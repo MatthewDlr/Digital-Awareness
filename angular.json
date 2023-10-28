@@ -13,20 +13,18 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "optimization": {
+              "styles": {
+                "inlineCritical": false
+              }
+            },
             "outputPath": "dist/digital-wellbeing",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "assets": ["src/favicon.ico", "src/assets", "src/manifest.json"],
+            "styles": ["src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -77,22 +75,17 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.css"],
             "scripts": []
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "a1ab8d37-e922-4988-bec9-d133cdc79bfe"
   }
 }
