@@ -1,12 +1,12 @@
 {
   "name": "digital-wellbeing",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --configuration development",
     "build:prod": "ng build ",
-    "serve": "ng build --watch --configuration development",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
   "private": true,
@@ -18,7 +18,7 @@
     "@angular/forms": "^16.2.0",
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
-    "@angular/router": "^16.2.0",
+    "@angular/router": "^16.2.11",
     "nightwind": "^1.1.13",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
