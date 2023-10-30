@@ -11,25 +11,19 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "fileReplacements": [
-              {
-                "replace": "./src/background.ts",
-                "with": "./custom-webpack.config.ts"
-              }
-            ],
             "optimization": {
               "styles": {
                 "inlineCritical": false
               }
             },
-            "outputPath": "dist/digital-wellbeing",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": ["src/assets", "src/manifest.json"],
+            "assets": ["src/assets", "src/manifest.json", "src/background.js"],
             "styles": ["src/styles.css"],
             "scripts": []
           },
@@ -47,7 +41,7 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "none"
             },
             "development": {
               "buildOptimizer": false,
