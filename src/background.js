@@ -1,6 +1,6 @@
-chrome.webNavigation.onCompleted.addListener(function (details) {
+chrome.webNavigation.onCommitted.addListener(function (details) {
   if (details.frameId != 0) {
-    return;
+    return; // Avoid showing blockpage if the request is made in background
   }
 
   let host = new URL(details.url).host;

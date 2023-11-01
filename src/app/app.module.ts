@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { BlockPageComponent } from './blockpage/blockpage.component';
 import { OptionsComponent } from './options/options.component';
 import { PopupComponent } from './popup/popup.component';
+import { Quotes } from './blockpage/quotes';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { PopupComponent } from './popup/popup.component';
     PopupComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, CommonModule],
-  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy}, Quotes],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
