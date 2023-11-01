@@ -11,7 +11,7 @@ chrome.webNavigation.onCompleted.addListener(function (details) {
 
     if (blocketWebsites.includes(host)) {
       console.log("Gotcha! ", host);
-      let redirectUrl = chrome.runtime.getURL("index.html#popup");
+      let redirectUrl = chrome.runtime.getURL("index.html#blocked");
       chrome.tabs.update(details.tabId, { url: redirectUrl });
     }
   });
@@ -42,6 +42,7 @@ function writeDefaultConfig() {
         "wish.com",
         "etsy.com",
       ],
+      "timerValue" : 30,
     })
     .then(() => {
       console.log("Default settings applied");
