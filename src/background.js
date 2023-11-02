@@ -1,4 +1,4 @@
-chrome.webNavigation.onCommitted.addListener(function (details) {
+chrome.webNavigation.onCommitted.addListener(function (details, tabId) {
   if (details.frameId != 0) {
     return; // Avoid showing blockpage if the request is made in background
   }
@@ -10,8 +10,8 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
     let blocketWebsites = result.blocketWebsites;
 
     if (blocketWebsites.includes(host)) {
-      console.log("Gotcha! ", host);
-      let redirectUrl = chrome.runtime.getURL("index.html#blocked");
+      console.log("Gotcha! ", host, "tabID: ", details.tabId);
+      let redirectUrl = chrome.runtime.getURL("index.html#blocked/" + btoa(details.tabId) + "/" + btoa(details.url));
       chrome.tabs.update(details.tabId, { url: redirectUrl });
     }
   });
@@ -19,6 +19,10 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 
 chrome.runtime.onInstalled.addListener(() => {
   writeDefaultConfig();
+});
+
+chrome.tabs.onRemoved.addListener(function (tabid, removed) {
+  console.log(tabid, ": tab closed");
 });
 
 function writeDefaultConfig() {
@@ -42,7 +46,7 @@ function writeDefaultConfig() {
         "wish.com",
         "etsy.com",
       ],
-      "timerValue" : 30,
+      timerValue: 30,
     })
     .then(() => {
       console.log("Default settings applied");
