@@ -14,6 +14,7 @@ export class BlockPageComponent {
   quoteText!: string;
   quoteAuthor!: string;
   outputUrl!: URL;
+  tabId!: string;
 
   constructor(
     private ngZone: NgZone,
@@ -23,7 +24,7 @@ export class BlockPageComponent {
   ) {
     // Getting url parameters
     this.route.params.subscribe((params) => {
-      const tabId = decodeURIComponent(params['tabId']);
+      this.tabId = decodeURIComponent(params['tabId']);
       this.outputUrl = new URL(decodeURIComponent(params['outputURL']));
     });
 
@@ -51,8 +52,19 @@ export class BlockPageComponent {
     if (this.timerValue > 0) {
       setTimeout(() => {
         this.ngZone.run(() => {
-          this.timerValue--;
-          this.countdown();
+          async function getCurrentTab() {
+            let queryOptions = { active: true, lastFocusedWindow: true };
+            let [tab] = await chrome.tabs.query(queryOptions);
+            return tab.id;
+          }
+
+          getCurrentTab().then((currentTabId) => {
+            if (currentTabId?.toString() != this.tabId) {
+            } else {
+              this.timerValue--;
+            }
+            this.countdown();
+          });
         });
       }, 1100);
     }
