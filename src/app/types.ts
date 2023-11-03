@@ -1,1 +1,4 @@
-export type BlockedWebsite = string[]
+export type allowedSite = {
+    host: string,
+    allowedUntil: string
+};

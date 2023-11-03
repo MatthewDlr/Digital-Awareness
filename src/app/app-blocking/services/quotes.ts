@@ -66,6 +66,10 @@ export class Quotes {
       author: 'Mark Manson, The Subtle Art of Not Giving a F*ck',
     },
     {
+      text: '"We shape our tools and thereafter our tools shape us"',
+      author: 'Marshall McLuhan',
+    },
+    {
       text: 'Do you you really need to do this?',
       author: '',
     },
@@ -85,7 +89,6 @@ export class Quotes {
       text: 'Wondering, is this all?',
       author: '',
     },
-
   ];
 
   getRandomQuote() {
