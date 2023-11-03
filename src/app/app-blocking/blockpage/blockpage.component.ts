@@ -23,8 +23,8 @@ export class BlockPageComponent {
   ) {
     // Getting url parameters
     this.route.params.subscribe((params) => {
-      const tabId = atob(params['tabId']);
-      this.outputUrl = new URL(atob(params['outputURL']));
+      const tabId = decodeURIComponent(params['tabId']);
+      this.outputUrl = new URL(decodeURIComponent(params['outputURL']));
     });
 
     // Getting timer value from the storage

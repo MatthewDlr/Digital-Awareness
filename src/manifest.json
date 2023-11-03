@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Digital Wellbeing",
-  "version": "0.0.1",
+  "name": "Digital Awareness",
+  "version": "0.1",
   "description": "A powerful website blocker",
   "icons": {
-    "16": "./assets/icon16.png",
-    "128": "./assets/icon128.png"
+    "128": "./assets/logo128.png",
+    "256": "./assets/logo256.png"
   },
   "host_permissions": ["*://*/*"],
   "permissions": ["storage", "tabs", "activeTab", "webNavigation"],

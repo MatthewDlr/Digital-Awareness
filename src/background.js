@@ -25,9 +25,9 @@ chrome.webNavigation.onCommitted.addListener(function (details, tabId) {
       return;
     }
 
-    console.log("Blocked! ", url, "tabID: ", details.tabId);
+    console.log("Blocked! ", url, "tabID: ", details.tabId, " url: ", details.url);
     let redirectUrl = chrome.runtime.getURL(
-      "index.html#blocked/" + btoa(details.tabId) + "/" + btoa(details.url)
+      "index.html#blocked/" + encodeURIComponent(details.tabId) + "/" + encodeURIComponent(details.url)
     );
     chrome.tabs.update(details.tabId, { url: redirectUrl });
   });
