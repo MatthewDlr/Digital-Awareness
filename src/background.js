@@ -21,11 +21,11 @@ chrome.webNavigation.onCommitted.addListener(function (details, tabId) {
       websiteBlocked.allowedUntil &&
       new Date(websiteBlocked.allowedUntil) > Date.now()
     ) {
-      console.log("Website is temporary allowed");
+      console.log("Website is temporary allowed until: ", new Date(websiteBlocked.allowedUntil));
       return;
     }
 
-    console.log("Gotcha! ", url, "tabID: ", details.tabId);
+    console.log("Blocked! ", url, "tabID: ", details.tabId);
     let redirectUrl = chrome.runtime.getURL(
       "index.html#blocked/" + btoa(details.tabId) + "/" + btoa(details.url)
     );

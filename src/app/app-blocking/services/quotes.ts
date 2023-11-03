@@ -62,12 +62,28 @@ export class Quotes {
       author: 'Mark Manson, The Subtle Art of Not Giving a F*ck',
     },
     {
-      text: '" True happiness occurs only when you find the problems you enjoy having and enjoy solving."',
+      text: '"True happiness occurs only when you find the problems you enjoy having and enjoy solving."',
       author: 'Mark Manson, The Subtle Art of Not Giving a F*ck',
     },
     {
       text: '"We shape our tools and thereafter our tools shape us"',
       author: 'Marshall McLuhan',
+    },
+    {
+      text: '"Compare yourself to who you were yesterday, not to who someone else is today."',
+      author: 'Jordan Peterson, 12 Rules For Life',
+    },
+    {
+      text: '"Always place your becoming above your current being."',
+      author: 'Jordan Peterson, 12 Rules For Life',
+    },
+    {
+      text: '"It is my firm belief that the best way to fix the world—a handyman’s dream, if ever there was one—is to fix yourself,"',
+      author: 'Jordan Peterson, 12 Rules For Life',
+    },
+    {
+      text: '"Always place your becoming above your current being."',
+      author: 'Jordan Peterson, 12 Rules For Life',
     },
     {
       text: 'Do you you really need to do this?',

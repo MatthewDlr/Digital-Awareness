@@ -62,7 +62,7 @@ export class BlockPageComponent {
     // This means failure as the user has waited for the timer to expire
     const newTimerValue = Math.min(this.storedTimerValue + 5, 180);
     chrome.storage.sync.set({ timerValue: newTimerValue });
-    this.allowedSitesService.addAllowedSite(this.outputUrl.host, 5);
+    this.allowedSitesService.addAllowedSite(this.outputUrl.host, 1);
     window.location.href = this.outputUrl.toString();
   }
 
