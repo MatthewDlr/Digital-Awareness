@@ -1,30 +1,34 @@
 import { Injectable } from '@angular/core';
-import { allowedSite } from 'src/app/types';
+import { blockedSite } from 'src/app/types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AllowedSitesService {
+  blockedWebsites: blockedSite[] = [];
   constructor() {}
 
-  addAllowedSite(host: string, duration: number = 30): void {
-    if (host.substring(0, 3) == "www") host = host.substring(4);
+  addAllowedSite(websiteToAllow: string, duration: number = 30): void {
+    if (websiteToAllow.substring(0, 3) == 'www')
+      websiteToAllow = websiteToAllow.substring(4); // Removing the www.
 
-    // Setting up the allowed site
-    const site: allowedSite = {
-      host: host,
-      allowedUntil: new Date(
-        new Date().getTime() + duration * 60000
-      ).toString(),
-    };
+    chrome.storage.sync.get('blockedWebsites', (result) => {
+      this.blockedWebsites = result['blockedWebsites'];
+      let blockedSite = this.blockedWebsites.find(
+        (blockedSite) => blockedSite.host == websiteToAllow
+      );
+      if (!blockedSite) {
+        console.log(
+          '[ERROR] The website must be blocked before it can be allowed.'
+        );
+        return;
+      }
+      blockedSite.allowedUntil = new Date(
+        Date.now() + duration * 60000
+      ).toString();
 
-    // Sync local storage
-    chrome.storage.local.get('allowedSites', (result) => {
-      let allowedSites: allowedSite[] = result['allowedSites'];
-      allowedSites.push(site);
-      chrome.storage.local.set({ allowedSites: allowedSites }, () => {
-        console.log('Pushed sites: ', allowedSites);
-      });
+      chrome.storage.sync.set({ blockedWebsites: this.blockedWebsites });
+      console.log("Updated blocked list: ", this.blockedWebsites);
     });
   }
 }

@@ -1,22 +1,35 @@
 chrome.webNavigation.onCommitted.addListener(function (details, tabId) {
   if (details.frameId != 0 || !details.url.startsWith("https")) {
-    console.log("Frame ignored");
-    return; // Avoid showing blockpage if the request is made in background
+    return; // Avoid showing blockpage if the request is made in background or isn't https
   }
 
   let url = new URL(details.url).host;
   if (url.substring(0, 3) == "www") url = url.substring(4);
 
-  chrome.storage.sync.get("blocketWebsites", function (result) {
-    const blocketWebsites = result.blocketWebsites;
+  chrome.storage.sync.get("blockedWebsites", function (result) {
+    const blockedWebsites = result.blockedWebsites;
+    let websiteBlocked = blockedWebsites.find((website) => {
+      return website.host === url;
+    });
 
-    if (blocketWebsites.includes(url)) {
-      console.log("Gotcha! ", url, "tabID: ", details.tabId);
-      let redirectUrl = chrome.runtime.getURL(
-        "index.html#blocked/" + btoa(details.tabId) + "/" + btoa(details.url)
-      );
-      chrome.tabs.update(details.tabId, { url: redirectUrl });
+    if (!websiteBlocked) {
+      console.log("Website not blocked: ", url);
+      return;
     }
+
+    if (
+      websiteBlocked.allowedUntil &&
+      new Date(websiteBlocked.allowedUntil) > Date.now()
+    ) {
+      console.log("Website is temporary allowed");
+      return;
+    }
+
+    console.log("Gotcha! ", url, "tabID: ", details.tabId);
+    let redirectUrl = chrome.runtime.getURL(
+      "index.html#blocked/" + btoa(details.tabId) + "/" + btoa(details.url)
+    );
+    chrome.tabs.update(details.tabId, { url: redirectUrl });
   });
 });
 
@@ -31,36 +44,23 @@ chrome.tabs.onRemoved.addListener(function (tabid, removed) {
 function writeDefaultConfig() {
   chrome.storage.sync
     .set({
-      blocketWebsites: [
-        "x.com",
-        "twitter.com",
-        "youtube.com",
-        "facebook.com",
-        "instagram.com",
-        "reddit.com",
-        "tiktok.com",
-        "netflix.com",
-        "twitch.tv",
-        "pinterest.com",
-        "tumblr.com",
-        "snapchat.com",
-        "aliexpress.com",
-        "alibaba.com",
-        "wish.com",
-        "etsy.com",
+      blockedWebsites: [
+        {
+          host: "youtube.com",
+          allowedUntil: null,
+          category: "Video",
+        },
+        {
+          host: "shopping.google.com",
+          allowedUntil: null,
+          category: "Social",
+        },
       ],
       timerValue: 30,
       allowedSites: [],
     })
     .then(() => {
       console.log("Default settings applied");
-    });
-  chrome.storage.local
-    .set({
-      allowedSites: [],
-    })
-    .then(() => {
-      console.log("Allowed sites cleared");
     });
 }
 
