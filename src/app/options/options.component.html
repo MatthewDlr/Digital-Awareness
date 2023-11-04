@@ -1,3 +1,65 @@
-<div class="w-full h-full flex justify-center align-middle">
-  <p>options works!</p>
+<!-- DevMode Warning-->
+<div
+  *ngIf="isDevModeEnabled()"
+  class="absolute -rotate-90 left-[-4.5rem] top-[10rem] px-5 py-5 bg-orange-50 text-orange-600 stroke-orange-600 rounded-b-lg w-fit h-fit flex gap-3 items-center"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.75"
+    stroke="currentColor"
+    class="w-6 h-6"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+    />
+  </svg>
+  <div class="flex items-baseline mt-[0.10rem] gap-2">
+    <label class="font-medium text-base">DevMode is ON</label>
+  </div>
+</div>
+
+<div
+  class="h-[100vh] w-full !transition-all flex flex-col gap-5 py-20 px-80 bg-white"
+>
+  <h1
+    class="text-4xl font-bold w-fit py-2 h-fit text-transparent bg-clip-text bg-gradient-to-br from-green-300 via-green-400 to-green-500 from-10% via-70% dark:from-green-200 dark:via-green-300 dark:to-green-400"
+  >
+    Digital Awareness Options
+  </h1>
+
+  <!-- Tabs -->
+  <div
+    class="overflow-hidden rounded-xl border border-green-100 bg-green-50 p-1"
+  >
+    <ul class="flex items-center gap-2 text-sm font-medium">
+      <li class="flex-1">
+        <a
+          href="#"
+          class="text-gra relative flex items-center justify-center gap-2 rounded-lg bg-white hover:bg-opacity-50 px-3 py-2 hover:bg-white hover:text-gray-700"
+        >
+          Block List</a
+        >
+      </li>
+      <li class="flex-1">
+        <a
+          href="#"
+          class="flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-gray-500 hover:bg-white hover:bg-opacity-50 hover:text-gray-700"
+        >
+          Block Page</a
+        >
+      </li>
+      <li class="flex-1">
+        <a
+          href="#"
+          class="flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-gray-500 hover:bg-white hover:bg-opacity-50 hover:text-gray-700"
+        >
+          Notifications</a
+        >
+      </li>
+    </ul>
+  </div>
 </div>

@@ -14,6 +14,7 @@ chrome.webNavigation.onCommitted.addListener(function (details, tabId) {
 
     if (!websiteBlocked) {
       console.log("Website not blocked: ", url);
+      return;
     }
 
     if (

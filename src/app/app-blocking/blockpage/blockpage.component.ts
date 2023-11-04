@@ -29,7 +29,7 @@ export class BlockPageComponent {
     });
 
     // Getting timer value from the storage
-    if (this.isDevModeEnabled()) {
+    if (isDevMode()) {
       this.timerValue = 5;
       this.countdown();
     } else {
@@ -74,7 +74,7 @@ export class BlockPageComponent {
   skipTimer() {
     const newTimerValue = Math.min(this.storedTimerValue + 5, 180);
     chrome.storage.sync.set({ timerValue: newTimerValue });
-    if (this.isDevModeEnabled()) {
+    if (isDevMode()) {
       this.allowedSitesService.addAllowedSite(this.outputUrl.host, 1); // Allow for 1 min
     } else {
       this.allowedSitesService.addAllowedSite(this.outputUrl.host, 30); // Allow for 30 min
@@ -87,9 +87,5 @@ export class BlockPageComponent {
     const newTimerValue = Math.max(this.storedTimerValue - 1, 30);
     chrome.storage.sync.set({ timerValue: newTimerValue });
     window.close();
-  }
-
-  isDevModeEnabled() {
-    return isDevMode();
   }
 }

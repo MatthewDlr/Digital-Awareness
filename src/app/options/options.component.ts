@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, isDevMode } from '@angular/core';
 
 @Component({
   selector: 'app-options',
@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./options.component.css']
 })
 export class OptionsComponent {
+
+  isDevModeEnabled() {
+    return isDevMode();
+  }
 
 }
