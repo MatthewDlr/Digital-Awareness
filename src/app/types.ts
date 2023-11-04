@@ -1,11 +1,7 @@
 export type blockedSite = {
   host: string;
   allowedUntil: string;
-  category: blockCategory;
+  isMandatory: boolean;
+  timesBlocked: number;
+  timesAllowed: 0;
 };
-
-export enum blockCategory {
-  social = 'Social',
-  news = 'News',
-  streaming = 'Streaming',
-}

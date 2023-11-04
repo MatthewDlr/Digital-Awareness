@@ -20,7 +20,7 @@ export class BlockPageComponent {
     private ngZone: NgZone,
     private route: ActivatedRoute,
     private quote: Quotes,
-    private allowedSitesService: AllowedSitesService
+    private allowedSitesService: AllowedSitesService,
   ) {
     // Getting url parameters
     this.route.params.subscribe((params) => {
@@ -74,11 +74,13 @@ export class BlockPageComponent {
   skipTimer() {
     const newTimerValue = Math.min(this.storedTimerValue + 5, 180);
     chrome.storage.sync.set({ timerValue: newTimerValue });
-    if (isDevMode()) {
-      this.allowedSitesService.addAllowedSite(this.outputUrl.host, 1); // Allow for 1 min
-    } else {
-      this.allowedSitesService.addAllowedSite(this.outputUrl.host, 30); // Allow for 30 min
-    }
+
+    const timeAllowed = isDevMode() ? 1 : 30;
+    this.allowedSitesService.allowWebsiteTemporary(
+      this.outputUrl.host,
+      timeAllowed,
+    );
+
     window.location.href = this.outputUrl.toString();
   }
 
@@ -86,6 +88,9 @@ export class BlockPageComponent {
   closeBlockPage() {
     const newTimerValue = Math.max(this.storedTimerValue - 1, 30);
     chrome.storage.sync.set({ timerValue: newTimerValue });
-    window.close();
+    this.allowedSitesService.incrementTimesBlocked(this.outputUrl.host)
+    setTimeout(() => {
+      window.close();
+    }, 500);
   }
 }
