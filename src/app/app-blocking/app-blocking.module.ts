@@ -5,12 +5,8 @@ import { AllowedSitesService } from './services/allowed-sites/allowed-sites.serv
 import { Quotes } from './services/quotes';
 
 @NgModule({
-  declarations: [
-    BlockPageComponent,
-  ],
-  imports: [
-    CommonModule
-  ],
-  providers: [AllowedSitesService, Quotes]
+  declarations: [BlockPageComponent],
+  imports: [CommonModule],
+  providers: [AllowedSitesService, Quotes],
 })
-export class AppBlockingModule { }
+export class AppBlockingModule {}

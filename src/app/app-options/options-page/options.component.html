@@ -77,9 +77,12 @@
       </li>
     </ul>
   </div>
+
+  <!-- Options Area -->
+  <div>
+    <app-blocklist-tab *ngIf="currentTab == 'blocklist'"></app-blocklist-tab>
+    <app-blockpage-tab *ngIf="currentTab == 'blockpage'"></app-blockpage-tab>
+    <app-notifications-tab *ngIf="currentTab == 'notifications'"></app-notifications-tab>
+  </div>
 </div>
 
-<!-- Options Area -->
-<div>
-
-</div>

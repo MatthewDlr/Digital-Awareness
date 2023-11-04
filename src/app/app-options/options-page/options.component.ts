@@ -8,6 +8,8 @@ import { Component, isDevMode } from '@angular/core';
 export class OptionsComponent {
   currentTab: string = "blocklist"
 
+  constructor(){}
+
   isDevModeEnabled() {
     return isDevMode();
   }

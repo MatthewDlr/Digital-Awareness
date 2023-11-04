@@ -10,7 +10,7 @@ import { NotificationsTabComponent } from './notifications-tab/notifications-tab
     OptionsComponent,
     BlocklistTabComponent,
     BlockpageTabComponent,
-    NotificationsTabComponent
+    NotificationsTabComponent,
   ],
   imports: [CommonModule],
 })
