@@ -1,9 +1,9 @@
 <div
-  class="h-[100vh] w-full !transition-all flex flex-col gap-16 justify-center items-center bg-gradient-to-br from-green-100 via-green-200 to-green-300 from-10% via-70% dark:from-green-800 dark:via-green-900 dark:to-green-950"
+  class="flex h-[100vh] w-full flex-col items-center justify-center gap-16 bg-gradient-to-br from-green-100 from-10% via-green-200 via-70% to-green-300 !transition-all dark:from-green-800 dark:via-green-900 dark:to-green-950"
 >
   <!-- Timer -->
   <div
-    class="bg-white bg-opacity-40 rounded-lg min-w-[5rem] min-h-[5rem] flex justify-center items-center fade-in-bottom"
+    class="fade-in-bottom bg-white flex min-h-[5rem] min-w-[5rem] items-center justify-center rounded-lg bg-opacity-40"
     style="--delay: 0.1s"
   >
     <label
@@ -15,24 +15,24 @@
 
   <!-- Quote -->
   <div
-    class="flex flex-col justify-center h-fit text-center gap-3 fade-in-bottom"
+    class="fade-in-bottom flex h-fit flex-col justify-center gap-3 text-center"
     style="--delay: 0.3s"
   >
-    <div class="text-black text-lg font-extralight max-w-xl">
+    <div class="text-black max-w-xl text-lg font-extralight">
       {{ quoteText }}
     </div>
     <div class="text-black text-sm font-normal">{{ quoteAuthor }}</div>
   </div>
 
-  <div class="flex flex-col gap-5 justify-center items-center">
+  <div class="flex flex-col items-center justify-center gap-5">
     <!-- Go Back Button -->
     <div
-      class="m-3 fade-in-bottom"
+      class="fade-in-bottom m-3"
       style="--delay: 0.5s"
       (click)="closeBlockPage()"
     >
       <button
-        class="bg-white bg-opacity-40 !transition-all rotating-stroke text-gray-800 font-bold rounded-md border-b-2 border-purple-500 hover:border-purple-600 hover:bg-purple-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center hover:shadow-purple-500 hover:shadow-2xl hover:scale-110 hover:transition-all delay-100"
+        class="rotating-stroke bg-white text-gray-800 border-purple-500 inline-flex items-center rounded-md border-b-2 bg-opacity-40 px-6 py-2 font-bold shadow-md !transition-all delay-100 hover:text-white hover:bg-purple-500 hover:border-purple-600 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500 hover:transition-all"
       >
         <span class="mr-2 text-sm font-medium">Go Back</span>
         <svg
@@ -51,9 +51,11 @@
     </div>
 
     <!-- Skip Timer Button -->
-    <div [ngClass]="timerValue == 0 ? 'flex fade-in-bottom-small' : 'invisible'">
+    <div
+      [ngClass]="timerValue == 0 ? 'fade-in-bottom-small flex' : 'invisible'"
+    >
       <button
-        class="text-gray-600 underline text-sm opacity-50"
+        class="text-gray-600 text-sm underline opacity-50"
         (click)="skipTimer()"
       >
         Proceed to {{ outputUrl.hostname }}

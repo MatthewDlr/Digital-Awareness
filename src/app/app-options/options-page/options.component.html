@@ -1,7 +1,7 @@
 <!-- DevMode Warning-->
 <div
   *ngIf="isDevModeEnabled()"
-  class="absolute -rotate-90 left-[-4.5rem] top-[10rem] px-5 py-5 bg-orange-50 text-orange-600 stroke-orange-600 rounded-b-lg w-fit h-fit flex gap-3 items-center"
+  class="text-orange-600 bg-orange-50 absolute left-[-4.5rem] top-[10rem] flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -9,7 +9,7 @@
     viewBox="0 0 24 24"
     stroke-width="1.75"
     stroke="currentColor"
-    class="w-6 h-6"
+    class="h-6 w-6"
   >
     <path
       stroke-linecap="round"
@@ -17,23 +17,21 @@
       d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
     />
   </svg>
-  <div class="flex items-baseline mt-[0.10rem] gap-2">
-    <label class="font-medium text-base">DevMode is ON</label>
+  <div class="mt-[0.10rem] flex items-baseline gap-2">
+    <label class="text-base font-medium">DevMode is ON</label>
   </div>
 </div>
 
-<div
-  class="h-[100vh] w-full flex flex-col gap-5 py-20 px-80 bg-white"
->
+<div class="bg-white flex h-[100vh] w-full flex-col gap-5 px-80 py-20">
   <h1
-    class="text-4xl font-bold w-fit py-2 h-fit text-transparent bg-clip-text bg-gradient-to-br from-green-300 via-green-400 to-green-500 from-10% via-70% dark:from-green-200 dark:via-green-300 dark:to-green-400"
+    class="h-fit w-fit bg-gradient-to-br from-green-300 from-10% via-green-400 via-70% to-green-500 bg-clip-text py-2 text-4xl font-bold text-transparent dark:from-green-200 dark:via-green-300 dark:to-green-400"
   >
     Digital Awareness Options
   </h1>
 
   <!-- Tabs -->
   <div
-    class="overflow-hidden rounded-xl border border-green-100 bg-green-50 p-1"
+    class="bg-green-50 border-green-100 overflow-hidden rounded-xl border p-1"
   >
     <ul class="flex items-center gap-2 text-sm font-medium">
       <li class="flex-1">
@@ -41,8 +39,8 @@
           (click)="currentTab = 'blocklist'"
           [ngClass]="
             currentTab == 'blocklist'
-              ? 'bg-white text-black'
-              : 'bg-transparent text-gray-700 hover:bg-opacity-50 hover:bg-white hover:text-gray-700'
+              ? 'text-black bg-white'
+              : 'text-gray-700 bg-transparent hover:bg-white hover:text-gray-700 hover:bg-opacity-50'
           "
           class="flex items-center justify-center gap-2 rounded-lg px-3 py-2"
         >
@@ -51,12 +49,12 @@
       </li>
       <li class="flex-1">
         <a
-        (click)="currentTab = 'blockpage'"
-        [ngClass]="
-          currentTab == 'blockpage'
-            ? 'bg-white text-black'
-            : 'bg-transparent text-gray-700 hover:bg-opacity-50 hover:bg-white hover:text-gray-700'
-        "
+          (click)="currentTab = 'blockpage'"
+          [ngClass]="
+            currentTab == 'blockpage'
+              ? 'text-black bg-white'
+              : 'text-gray-700 bg-transparent hover:bg-white hover:text-gray-700 hover:bg-opacity-50'
+          "
           class="flex items-center justify-center gap-2 rounded-lg px-3 py-2"
         >
           Block Page</a
@@ -64,12 +62,12 @@
       </li>
       <li class="flex-1">
         <a
-        (click)="currentTab = 'notifications'"
-        [ngClass]="
-          currentTab == 'notifications'
-            ? 'bg-white text-black'
-            : 'bg-transparent text-gray-700 hover:bg-opacity-50 hover:bg-white hover:text-gray-700'
-        "
+          (click)="currentTab = 'notifications'"
+          [ngClass]="
+            currentTab == 'notifications'
+              ? 'text-black bg-white'
+              : 'text-gray-700 bg-transparent hover:bg-white hover:text-gray-700 hover:bg-opacity-50'
+          "
           class="flex items-center justify-center gap-2 rounded-lg px-3 py-2"
         >
           Notifications</a
@@ -82,7 +80,8 @@
   <div>
     <app-blocklist-tab *ngIf="currentTab == 'blocklist'"></app-blocklist-tab>
     <app-blockpage-tab *ngIf="currentTab == 'blockpage'"></app-blockpage-tab>
-    <app-notifications-tab *ngIf="currentTab == 'notifications'"></app-notifications-tab>
+    <app-notifications-tab
+      *ngIf="currentTab == 'notifications'"
+    ></app-notifications-tab>
   </div>
 </div>
-
