@@ -23,7 +23,7 @@
 </div>
 
 <div
-  class="h-[100vh] w-full !transition-all flex flex-col gap-5 py-20 px-80 bg-white"
+  class="h-[100vh] w-full flex flex-col gap-5 py-20 px-80 bg-white"
 >
   <h1
     class="text-4xl font-bold w-fit py-2 h-fit text-transparent bg-clip-text bg-gradient-to-br from-green-300 via-green-400 to-green-500 from-10% via-70% dark:from-green-200 dark:via-green-300 dark:to-green-400"
@@ -38,28 +38,48 @@
     <ul class="flex items-center gap-2 text-sm font-medium">
       <li class="flex-1">
         <a
-          href="#"
-          class="text-gra relative flex items-center justify-center gap-2 rounded-lg bg-white hover:bg-opacity-50 px-3 py-2 hover:bg-white hover:text-gray-700"
+          (click)="currentTab = 'blocklist'"
+          [ngClass]="
+            currentTab == 'blocklist'
+              ? 'bg-white text-black'
+              : 'bg-transparent text-gray-700 hover:bg-opacity-50 hover:bg-white hover:text-gray-700'
+          "
+          class="flex items-center justify-center gap-2 rounded-lg px-3 py-2"
         >
           Block List</a
         >
       </li>
       <li class="flex-1">
         <a
-          href="#"
-          class="flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-gray-500 hover:bg-white hover:bg-opacity-50 hover:text-gray-700"
+        (click)="currentTab = 'blockpage'"
+        [ngClass]="
+          currentTab == 'blockpage'
+            ? 'bg-white text-black'
+            : 'bg-transparent text-gray-700 hover:bg-opacity-50 hover:bg-white hover:text-gray-700'
+        "
+          class="flex items-center justify-center gap-2 rounded-lg px-3 py-2"
         >
           Block Page</a
         >
       </li>
       <li class="flex-1">
         <a
-          href="#"
-          class="flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-gray-500 hover:bg-white hover:bg-opacity-50 hover:text-gray-700"
+        (click)="currentTab = 'notifications'"
+        [ngClass]="
+          currentTab == 'notifications'
+            ? 'bg-white text-black'
+            : 'bg-transparent text-gray-700 hover:bg-opacity-50 hover:bg-white hover:text-gray-700'
+        "
+          class="flex items-center justify-center gap-2 rounded-lg px-3 py-2"
         >
           Notifications</a
         >
       </li>
     </ul>
   </div>
+</div>
+
+<!-- Options Area -->
+<div>
+
 </div>

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Routes } from '@angular/router';
 import { PopupComponent } from './popup/popup.component';
-import { OptionsComponent } from './options/options.component';
+import { OptionsComponent } from './app-options/options-page/options.component';
 import { BlockPageComponent } from './app-blocking/blockpage/blockpage.component'
 
 const routes: Routes = [

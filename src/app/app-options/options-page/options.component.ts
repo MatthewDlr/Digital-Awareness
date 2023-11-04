@@ -6,6 +6,7 @@ import { Component, isDevMode } from '@angular/core';
   styleUrls: ['./options.component.css']
 })
 export class OptionsComponent {
+  currentTab: string = "blocklist"
 
   isDevModeEnabled() {
     return isDevMode();

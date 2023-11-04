@@ -4,17 +4,18 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CommonModule } from '@angular/common';
-import { OptionsComponent } from './options/options.component';
 import { PopupComponent } from './popup/popup.component';
 import { AppBlockingModule } from './app-blocking/app-blocking.module';
+import { OptionsModule } from './app-options/options.module';
+import { NotificationsTabComponent } from './app-options/notifications-tab/notifications-tab.component'; 
 
 @NgModule({
   declarations: [
     AppComponent,
-    OptionsComponent,
     PopupComponent,
+    NotificationsTabComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, CommonModule, AppBlockingModule],
+  imports: [BrowserModule, AppRoutingModule, CommonModule, AppBlockingModule, OptionsModule],
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent],
 })
