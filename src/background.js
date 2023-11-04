@@ -14,20 +14,32 @@ chrome.webNavigation.onCommitted.addListener(function (details, tabId) {
 
     if (!websiteBlocked) {
       console.log("Website not blocked: ", url);
-      return;
     }
 
     if (
       websiteBlocked.allowedUntil &&
       new Date(websiteBlocked.allowedUntil) > Date.now()
     ) {
-      console.log("Website is temporary allowed until: ", new Date(websiteBlocked.allowedUntil));
+      console.log(
+        "Website is temporary allowed until: ",
+        new Date(websiteBlocked.allowedUntil)
+      );
       return;
     }
 
-    console.log("Blocked! ", url, "tabID: ", details.tabId, " url: ", details.url);
+    console.log(
+      "Blocked! ",
+      url,
+      "tabID: ",
+      details.tabId,
+      " url: ",
+      details.url
+    );
     let redirectUrl = chrome.runtime.getURL(
-      "index.html#blocked/" + encodeURIComponent(details.tabId) + "/" + encodeURIComponent(details.url)
+      "index.html#blocked/" +
+        encodeURIComponent(details.tabId) +
+        "/" +
+        encodeURIComponent(details.url)
     );
     chrome.tabs.update(details.tabId, { url: redirectUrl });
   });

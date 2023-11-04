@@ -70,16 +70,20 @@ export class BlockPageComponent {
     }
   }
 
+  // This means failure as the user has waited for the timer to expire
   skipTimer() {
-    // This means failure as the user has waited for the timer to expire
     const newTimerValue = Math.min(this.storedTimerValue + 5, 180);
     chrome.storage.sync.set({ timerValue: newTimerValue });
-    this.allowedSitesService.addAllowedSite(this.outputUrl.host, 1);
+    if (this.isDevModeEnabled()) {
+      this.allowedSitesService.addAllowedSite(this.outputUrl.host, 1); // Allow for 1 min
+    } else {
+      this.allowedSitesService.addAllowedSite(this.outputUrl.host, 30); // Allow for 30 min
+    }
     window.location.href = this.outputUrl.toString();
   }
 
+  // This means success as the user left the page before the timer expired
   closeBlockPage() {
-    // This means success as the user left the page before the timer expired
     const newTimerValue = Math.max(this.storedTimerValue - 1, 30);
     chrome.storage.sync.set({ timerValue: newTimerValue });
     window.close();

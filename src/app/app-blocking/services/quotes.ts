@@ -86,6 +86,14 @@ export class Quotes {
       author: 'Jordan Peterson, 12 Rules For Life',
     },
     {
+      text: '"Passion. Action. Noble intention…Creates progress."',
+      author: 'Tom Hardy',
+    },
+    {
+      text: '"We cannot become what we want by remaining what we are."',
+      author: 'Max Depree',
+    },
+    {
       text: 'Do you you really need to do this?',
       author: '',
     },
