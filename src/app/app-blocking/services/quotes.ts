@@ -22,6 +22,10 @@ export class Quotes {
       author: 'James Clear, Atomic Habits',
     },
     {
+      text: '"The secret to getting results that last is to never stop making improvements. It\'s remarkable what you can build if you just don\'t stop."', 
+      author: 'James Clear, Atomic Habits',
+    },
+    {
       text: '"The truth, is that many of the actions we take each day are shaped not by purposeful drive and choice but by the most obvious option."',
       author: 'James Clear, Atomic Habits',
     },

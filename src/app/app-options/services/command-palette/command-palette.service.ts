@@ -9,10 +9,13 @@ export class CommandPaletteService {
 
   constructor() {
     this.toggleCommandPalette(true);
-    this.isCommandPaletteShown.subscribe(state => console.log('Update command palette state: ', state));
+    this.isCommandPaletteShown.subscribe((state) =>
+      console.log('Update command palette state: ', state),
+    );
   }
 
   toggleCommandPalette(state: boolean) {
     this.isCommandPaletteShown.next(state);
   }
+
 }

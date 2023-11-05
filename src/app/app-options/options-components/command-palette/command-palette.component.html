@@ -1,65 +1,67 @@
-<div class="h-full w-full" (click)="toggleCommandPalette(false)">
-  <section class="h-full overflow-hidden object-center backdrop-blur">
-    <div class="items-center justify-center p-8 md:p-12 lg:px-20 lg:py-36">
+<section
+  class="bg-gray-100 absolute left-0 top-0 z-10 h-full w-full bg-opacity-50 object-center"
+  (click)="toggleCommandPalette(false)"
+>
+  <div class="items-center justify-center p-8 md:p-12 lg:px-20 lg:py-36">
+    <div
+      class="bg-white mx-auto max-h-[25rem] max-w-xl transform rounded-2xl bg-opacity-75 p-3 shadow-2xl ring-1 ring-black ring-opacity-10 backdrop-blur backdrop-filter transition-all"
+      (click)="$event.stopPropagation()"
+    >
+      <!--Search Bar-->
       <div
-        class="bg-white mx-auto max-w-xl transform overflow-hidden rounded-xl p-3 shadow-2xl ring-1 ring-black ring-opacity-5 transition-all"
-        (click)="$event.stopPropagation()"
+        class="bg-gray-50 relative flex items-center gap-3 rounded-xl bg-opacity-75 pl-3 !transition-all hover:scale-[1.01] hover:bg-opacity-[0.6]"
       >
-        <div
-          class="bg-green-50 relative flex items-center gap-3 rounded-xl stroke-green-500 pl-3 focus:bg-white"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="h-6 w-6 stroke-black dark:stroke-white"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="<2>"
-            stroke="currentColor"
-            class="h-6 w-6 stroke-green-500"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-            />
-          </svg>
-
-          <input
-            type="text"
-            class="text-gray-800 h-12 w-full border-0 bg-transparent pr-4 placeholder-gray-400 focus:ring-0 sm:text-sm"
-            placeholder="What do you need?"
-            role="combobox"
-            aria-expanded="false"
-            aria-controls="options"
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
           />
-        </div>
-        <ul
-          class="max-h-96 scroll-py-3 space-y-3 overflow-y-auto pt-3"
-          id="options"
-          role="listbox"
-        >
-          <li
-            class="group text-gray-500 flex cursor-default select-none rounded-xl p-3 duration-200 hover:text-blue-500 hover:bg-gray-50"
-          >
-            <span class="ml-3 flex-auto truncate text-sm">
-              Search projects...
-            </span>
+        </svg>
 
-            <span class="text-gray-400 ml-3 flex-none text-xs font-semibold">
-              <kbd class="font-sans"> ⌘ </kbd>
-              <kbd class="font-sans"> N </kbd>
+        <input
+          (input)="processSearch($event)"
+          type="text"
+          class="text-gray-800 h-12 w-full border-0 bg-transparent pr-4 placeholder-gray-400 focus:ring-0 sm:text-sm"
+          placeholder="Type a website"
+          role="combobox"
+          aria-expanded="false"
+          aria-controls="options"
+          #search
+        />
+      </div>
+
+      <!--Search Results-->
+      <div class="mt-3 max-h-80 overflow-y-scroll">
+        <ul class="pt-3" *ngFor="let website of searchResults">
+          <li
+            class="group text-gray-500 flex cursor-default select-none items-end rounded-xl p-3 duration-200 hover:text-green-500 hover:bg-gray-50"
+          >
+            <div class="flex w-4/5 items-end justify-start gap-3">
+              <span class="text-base font-medium">
+                {{ website.url }}
+              </span>
+
+              <span class="text-sm font-light">
+                {{ website.category }}
+              </span>
+            </div>
+
+            <!-- Added indicator -->
+            <span class="text-green-500 ml-3 flex-none text-xs font-semibold">
+              Added
             </span>
           </li>
-          <li
-            class="group text-gray-500 flex cursor-default select-none rounded-xl p-3 duration-200 hover:text-blue-500 hover:bg-gray-50"
-          >
-            <span class="ml-3 flex-auto truncate text-sm">
-              Create another project...
-            </span>
-          </li>
-
-          <!-- More items... -->
         </ul>
+
       </div>
     </div>
-  </section>
-</div>
+  </div>
+</section>
