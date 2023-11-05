@@ -1,0 +1,65 @@
+<div class="h-full w-full" (click)="toggleCommandPalette(false)">
+  <section class="h-full overflow-hidden object-center backdrop-blur">
+    <div class="items-center justify-center p-8 md:p-12 lg:px-20 lg:py-36">
+      <div
+        class="bg-white mx-auto max-w-xl transform overflow-hidden rounded-xl p-3 shadow-2xl ring-1 ring-black ring-opacity-5 transition-all"
+        (click)="$event.stopPropagation()"
+      >
+        <div
+          class="bg-green-50 relative flex items-center gap-3 rounded-xl stroke-green-500 pl-3 focus:bg-white"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="<2>"
+            stroke="currentColor"
+            class="h-6 w-6 stroke-green-500"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+
+          <input
+            type="text"
+            class="text-gray-800 h-12 w-full border-0 bg-transparent pr-4 placeholder-gray-400 focus:ring-0 sm:text-sm"
+            placeholder="What do you need?"
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="options"
+          />
+        </div>
+        <ul
+          class="max-h-96 scroll-py-3 space-y-3 overflow-y-auto pt-3"
+          id="options"
+          role="listbox"
+        >
+          <li
+            class="group text-gray-500 flex cursor-default select-none rounded-xl p-3 duration-200 hover:text-blue-500 hover:bg-gray-50"
+          >
+            <span class="ml-3 flex-auto truncate text-sm">
+              Search projects...
+            </span>
+
+            <span class="text-gray-400 ml-3 flex-none text-xs font-semibold">
+              <kbd class="font-sans"> ⌘ </kbd>
+              <kbd class="font-sans"> N </kbd>
+            </span>
+          </li>
+          <li
+            class="group text-gray-500 flex cursor-default select-none rounded-xl p-3 duration-200 hover:text-blue-500 hover:bg-gray-50"
+          >
+            <span class="ml-3 flex-auto truncate text-sm">
+              Create another project...
+            </span>
+          </li>
+
+          <!-- More items... -->
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>

@@ -3,5 +3,5 @@ export type blockedSite = {
   allowedUntil: string;
   isMandatory: boolean;
   timesBlocked: number;
-  timesAllowed: 0;
+  timesAllowed: number;
 };
