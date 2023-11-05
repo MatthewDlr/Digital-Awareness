@@ -7,7 +7,7 @@ export type blockedSite = {
   category: category;
 };
 
-enum category {
+export enum category {
   social = 'Social',
   streaming = 'Streaming',
   adult = 'Adult',
@@ -15,4 +15,5 @@ enum category {
   games = 'Games',
   shopping = 'Shopping',
   news = 'News',
+  unknown = ''
 }
