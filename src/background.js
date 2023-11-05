@@ -9,7 +9,7 @@ chrome.webNavigation.onCommitted.addListener(function (details, tabId) {
   chrome.storage.sync.get("blockedWebsites", function (result) {
     const blockedWebsites = result.blockedWebsites;
     let websiteBlocked = blockedWebsites.find((website) => {
-      return website.host === url;
+      return website.url === url;
     });
 
     if (!websiteBlocked) {
@@ -59,14 +59,14 @@ function writeDefaultConfig() {
     .set({
       blockedWebsites: [
         {
-          host: "youtube.com",
+          url: "youtube.com",
           allowedUntil: null,
           isMandatory: true,
           timesBlocked: 0,
           timesAllowed: 0,
         },
         {
-          host: "shopping.google.com",
+          url: "shopping.google.com",
           allowedUntil: null,
           isMandatory: true,
           timesBlocked: 0,

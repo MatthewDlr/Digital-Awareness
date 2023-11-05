@@ -1,5 +1,5 @@
 export type blockedSite = {
-  host: string;
+  url: string;
   allowedUntil: string;
   isMandatory: boolean;
   timesBlocked: number;

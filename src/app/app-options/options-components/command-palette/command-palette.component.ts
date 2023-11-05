@@ -19,6 +19,7 @@ export class CommandPaletteComponent implements AfterViewInit {
   constructor(private commandPaletteService: CommandPaletteService) {
     chrome.storage.sync.get('blockedWebsites').then((result) => {
       this.blockedWebsites = result['blockedWebsites'];
+      this.matchCommonAndBlockedWebsites();
     });
   }
 
@@ -35,7 +36,8 @@ export class CommandPaletteComponent implements AfterViewInit {
     let searchQuery = (event.target as HTMLInputElement).value;
 
     // Removing the www. and the url parameters
-    if (searchQuery.substring(0, 3) == 'www') searchQuery = searchQuery.substring(4);
+    if (searchQuery.substring(0, 3) == 'www')
+      searchQuery = searchQuery.substring(4);
     if (searchQuery.includes('/')) {
       searchQuery = searchQuery.substring(0, searchQuery.indexOf('/'));
     }
@@ -48,6 +50,17 @@ export class CommandPaletteComponent implements AfterViewInit {
     this.searchResults = fuzzy.search(searchQuery);
     if (this.searchResults.length == 0) {
       this.generateResults(searchQuery);
+    }
+  }
+
+  matchCommonAndBlockedWebsites() {
+    for (let searchResult of this.searchResults) {
+      const isBlocked = this.blockedWebsites.find((website) => {
+        return website.url == searchResult.url;
+      })
+        ? true
+        : false;
+      searchResult.isBlocked = isBlocked;
     }
   }
 
@@ -67,7 +80,6 @@ export class CommandPaletteComponent implements AfterViewInit {
     ) {
       this.searchResults.push({ url: text, category: '' });
     } else {
-
       if (text.endsWith('.')) {
         text = text.substring(0, text.length - 1);
       }
@@ -75,6 +87,7 @@ export class CommandPaletteComponent implements AfterViewInit {
       this.searchResults.push({ url: text + '.com', category: '' });
       this.searchResults.push({ url: text + '.org', category: '' });
       this.searchResults.push({ url: text + '.net', category: '' });
+      this.searchResults.push({ url: text + '.co', category: '' });
     }
   }
 }

@@ -15,7 +15,7 @@ export class AllowedSitesService {
     chrome.storage.sync.get('blockedWebsites', (result) => {
       this.blockedWebsites = result['blockedWebsites'];
       let blockedSite = this.blockedWebsites.find(
-        (blockedSite) => blockedSite.host == websiteToAllow,
+        (blockedSite) => blockedSite.url == websiteToAllow,
       );
       if (!blockedSite) {
         console.log(
@@ -40,7 +40,7 @@ export class AllowedSitesService {
     chrome.storage.sync.get('blockedWebsites', (result) => {
       this.blockedWebsites = result['blockedWebsites'];
       let blockedSite = this.blockedWebsites.find(
-        (blockedSite) => blockedSite.host == website,
+        (blockedSite) => blockedSite.url == website,
       );
       if (!blockedSite) {
         console.log('[ERROR] The website should be blocked and it is not');
