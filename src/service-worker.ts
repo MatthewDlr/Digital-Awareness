@@ -1,3 +1,5 @@
+import { defaultConfig } from "./defaultConfig.js"
+
 chrome.webNavigation.onCommitted.addListener(function (details) {
   if (details.frameId != 0 || !details.url.startsWith("https")) {
     return; // Avoid showing blockpage if the request is made in background or isn't https
@@ -47,36 +49,10 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 });
 
 chrome.runtime.onInstalled.addListener(() => {
-  writeDefaultConfig();
+  defaultConfig();
 });
 
 chrome.tabs.onRemoved.addListener(function (tabid, removed) {
   console.log(tabid, ": tab closed");
 });
 
-function writeDefaultConfig() {
-  chrome.storage.sync
-    .set({
-      mandatoryWebsites: [
-        {
-          url: "youtube.com",
-          allowedUntil: null,
-          timesBlocked: 0,
-          timesAllowed: 0,
-        },
-        {
-          url: "shopping.google.com",
-          allowedUntil: null,
-          timesBlocked: 0,
-          timesAllowed: 0,
-        },
-      ],
-      userWebsites: [],
-      userCategories: [],
-      timerValue: 30,
-      allowedSites: [],
-    })
-    .then(() => {
-      console.log("Default settings applied");
-    });
-}
