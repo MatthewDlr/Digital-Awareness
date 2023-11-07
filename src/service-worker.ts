@@ -1,4 +1,4 @@
-chrome.webNavigation.onCommitted.addListener(function (details, tabId) {
+chrome.webNavigation.onCommitted.addListener(function (details) {
   if (details.frameId != 0 || !details.url.startsWith("https")) {
     return; // Avoid showing blockpage if the request is made in background or isn't https
   }
@@ -6,9 +6,9 @@ chrome.webNavigation.onCommitted.addListener(function (details, tabId) {
   let url = new URL(details.url).host;
   if (url.substring(0, 3) == "www") url = url.substring(4);
 
-  chrome.storage.sync.get("blockedWebsites", function (result) {
-    const blockedWebsites = result.blockedWebsites;
-    let websiteBlocked = blockedWebsites.find((website) => {
+  chrome.storage.sync.get("mandatoryWebsites", function (result) {
+    const blockedWebsites = result['mandatoryWebsites'];
+    let websiteBlocked = blockedWebsites.find((website: { url: string; }) => {
       return website.url === url;
     });
 
@@ -19,7 +19,7 @@ chrome.webNavigation.onCommitted.addListener(function (details, tabId) {
 
     if (
       websiteBlocked.allowedUntil &&
-      new Date(websiteBlocked.allowedUntil) > Date.now()
+      new Date(websiteBlocked.allowedUntil).getTime() > Date.now()
     ) {
       console.log(
         "Website is temporary allowed until: ",
@@ -57,22 +57,22 @@ chrome.tabs.onRemoved.addListener(function (tabid, removed) {
 function writeDefaultConfig() {
   chrome.storage.sync
     .set({
-      blockedWebsites: [
+      mandatoryWebsites: [
         {
           url: "youtube.com",
           allowedUntil: null,
-          isMandatory: true,
           timesBlocked: 0,
           timesAllowed: 0,
         },
         {
           url: "shopping.google.com",
           allowedUntil: null,
-          isMandatory: true,
           timesBlocked: 0,
           timesAllowed: 0,
         },
       ],
+      userWebsites: [],
+      userCategories: [],
       timerValue: 30,
       allowedSites: [],
     })

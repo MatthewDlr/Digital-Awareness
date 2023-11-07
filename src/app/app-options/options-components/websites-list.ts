@@ -9,7 +9,7 @@ export type Website = {
 
 // Thank you Copilot for generating this list
 export const commonWebsites: Website[] = [
-  { url: 'cnn.com', category: category.news },
+  { url: 'edition.cnn.com', category: category.news },
   { url: 'bbc.com', category: category.news },
   { url: 'nytimes.com', category: category.news },
   { url: 'theguardian.com', category: category.news },

@@ -1,10 +1,10 @@
-export type blockedSite = {
+export type watchedWebsite = {
   url: string;
   allowedUntil: string;
-  isMandatory: boolean;
   timesBlocked: number;
   timesAllowed: number;
   category: category;
+  isMandatory:boolean;
 };
 
 export enum category {

@@ -11,8 +11,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
+            "customWebpackConfig": {
+              "path": "./webpack.config.ts"
+            },
             "optimization": {
               "styles": {
                 "inlineCritical": false
@@ -23,7 +26,7 @@
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": ["src/assets", "src/manifest.json", "src/background.js"],
+            "assets": ["src/assets", "src/manifest.json"],
             "styles": ["src/styles.css"],
             "scripts": []
           },

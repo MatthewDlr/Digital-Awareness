@@ -10,7 +10,7 @@ import {
   commonWebsites,
   Website,
 } from '../../options-components/websites-list';
-import { blockedSite, category } from '../../../types';
+import { watchedWebsite, category } from '../../../types';
 import FuzzySearch from 'fuzzy-search';
 
 @Component({
@@ -20,8 +20,9 @@ import FuzzySearch from 'fuzzy-search';
 })
 export class CommandPaletteComponent implements AfterViewInit {
   searchResults: Website[] = commonWebsites;
-  blockedWebsites: blockedSite[] = [];
+  blockedWebsites: watchedWebsite[] = [];
   selectedWebsites: Website[] = [];
+  suggestion: { category: category, performed: boolean } = { category: category.unknown, performed: false}
 
   constructor(private commandPaletteService: CommandPaletteService) {
     chrome.storage.sync.get('blockedWebsites').then((result) => {
@@ -30,19 +31,24 @@ export class CommandPaletteComponent implements AfterViewInit {
     });
   }
 
+  // Focus on the search input when the component is loaded
   @ViewChild('search') searchInput!: ElementRef;
   ngAfterViewInit(): void {
     this.searchInput.nativeElement.focus();
   }
 
+  // Listen for the enter key, esc or cmd+k/ctrl+k to validate
   @HostListener('document:keydown.enter', ['$event'])
+  @HostListener('document:keydown.escape', ['$event'])
+  @HostListener('document:keydown.meta.k', ['$event'])
+  @HostListener('document:keydown.control.k', ['$event'])
   onKeydownHandler(event: KeyboardEvent) {
     this.blockSelectedWebsites();
   }
 
   blockSelectedWebsites() {
     for (let website of this.selectedWebsites) {
-      let blockedWebsite: blockedSite = {
+      let blockedWebsite: watchedWebsite = {
         url: website.url,
         allowedUntil: '',
         isMandatory: false,
@@ -50,14 +56,15 @@ export class CommandPaletteComponent implements AfterViewInit {
         timesAllowed: 0,
         category: website.category || category.unknown,
       };
-
       this.blockedWebsites.push(blockedWebsite);
-      website.selected = false;
     }
-    console.log(this.blockedWebsites);
+    console.log(this.selectedWebsites)
     chrome.storage.sync
       .set({ blockedWebsites: this.blockedWebsites })
       .then((result) => {
+        for (let website of this.selectedWebsites) {
+          website.selected = false;
+        }
         this.selectedWebsites = [];
         this.toggleCommandPalette(false);
       })
@@ -103,6 +110,36 @@ export class CommandPaletteComponent implements AfterViewInit {
     if (this.searchResults.length == 0) {
       this.generateResults(searchQuery);
     }
+
+    this.processSuggestion(searchQuery.trim());
+  }
+
+  processSuggestion(searchQuery: string) {
+    for (let value of Object.values(category)) {
+      let search =
+        searchQuery.charAt(0).toUpperCase() +
+        searchQuery.slice(1).toLowerCase();
+      if (value.toString() == search && !(value.toString() == this.suggestion.category.toString())) {
+        this.suggestion.category = value;
+        this.suggestion.performed = false
+      }
+    }
+  }
+
+  performSuggestion() {
+    for (let website of commonWebsites) {
+      if (website.category == this.suggestion.category && !website.isBlocked) {
+        if (!this.suggestion.performed) {
+          this.selectedWebsites.push(website)
+          website.selected = true
+        } else {
+          const index = this.selectedWebsites.indexOf(website);
+          this.selectedWebsites.splice(index, 1);
+          website.selected = false
+        }
+      }
+    }
+    this.suggestion.performed = !this.suggestion.performed
   }
 
   matchCommonAndBlockedWebsites() {
@@ -117,29 +154,32 @@ export class CommandPaletteComponent implements AfterViewInit {
   }
 
   generateResults(text: string) {
-    if (
-      text.endsWith('.com') ||
-      text.endsWith('.org') ||
-      text.endsWith('.net') ||
-      text.endsWith('.io') ||
-      text.endsWith('.edu') ||
-      text.endsWith('.us') ||
-      text.endsWith('.ru') ||
-      text.endsWith('.co') ||
-      text.endsWith('.fr') ||
-      text.endsWith('.de') ||
-      text.endsWith('.uk')
-    ) {
+    // Check if the url end with a . + 2 or 3 letters
+    const regex = new RegExp(/\.([a-z]{2,5})$/);
+    const match = text.match(regex);
+
+    if (match) {
       this.searchResults.push({ url: text, category: category.unknown });
     } else {
       if (text.endsWith('.')) {
         text = text.substring(0, text.length - 1);
       }
-
-      this.searchResults.push({ url: text + '.com', category: category.unknown });
-      this.searchResults.push({ url: text + '.org', category: category.unknown });
-      this.searchResults.push({ url: text + '.net', category: category.unknown });
-      this.searchResults.push({ url: text + '.co', category: category.unknown });
+      this.searchResults.push({
+        url: text + '.com',
+        category: category.unknown,
+      });
+      this.searchResults.push({
+        url: text + '.org',
+        category: category.unknown,
+      });
+      this.searchResults.push({
+        url: text + '.net',
+        category: category.unknown,
+      });
+      this.searchResults.push({
+        url: text + '.co',
+        category: category.unknown,
+      });
     }
   }
 }

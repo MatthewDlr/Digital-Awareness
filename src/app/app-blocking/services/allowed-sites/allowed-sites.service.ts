@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { blockedSite } from 'src/app/types';
+import { watchedWebsite } from 'src/app/types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AllowedSitesService {
-  blockedWebsites: blockedSite[] = [];
+  blockedWebsites: watchedWebsite[] = [];
   constructor() {}
 
   allowWebsiteTemporary(websiteToAllow: string, duration: number = 30): void {

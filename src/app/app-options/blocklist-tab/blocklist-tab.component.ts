@@ -1,5 +1,5 @@
-import { Component} from '@angular/core';
-import { blockedSite } from 'src/app/types';
+import { Component, HostListener} from '@angular/core';
+import { watchedWebsite } from 'src/app/types';
 import { CommandPaletteService } from '../services/command-palette/command-palette.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { CommandPaletteService } from '../services/command-palette/command-palet
 })
 export class BlocklistTabComponent {
   isLoading: boolean = true;
-  blockedWebsites: blockedSite[] = [];
+  blockedWebsites: watchedWebsite[] = [];
   isCommandPaletteShown: boolean = false;
   randomWidths: any[] = [];
 
@@ -26,11 +26,18 @@ export class BlocklistTabComponent {
     })
   }
 
+  // Listen for the cmd+k/ctrl+k to toggle the command palette
+  @HostListener('document:keydown.meta.k', ['$event'])
+  @HostListener('document:keydown.control.k', ['$event'])
+  onKeydownHandler(event: KeyboardEvent) {
+    this.toggleCommandPalette(true);
+  }
+
   toggleCommandPalette(state: boolean) {
     this.commandPaletteService.toggleCommandPalette(state);
   }
 
-  computeBlockedScore(website: blockedSite): string {
+  computeBlockedScore(website: watchedWebsite): string {
     let score =
       (website.timesBlocked * 100) /
       (website.timesBlocked + website.timesAllowed);

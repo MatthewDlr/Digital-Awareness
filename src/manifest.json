@@ -8,13 +8,14 @@
     "256": "./assets/logo256.png"
   },
   "host_permissions": ["*://*/*"],
-  "permissions": ["storage", "tabs", "activeTab", "webNavigation"],
+  "permissions": ["storage", "tabs", "activeTab", "webNavigation", "unlimitedStorage"],
   "action": {
     "default_popup": "index.html#/popup"
   },
   "options_page": "index.html#/options",
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "serviceWorker.js",
+    "type": "module"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self' ; object-src 'self'"

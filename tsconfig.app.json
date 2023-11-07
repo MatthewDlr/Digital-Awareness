@@ -7,8 +7,8 @@
   },
   "files": [
     "src/main.ts",
+    "src/service-worker.ts"
   ],
   "include": [
-    "src/**/*.d.ts"
   ]
 }
