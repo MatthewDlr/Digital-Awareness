@@ -1,3 +1,4 @@
+import { Website } from './app/app-options/options-components/websites-list.js';
 import { defaultConfig } from './defaultConfig.js';
 
 chrome.webNavigation.onCommitted.addListener(function (details) {
@@ -12,37 +13,24 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
   }
 
   chrome.storage.local.get(['enforcedWebsites']).then((result) => {
+    // Check if the website blocked by the list of mandatory blocked websites
     const enforcedWebsites = result['enforcedWebsites'];
-    let websiteBlocked = enforcedWebsites.find((website: { host: string }) => {
-      return website.host === commitedWebsite;
-    });
+    const isEnforced = isWebsiteBlocked(commitedWebsite, enforcedWebsites);
 
-    if (!websiteBlocked) {
-      console.log('Website not blocked: ', commitedWebsite);
-      return;
+    if (isEnforced) {
+      redirectToWaitPage(details);
+    } else {
+      // Check if the website is in the list of user blocked websites
+      chrome.storage.sync.get(['userWebsites']).then((result) => {
+        const userWebsites = result['userWebsites'];
+        const isBlocked = isWebsiteBlocked(commitedWebsite, userWebsites);
+
+        if (isBlocked) {
+          redirectToWaitPage(details);
+        }
+      });
     }
-
-    const allowedUntil: Date = new Date(websiteBlocked.allowedUntil);
-    if (allowedUntil > new Date()) {
-      console.log('Website is temporary allowed until: ', allowedUntil);
-      return;
-    }
-    console.log(
-      'Blocked! ',
-      commitedWebsite,
-      'tabID: ',
-      details.tabId,
-      ' url: ',
-      details.url,
-    );
-
-    let redirectUrl = chrome.runtime.getURL(
-      'index.html#blocked/' +
-        encodeURIComponent(details.tabId) +
-        '/' +
-        encodeURIComponent(details.url),
-    );
-    chrome.tabs.update(details.tabId, { url: redirectUrl });
+    // If website is blocked
   });
 });
 
@@ -53,3 +41,36 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.tabs.onRemoved.addListener(function (tabid, removed) {
   console.log(tabid, ': tab closed');
 });
+
+function isWebsiteBlocked(
+  commitedHost: string,
+  blockedWebsites: any[],
+): boolean {
+  let blockedWebsite = blockedWebsites.find((website) => {
+    return website.host === commitedHost;
+  });
+
+  if (!blockedWebsite) {
+    console.log('Website not blocked: ', commitedHost);
+    return false;
+  }
+
+  const allowedUntil: Date = new Date(blockedWebsite.allowedUntil);
+  if (allowedUntil > new Date()) {
+    console.log('Website is temporary allowed until: ', allowedUntil);
+    return false;
+  }
+
+  console.log('Website blocked: ', commitedHost);
+  return true;
+}
+
+function redirectToWaitPage(details: any) {
+  let redirectUrl = chrome.runtime.getURL(
+    'index.html#blocked/' +
+      encodeURIComponent(details.tabId) +
+      '/' +
+      encodeURIComponent(details.url),
+  );
+  chrome.tabs.update(details.tabId, { url: redirectUrl });
+}

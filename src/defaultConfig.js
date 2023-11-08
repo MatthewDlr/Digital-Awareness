@@ -101,8 +101,18 @@ export function defaultConfig() {
 
   chrome.storage.sync
     .set({
-      timerValue: 0,
-      timeAllowed: 30,
+      timerValue: 30, // Timer base value is 30 sec
+      timeAllowed: 30, // When a website is allowed, the default duration is 30 min
+      userWebsites: [
+        {
+          host: "edition.cnn.com",
+          allowedUntil: "next time",
+          timesBlocked: 0,
+          timesAllowed: 0,
+          category: "Shopping",
+        },
+      ], // Website the user will decide to block
+      userCategories: [] // Categories the user will decide to block
     })
     .then(() => {
       console.log("sync set");
