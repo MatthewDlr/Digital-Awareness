@@ -3,105 +3,108 @@ export function defaultConfig() {
     .set({
       enforcedWebsites: [
         {
-          url: "youtube.com",
-          allowedUntil: "",
+          host: "youtube.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Sreaming",
         },
         {
-          url: "netflix.com",
-          allowedUntil: "",
+          host: "netflix.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Sreaming",
         },
         {
-          url: "twitch.tv",
-          allowedUntil: "",
+          host: "twitch.tv",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Sreaming",
         },
         {
-          url: "primevideo.com",
-          allowedUntil: "",
+          host: "primevideo.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Sreaming",
         },
         {
-          url: "disneyplus.com",
-          allowedUntil: "",
+          host: "disneyplus.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Sreaming",
         },
         {
-          url: "instagram.com",
-          allowedUntil: "",
+          host: "instagram.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Social",
         },
         {
-          url: "facebook.com",
-          allowedUntil: "",
+          host: "facebook.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Social",
         },
         {
-          url: "twitter.com",
-          allowedUntil: "",
+          host: "twitter.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Social",
         },
         {
-          url: "x.com",
-          allowedUntil: "",
+          host: "x.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Social",
         },
         {
-          url: "reddit.com",
-          allowedUntil: "",
+          host: "tiktok.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Social",
         },
         {
-          url: "tiktok.com",
-          allowedUntil: "",
+          host: "snapchat.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Social",
         },
         {
-          url: "snapchat.com",
-          allowedUntil: "",
+          host: "threads.net",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Social",
         },
         {
-          url: "threads.net",
-          allowedUntil: "",
-          timesBlocked: 0,
-          timesAllowed: 0,
-          category: "Social",
-        },
-        {
-          url: "aliexpress.com",
-          allowedUntil: "",
+          host: "aliexpress.com",
+          allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
           category: "Shopping",
         },
-
       ],
     })
-    .then(console.log("defaultConfigWritten"));
+    .then(() => {
+      console.log("enforcedWebsites set");
+    });
+
+  chrome.storage.sync
+    .set({
+      timerValue: 0,
+      timeAllowed: 30,
+    })
+    .then(() => {
+      console.log("sync set");
+    });
 }

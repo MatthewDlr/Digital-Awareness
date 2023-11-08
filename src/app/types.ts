@@ -1,10 +1,10 @@
 export type watchedWebsite = {
-  url: string;
+  host: string;
   allowedUntil: string;
   timesBlocked: number;
   timesAllowed: number;
   category: category;
-  isMandatory:boolean;
+  isMandatory?:boolean;
 };
 
 export enum category {

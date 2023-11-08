@@ -49,7 +49,7 @@ export class CommandPaletteComponent implements AfterViewInit {
   blockSelectedWebsites() {
     for (let website of this.selectedWebsites) {
       let blockedWebsite: watchedWebsite = {
-        url: website.url,
+        host: website.url,
         allowedUntil: '',
         isMandatory: false,
         timesBlocked: 0,
@@ -146,7 +146,7 @@ export class CommandPaletteComponent implements AfterViewInit {
     for (let searchResult of this.searchResults) {
       const isBlocked = Boolean(
         this.blockedWebsites.find((website) => {
-          return website.url == searchResult.url;
+          return website.host == searchResult.url;
         }),
       );
       searchResult.isBlocked = isBlocked;
