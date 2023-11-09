@@ -51,7 +51,6 @@ export class CommandPaletteComponent implements AfterViewInit {
       let blockedWebsite: watchedWebsite = {
         host: website.url,
         allowedUntil: '',
-        isMandatory: false,
         timesBlocked: 0,
         timesAllowed: 0,
         category: website.category || category.unknown,

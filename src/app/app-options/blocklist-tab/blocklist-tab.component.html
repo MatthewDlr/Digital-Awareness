@@ -1,128 +1,151 @@
-<!-- Information card -->
-<div
-  class="text-blue-500 bg-blue-50 mt-10 flex w-full items-center gap-3 rounded-lg stroke-blue-500 px-4 py-3 text-sm"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke-width="1.5"
-    stroke="currentColor"
-    class="h-6 w-6"
-  >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-    />
-  </svg>
-  For your wellbeing, certain websites we identified as the most time-consuming
-  are enforced in the block list.
-</div>
-
-<button
-  (click)="toggleCommandPalette(true)"
-  type="button"
-  class="text-white mb-2 mr-2 mt-5 rounded-lg px-5 py-2.5 text-center text-sm font-medium bg-gradient-to-br from-green-400 via-green-500 to-green-600  dark:from-green-200 dark:via-green-300 dark:to-green-400"
->
-  Add New
-</button>
-
 <!-- Table -->
-<div class="w-full overflow-x-auto shadow-md sm:rounded-lg">
-  <table class="text-gray-500 w-full text-left text-sm">
-    <!-- Table Header -->
-    <thead class="text-gray-700 bg-gray-50 w-full text-xs uppercase">
-      <tr>
-        <th scope="col" class="w-3/5 px-5 py-3">Website</th>
-        <th scope="col" class="px-5 py-3">Blocked Ratio</th>
-        <th scope="col" class="px-5 py-3">Actions</th>
-      </tr>
-    </thead>
-
-    <!-- Table Body (records) -->
-    <tbody>
-      <!-- Skeleton Loading -->
-      <ng-container *ngIf="isLoading">
-        <tr *ngFor="let row of [0, 1, 2, 3, 4, 5]">
-          <th scope="row" class="whitespace-nowrap px-6 py-4">
-            <div
-              class="bg-gray-200 h-6 animate-pulse rounded-full"
-              [style.width]="randomWidths.at(row).at(0)"
-            ></div>
-          </th>
-          <th scope="row" class="whitespace-nowrap px-6 py-4">
-            <div
-              class="bg-gray-200 h-6 animate-pulse rounded-full"
-              [style.width]="randomWidths.at(row).at(1)"
-            ></div>
-          </th>
-          <th scope="row" class="whitespace-nowrap px-6 py-4">
-            <div
-              class="bg-gray-200 h-6 animate-pulse rounded-full"
-              [style.width]="randomWidths.at(row).at(2)"
-            ></div>
-          </th>
-        </tr>
-      </ng-container>
-
-      <!-- Real Content -->
-      <ng-container *ngIf="!isLoading">
-        <tr *ngFor="let website of blockedWebsites" class="bg-white border-b">
-          <!-- Host Name -->
-          <th
-            scope="row"
-            class="text-gray-900 whitespace-nowrap px-6 py-4 font-medium"
-          >
-            {{ website.host }}
-          </th>
-
-          <!-- Blocked Ratio -->
-          <td class="px-6 py-4">
-            {{ computeBlockedScore(website) }}
-          </td>
-
-          <!-- Actions -->
-          <td class="flex gap-10 px-6 py-4">
-            <svg
-              [ngClass]="
-                website.isMandatory
-                  ? 'cursor-not-allowed stroke-gray-200 opacity-50'
-                  : 'cursor-pointer stroke-green-500'
-              "
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              class="h-6 w-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-              />
-            </svg>
-            <svg
-              [ngClass]="
-                website.isMandatory
-                  ? 'cursor-not-allowed stroke-gray-200 opacity-50'
-                  : 'cursor-pointer stroke-green-500'
-              "
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              class="h-6 w-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
-              />
-            </svg>
-          </td>
-        </tr>
-      </ng-container>
-    </tbody>
-  </table>
+<div class="mt-5 min-w-full">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-gray-900 text-base font-semibold leading-6">Websites</h1>
+      <p class="text-gray-700 mt-2 text-sm">
+        For your wellbeing, certain websites we identified as the most
+        time-consuming are enforced in the block list.
+      </p>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+      <button
+        (click)="toggleCommandPalette(true)"
+        type="button"
+        class="text-white mb-2 mr-2 mt-5 rounded-lg bg-gradient-to-br from-green-400 via-green-500 to-green-600 px-5 py-2.5 text-center text-sm font-medium dark:from-green-200 dark:via-green-300 dark:to-green-400"
+      >
+        Add new website
+      </button>
+    </div>
+  </div>
+  <div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <div
+          class="max-h-[25rem] overflow-scroll shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg"
+        >
+          <table class="min-w-full divide-y-0 divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr class="">
+                <th
+                  scope="col"
+                  class="text-gray-900 w-1/2 py-3.5 pl-5 text-left text-sm font-semibold"
+                >
+                  Website
+                </th>
+                <th
+                  scope="col"
+                  class="text-gray-900 w-1/6 py-3.5 text-left text-sm font-semibold"
+                >
+                  Category
+                </th>
+                <th
+                  scope="col"
+                  class="text-gray-900 w-1/6 py-3.5 text-left text-sm font-semibold"
+                >
+                  Blocked Ratio
+                </th>
+                <th
+                  scope="col"
+                  class="text-gray-900 w-1/6 py-3.5 text-left text-sm font-semibold"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200 overflow-scroll">
+              <tr *ngFor="let website of userWebsites; let i = index">
+                <td
+                  class="text-gray-900 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6"
+                >
+                  <span *ngIf="editIndex != i">{{ website.host }}</span>
+                  <div
+                    *ngIf="editIndex === i"
+                    class="focus-within:ring-indigo-600 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset sm:max-w-md"
+                  >
+                    <span
+                      class="text-gray-500 flex select-none items-center pl-3 sm:text-sm"
+                      >http://</span
+                    >
+                    <input
+                      type="text"
+                      name="company-website"
+                      id="company-website"
+                      class="text-gray-900 block flex-1 border-0 bg-transparent py-1.5 pl-1 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                      placeholder="example.com"
+                      [(ngModel)]="website.host"
+                      (blur)="setEditIndex(-1)"
+                    />
+                    <svg
+                      (click)="setEditIndex(-1)"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="h-6 w-6 flex select-none items-center pr-3 sm:text-sm"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                </td>
+                <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
+                  {{ website.category }}
+                </td>
+                <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
+                  {{ computeBlockedScore(website) }}
+                </td>
+                <td
+                  class="relative flex gap-5 whitespace-nowrap py-4 pr-3 text-right text-sm font-medium sm:pr-6"
+                >
+                  <a
+                    class="text-purple-500 cursor-pointer underline hover:text-purple-600"
+                    (click)="setEditIndex(i)"
+                  >
+                    Edit
+                  </a>
+                  <a
+                    class="text-purple-500 cursor-pointer underline hover:text-purple-600"
+                  >
+                    Remove
+                  </a>
+                </td>
+              </tr>
+              <tr *ngFor="let website of enforcedWebsites">
+                <td
+                  class="text-gray-900 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6"
+                >
+                  {{ website.host }}
+                </td>
+                <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
+                  {{ website.category }}
+                </td>
+                <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
+                  {{ computeBlockedScore(website) }}
+                </td>
+                <td
+                  class="relative flex gap-5 whitespace-nowrap py-4 pr-3 text-right text-sm font-medium sm:pr-6"
+                >
+                  <a
+                    class="text-gray-500 cursor-not-allowed hover:text-gray-600"
+                  >
+                    Edit
+                  </a>
+                  <a
+                    class="text-gray-500 cursor-not-allowed hover:text-gray-600"
+                  >
+                    Remove
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

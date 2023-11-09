@@ -1,6 +1,7 @@
-import { Component, HostListener} from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { watchedWebsite } from 'src/app/types';
 import { CommandPaletteService } from '../services/command-palette/command-palette.service';
+import { Website } from '../options-components/websites-list';
 
 @Component({
   selector: 'app-blocklist-tab',
@@ -9,21 +10,19 @@ import { CommandPaletteService } from '../services/command-palette/command-palet
 })
 export class BlocklistTabComponent {
   isLoading: boolean = true;
-  blockedWebsites: watchedWebsite[] = [];
+  enforcedWebsites: watchedWebsite[] = []
+  userWebsites: watchedWebsite[] = []
   isCommandPaletteShown: boolean = false;
   randomWidths: any[] = [];
+  editIndex!: number ;
 
-  constructor(
-    private commandPaletteService: CommandPaletteService,
-  ) {
-    chrome.storage.sync.get('blockedWebsites').then((result) => {
-      this.blockedWebsites = result['blockedWebsites'];
-      this.isLoading = false;
-    });
-    this.generateRandomWidth()
+
+  constructor(private commandPaletteService: CommandPaletteService) {
+    this.getWebsites();
+    this.generateRandomWidth();
     this.commandPaletteService.isCommandPaletteShown.subscribe({
-      next: (state) => this.isCommandPaletteShown = state
-    })
+      next: (state) => (this.isCommandPaletteShown = state),
+    });
   }
 
   // Listen for the cmd+k/ctrl+k to toggle the command palette
@@ -57,5 +56,19 @@ export class BlocklistTabComponent {
       }
       this.randomWidths.push(rowValues);
     }
+  }
+
+  getWebsites() {
+    Promise.all([
+      chrome.storage.local.get('enforcedWebsites'),
+      chrome.storage.sync.get('userWebsites'),
+    ]).then(([enforcedResult, userResult]) => {
+      this.enforcedWebsites = enforcedResult['enforcedWebsites'] || [];
+      this.userWebsites = userResult['userWebsites'] || [];
+    });
+  }
+
+  setEditIndex(index: number) {
+    this.editIndex = index;
   }
 }

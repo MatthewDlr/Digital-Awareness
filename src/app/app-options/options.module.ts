@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { OptionsComponent } from './options-page/options.component';
 import { BlocklistTabComponent } from './blocklist-tab/blocklist-tab.component';
 import { BlockpageTabComponent } from './blockpage-tab/blockpage-tab.component';
@@ -15,7 +16,7 @@ import { CommandPaletteService } from './services/command-palette/command-palett
     NotificationsTabComponent,
     CommandPaletteComponent,
   ],
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   providers: [CommandPaletteService]
 })
 export class OptionsModule {}

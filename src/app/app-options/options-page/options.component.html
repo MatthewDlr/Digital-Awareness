@@ -1,6 +1,5 @@
 <app-command-palette *ngIf="isCommandPaletteShown"></app-command-palette>
 
-
 <!-- DevMode Warning-->
 <div
   *ngIf="isDevModeEnabled()"
@@ -25,12 +24,14 @@
   </div>
 </div>
 
-<div class="bg-white flex h-[100vh] w-full flex-col gap-5 px-80 py-20 overflow-hidden">
+<div
+  class="bg-white flex h-[100vh] w-full flex-col gap-5 overflow-hidden px-80 py-20"
+>
   <h1
     class="fade-in-bottom h-fit w-fit bg-gradient-to-br from-green-300 from-10% via-green-400 via-70% to-green-500 bg-clip-text py-2 text-4xl font-bold text-transparent dark:from-green-200 dark:via-green-300 dark:to-green-400"
     style="--delay: 0.1s"
   >
-    Digital Awareness Options
+    Options
   </h1>
 
   <!-- Tabs -->

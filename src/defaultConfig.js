@@ -94,6 +94,7 @@ export function defaultConfig() {
           category: "Shopping",
         },
       ],
+      categoriesWebsites: [],
     })
     .then(() => {
       console.log("enforcedWebsites set");
@@ -112,7 +113,32 @@ export function defaultConfig() {
           category: "News",
         },
       ], // Website the user will decide to block
-      userCategories: [] // Categories the user will decide to block
+      userCategories: [
+        {
+          name: 'News',
+          isActive: false
+        },
+        {
+          name: 'Social',
+          isActive: false
+        },
+        {
+          name: 'Shopping',
+          isActive: false
+        },
+        {
+          name: 'Sreaming',
+          isActive: false
+        },
+        {
+          name: 'Adult',
+          isActive: false
+        },
+        {
+          name: 'Gambling',
+          isActive: false
+        }
+      ]
     })
     .then(() => {
       console.log("sync set");
