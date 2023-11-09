@@ -1,55 +1,79 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
+import { resolveObjectURL } from 'buffer';
 import { watchedWebsite } from 'src/app/types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AllowedSitesService {
-  blockedWebsites: watchedWebsite[] = [];
+  enforcedWebsites: watchedWebsite[] = [];
+  userWebsites: watchedWebsite[] = [];
   constructor() {}
 
   allowWebsiteTemporary(websiteToAllow: string, duration: number = 30): void {
-    if (websiteToAllow.substring(0, 3) == 'www')
-      websiteToAllow = websiteToAllow.substring(4); // Removing the www.
+    websiteToAllow = this.removeWWW(websiteToAllow);
 
-    chrome.storage.sync.get('blockedWebsites', (result) => {
-      this.blockedWebsites = result['blockedWebsites'];
-      let blockedSite = this.blockedWebsites.find(
-        (blockedSite) => blockedSite.host == websiteToAllow,
+    chrome.storage.local.get('enforcedWebsites', (result) => {
+      this.enforcedWebsites = result['enforcedWebsites'];
+      let enforcedWebsite = this.enforcedWebsites.find(
+        (enforcedSite) => enforcedSite.host == websiteToAllow,
       );
-      if (!blockedSite) {
-        console.log(
-          '[ERROR] The website must be blocked before it can be allowed.',
-        );
-        return;
+      if (enforcedWebsite) {
+        this.updateWebsiteAllowedDate(enforcedWebsite, duration);
+        chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites });
+        console.log('Updated enforcedWebsites list: ', this.enforcedWebsites);
+      } else {
+        chrome.storage.sync.get('userWebsites', (result) => {
+          this.userWebsites = result['userWebsites'];
+          let userWebsite = this.userWebsites.find(
+            (userWebsite) => userWebsite.host == websiteToAllow,
+          );
+          if (userWebsite) {
+            this.updateWebsiteAllowedDate(userWebsite, duration);
+
+            chrome.storage.sync.set({ userWebsites: this.userWebsites });
+            console.log('Updated userWebsites list: ', this.userWebsites);
+          }
+        });
       }
-      blockedSite.allowedUntil = new Date(
-        Date.now() + duration * 60000,
-      ).toString();
-
-      blockedSite.timesAllowed++;
-
-      chrome.storage.sync.set({ blockedWebsites: this.blockedWebsites });
-      console.log('Updated blocked list: ', this.blockedWebsites);
     });
   }
 
-  incrementTimesBlocked(website: string) {
-    if (website.substring(0, 3) == 'www') website = website.substring(4); // Removing the www.
+  incrementTimesBlocked(websiteToIncrement: string) {
+    websiteToIncrement = this.removeWWW(websiteToIncrement);
 
-    chrome.storage.sync.get('blockedWebsites', (result) => {
-      this.blockedWebsites = result['blockedWebsites'];
-      let blockedSite = this.blockedWebsites.find(
-        (blockedSite) => blockedSite.host == website,
+    chrome.storage.local.get('enforcedWebsites', (result) => {
+      this.enforcedWebsites = result['enforcedWebsites'];
+      let enforcedWebsite = this.enforcedWebsites.find(
+        (enforcedSite) => enforcedSite.host == websiteToIncrement,
       );
-      if (!blockedSite) {
-        console.log('[ERROR] The website should be blocked and it is not');
-        return;
+      if (enforcedWebsite) {
+        enforcedWebsite.timesBlocked++;
+        chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites });
+        console.log('Updated enforcedWebsites list: ', this.enforcedWebsites);
+      } else {
+        chrome.storage.sync.get('userWebsites', (result) => {
+          this.userWebsites = result['userWebsites'];
+          let userWebsite = this.userWebsites.find(
+            (userWebsite) => userWebsite.host == websiteToIncrement,
+          );
+          if (userWebsite) {
+            userWebsite.timesBlocked++;
+            chrome.storage.sync.set({ userWebsites: this.userWebsites });
+            console.log('Updated userWebsites list: ', this.userWebsites);
+          }
+        });
       }
-      blockedSite.timesBlocked++;
-
-      chrome.storage.sync.set({ blockedWebsites: this.blockedWebsites });
-      console.log('Incremented Times Blocked: ', blockedSite);
     });
+  }
+
+  removeWWW(website: string): string {
+    if (website.substring(0, 3) == 'www') return website.substring(4);
+    return website;
+  }
+
+  updateWebsiteAllowedDate(website: watchedWebsite, duration: number) {
+    website.allowedUntil = new Date(Date.now() + duration * 60000).toString();
+    website.timesAllowed++;
   }
 }

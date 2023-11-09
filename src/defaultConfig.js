@@ -109,7 +109,7 @@ export function defaultConfig() {
           allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
-          category: "Shopping",
+          category: "News",
         },
       ], // Website the user will decide to block
       userCategories: [] // Categories the user will decide to block

@@ -4,7 +4,6 @@ export type watchedWebsite = {
   timesBlocked: number;
   timesAllowed: number;
   category: category;
-  isMandatory?:boolean;
 };
 
 export enum category {
