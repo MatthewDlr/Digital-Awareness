@@ -7,6 +7,7 @@ import { BlockpageTabComponent } from './blockpage-tab/blockpage-tab.component';
 import { NotificationsTabComponent } from './notifications-tab/notifications-tab.component';
 import { CommandPaletteComponent } from './options-components/command-palette/command-palette.component';
 import { CommandPaletteService } from './services/command-palette/command-palette.service';
+import { PendingChangesService } from './services/pending-changes/pending-changes.service';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,6 @@ import { CommandPaletteService } from './services/command-palette/command-palett
     CommandPaletteComponent,
   ],
   imports: [CommonModule, FormsModule],
-  providers: [CommandPaletteService]
+  providers: [CommandPaletteService, PendingChangesService]
 })
 export class OptionsModule {}
