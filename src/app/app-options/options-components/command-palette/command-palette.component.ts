@@ -20,14 +20,14 @@ import FuzzySearch from 'fuzzy-search';
 })
 export class CommandPaletteComponent implements AfterViewInit {
   searchResults: Website[] = commonWebsites;
-  blockedWebsites: watchedWebsite[] = [];
+  userWebsites: watchedWebsite[] = [];
   selectedWebsites: Website[] = [];
   suggestion: { category: category, performed: boolean } = { category: category.unknown, performed: false}
 
   constructor(private commandPaletteService: CommandPaletteService) {
-    chrome.storage.sync.get('blockedWebsites').then((result) => {
-      this.blockedWebsites = result['blockedWebsites'];
-      this.matchCommonAndBlockedWebsites();
+    chrome.storage.sync.get('userWebsites').then((result) => {
+      this.userWebsites = result['userWebsites'];
+      this.matchCommonAndUserWebsites();
     });
   }
 
@@ -55,11 +55,11 @@ export class CommandPaletteComponent implements AfterViewInit {
         timesAllowed: 0,
         category: website.category || category.unknown,
       };
-      this.blockedWebsites.push(blockedWebsite);
+      this.userWebsites.push(blockedWebsite);
     }
     console.log(this.selectedWebsites)
     chrome.storage.sync
-      .set({ blockedWebsites: this.blockedWebsites })
+      .set({ userWebsites: this.userWebsites })
       .then((result) => {
         for (let website of this.selectedWebsites) {
           website.selected = false;
@@ -141,10 +141,10 @@ export class CommandPaletteComponent implements AfterViewInit {
     this.suggestion.performed = !this.suggestion.performed
   }
 
-  matchCommonAndBlockedWebsites() {
+  matchCommonAndUserWebsites() {
     for (let searchResult of this.searchResults) {
       const isBlocked = Boolean(
-        this.blockedWebsites.find((website) => {
+        this.userWebsites.find((website) => {
           return website.host == searchResult.url;
         }),
       );

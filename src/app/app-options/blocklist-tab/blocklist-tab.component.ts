@@ -71,4 +71,8 @@ export class BlocklistTabComponent {
   setEditIndex(index: number) {
     this.editIndex = index;
   }
+
+  removeWebsite(websiteToDelete: watchedWebsite){
+    this.userWebsites = this.userWebsites.filter((website) => website.host !== websiteToDelete.host);
+  }
 }
