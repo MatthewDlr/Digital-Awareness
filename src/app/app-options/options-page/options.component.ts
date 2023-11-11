@@ -1,4 +1,4 @@
-import { Component, isDevMode } from '@angular/core';
+import { Component, NgZone, isDevMode } from '@angular/core';
 import { CommandPaletteService } from '../services/command-palette/command-palette.service';
 
 @Component({
@@ -10,7 +10,10 @@ export class OptionsComponent {
   currentTab: string = 'blocklist';
   isCommandPaletteShown: boolean = false;
 
-  constructor(public commandPaletteService: CommandPaletteService) {
+  constructor(
+    public commandPaletteService: CommandPaletteService,
+    private ngZone: NgZone,
+  ) {
     this.commandPaletteService.isCommandPaletteShown.subscribe({
       next: (state) => {
         this.isCommandPaletteShown = state;

@@ -9,7 +9,7 @@ import { CommandPaletteService } from '../../services/command-palette/command-pa
 import {
   commonWebsites,
   Website,
-} from '../../options-components/websites-list';
+} from '../websites-list';
 import { watchedWebsite, category } from '../../../types';
 import FuzzySearch from 'fuzzy-search';
 

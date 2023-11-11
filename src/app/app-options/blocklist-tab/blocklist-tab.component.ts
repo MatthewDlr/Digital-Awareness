@@ -1,7 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { watchedWebsite } from 'src/app/types';
 import { CommandPaletteService } from '../services/command-palette/command-palette.service';
-import { Website } from '../options-components/websites-list';
+import { Website } from '../components/websites-list';
 
 @Component({
   selector: 'app-blocklist-tab',
@@ -17,7 +17,9 @@ export class BlocklistTabComponent {
   editIndex!: number ;
 
 
-  constructor(private commandPaletteService: CommandPaletteService) {
+  constructor(
+    private commandPaletteService: CommandPaletteService,
+    ) {
     this.getWebsites();
     this.generateRandomWidth();
     this.commandPaletteService.isCommandPaletteShown.subscribe({
@@ -70,6 +72,10 @@ export class BlocklistTabComponent {
 
   setEditIndex(index: number) {
     this.editIndex = index;
+  }
+
+  editWebsite(websiteToEdit: watchedWebsite){
+    this.editIndex = -1
   }
 
   removeWebsite(websiteToDelete: watchedWebsite){

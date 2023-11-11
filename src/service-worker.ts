@@ -1,4 +1,4 @@
-import { Website } from './app/app-options/options-components/websites-list.js';
+import { Website } from './app/app-options/components/websites-list.js';
 import { defaultConfig } from './defaultConfig.js';
 
 chrome.webNavigation.onCommitted.addListener(function (details) {
