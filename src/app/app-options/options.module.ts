@@ -8,6 +8,7 @@ import { NotificationsTabComponent } from './notifications-tab/notifications-tab
 import { CommandPaletteComponent } from './components/command-palette/command-palette.component';
 import { CommandPaletteService } from './services/command-palette/command-palette.service';
 import { PendingChangesComponent } from './components/pending-changes/pending-changes.component';
+import { PendingChangesService } from './services/pending-changes/pending-changes.service';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,6 @@ import { PendingChangesComponent } from './components/pending-changes/pending-ch
     PendingChangesComponent,
   ],
   imports: [CommonModule, FormsModule],
-  providers: [CommandPaletteService]
+  providers: [CommandPaletteService, PendingChangesService]
 })
 export class OptionsModule {}

@@ -6,10 +6,7 @@ import {
   HostListener,
 } from '@angular/core';
 import { CommandPaletteService } from '../../services/command-palette/command-palette.service';
-import {
-  commonWebsites,
-  Website,
-} from '../websites-list';
+import { commonWebsites, Website } from '../websites-list';
 import { watchedWebsite, category } from '../../../types';
 import FuzzySearch from 'fuzzy-search';
 
@@ -22,7 +19,10 @@ export class CommandPaletteComponent implements AfterViewInit {
   searchResults: Website[] = commonWebsites;
   userWebsites: watchedWebsite[] = [];
   selectedWebsites: Website[] = [];
-  suggestion: { category: category, performed: boolean } = { category: category.unknown, performed: false}
+  suggestion: { category: category; performed: boolean } = {
+    category: category.unknown,
+    performed: false,
+  };
 
   constructor(private commandPaletteService: CommandPaletteService) {
     chrome.storage.sync.get('userWebsites').then((result) => {
@@ -57,7 +57,7 @@ export class CommandPaletteComponent implements AfterViewInit {
       };
       this.userWebsites.push(blockedWebsite);
     }
-    console.log(this.selectedWebsites)
+    console.log(this.selectedWebsites);
     chrome.storage.sync
       .set({ userWebsites: this.userWebsites })
       .then((result) => {
@@ -118,9 +118,12 @@ export class CommandPaletteComponent implements AfterViewInit {
       let search =
         searchQuery.charAt(0).toUpperCase() +
         searchQuery.slice(1).toLowerCase();
-      if (value.toString() == search && !(value.toString() == this.suggestion.category.toString())) {
+      if (
+        value.toString() == search &&
+        !(value.toString() == this.suggestion.category.toString())
+      ) {
         this.suggestion.category = value;
-        this.suggestion.performed = false
+        this.suggestion.performed = false;
       }
     }
   }
@@ -129,16 +132,16 @@ export class CommandPaletteComponent implements AfterViewInit {
     for (let website of commonWebsites) {
       if (website.category == this.suggestion.category && !website.isBlocked) {
         if (!this.suggestion.performed) {
-          this.selectedWebsites.push(website)
-          website.selected = true
+          this.selectedWebsites.push(website);
+          website.selected = true;
         } else {
           const index = this.selectedWebsites.indexOf(website);
           this.selectedWebsites.splice(index, 1);
-          website.selected = false
+          website.selected = false;
         }
       }
     }
-    this.suggestion.performed = !this.suggestion.performed
+    this.suggestion.performed = !this.suggestion.performed;
   }
 
   matchCommonAndUserWebsites() {

@@ -1,4 +1,4 @@
-<div class="bg-blue-50 rounded-md p-4">
+<div class="bg-blue-50 rounded-md p-4" *ngIf="areChangesPending">
   <div class="flex">
     <div class="flex-shrink-0">
       <svg
@@ -25,16 +25,18 @@
       <div class="mt-4">
         <div class="-mx-2 -my-1.5 flex">
           <button
+            (click)="confirmChanges()"
             type="button"
             class="text-blue-800 bg-blue-50 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-blue-50"
           >
-            View status
+            Confirm
           </button>
           <button
+            (click)="discardChanges()"
             type="button"
             class="text-blue-800 bg-blue-50 ml-3 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-blue-50"
           >
-            Dismiss
+            Discard
           </button>
         </div>
       </div>

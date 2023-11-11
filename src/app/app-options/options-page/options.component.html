@@ -3,7 +3,7 @@
 <!-- DevMode Warning-->
 <div
   *ngIf="isDevModeEnabled()"
-  class="text-orange-600 bg-orange-50 absolute left-[-4.5rem] top-[10rem] flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
+  class="text-orange-600 bg-orange-50 fixed left-[-4.5rem] top-[10rem] flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +35,7 @@
   </h1>
 
   <!-- Pending Changes -->
-  <app-pending-changes></app-pending-changes>
+  <app-pending-changes class="fade-in-bottom" style="--delay: 0.2s"></app-pending-changes>
 
   <!-- Tabs -->
   <div

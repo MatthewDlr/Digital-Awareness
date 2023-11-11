@@ -1,8 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { watchedWebsite } from 'src/app/types';
 import { CommandPaletteService } from '../services/command-palette/command-palette.service';
-import { Website } from '../components/websites-list';
-
+import { PendingChangesService } from '../services/pending-changes/pending-changes.service';
 @Component({
   selector: 'app-blocklist-tab',
   templateUrl: './blocklist-tab.component.html',
@@ -14,11 +13,14 @@ export class BlocklistTabComponent {
   userWebsites: watchedWebsite[] = []
   isCommandPaletteShown: boolean = false;
   randomWidths: any[] = [];
+  
   editIndex!: number ;
+  oldHost!: string;
 
 
   constructor(
     private commandPaletteService: CommandPaletteService,
+    private pendingChangesService: PendingChangesService,
     ) {
     this.getWebsites();
     this.generateRandomWidth();
@@ -70,15 +72,19 @@ export class BlocklistTabComponent {
     });
   }
 
-  setEditIndex(index: number) {
+  enableEdit(index: number, websiteToEdit: watchedWebsite) {
     this.editIndex = index;
+    this.oldHost = websiteToEdit.host;
   }
 
   editWebsite(websiteToEdit: watchedWebsite){
     this.editIndex = -1
+    this.pendingChangesService.addWebsiteToEdit(this.oldHost, websiteToEdit.host);
+
   }
 
   removeWebsite(websiteToDelete: watchedWebsite){
     this.userWebsites = this.userWebsites.filter((website) => website.host !== websiteToDelete.host);
+    this.pendingChangesService.addWebsiteToRemove(websiteToDelete.host);
   }
 }
