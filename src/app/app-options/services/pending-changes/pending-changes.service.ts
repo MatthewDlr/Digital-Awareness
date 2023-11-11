@@ -1,41 +1,66 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { Subject } from 'rxjs';
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class PendingChangesService {
-
   pendingChanges: PendingChanges = {
     areChangesPending: false,
     validationDate: null,
     websitesToDelete: new Set(),
     websitesToEdit: new Set(),
   };
-  areChangesPending:Subject<boolean> = new Subject<boolean>();
+  areChangesPending: Subject<boolean> = new Subject<boolean>();
+  canChangesBeValidated: Subject<boolean> = new Subject<boolean>();
 
   constructor() {
     chrome.storage.local.get(['pendingChanges'], (result) => {
       if (result['pendingChanges']) {
-        this.pendingChanges = result['pendingChanges'];
+        const websitesToDelete = result['pendingChanges'].websitesToDelete;
+        const websitesToEdit = result['pendingChanges'].websitesToEdit;
+
+        this.pendingChanges = {
+          areChangesPending: result['pendingChanges'].areChangesPending,
+          validationDate: result['pendingChanges'].validationDate,
+          websitesToDelete:
+            websitesToDelete.length > 0 ? new Set(websitesToDelete) : new Set(),
+          websitesToEdit:
+            websitesToEdit.length > 0 ? new Set(websitesToEdit) : new Set(),
+        };
         this.areChangesPending.next(this.pendingChanges.areChangesPending);
-        console.log('Pending changes loaded: ', this.pendingChanges);
+
+        if (this.canBeValidated()) {
+          this.canChangesBeValidated.next(true);
+        } else {
+          this.canChangesBeValidated.next(false);
+          this.checkIfChangesCanBeValidated();
+        }
+
+        console.log(
+          'Pending changes loaded: ',
+          this.pendingChanges,
+          '\n canBeValidated: ',
+          this.canBeValidated(),
+        );
       }
     });
+    console.log('Pending changes service initialized');
+  }
+
+  checkIfChangesCanBeValidated() {
+    setInterval(() => {
+      if (this.canBeValidated()) {
+        this.canChangesBeValidated.next(true);
+      } else {
+        this.canChangesBeValidated.next(false);
+        this.checkIfChangesCanBeValidated();
+      }
+    }, 1000 * 60);
   }
 
   getValidationDate(): Date {
     return this.pendingChanges.validationDate as Date;
-  }
-
-  canBeValidated(): boolean {
-    if (this.pendingChanges.validationDate) {
-      if (this.pendingChanges.validationDate.getTime() < new Date().getTime()) {
-        return true;
-      }
-    }
-    return false;
   }
 
   addWebsiteToRemove(host: string) {
@@ -45,7 +70,17 @@ export class PendingChangesService {
   }
 
   addWebsiteToEdit(oldHost: string, newHost: string) {
-    this.pendingChanges.websitesToEdit.add({ oldHost, newHost });
+    let doesWebsiteReplaceAnother = false;
+    this.pendingChanges.websitesToEdit.forEach((website) => {
+      if (website.newHost === oldHost) {
+        website.newHost = newHost;
+        doesWebsiteReplaceAnother = true;
+      }
+    });
+
+    if (!doesWebsiteReplaceAnother) {
+      this.pendingChanges.websitesToEdit.add({ oldHost, newHost });
+    }
     this.setPendingDuration();
     this.savePendingChanges();
   }
@@ -54,12 +89,21 @@ export class PendingChangesService {
     this.pendingChanges.areChangesPending = false;
     this.pendingChanges.validationDate = null;
     this.pendingChanges.websitesToDelete = new Set();
-    this.pendingChanges.websitesToEdit = new Set();
+    this.pendingChanges.websitesToEdit.clear();
     this.savePendingChanges();
   }
 
   confirmPendingChanges() {
     throw new Error('Method not implemented.');
+  }
+
+  private canBeValidated(): boolean {
+    if (this.pendingChanges.validationDate instanceof Date) {
+      if (this.pendingChanges.validationDate.getTime() < new Date().getTime()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private setPendingDuration() {

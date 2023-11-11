@@ -8,7 +8,8 @@ import { PendingChangesService } from '../../services/pending-changes/pending-ch
 })
 export class PendingChangesComponent {
   areChangesPending: boolean = false;
-  dateUntilChangesCanBeValidated!: Date;
+  validationDate!: Date;
+  canChangesBeValidated: boolean = false;
 
   constructor(private pendingChangesService: PendingChangesService) {
     this.pendingChangesService.areChangesPending.subscribe({
@@ -17,7 +18,13 @@ export class PendingChangesComponent {
         console.log('Pending changes updated: ', this.areChangesPending);
       },
     });
-    this.dateUntilChangesCanBeValidated =
+    this.pendingChangesService.canChangesBeValidated.subscribe({
+      next: (state) => {
+        this.canChangesBeValidated = state;
+        console.log('Changes state changed: ', state);
+      },
+    });
+    this.validationDate =
       this.pendingChangesService.getValidationDate();
   }
 
@@ -26,8 +33,6 @@ export class PendingChangesComponent {
   }
 
   confirmChanges() {
-    if (this.pendingChangesService.canBeValidated()) {
-      this.pendingChangesService.confirmPendingChanges();
-    }
+    //TODO
   }
 }

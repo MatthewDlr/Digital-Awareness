@@ -17,17 +17,19 @@
     <div class="ml-3">
       <h3 class="text-blue-800 text-sm font-medium">Changes Pending</h3>
       <div class="text-blue-700 mt-2 text-sm">
-        <p>
-          To confirm your modifications, please come back in
-          
-        </p>
+        <p>To confirm your modifications, please come back at {{validationDate.toString()}}</p>
       </div>
       <div class="mt-4">
         <div class="-mx-2 -my-1.5 flex">
           <button
             (click)="confirmChanges()"
+            [ngClass]="
+              canChangesBeValidated
+                ? 'text-blue-800 hover:bg-blue-100'
+                : 'text-gray-500 cursor-not-allowed'
+            "
             type="button"
-            class="text-blue-800 bg-blue-50 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-blue-50"
+            class="bg-blue-50 rounded-md px-2 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-blue-50"
           >
             Confirm
           </button>

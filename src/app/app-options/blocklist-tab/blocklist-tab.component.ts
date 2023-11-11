@@ -79,7 +79,9 @@ export class BlocklistTabComponent {
 
   editWebsite(websiteToEdit: watchedWebsite){
     this.editIndex = -1
-    this.pendingChangesService.addWebsiteToEdit(this.oldHost, websiteToEdit.host);
+    if (this.oldHost !== websiteToEdit.host){
+      this.pendingChangesService.addWebsiteToEdit(this.oldHost, websiteToEdit.host);
+    }
 
   }
 
