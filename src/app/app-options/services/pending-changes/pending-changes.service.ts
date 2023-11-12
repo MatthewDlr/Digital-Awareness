@@ -23,8 +23,6 @@ export class PendingChangesService {
         const websitesToEdit = result['pendingChanges'].websitesToEdit;
         const validationDate = result['pendingChanges'].validationDate;
 
-        console.log('Website to delete: ', websitesToDelete, '\n' + 'Website to edit: ', websitesToEdit + '\n' + 'Validation date: ', validationDate);
-
         this.pendingChanges = {
           areChangesPending: result['pendingChanges'].areChangesPending,
           validationDate: validationDate != "" ? new Date(validationDate) : null,
@@ -51,7 +49,6 @@ export class PendingChangesService {
         );
       }
     });
-    console.log('Pending changes service initialized');
   }
 
   checkIfChangesCanBeValidated() {
@@ -60,11 +57,10 @@ export class PendingChangesService {
       return;
     }
 
-    const waitTimer = isDevMode() ? 1000 * 5 : 1000 * 60 * 60;
+    const waitTimer = isDevMode() ? 1000 * 5 : 1000 * 60 ;
     setInterval(() => {
       if (this.canBeValidated()) {
         this.canChangesBeValidated.next(true);
-        console.log('Changes can be validated');
       } else {
         this.canChangesBeValidated.next(false);
         this.checkIfChangesCanBeValidated();
@@ -121,7 +117,6 @@ export class PendingChangesService {
           (website) => website.host !== host,
         );
       });
-      console.log('Websites removed: ', userWebsites);
 
       this.pendingChanges.websitesToEdit.forEach((website) => {
         userWebsites.forEach((userWebsite) => {
@@ -130,7 +125,6 @@ export class PendingChangesService {
           }
         });
       });
-      console.log('Websites edited: ', userWebsites);
 
       chrome.storage.sync.set({ userWebsites: userWebsites }, () => {
         this.discardPendingChanges();
@@ -148,12 +142,13 @@ export class PendingChangesService {
   }
 
   private setPendingDuration() {
-    const waitTimer = isDevMode() ? 1000 * 30 : 1000 * 60 * 60;
+    const waitTimer = isDevMode() ? 1000 * 10 : 1000 * 60 * 60;
     this.pendingChanges.areChangesPending = true;
     this.pendingChanges.validationDate = new Date(
       new Date().getTime() + waitTimer,
     );
     this.validationDate.next(this.pendingChanges.validationDate);
+    this.checkIfChangesCanBeValidated();
   }
 
   private savePendingChanges() {

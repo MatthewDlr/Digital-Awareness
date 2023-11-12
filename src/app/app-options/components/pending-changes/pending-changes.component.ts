@@ -19,14 +19,12 @@ export class PendingChangesComponent {
       next: (state) => {
         this.areChangesPending = state;
         this.cdRef.detectChanges();
-        console.log('Are changes pending: ', state);
       },
     });
     this.pendingChangesService.canChangesBeValidated.subscribe({
       next: (state) => {
         this.canChangesBeValidated = state;
         this.cdRef.detectChanges();
-        console.log('Can changes be validated: ', state);
       },
     });
     this.pendingChangesService.validationDate.subscribe({
@@ -34,9 +32,10 @@ export class PendingChangesComponent {
         if (!(date instanceof Date)) {
           return;
         }
-        this.validationDate = String(date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0'));
+        this.validationDate = String(
+          date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0'),
+        );
         this.cdRef.detectChanges();
-        console.log('Validation Date: ', this.validationDate);
       },
     });
   }
