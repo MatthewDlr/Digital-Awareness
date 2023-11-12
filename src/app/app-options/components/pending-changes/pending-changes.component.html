@@ -1,46 +1,131 @@
-<div class="bg-blue-50 rounded-md p-4" *ngIf="areChangesPending">
-  <div class="flex">
-    <div class="flex-shrink-0">
-      <svg
-        class="text-blue-400 h-5 w-5"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-          clip-rule="evenodd"
-        />
-      </svg>
-    </div>
-    <div class="ml-3">
-      <h3 class="text-blue-800 text-sm font-medium">Changes Pending</h3>
-      <div class="text-blue-700 mt-2 text-sm">
-        <p>To confirm your modifications, please come back at</p>
+<div
+  class="bg-purple-50 flex h-fit flex-row items-center gap-4 rounded-xl py-4 px-5"
+  *ngIf="areChangesPending"
+>
+  <!-- SVG Animation -->
+  <svg
+    id="20032"
+    viewBox="0 0 32 32"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    class="h-8 w-8"
+  >
+    <g transform="matrix(1,0,0,1,0,0)">
+      <g id="20032" opacity="1" style="mix-blend-mode: normal">
+        <g>
+          <defs>
+            <clipPath
+              id="20032_clipPath"
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+            >
+              <path
+                d="M0,0h32v0v32v0h-32v0v-32z"
+                fill="white"
+                clip-rule="nonzero"
+              ></path>
+            </clipPath>
+          </defs>
+          <g clip-path="url(#20032_clipPath)">
+            <g transform="matrix(1,0,0,1,4,4)">
+              <g id="20033" opacity="1" style="mix-blend-mode: normal">
+                <g>
+                  <g>
+                    <g style="mix-blend-mode: NORMAL">
+                      <g>
+                        <path
+                          id="20033_stroke_path"
+                          d="M24,12c0,1.57586 -0.31039,3.13629 -0.91344,4.5922c-0.60306,1.45591 -1.48697,2.77878 -2.60127,3.89308c-1.1143,1.1143 -2.43717,1.99822 -3.89308,2.60127c-1.45591,0.60306 -3.01634,0.91344 -4.5922,0.91344c-1.57586,0 -3.13629,-0.31039 -4.5922,-0.91344c-1.45591,-0.60306 -2.77878,-1.48697 -3.89308,-2.60127c-1.1143,-1.1143 -1.99822,-2.43717 -2.60127,-3.89308c-0.60306,-1.45591 -0.91345,-3.01634 -0.91345,-4.5922c0,-3.1826 1.26428,-6.23484 3.51472,-8.48528c2.25044,-2.25044 5.30268,-3.51472 8.48528,-3.51472c3.1826,0 6.23484,1.26428 8.48528,3.51472c2.25044,2.25044 3.51472,5.30268 3.51472,8.48528z"
+                          fill="none"
+                          class="stroke-purple-600"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-dasharray="0 0"
+                          stroke-opacity="1"
+                        ></path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <g transform="matrix(1,0,0,1,16,8)">
+              <g id="20034" opacity="1" style="mix-blend-mode: normal">
+                <g>
+                  <g>
+                    <g style="mix-blend-mode: NORMAL">
+                      <g>
+                        <path
+                          id="20034_stroke_path"
+                          d="M0,9v-9"
+                          fill="none"
+                          class="stroke-purple-600"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="miter"
+                          stroke-dasharray="0 0"
+                          stroke-opacity="1"
+                        ></path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+    <animateTransform
+      href="#20034"
+      attributeName="transform"
+      type="rotate"
+      values="0 0 9;360 0 9;360 0 9"
+      dur="5s"
+      repeatCount="indefinite"
+      calcMode="spline"
+      keyTimes="0;0.25;1"
+      keySplines="0.5 0 0.15 1;0.5 0.35 0.15 1"
+      additive="sum"
+      fill="freeze"
+    ></animateTransform>
+  </svg>
+  <div class="flex gap-3 justify-between w-full items-center mr-[0.15rem]">
+    <div class="w-3/4">
+      <h3 class="text-purple-600 text-base font-semibold">
+        Your changes are pending
+      </h3>
+      <div class="text-purple-600 mt-1 text-sm">
+        <p>
+          To confirm your modifications, please come back at
+          {{ validationDate }}
+        </p>
       </div>
-      <div class="mt-4">
-        <div class="-mx-2 -my-1.5 flex">
-          <button
-            (click)="confirmChanges()"
-            [ngClass]="
-              canChangesBeValidated
-                ? 'text-blue-800 hover:bg-blue-100'
-                : 'text-gray-500 cursor-not-allowed'
-            "
-            type="button"
-            class="bg-blue-50 rounded-md px-2 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-blue-50"
-          >
-            Confirm
-          </button>
-          <button
-            (click)="discardChanges()"
-            type="button"
-            class="text-blue-800 bg-blue-50 ml-3 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-blue-50"
-          >
-            Discard
-          </button>
-        </div>
+    </div>
+    <div class="w-1/4 flex justify-end">
+      <div class="flex gap-3">
+        <button
+          (click)="confirmChanges()"
+          [ngClass]="
+            canChangesBeValidated
+              ? 'text-purple-600 cursor-pointer hover:bg-purple-100'
+              : 'text-gray-500 cursor-not-allowed'
+          "
+          type="button"
+          class="rounded-md px-3 py-2 text-sm font-medium"
+        >
+          Confirm
+        </button>
+        <button
+          (click)="discardChanges()"
+          type="button"
+          class="purple-gradient text-white !transform rounded-md px-3 py-2 text-sm font-medium !transition-all hover:scale-105 hover:shadow-lg hover:shadow-purple-300 hover:dark:shadow-purple-800"
+        >
+          Discard
+        </button>
       </div>
     </div>
   </div>

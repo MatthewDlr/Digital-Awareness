@@ -8,7 +8,7 @@ import { PendingChangesService } from '../../services/pending-changes/pending-ch
 })
 export class PendingChangesComponent {
   areChangesPending: boolean = false;
-  validationDate!: Date;
+  validationDate: string = ""
   canChangesBeValidated: boolean = false;
 
   constructor(private pendingChangesService: PendingChangesService) {
@@ -25,7 +25,7 @@ export class PendingChangesComponent {
       },
     });
     this.validationDate =
-      this.pendingChangesService.getValidationDate();
+      this.pendingChangesService.getValidationDate() as unknown as string;
   }
 
   discardChanges() {
