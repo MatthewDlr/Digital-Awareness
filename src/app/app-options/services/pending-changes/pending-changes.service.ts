@@ -14,6 +14,7 @@ export class PendingChangesService {
   };
   areChangesPending: Subject<boolean> = new Subject<boolean>();
   canChangesBeValidated: Subject<boolean> = new Subject<boolean>();
+  validationDate: Subject<Date> = new Subject<Date>();
 
   constructor() {
     chrome.storage.local.get(['pendingChanges'], (result) => {
@@ -26,13 +27,14 @@ export class PendingChangesService {
 
         this.pendingChanges = {
           areChangesPending: result['pendingChanges'].areChangesPending,
-          validationDate: validationDate ? new Date(validationDate) : null,
+          validationDate: validationDate != "" ? new Date(validationDate) : null,
           websitesToDelete:
             websitesToDelete.length > 0 ? new Set(websitesToDelete) : new Set(),
           websitesToEdit:
             websitesToEdit.length > 0 ? new Set(websitesToEdit) : new Set(),
         };
         this.areChangesPending.next(this.pendingChanges.areChangesPending);
+        this.validationDate.next(this.pendingChanges.validationDate as Date);
 
         if (this.canBeValidated()) {
           this.canChangesBeValidated.next(true);
@@ -53,10 +55,16 @@ export class PendingChangesService {
   }
 
   checkIfChangesCanBeValidated() {
-    const waitTimer = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
+    if (!this.pendingChanges?.areChangesPending){
+      console.log('No pending changes');
+      return;
+    }
+
+    const waitTimer = isDevMode() ? 1000 * 5 : 1000 * 60 * 60;
     setInterval(() => {
       if (this.canBeValidated()) {
         this.canChangesBeValidated.next(true);
+        console.log('Changes can be validated');
       } else {
         this.canChangesBeValidated.next(false);
         this.checkIfChangesCanBeValidated();
@@ -93,8 +101,9 @@ export class PendingChangesService {
   discardPendingChanges() {
     this.pendingChanges.areChangesPending = false;
     this.pendingChanges.validationDate = null;
-    this.pendingChanges.websitesToDelete = new Set();
+    this.pendingChanges.websitesToDelete.clear();
     this.pendingChanges.websitesToEdit.clear();
+    this.canChangesBeValidated.next(false);
     this.savePendingChanges();
   }
 
@@ -144,6 +153,7 @@ export class PendingChangesService {
     this.pendingChanges.validationDate = new Date(
       new Date().getTime() + waitTimer,
     );
+    this.validationDate.next(this.pendingChanges.validationDate);
   }
 
   private savePendingChanges() {

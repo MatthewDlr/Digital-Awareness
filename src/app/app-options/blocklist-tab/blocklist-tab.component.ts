@@ -33,6 +33,13 @@ export class BlocklistTabComponent {
         }
       },
     });
+    this.pendingChangesService.areChangesPending.subscribe({
+      next: (state) => {
+        if (!state) {
+          this.getWebsites();
+        }
+      },
+    });
   }
 
   // Listen for the cmd+k/ctrl+k to toggle the command palette
