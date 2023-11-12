@@ -24,7 +24,14 @@ export class BlocklistTabComponent {
     this.getWebsites();
     this.generateRandomWidth();
     this.commandPaletteService.isCommandPaletteShown.subscribe({
-      next: (state) => (this.isCommandPaletteShown = state),
+      next: (state) => {
+        this.isCommandPaletteShown = state;
+        if (!state){
+          setTimeout(() => {
+            this.getWebsites();
+          }, 100);
+        }
+      },
     });
   }
 

@@ -1,5 +1,6 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { Subject } from 'rxjs';
+import { watchedWebsite } from 'src/app/types';
 
 @Injectable({
   providedIn: 'root',
@@ -19,10 +20,13 @@ export class PendingChangesService {
       if (result['pendingChanges']) {
         const websitesToDelete = result['pendingChanges'].websitesToDelete;
         const websitesToEdit = result['pendingChanges'].websitesToEdit;
+        const validationDate = result['pendingChanges'].validationDate;
+
+        console.log('Website to delete: ', websitesToDelete, '\n' + 'Website to edit: ', websitesToEdit + '\n' + 'Validation date: ', validationDate);
 
         this.pendingChanges = {
           areChangesPending: result['pendingChanges'].areChangesPending,
-          validationDate: result['pendingChanges'].validationDate,
+          validationDate: validationDate ? new Date(validationDate) : null,
           websitesToDelete:
             websitesToDelete.length > 0 ? new Set(websitesToDelete) : new Set(),
           websitesToEdit:
@@ -49,6 +53,7 @@ export class PendingChangesService {
   }
 
   checkIfChangesCanBeValidated() {
+    const waitTimer = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
     setInterval(() => {
       if (this.canBeValidated()) {
         this.canChangesBeValidated.next(true);
@@ -56,7 +61,7 @@ export class PendingChangesService {
         this.canChangesBeValidated.next(false);
         this.checkIfChangesCanBeValidated();
       }
-    }, 1000 * 60);
+    }, waitTimer);
   }
 
   getValidationDate(): Date {
@@ -94,7 +99,34 @@ export class PendingChangesService {
   }
 
   confirmPendingChanges() {
-    throw new Error('Method not implemented.');
+
+    if (!this.canBeValidated()) {
+      return;
+    }
+
+    chrome.storage.sync.get(['userWebsites'], (result) => {
+
+      let userWebsites: watchedWebsite[] = result['userWebsites'] || [];
+      this.pendingChanges.websitesToDelete.forEach((host) => {
+        userWebsites = userWebsites.filter(
+          (website) => website.host !== host,
+        );
+      });
+      console.log('Websites removed: ', userWebsites);
+
+      this.pendingChanges.websitesToEdit.forEach((website) => {
+        userWebsites.forEach((userWebsite) => {
+          if (userWebsite.host === website.oldHost) {
+            userWebsite.host = website.newHost;
+          }
+        });
+      });
+      console.log('Websites edited: ', userWebsites);
+
+      chrome.storage.sync.set({ userWebsites: userWebsites }, () => {
+        this.discardPendingChanges();
+      });
+    });
   }
 
   private canBeValidated(): boolean {
@@ -107,7 +139,7 @@ export class PendingChangesService {
   }
 
   private setPendingDuration() {
-    const waitTimer = isDevMode() ? 1000 * 60 * 1 : 1000 * 60 * 60;
+    const waitTimer = isDevMode() ? 1000 * 30 : 1000 * 60 * 60;
     this.pendingChanges.areChangesPending = true;
     this.pendingChanges.validationDate = new Date(
       new Date().getTime() + waitTimer,
@@ -115,9 +147,15 @@ export class PendingChangesService {
   }
 
   private savePendingChanges() {
-    chrome.storage.local.set({ pendingChanges: this.pendingChanges });
+    const pendingChangesSave = {
+      areChangesPending: this.pendingChanges.areChangesPending,
+      validationDate: this.pendingChanges.validationDate?.toString() || "",
+      websitesToDelete: Array.from(this.pendingChanges.websitesToDelete),
+      websitesToEdit: Array.from(this.pendingChanges.websitesToEdit),
+    }
+    chrome.storage.local.set({ pendingChanges: pendingChangesSave });
     this.areChangesPending.next(this.pendingChanges.areChangesPending);
-    console.log('Pending changes saved: ', this.pendingChanges);
+    console.log('Pending changes saved: ', pendingChangesSave);
   }
 }
 

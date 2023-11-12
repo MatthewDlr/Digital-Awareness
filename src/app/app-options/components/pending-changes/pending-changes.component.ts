@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { PendingChangesService } from '../../services/pending-changes/pending-changes.service';
 
 @Component({
@@ -8,20 +8,24 @@ import { PendingChangesService } from '../../services/pending-changes/pending-ch
 })
 export class PendingChangesComponent {
   areChangesPending: boolean = false;
-  validationDate: string = ""
+  validationDate: string = '';
   canChangesBeValidated: boolean = false;
 
-  constructor(private pendingChangesService: PendingChangesService) {
+  constructor(
+    private pendingChangesService: PendingChangesService,
+    private cdRef: ChangeDetectorRef,
+  ) {
     this.pendingChangesService.areChangesPending.subscribe({
       next: (state) => {
         this.areChangesPending = state;
-        console.log('Pending changes updated: ', this.areChangesPending);
+        console.log('Changes Pending: ', this.areChangesPending);
       },
     });
     this.pendingChangesService.canChangesBeValidated.subscribe({
       next: (state) => {
         this.canChangesBeValidated = state;
-        console.log('Changes state changed: ', state);
+        this.cdRef.detectChanges();
+        console.log('Can Be Validated ? ', state);
       },
     });
     this.validationDate =
@@ -33,6 +37,8 @@ export class PendingChangesComponent {
   }
 
   confirmChanges() {
-    //TODO
+    if (this.canChangesBeValidated) {
+      this.pendingChangesService.confirmPendingChanges();
+    }
   }
 }

@@ -75,6 +75,7 @@ export class CommandPaletteComponent implements AfterViewInit {
       .catch((error) => {
         console.error('Error while blocking websites:', error);
       });
+    
   }
 
   toggleCommandPalette(state: boolean) {

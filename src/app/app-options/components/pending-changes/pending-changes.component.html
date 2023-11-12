@@ -1,14 +1,14 @@
 <div
-  class="bg-purple-50 flex h-fit flex-row items-center gap-4 rounded-xl py-4 px-5"
+  class="bg-purple-50 flex h-fit flex-row items-center gap-4 rounded-xl px-5 py-4"
   *ngIf="areChangesPending"
 >
   <!-- SVG Animation -->
   <svg
+    class="w-10 h-10"
     id="20032"
     viewBox="0 0 32 32"
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    class="h-8 w-8"
   >
     <g transform="matrix(1,0,0,1,0,0)">
       <g id="20032" opacity="1" style="mix-blend-mode: normal">
@@ -40,11 +40,11 @@
                           d="M24,12c0,1.57586 -0.31039,3.13629 -0.91344,4.5922c-0.60306,1.45591 -1.48697,2.77878 -2.60127,3.89308c-1.1143,1.1143 -2.43717,1.99822 -3.89308,2.60127c-1.45591,0.60306 -3.01634,0.91344 -4.5922,0.91344c-1.57586,0 -3.13629,-0.31039 -4.5922,-0.91344c-1.45591,-0.60306 -2.77878,-1.48697 -3.89308,-2.60127c-1.1143,-1.1143 -1.99822,-2.43717 -2.60127,-3.89308c-0.60306,-1.45591 -0.91345,-3.01634 -0.91345,-4.5922c0,-3.1826 1.26428,-6.23484 3.51472,-8.48528c2.25044,-2.25044 5.30268,-3.51472 8.48528,-3.51472c3.1826,0 6.23484,1.26428 8.48528,3.51472c2.25044,2.25044 3.51472,5.30268 3.51472,8.48528z"
                           fill="none"
                           class="stroke-purple-600"
-                          stroke-width="2"
                           stroke-linecap="round"
                           stroke-linejoin="round"
                           stroke-dasharray="0 0"
                           stroke-opacity="1"
+                          stroke-width="2"
                         ></path>
                       </g>
                     </g>
@@ -60,14 +60,14 @@
                       <g>
                         <path
                           id="20034_stroke_path"
-                          d="M0,9v-9"
+                          d="M0,9v-7"
                           fill="none"
                           class="stroke-purple-600"
-                          stroke-width="2"
                           stroke-linecap="round"
                           stroke-linejoin="miter"
                           stroke-dasharray="0 0"
                           stroke-opacity="1"
+                          stroke-width="2"
                         ></path>
                       </g>
                     </g>
@@ -80,20 +80,59 @@
       </g>
     </g>
     <animateTransform
+      href="#20033"
+      attributeName="transform"
+      type="translate"
+      values="12 12;12 12;12 12;12 12;12 12"
+      dur="2.5s"
+      repeatCount="indefinite"
+      calcMode="spline"
+      keyTimes="0;0.4;0.5;0.6;1"
+      keySplines="0.5 0 0.15 1;0.5 0 0.15 1;0.5 0 0.15 1;0.5 0.35 0.15 1"
+      additive="sum"
+      fill="freeze"
+    ></animateTransform>
+    <animateTransform
+      href="#20033"
+      attributeName="transform"
+      type="scale"
+      values="1 1;1 1;1.05 1.05;1 1;1 1"
+      dur="2.5s"
+      repeatCount="indefinite"
+      calcMode="spline"
+      keyTimes="0;0.4;0.5;0.6;1"
+      keySplines="0.5 0 0.15 1;0.5 0 0.15 1;0.5 0 0.15 1;0.5 0.35 0.15 1"
+      additive="sum"
+      fill="freeze"
+    ></animateTransform>
+    <animateTransform
+      href="#20033"
+      attributeName="transform"
+      type="translate"
+      values="-12 -12;-12 -12;-12 -12;-12 -12;-12 -12"
+      dur="2.5s"
+      repeatCount="indefinite"
+      calcMode="spline"
+      keyTimes="0;0.4;0.5;0.6;1"
+      keySplines="0.5 0 0.15 1;0.5 0 0.15 1;0.5 0 0.15 1;0.5 0.35 0.15 1"
+      additive="sum"
+      fill="freeze"
+    ></animateTransform>
+    <animateTransform
       href="#20034"
       attributeName="transform"
       type="rotate"
       values="0 0 9;360 0 9;360 0 9"
-      dur="5s"
+      dur="2.5s"
       repeatCount="indefinite"
       calcMode="spline"
-      keyTimes="0;0.25;1"
+      keyTimes="0;0.5;1"
       keySplines="0.5 0 0.15 1;0.5 0.35 0.15 1"
       additive="sum"
       fill="freeze"
     ></animateTransform>
   </svg>
-  <div class="flex gap-3 justify-between w-full items-center mr-[0.15rem]">
+  <div class="mr-[0.15rem] flex w-full items-center justify-between gap-3">
     <div class="w-3/4">
       <h3 class="text-purple-600 text-base font-semibold">
         Your changes are pending
@@ -105,7 +144,7 @@
         </p>
       </div>
     </div>
-    <div class="w-1/4 flex justify-end">
+    <div class="flex w-1/4 justify-end">
       <div class="flex gap-3">
         <button
           (click)="confirmChanges()"
