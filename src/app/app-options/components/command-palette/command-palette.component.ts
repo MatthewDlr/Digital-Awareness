@@ -18,6 +18,7 @@ import FuzzySearch from 'fuzzy-search';
 export class CommandPaletteComponent implements AfterViewInit {
   searchResults: Website[] = commonWebsites;
   userWebsites: watchedWebsite[] = [];
+  enforcedWebsites: watchedWebsite[] = [];
   selectedWebsites: Website[] = [];
   suggestion: { category: category; performed: boolean } = {
     category: category.unknown,
@@ -27,6 +28,10 @@ export class CommandPaletteComponent implements AfterViewInit {
   constructor(private commandPaletteService: CommandPaletteService) {
     chrome.storage.sync.get('userWebsites').then((result) => {
       this.userWebsites = result['userWebsites'];
+      this.matchCommonAndUserWebsites();
+    });
+    chrome.storage.local.get('enforcedWebsites').then((result) => {
+      this.enforcedWebsites = result['enforcedWebsites'];
       this.matchCommonAndUserWebsites();
     });
   }
@@ -149,7 +154,10 @@ export class CommandPaletteComponent implements AfterViewInit {
       const isBlocked = Boolean(
         this.userWebsites.find((website) => {
           return website.host == searchResult.url;
-        }),
+        }) ||
+          this.enforcedWebsites.find((website) => {
+            return website.host == searchResult.url;
+          }),
       );
       searchResult.isBlocked = isBlocked;
     }
@@ -157,7 +165,7 @@ export class CommandPaletteComponent implements AfterViewInit {
 
   generateResults(text: string) {
     // Check if the url end with a . + 2 or 3 letters
-    const regex = new RegExp(/\.([a-z]{2,5})$/);
+    const regex = new RegExp(/\.([a-z]{2,4})$/);
     const match = text.match(regex);
 
     if (match) {
@@ -183,5 +191,6 @@ export class CommandPaletteComponent implements AfterViewInit {
         category: category.unknown,
       });
     }
+    this.matchCommonAndUserWebsites();
   }
 }

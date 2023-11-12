@@ -3,7 +3,7 @@
 <!-- DevMode Warning-->
 <div
   *ngIf="isDevModeEnabled()"
-  class="text-orange-600 bg-orange-50 fixed left-[-4.5rem] top-[10rem] flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
+  class="fixed text-orange-600 bg-orange-50 left-[-4.5rem] top-[10rem] flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -25,17 +25,25 @@
 </div>
 
 <div
-  class="bg-white flex overflow-scroll h-fit min-h-[100vh] w-full flex-col gap-5 px-80 py-20"
+  [ngClass]="
+    isCommandPaletteShown
+      ? 'fixed bottom-0 left-0 right-0 top-0 overflow-hidden'
+      : 'overflow-scroll'
+  "
+  class="bg-white flex h-fit min-h-[100vh] w-full flex-col gap-5 px-80 py-20"
 >
   <h1
-    class="fade-in-bottom h-fit w-fit bg-gradient-to-br from-green-300 from-10% via-green-400 via-70% to-green-500 bg-clip-text py-2 text-4xl font-bold text-transparent dark:from-green-200 dark:via-green-300 dark:to-green-400"
+    class="fade-in-bottom h-fit w-fit bg-clip-text py-2 text-4xl font-bold text-transparent green-gradient"
     style="--delay: 0.1s"
   >
     Options
   </h1>
 
   <!-- Pending Changes -->
-  <app-pending-changes class="fade-in-bottom" style="--delay: 0.2s"></app-pending-changes>
+  <app-pending-changes
+    class="fade-in-bottom"
+    style="--delay: 0.2s"
+  ></app-pending-changes>
 
   <!-- Tabs -->
   <div

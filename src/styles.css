@@ -8,6 +8,6 @@
 
 @layer components {
   .green-gradient {
-    @apply bg-gradient-to-br from-green-400 via-green-500 to-green-600  dark:from-green-200 dark:via-green-300 dark:to-green-400;
+    @apply bg-gradient-to-br from-10% via-70% from-green-400 via-green-500 to-green-600 dark:from-green-300 dark:via-green-400 dark:to-green-500;
   }
 }

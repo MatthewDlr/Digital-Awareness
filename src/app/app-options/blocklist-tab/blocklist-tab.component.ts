@@ -9,19 +9,18 @@ import { PendingChangesService } from '../services/pending-changes/pending-chang
 })
 export class BlocklistTabComponent {
   isLoading: boolean = true;
-  enforcedWebsites: watchedWebsite[] = []
-  userWebsites: watchedWebsite[] = []
+  enforcedWebsites: watchedWebsite[] = [];
+  userWebsites: watchedWebsite[] = [];
   isCommandPaletteShown: boolean = false;
   randomWidths: any[] = [];
-  
-  editIndex!: number ;
-  oldHost!: string;
 
+  editIndex: number = -1;
+  oldHost!: string;
 
   constructor(
     private commandPaletteService: CommandPaletteService,
     private pendingChangesService: PendingChangesService,
-    ) {
+  ) {
     this.getWebsites();
     this.generateRandomWidth();
     this.commandPaletteService.isCommandPaletteShown.subscribe({
@@ -34,6 +33,11 @@ export class BlocklistTabComponent {
   @HostListener('document:keydown.control.k', ['$event'])
   onKeydownHandler(event: KeyboardEvent) {
     this.toggleCommandPalette(true);
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+  onEnterHandler(event: KeyboardEvent) {
+    this.editWebsite(this.userWebsites[this.editIndex]);
   }
 
   toggleCommandPalette(state: boolean) {
@@ -77,16 +81,25 @@ export class BlocklistTabComponent {
     this.oldHost = websiteToEdit.host;
   }
 
-  editWebsite(websiteToEdit: watchedWebsite){
-    this.editIndex = -1
-    if (this.oldHost !== websiteToEdit.host){
-      this.pendingChangesService.addWebsiteToEdit(this.oldHost, websiteToEdit.host);
+  editWebsite(websiteToEdit: watchedWebsite) {
+    websiteToEdit.host = websiteToEdit.host.trim();
+    if (this.editIndex === -1 || websiteToEdit.host === '') {
+      return;
     }
 
+    this.editIndex = -1;
+    if (this.oldHost !== websiteToEdit.host) {
+      this.pendingChangesService.addWebsiteToEdit(
+        this.oldHost,
+        websiteToEdit.host,
+      );
+    }
   }
 
-  removeWebsite(websiteToDelete: watchedWebsite){
-    this.userWebsites = this.userWebsites.filter((website) => website.host !== websiteToDelete.host);
+  removeWebsite(websiteToDelete: watchedWebsite) {
+    this.userWebsites = this.userWebsites.filter(
+      (website) => website.host !== websiteToDelete.host,
+    );
     this.pendingChangesService.addWebsiteToRemove(websiteToDelete.host);
   }
 }
