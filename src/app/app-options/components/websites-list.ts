@@ -153,6 +153,7 @@ export const commonWebsites: Website[] = [
   { url: 'chloe.com', category: category.shopping },
   { url: 'dolcegabbana.com', category: category.shopping },
   { url: 'vinted.com', category: category.shopping },
+  { url: 'vinted.fr', category: category.shopping },
   { url: 'depop.com', category: category.shopping },
   { url: 'poshmark.com', category: category.shopping },
   { url: 'thredup.com', category: category.shopping },
@@ -354,4 +355,17 @@ export const commonWebsites: Website[] = [
   { url: 'store.greenmangaming.com', category: category.games },
   { url: 'store.fanatical.com', category: category.games },
   { url: 'store.g2a.com', category: category.games },
+
+  { url: 'music.youtube.com', category: category.music },
+  { url: 'spotify.com', category: category.music },
+  { url: 'music.apple.com', category: category.music },
+  { url: 'soundcloud.com', category: category.music },
+  { url: 'deezer.com', category: category.music },
+  { url: 'tidal.com', category: category.music },
+  { url: 'music.amazon.com', category: category.music },
+  { url: 'pandora.com', category: category.music },
+  { url: 'iheart.com', category: category.music },
+  { url: 'napster.com', category: category.music },
+  { url: 'last.fm', category: category.music },
+
 ];
