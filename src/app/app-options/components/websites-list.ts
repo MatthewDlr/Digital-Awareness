@@ -367,5 +367,4 @@ export const commonWebsites: Website[] = [
   { url: 'iheart.com', category: category.music },
   { url: 'napster.com', category: category.music },
   { url: 'last.fm', category: category.music },
-
 ];

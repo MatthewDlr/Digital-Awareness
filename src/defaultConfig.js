@@ -87,6 +87,20 @@ export function defaultConfig() {
           category: "Social",
         },
         {
+          host: "music.youtube.com",
+          allowedUntil: "next time",
+          timesBlocked: 0,
+          timesAllowed: 0,
+          category: "Music",
+        },
+        {
+          host: "spotify.com",
+          allowedUntil: "next time",
+          timesBlocked: 0,
+          timesAllowed: 0,
+          category: "Music",
+        },
+        {
           host: "aliexpress.com",
           allowedUntil: "next time",
           timesBlocked: 0,

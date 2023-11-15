@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, isDevMode } from '@angular/core';
 import { PendingChangesService } from '../../services/pending-changes/pending-changes.service';
 
 @Component({
@@ -9,6 +9,7 @@ import { PendingChangesService } from '../../services/pending-changes/pending-ch
 export class PendingChangesComponent {
   areChangesPending: boolean = false;
   validationDate: string = '';
+  expirationDate: string = '';
   canChangesBeValidated: boolean = false;
 
   constructor(
@@ -35,6 +36,9 @@ export class PendingChangesComponent {
         this.validationDate = String(
           date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0'),
         );
+        const timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
+        const expirationDate = new Date(date.getTime() + timeToAdd);
+        this.expirationDate = String(expirationDate.getHours() + ':' + String(expirationDate.getMinutes()).padStart(2, '0'));
         this.cdRef.detectChanges();
       },
     });

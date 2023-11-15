@@ -36,6 +36,7 @@ export class PendingChangesService {
 
         if (this.canBeValidated()) {
           this.canChangesBeValidated.next(true);
+          this.checkIfChangesExpired();
         } else {
           this.canChangesBeValidated.next(false);
           this.checkIfChangesCanBeValidated();
@@ -51,8 +52,25 @@ export class PendingChangesService {
     });
   }
 
+  checkIfChangesExpired() {
+    if (!this.pendingChanges.areChangesPending || !this.canBeValidated()){
+      console.log('No pending changes or changes not valid');
+      return;
+    }
+
+    const waitTimer = isDevMode() ? 1000 * 60 : 1000 * 60 * 60;
+    setInterval(() => {
+      if (this.areChangesStillValid()) {
+        this.checkIfChangesExpired();
+      } else {
+        this.discardPendingChanges();
+        console.log('Pending changes expired');
+      }
+    }, waitTimer);
+  }
+
   checkIfChangesCanBeValidated() {
-    if (!this.pendingChanges?.areChangesPending){
+    if (!this.pendingChanges.areChangesPending){
       console.log('No pending changes');
       return;
     }
@@ -61,6 +79,8 @@ export class PendingChangesService {
     setInterval(() => {
       if (this.canBeValidated()) {
         this.canChangesBeValidated.next(true);
+        this.checkIfChangesExpired();
+        console.log('Pending changes can be validated');
       } else {
         this.canChangesBeValidated.next(false);
         this.checkIfChangesCanBeValidated();
@@ -141,6 +161,16 @@ export class PendingChangesService {
     return false;
   }
 
+  private areChangesStillValid(): boolean {
+    if (this.pendingChanges.validationDate instanceof Date) {
+      const timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
+      if (this.pendingChanges.validationDate.getTime() < new Date().getTime() && this.pendingChanges.validationDate.getTime() + timeToAdd > new Date().getTime() ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private setPendingDuration() {
     const waitTimer = isDevMode() ? 1000 * 10 : 1000 * 60 * 60;
     this.pendingChanges.areChangesPending = true;
@@ -160,6 +190,7 @@ export class PendingChangesService {
     }
     chrome.storage.local.set({ pendingChanges: pendingChangesSave });
     this.areChangesPending.next(this.pendingChanges.areChangesPending);
+    this.validationDate.next(this.pendingChanges.validationDate as Date);
     console.log('Pending changes saved: ', pendingChangesSave);
   }
 }
