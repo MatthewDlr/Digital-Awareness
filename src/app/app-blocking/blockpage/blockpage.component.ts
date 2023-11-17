@@ -66,8 +66,16 @@ export class BlockPageComponent {
             this.countdown();
           });
         });
-      }, 1250); // Yes, it's more than 1s
+      }, 1150); // Yes, it's more than 1s
+    } else {
+      this.waitBeforeClose();
     }
+  }
+
+  waitBeforeClose() {
+    setTimeout(() => {
+      this.closeBlockPage();
+    }, 10000);
   }
 
   // This means failure as the user has waited for the timer to expire

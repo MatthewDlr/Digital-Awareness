@@ -66,7 +66,7 @@ export class BlocklistTabComponent {
       score = Math.round(score);
       return score + '%';
     }
-    return '-';
+    return 'Never blocked';
   }
 
   generateRandomWidth() {
