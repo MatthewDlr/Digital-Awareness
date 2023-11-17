@@ -59,7 +59,7 @@ export class BlockPageComponent {
           }
 
           getCurrentTab().then((currentTabId) => {
-            if (currentTabId?.toString() != this.tabId) {
+            if (currentTabId?.toString() != this.tabId || !document.hasFocus()) {
             } else {
               this.timerValue--;
             }
