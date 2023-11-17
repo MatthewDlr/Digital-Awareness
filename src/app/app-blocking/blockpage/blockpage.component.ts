@@ -66,7 +66,7 @@ export class BlockPageComponent {
             this.countdown();
           });
         });
-      }, 1150); // Yes, it's more than 1s
+      }, 1100); // Yes, it's more than 1s
     } else {
       this.waitBeforeClose();
     }

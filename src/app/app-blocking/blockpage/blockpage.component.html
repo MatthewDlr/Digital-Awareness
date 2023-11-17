@@ -52,7 +52,7 @@
 
     <!-- Skip Timer Button -->
     <div
-      [ngClass]="timerValue == 0 ? 'fade-in-bottom-small flex' : 'invisible'"
+      [ngClass]="timerValue == 0 ? 'fade-in-bottom-small flex flex-col gap-2 items-center' : 'invisible'"
     >
       <button
         class="text-gray-600 text-sm underline opacity-50"
@@ -60,6 +60,7 @@
       >
         Continue to {{ outputUrl.hostname }}
       </button>
+      <label class="text-gray-600 text-sm opacity-50">Otherwise, tab will close on its own</label>
     </div>
   </div>
 </div>

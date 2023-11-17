@@ -1,9 +1,9 @@
-import { Website } from './app/app-options/components/websites-list.js';
 import { defaultConfig } from './defaultConfig.js';
 
 chrome.webNavigation.onCommitted.addListener(function (details) {
   // Avoid showing blockpage if the request is made in background or isn't http/https
   if (details.frameId != 0 || !details.url.startsWith('http')) {
+    console.log('Not a main frame request, ignoring: ', details.url);
     return;
   }
 
@@ -30,7 +30,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
         }
       });
     }
-    // If website is blocked
+
   });
 });
 
