@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, isDevMode } from '@angular/core';
+import { Component, isDevMode } from '@angular/core';
 import { PendingChangesService } from '../../services/pending-changes/pending-changes.service';
 
 @Component({
@@ -14,18 +14,15 @@ export class PendingChangesComponent {
 
   constructor(
     private pendingChangesService: PendingChangesService,
-    private cdRef: ChangeDetectorRef,
   ) {
     this.pendingChangesService.areChangesPending.subscribe({
       next: (state) => {
         this.areChangesPending = state;
-        this.cdRef.detectChanges();
       },
     });
     this.pendingChangesService.canChangesBeValidated.subscribe({
       next: (state) => {
         this.canChangesBeValidated = state;
-        this.cdRef.detectChanges();
       },
     });
     this.pendingChangesService.validationDate.subscribe({
@@ -39,7 +36,6 @@ export class PendingChangesComponent {
         const timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
         const expirationDate = new Date(date.getTime() + timeToAdd);
         this.expirationDate = String(expirationDate.getHours() + ':' + String(expirationDate.getMinutes()).padStart(2, '0'));
-        this.cdRef.detectChanges();
       },
     });
   }

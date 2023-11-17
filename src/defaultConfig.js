@@ -118,15 +118,9 @@ export function defaultConfig() {
     .set({
       timerValue: 30, // Timer base value is 30 sec
       timeAllowed: 30, // When a website is allowed, the default duration is 30 min
-      userWebsites: [
-        {
-          host: "edition.cnn.com",
-          allowedUntil: "next time",
-          timesBlocked: 0,
-          timesAllowed: 0,
-          category: "News",
-        },
-      ], // Website the user will decide to block
+      doomScrollingNotification: true, // Notification when doom scrolling
+      bindWatchingNotification: true, // Notification when bind watching
+      userWebsites: [], // Website the user will decide to block
       userCategories: [
         {
           name: 'News',

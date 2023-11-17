@@ -3,7 +3,6 @@ import { defaultConfig } from './defaultConfig.js';
 chrome.webNavigation.onCommitted.addListener(function (details) {
   // Avoid showing blockpage if the request is made in background or isn't http/https
   if (details.frameId != 0 || !details.url.startsWith('http')) {
-    console.log('Not a main frame request, ignoring: ', details.url);
     return;
   }
 

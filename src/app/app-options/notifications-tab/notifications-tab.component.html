@@ -1,1 +1,37 @@
-<p class="text-black">notifications-tab works!</p>
+<ul role="list" class="space-y-3">
+  <li class="bg-green-50 overflow-hidden rounded-md px-6 py-4">
+    <!-- Doom scrolling toggle -->
+    <div class="flex items-center justify-between">
+      <span class="flex flex-grow flex-col">
+        <span
+          class="text-gray-900 text-sm font-medium leading-6"
+          id="availability-label"
+          >Prevent Doom Scrolling</span
+        >
+        <span class="text-gray-500 text-sm" id="availability-description"
+          >Send a notification when you've been scrolling for too long.</span
+        >
+      </span>
+
+      <button
+        [ngClass]="doomScrollingToggle ? 'bg-green-500' : 'bg-gray-200'"
+        (click)="toggleDoomScrolling()"
+        type="button"
+        class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out"
+        role="switch"
+        aria-checked="false"
+        aria-labelledby="availability-label"
+        aria-describedby="availability-description"
+      >
+        <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+        <span
+          [ngClass]="doomScrollingToggle ? 'translate-x-5' : 'translate-x-0'"
+          aria-hidden="true"
+          class="bg-white pointer-events-none inline-block h-5 w-5 translate-x-0 !transform rounded-full shadow !transition-all !duration-200 !ease-in-out"
+        ></span>
+      </button>
+    </div>
+  </li>
+
+  <!-- More items... -->
+</ul>
