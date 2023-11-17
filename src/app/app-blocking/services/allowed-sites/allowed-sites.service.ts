@@ -7,7 +7,6 @@ import { watchedWebsite } from 'src/app/types';
 export class AllowedSitesService {
   enforcedWebsites: watchedWebsite[] = [];
   userWebsites: watchedWebsite[] = [];
-  constructor() {}
 
   allowWebsiteTemporary(websiteToAllow: string, duration: number = 30): void {
     websiteToAllow = this.removeWWW(websiteToAllow);

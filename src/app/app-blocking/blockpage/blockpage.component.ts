@@ -66,19 +66,19 @@ export class BlockPageComponent {
             this.countdown();
           });
         });
-      }, 1100);
+      }, 1250); // Yes, it's more than 1s
     }
   }
 
   // This means failure as the user has waited for the timer to expire
   skipTimer() {
-    const newTimerValue = Math.min(this.storedTimerValue + 5, 180);
+    const newTimerValue = Math.min(this.storedTimerValue + 10, 180);
     chrome.storage.sync.set({ timerValue: newTimerValue });
 
-    const timeAllowed = isDevMode() ? 1 : 30;
+    const minutesAllowed = isDevMode() ? 1 : 30;
     this.allowedSitesService.allowWebsiteTemporary(
       this.outputUrl.host,
-      timeAllowed,
+      minutesAllowed,
     );
 
     window.location.href = this.outputUrl.toString();
