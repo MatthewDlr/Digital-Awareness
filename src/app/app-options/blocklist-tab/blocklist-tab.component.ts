@@ -51,6 +51,9 @@ export class BlocklistTabComponent {
 
   @HostListener('document:keydown.enter', ['$event'])
   onEnterHandler(event: KeyboardEvent) {
+    if (this.editIndex === -1) {
+      return;
+    }
     this.editWebsite(this.userWebsites[this.editIndex]);
   }
 

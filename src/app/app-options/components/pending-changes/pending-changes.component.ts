@@ -12,6 +12,8 @@ export class PendingChangesComponent {
   expirationDate: string = '';
   canChangesBeValidated: boolean = false;
 
+  timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
+
   constructor(
     private pendingChangesService: PendingChangesService,
   ) {
@@ -27,14 +29,10 @@ export class PendingChangesComponent {
     });
     this.pendingChangesService.validationDate.subscribe({
       next: (date) => {
-        if (!(date instanceof Date)) {
-          return;
-        }
         this.validationDate = String(
           date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0'),
         );
-        const timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
-        const expirationDate = new Date(date.getTime() + timeToAdd);
+        const expirationDate = new Date(date.getTime() + this.timeToAdd);
         this.expirationDate = String(expirationDate.getHours() + ':' + String(expirationDate.getMinutes()).padStart(2, '0'));
       },
     });
