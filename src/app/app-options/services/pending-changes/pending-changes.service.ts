@@ -16,7 +16,7 @@ export class PendingChangesService {
   websitesToDelete: Set<string> = new Set();
   websitesToEdit: Set<{ oldHost: string; newHost: string }> = new Set();
 
-  intervalTimer = isDevMode() ? 1000 * 5 : 1000 * 60;
+  timeout = isDevMode() ? 1000 * 5 : 1000 * 60;
   waitDuration = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
 
   constructor() {
@@ -24,7 +24,7 @@ export class PendingChangesService {
       if (result['pendingChanges']) {
         this.areChangesPending.next(result['pendingChanges'].areChangesPending);
         this.validationDate.next(
-          new Date(result['pendingChanges'].validationDate),
+          new Date(result['pendingChanges'].validationDate) || new Date(),
         );
         this.websitesToDelete = new Set(
           result['pendingChanges'].websitesToDelete,
@@ -52,12 +52,12 @@ export class PendingChangesService {
         this.canChangesBeValidated.next(true);
         setTimeout(() => {
           this.checkChangesValidity();
-        }, this.intervalTimer);
+        }, this.timeout);
       }
     } else {
       setTimeout(() => {
         this.checkChangesValidity();
-      }, this.intervalTimer);
+      }, this.timeout);
     }
   }
 
@@ -92,7 +92,7 @@ export class PendingChangesService {
   }
 
   confirmPendingChanges() {
-    if (!this.canBeValidated()) {
+    if (!this.canBeValidated() || this.areChangesExpired() || !this.areChangesPending.getValue() ) {
       return;
     }
 
@@ -147,8 +147,8 @@ export class PendingChangesService {
   private savePendingChanges() {
     chrome.storage.local.set({
       pendingChanges: {
-        areChangesPending: this.areChangesPending,
-        validationDate: this.validationDate.toString(),
+        areChangesPending: this.areChangesPending.getValue(),
+        validationDate: this.validationDate.getValue().toString(),
         websitesToDelete: Array.from(this.websitesToDelete),
         websitesToEdit: Array.from(this.websitesToEdit),
       },
@@ -161,13 +161,3 @@ export class PendingChangesService {
     }
   }
 }
-
-export type PendingChanges = {
-  areChangesPending: boolean;
-  validationDate: Date | null;
-  websitesToDelete: Set<string>;
-  websitesToEdit: Set<{
-    oldHost: string;
-    newHost: string;
-  }>;
-};

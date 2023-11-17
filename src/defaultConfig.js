@@ -7,35 +7,35 @@ export function defaultConfig() {
           allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
-          category: "Sreaming",
+          category: "Streaming",
         },
         {
           host: "netflix.com",
           allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
-          category: "Sreaming",
+          category: "Streaming",
         },
         {
           host: "twitch.tv",
           allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
-          category: "Sreaming",
+          category: "Streaming",
         },
         {
           host: "primevideo.com",
           allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
-          category: "Sreaming",
+          category: "Streaming",
         },
         {
           host: "disneyplus.com",
           allowedUntil: "next time",
           timesBlocked: 0,
           timesAllowed: 0,
-          category: "Sreaming",
+          category: "Streaming",
         },
         {
           host: "instagram.com",
@@ -141,7 +141,7 @@ export function defaultConfig() {
           isActive: false
         },
         {
-          name: 'Sreaming',
+          name: 'Streaming',
           isActive: false
         },
         {
