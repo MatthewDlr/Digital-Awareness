@@ -3,7 +3,7 @@
 <!-- DevMode Warning-->
 <div
   *ngIf="isDevModeEnabled()"
-  class="text-orange-600 bg-orange-50 fixed left-[-4.5rem] top-[10rem] flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
+  class="z-10 text-orange-600 bg-orange-50 fixed left-[-4.5rem] top-[10rem] flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@
           (click)="currentTab = 'blocklist'"
           [ngClass]="
             currentTab == 'blocklist'
-              ? 'text-green-500 border-green-500'
+              ? 'text-green-500 !border-green-500'
               : 'text-gray-500 hover:border-green-500'
           "
           class="group text-gray-500 flex w-52 cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
@@ -82,7 +82,7 @@
           (click)="currentTab = 'blockpage'"
           [ngClass]="
             currentTab == 'blockpage'
-              ? 'text-green-500 border-green-500'
+              ? 'text-green-500 !border-green-500'
               : 'text-gray-500 hover:border-green-500'
           "
           class="group text-gray-500 flex w-44 cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
@@ -110,7 +110,7 @@
           (click)="currentTab = 'notifications'"
           [ngClass]="
             currentTab == 'notifications'
-              ? 'text-green-500 border-green-500'
+              ? 'text-green-500 !border-green-500'
               : 'text-gray-500 hover:border-green-500'
           "
           class="group text-gray-500 flex w-36 cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"

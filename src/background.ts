@@ -5,6 +5,8 @@ let realScrollsCount: number = 0;
 let tabOpenedAt: Date = new Date();
 let intervalId: any;
 let lastScrollTop = 0;
+let isDevMode = false;
+let scrollTreshold: number = 10;
 
 chrome.storage.sync.get('doomScrollingNotification', (result) => {
   if (result['doomScrollingNotification'] == true) {
@@ -13,27 +15,53 @@ chrome.storage.sync.get('doomScrollingNotification', (result) => {
   }
 });
 
-window.addEventListener("scroll", function(e) {
-  let st = window.scrollY;
-  if (st > lastScrollTop && isDoomScrollingEnabled){
-     totalScrolls++;
+chrome.storage.local.get('isDevMode', (result) => {
+  isDevMode = result['isDevMode'] || false;
+  console.log('isDevMode: ', isDevMode);
+});
+
+// Watching for scroll down event
+window.addEventListener(
+  'scroll',
+  function (e) {
+    let st = window.scrollY;
+    if (st > lastScrollTop && isDoomScrollingEnabled) {
+      totalScrolls++;
+    }
+    lastScrollTop = st <= 0 ? 0 : st;
+  },
+  false,
+);
+
+window.addEventListener('keydown', function (e) {
+  if (e.key == 'ArrowDown' && isDoomScrollingEnabled) {
+    totalScrolls++;
   }
-  lastScrollTop = st <= 0 ? 0 : st; 
-}, false);
+});
 
 function checkChanges() {
   if (previousScrollCount < totalScrolls) {
     realScrollsCount++;
-    console.log('user scrolled: ' + realScrollsCount + ' times');
+    isDevMode
+      ? console.log('user scrolled: ' + realScrollsCount + ' times')
+      : null;
   }
   previousScrollCount = totalScrolls;
 
-  if (realScrollsCount > 10) {
+  if (!isDevMode && tabOpenedAt > new Date(Date.now() - 1000 * 60 * 10)) {
+    isDevMode ? console.log('Wait 10 min before checking') : null;
+    return;
+  }
+
+  if ((isDevMode && realScrollsCount > 5) || realScrollsCount > 100) {
     console.log('user is doom scrolling');
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     clearInterval(intervalId);
-    window.removeEventListener("scroll", function(e) {});
+    window.removeEventListener('scroll', function (e) {});
     rediretToBlockPage();
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 1000);
   }
 }
 

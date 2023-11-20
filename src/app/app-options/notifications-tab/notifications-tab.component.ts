@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, isDevMode } from '@angular/core';
 import { PendingChangesService } from '../services/pending-changes/pending-changes.service';
 
 @Component({
@@ -18,6 +18,8 @@ export class NotificationsTabComponent {
     chrome.storage.sync.get('bindWatchingNotification').then((result) => {
       this.bindWatchingToggle = result['bindWatchingNotification'];
     });
+
+    chrome.storage.local.set({ isDevMode: isDevMode() });
   }
 
   toggleDoomScrolling() {
