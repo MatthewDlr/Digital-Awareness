@@ -38,6 +38,8 @@
 .fade-in-bottom-small {
   -webkit-animation: fade-in-bottom .75s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   animation: fade-in-bottom .75s cubic-bezier(0.25, 0.46, 0.45, 0.94) both ;
+  -webkit-animation-delay: var(--delay);
+  animation-delay: var(--delay);
 }
 
 @-webkit-keyframes fade-in-bottom {

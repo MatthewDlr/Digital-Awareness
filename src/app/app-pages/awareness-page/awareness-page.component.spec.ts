@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BlockPageComponent } from './blockpage.component';
+import { AwarenessPageComponent } from './awareness-page.component';
 
-describe('BlockPageComponent', () => {
-  let component: BlockPageComponent;
-  let fixture: ComponentFixture<BlockPageComponent>;
+describe('AwarenessPageComponent', () => {
+  let component: AwarenessPageComponent;
+  let fixture: ComponentFixture<AwarenessPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BlockPageComponent]
+      declarations: [AwarenessPageComponent]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BlockPageComponent);
+    fixture = TestBed.createComponent(AwarenessPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

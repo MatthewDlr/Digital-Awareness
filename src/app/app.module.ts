@@ -4,7 +4,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
-import { AppBlockingModule } from './app-blocking/app-blocking.module';
+import { AppBlockingModule } from './app-pages/app-blocking.module';
 import { OptionsModule } from './app-options/options.module';
 import { PopupComponent } from './popup/popup.component';
 

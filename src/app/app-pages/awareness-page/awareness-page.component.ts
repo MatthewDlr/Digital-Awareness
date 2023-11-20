@@ -4,11 +4,11 @@ import { Quotes } from '../services/quotes';
 import { AllowedSitesService } from '../services/allowed-sites/allowed-sites.service';
 
 @Component({
-  selector: 'app-blockpage',
-  templateUrl: './blockpage.component.html',
-  styleUrls: ['./blockpage.component.css'],
+  selector: 'app-awareness-page',
+  templateUrl: './awareness-page.component.html',
+  styleUrls: ['./awareness-page.component.css'],
 })
-export class BlockPageComponent {
+export class AwarenessPageComponent {
   storedTimerValue!: number;
   timerValue!: number;
   quoteText!: string;
@@ -75,7 +75,7 @@ export class BlockPageComponent {
   waitBeforeClose() {
     setTimeout(() => {
       this.closeBlockPage();
-    }, 10000);
+    }, 15000);
   }
 
   // This means failure as the user has waited for the timer to expire
