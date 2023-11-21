@@ -1,12 +1,13 @@
 let isDoomScrollingEnabled: boolean = false;
+let isDevMode = false;
 let totalScrolls: number = 0;
 let previousScrollCount: number = 0;
 let realScrollsCount: number = 0;
 let tabOpenedAt: Date = new Date();
 let intervalId: any;
 let lastScrollTop = 0;
-let isDevMode = false;
 let scrollTreshold: number = 10;
+let currentTab: chrome.tabs.Tab;
 
 chrome.storage.sync.get('doomScrollingNotification', (result) => {
   if (result['doomScrollingNotification'] == true) {
@@ -19,6 +20,7 @@ chrome.storage.local.get('isDevMode', (result) => {
   isDevMode = result['isDevMode'] || false;
   console.log('isDevMode: ', isDevMode);
 });
+
 
 // Watching for scroll down event
 window.addEventListener(
@@ -58,18 +60,21 @@ function checkChanges() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     clearInterval(intervalId);
     window.removeEventListener('scroll', function (e) {});
-    rediretToBlockPage();
+    redirectToWaitPage(currentTab);
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 1000);
   }
 }
 
-function rediretToBlockPage() {}
-
-// function getVideoTimer() {
-//   var timeCurrent = document.querySelector('.ytp-time-current')?.innerHTML;
-//   var timeDuration = document.querySelector('.ytp-time-duration')?.innerHTML;
-
-//   console.log(timeCurrent + ' / ' + timeDuration);
-// }
+function redirectToWaitPage(currentTab: chrome.tabs.Tab) {
+  let redirectUrl = chrome.runtime.getURL(
+    'index.html#blocked/' +
+      encodeURIComponent(String(currentTab.id)) +
+      '/' +
+      encodeURIComponent(String(currentTab.url)),
+  );
+  if (currentTab.id !== undefined) {
+    chrome.tabs.update(currentTab.id, { url: redirectUrl });
+  }
+}
