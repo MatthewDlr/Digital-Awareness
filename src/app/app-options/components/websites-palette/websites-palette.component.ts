@@ -12,11 +12,11 @@ import { watchedWebsite, category } from '../../../types';
 import FuzzySearch from 'fuzzy-search';
 
 @Component({
-  selector: 'app-command-palette',
-  templateUrl: './command-palette.component.html',
-  styleUrls: ['./command-palette.component.css'],
+  selector: 'app-websites-palette',
+  templateUrl: './websites-palette.component.html',
+  styleUrls: ['./websites-palette.component.css'],
 })
-export class CommandPaletteComponent implements AfterViewInit {
+export class WebsitesPaletteComponent implements AfterViewInit {
   searchResults: Website[] = commonWebsites;
   userWebsites: watchedWebsite[] = [];
   enforcedWebsites: watchedWebsite[] = [];

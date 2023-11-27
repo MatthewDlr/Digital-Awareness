@@ -4,11 +4,11 @@ import { CommandPaletteService } from '../services/command-palette/command-palet
 import { PendingChangesService } from '../services/pending-changes/pending-changes.service';
 
 @Component({
-  selector: 'app-blocklist-tab',
-  templateUrl: './blocklist-tab.component.html',
-  styleUrls: ['./blocklist-tab.component.css'],
+  selector: 'app-highlighted-websites-tab',
+  templateUrl: './highlighted-websites-tab.component.html',
+  styleUrls: ['./highlighted-websites-tab.component.css'],
 })
-export class BlocklistTabComponent {
+export class HighlightedWebsitesTabComponent {
   isLoading: boolean = true;
   enforcedWebsites: watchedWebsite[] = [];
   userWebsites: watchedWebsite[] = [];

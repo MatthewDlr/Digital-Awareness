@@ -1,4 +1,4 @@
-<app-command-palette *ngIf="isCommandPaletteShown"></app-command-palette>
+<app-websites-palette *ngIf="isCommandPaletteShown"></app-websites-palette>
 
 <!-- DevMode Warning-->
 <div
@@ -141,8 +141,8 @@
 
   <!-- Options Content -->
   <div class="fade-in-bottom" style="--delay: 0.5s">
-    <app-blocklist-tab *ngIf="currentTab == 'blocklist'"></app-blocklist-tab>
-    <app-blockpage-tab *ngIf="currentTab == 'blockpage'"></app-blockpage-tab>
+    <app-highlighted-websites-tab *ngIf="currentTab == 'blocklist'"></app-highlighted-websites-tab>
+    <app-awareness-page-tab *ngIf="currentTab == 'blockpage'"></app-awareness-page-tab>
     <app-notifications-tab
       *ngIf="currentTab == 'notifications'"
     ></app-notifications-tab>

@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OptionsComponent } from './options-page/options.component';
-import { BlocklistTabComponent } from './blocklist-tab/blocklist-tab.component';
-import { BlockpageTabComponent } from './blockpage-tab/blockpage-tab.component';
+import { HighlightedWebsitesTabComponent } from './highlighted-websites-tab/highlighted-websites-tab.component';
+import { AwarenessPageTabComponent } from './awareness-page-tab/awareness-page-tab.component';
 import { NotificationsTabComponent } from './notifications-tab/notifications-tab.component';
-import { CommandPaletteComponent } from './components/command-palette/command-palette.component';
+import { WebsitesPaletteComponent } from './components/websites-palette/websites-palette.component';
 import { CommandPaletteService } from './services/command-palette/command-palette.service';
 import { PendingChangesComponent } from './components/pending-changes/pending-changes.component';
 import { PendingChangesService } from './services/pending-changes/pending-changes.service';
@@ -13,10 +13,10 @@ import { PendingChangesService } from './services/pending-changes/pending-change
 @NgModule({
   declarations: [
     OptionsComponent,
-    BlocklistTabComponent,
-    BlockpageTabComponent,
+    HighlightedWebsitesTabComponent,
+    AwarenessPageTabComponent,
     NotificationsTabComponent,
-    CommandPaletteComponent,
+    WebsitesPaletteComponent,
     PendingChangesComponent,
   ],
   imports: [CommonModule, FormsModule],
