@@ -4,6 +4,7 @@ import {
   ElementRef,
   AfterViewInit,
   HostListener,
+  isDevMode,
 } from '@angular/core';
 import { CommandPaletteService } from '../../services/command-palette/command-palette.service';
 import { commonWebsites, Website } from '../websites-list';
@@ -62,7 +63,7 @@ export class CommandPaletteComponent implements AfterViewInit {
       };
       this.userWebsites.push(blockedWebsite);
     }
-    console.log(this.selectedWebsites);
+    isDevMode() ? console.log(this.selectedWebsites) : null;
     chrome.storage.sync
       .set({ userWebsites: this.userWebsites })
       .then((result) => {
@@ -75,7 +76,6 @@ export class CommandPaletteComponent implements AfterViewInit {
       .catch((error) => {
         console.error('Error while blocking websites:', error);
       });
-    
   }
 
   toggleCommandPalette(state: boolean) {

@@ -9,7 +9,6 @@
   },
   "host_permissions": ["*://*/*"],
   "permissions": ["storage", "tabs", "activeTab", "webNavigation", "unlimitedStorage", "notifications"],
-  "optional_permissions":["notifications"],
   "action": {
     "default_popup": "index.html#/popup"
   },

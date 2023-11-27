@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { watchedWebsite } from 'src/app/types';
 
 @Injectable({
@@ -19,7 +19,12 @@ export class AllowedSitesService {
       if (enforcedWebsite) {
         this.updateWebsiteAllowedDate(enforcedWebsite, duration);
         chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites });
-        console.log('Updated enforcedWebsites list: ', this.enforcedWebsites);
+        isDevMode()
+          ? console.log(
+              'Updated enforcedWebsites list: ',
+              this.enforcedWebsites,
+            )
+          : null;
       } else {
         chrome.storage.sync.get('userWebsites', (result) => {
           this.userWebsites = result['userWebsites'];
@@ -30,7 +35,9 @@ export class AllowedSitesService {
             this.updateWebsiteAllowedDate(userWebsite, duration);
 
             chrome.storage.sync.set({ userWebsites: this.userWebsites });
-            console.log('Updated userWebsites list: ', this.userWebsites);
+            isDevMode()
+              ? console.log('Updated userWebsites list: ', this.userWebsites)
+              : null;
           }
         });
       }
@@ -48,7 +55,12 @@ export class AllowedSitesService {
       if (enforcedWebsite) {
         enforcedWebsite.timesBlocked++;
         chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites });
-        console.log('Updated enforcedWebsites list: ', this.enforcedWebsites);
+        isDevMode()
+          ? console.log(
+              'Updated enforcedWebsites list: ',
+              this.enforcedWebsites,
+            )
+          : null;
       } else {
         chrome.storage.sync.get('userWebsites', (result) => {
           this.userWebsites = result['userWebsites'];
@@ -58,7 +70,9 @@ export class AllowedSitesService {
           if (userWebsite) {
             userWebsite.timesBlocked++;
             chrome.storage.sync.set({ userWebsites: this.userWebsites });
-            console.log('Updated userWebsites list: ', this.userWebsites);
+            isDevMode()
+              ? console.log('Updated userWebsites list: ', this.userWebsites)
+              : null;
           }
         });
       }

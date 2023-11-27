@@ -18,10 +18,12 @@ export class NotificationsTabComponent {
     chrome.notifications.getPermissionLevel((level) => {
       if (level === 'granted') {
         this.hasNotificationPermission = true;
-        console.log(
-          'hasNotificationPermission: ',
-          this.hasNotificationPermission,
-        );
+        isDevMode()
+          ? console.log(
+              'hasNotificationPermission: ',
+              this.hasNotificationPermission,
+            )
+          : null;
       }
     });
 
