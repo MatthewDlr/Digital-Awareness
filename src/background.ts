@@ -6,7 +6,7 @@ let realScrollsCount: number = 0;
 let tabOpenedAt: Date = new Date();
 let intervalId: any;
 let lastScrollTop = 0;
-let scrollTreshold: number = 10;
+let scrollTreshold: number = 100;
 
 chrome.storage.sync.get('doomScrollingNotification', (result) => {
   if (result['doomScrollingNotification'] == true) {
@@ -18,6 +18,11 @@ chrome.storage.sync.get('doomScrollingNotification', (result) => {
 chrome.storage.local.get('isDevMode', (result) => {
   isDevMode = result['isDevMode'] || false;
   console.log('isDevMode: ', isDevMode);
+});
+
+chrome.storage.sync.get('doomScrollingTreshold', (result) => {
+  scrollTreshold = result['doomScrollingTreshold'];
+  isDevMode ? console.log('scrollTreshold: ', scrollTreshold) : null;
 });
 
 // Watching for scroll down event
@@ -53,15 +58,20 @@ function checkChanges() {
     return;
   }
 
-  if ((isDevMode && realScrollsCount > 4) || realScrollsCount > 100) {
+  if (
+    (isDevMode && realScrollsCount > 5) ||
+    realScrollsCount > scrollTreshold
+  ) {
     console.log('user is doom scrolling');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    isDevMode ? null : window.scrollTo({ top: 0, behavior: 'smooth' });
     clearInterval(intervalId);
     window.removeEventListener('scroll', function (e) {});
     sendNotification();
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1000);
+    if (!isDevMode) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 1000);
+    }
   }
 }
 

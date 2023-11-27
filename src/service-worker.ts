@@ -44,17 +44,30 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.type == 'doomScrolling') {
     chrome.storage.sync.get('doomScrollingNotification', (result) => {
       if (result['doomScrollingNotification'] == true) {
-        chrome.notifications.create(
-          'doomScrollingNotification',
-          {
-            type: 'basic',
-            iconUrl: '/assets/logo128.png',
-            title: 'Doom Scrolling Detected',
-            message:
-              "Seems that you've been scrolling for a while, take a break!",
-            priority: 2,
+        chrome.notifications.create('doomScrollingNotification', {
+          type: 'basic',
+          iconUrl: '/assets/logo128.png',
+          title: 'Doom Scrolling Detected',
+          message:
+            "Seems that you've been scrolling for a while, take a break!",
+          priority: 2,
+          buttons: [
+            {
+              title: 'incorrect detection?',
+            },
+          ],
+        });
+        chrome.notifications.onButtonClicked.addListener(
+          function (notificationId, buttonIndex) {
+            if (notificationId === 'doomScrollingNotification') {
+              chrome.storage.sync.get('doomScrollingTreshold', (result) => {
+                chrome.storage.sync.set({
+                  doomScrollingTreshold: result['doomScrollingTreshold'] + 5,
+                });
+              });
+              chrome.notifications.clear(notificationId);
+            }
           },
-          function (notificationId) {},
         );
       }
     });

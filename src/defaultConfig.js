@@ -119,6 +119,7 @@ export function defaultConfig() {
       timerValue: 30, // Timer base value is 30 sec
       timeAllowed: 30, // When a website is allowed, the default duration is 30 min
       doomScrollingNotification: true, // Notification when doom scrolling
+      doomScrollingTreshold: 100, // Number of time the user can scroll before notification
       bindWatchingNotification: true, // Notification when bind watching
       userWebsites: [], // Website the user will decide to block
       userCategories: [
