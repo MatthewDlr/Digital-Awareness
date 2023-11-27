@@ -3,7 +3,7 @@
 <!-- DevMode Warning-->
 <div
   *ngIf="isDevModeEnabled()"
-  class="z-10 text-orange-600 bg-orange-50 fixed left-[-4.5rem] top-[10rem] flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
+  class="text-orange-600 bg-orange-50 fixed left-[-4.5rem] top-[10rem] z-10 flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +46,10 @@
   ></app-pending-changes>
 
   <!-- Tabs -->
-  <div class="fade-in-bottom block w-full overflow-x-scroll" style="--delay: 0.3s">
+  <div
+    class="fade-in-bottom block w-full overflow-x-scroll"
+    style="--delay: 0.3s"
+  >
     <div class="border-gray-200 border-b">
       <nav class="-mb-px flex space-x-10 max-lg:space-x-5" aria-label="Tabs">
         <!-- Highlighted Sites Tab -->

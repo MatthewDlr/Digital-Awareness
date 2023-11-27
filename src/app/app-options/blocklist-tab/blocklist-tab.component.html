@@ -9,29 +9,36 @@
       </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-      <button
-        (click)="toggleCommandPalette(true)"
-        type="button"
-        class="green-gradient text-white flex !transform items-center gap-2 rounded-lg stroke-white px-3 py-2 text-center text-base font-medium !transition-all hover:scale-105 hover:shadow-lg hover:shadow-green-200 dark:hover:shadow-green-800"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          aria-hidden="true"
-          class="h-6 w-6"
+      <div class="group relative flex flex-col items-center">
+        <button
+          (click)="toggleCommandPalette(true)"
+          type="button"
+          class="green-gradient text-white flex !transform items-center gap-2 rounded-lg stroke-white px-3 py-2 text-center text-base font-medium !transition-all hover:scale-105 hover:shadow-lg hover:shadow-green-200 dark:hover:shadow-green-800"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-          />
-        </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+            class="h-6 w-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
 
-        Add new website
-      </button>
+          Add new website
+        </button>
+        <div class="absolute bottom-full mb-2 hidden group-hover:block justify-center">
+          <div class="text-black bg-black rounded px-4 py-2 text-sm bg-opacity-20">
+            {{OS === 'MacOS' ? '⌘' : 'Ctrl' }} + K
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

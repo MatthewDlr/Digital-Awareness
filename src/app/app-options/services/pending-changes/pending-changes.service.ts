@@ -185,7 +185,7 @@ export class PendingChangesService {
 
     if (isDevMode()) {
       chrome.storage.local.get(['pendingChanges'], (result) => {
-      isDevMode() ? console.log('Pending changes saved: ', result['pendingChanges']);
+      isDevMode() ? console.log('Pending changes saved: ', result['pendingChanges']) : null;
       });
     }
   }

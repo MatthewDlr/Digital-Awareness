@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { watchedWebsite } from 'src/app/types';
 import { CommandPaletteService } from '../services/command-palette/command-palette.service';
 import { PendingChangesService } from '../services/pending-changes/pending-changes.service';
+
 @Component({
   selector: 'app-blocklist-tab',
   templateUrl: './blocklist-tab.component.html',
@@ -13,6 +14,7 @@ export class BlocklistTabComponent {
   userWebsites: watchedWebsite[] = [];
   isCommandPaletteShown: boolean = false;
   randomWidths: any[] = [];
+  OS: string = this.getOS();
 
   editIndex: number = -1;
   oldHost!: string;
@@ -118,5 +120,14 @@ export class BlocklistTabComponent {
       (website) => website.host !== websiteToDelete.host,
     );
     this.pendingChangesService.addWebsiteToRemove(websiteToDelete.host);
+  }
+
+  getOS(): string {
+    if (window.navigator.userAgent.indexOf("Mac OS") != -1) {
+      return "MacOS";
+    } else if (window.navigator.userAgent.indexOf("Windows") != -1) {
+      return "Windows";
+    }
+    return "Other";
   }
 }

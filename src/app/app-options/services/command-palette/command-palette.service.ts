@@ -10,7 +10,7 @@ export class CommandPaletteService {
   constructor() {
     this.toggleCommandPalette(true);
     this.isCommandPaletteShown.subscribe((state) =>
-    isDevMode() ? console.log('Update command palette state: ', state),
+    isDevMode() ? console.log('Update command palette state: ', state) : null
     );
   }
 
