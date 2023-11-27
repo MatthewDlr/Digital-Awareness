@@ -49,7 +49,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           iconUrl: '/assets/logo128.png',
           title: 'Doom Scrolling Detected',
           message:
-            "Seems that you've been scrolling for a while, take a break!",
+            "Seems that you've been scrolling for a while, let's take a break!",
           priority: 2,
           buttons: [
             {

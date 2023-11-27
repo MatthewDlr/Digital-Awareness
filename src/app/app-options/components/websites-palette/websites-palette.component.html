@@ -4,7 +4,7 @@
 >
   <div class="items-center justify-center mt-20">
     <div
-      class="bg-gray-50 dark:bg-gray-100 mx-auto max-h-[30rem] max-w-xl transform rounded-2xl bg-opacity-10 dark:bg-opacity-25 p-3 shadow-2xl ring-1 ring-black ring-opacity-10 backdrop-blur-xl backdrop-filter transition-all"
+      class="bg-gray-50 dark:bg-gray-100 mx-auto max-h-[30rem] max-w-xl transform rounded-2xl bg-opacity-10 dark:bg-opacity-25 p-3 shadow-2xl ring-1 ring-gray-200 dark:ring-gray-800 backdrop-blur-xl backdrop-filter !transition-all"
       (click)="$event.stopPropagation()"
     >
       <!--Search Bar-->
@@ -106,8 +106,8 @@
             (click)="toggleWebsiteSelection(website)"
             [ngClass]="
               website.selected
-                ? 'text-green-500 bg-green-100 bg-opacity-50'
-                : 'hover:bg-gray-100 bg-opacity-75'
+                ? 'text-green-500 bg-green-100 bg-opacity-75 dark:bg-opacity-50'
+                : 'hover:bg-gray-100 bg-opacity-75 dark:bg-opacity-50'
             "
           >
             <div

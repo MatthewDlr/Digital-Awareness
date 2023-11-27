@@ -7,3 +7,7 @@ platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
 
 nightwind.initNightwind();
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+  nightwind.toggle();
+});
