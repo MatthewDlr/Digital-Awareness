@@ -10,16 +10,28 @@ export class NotificationsTabComponent {
   doomScrollingToggle: boolean = false;
   bindWatchingToggle: boolean = false;
 
-  constructor(private pendingChangesService: PendingChangesService) {
-    chrome.storage.sync.get('doomScrollingNotification').then((result) => {
-      this.doomScrollingToggle = result['doomScrollingNotification'];
-    });
+  hasNotificationPermission: boolean = false;
+  isNotificationPermissionRequested: boolean = false;
 
-    chrome.storage.sync.get('bindWatchingNotification').then((result) => {
-      this.bindWatchingToggle = result['bindWatchingNotification'];
+  constructor(private pendingChangesService: PendingChangesService) {
+    this.getLocalData();
+    chrome.notifications.getPermissionLevel((level) => {
+      if (level === 'granted') {
+        this.hasNotificationPermission = true;
+        console.log(
+          'hasNotificationPermission: ',
+          this.hasNotificationPermission,
+        );
+      }
     });
 
     chrome.storage.local.set({ isDevMode: isDevMode() });
+
+    this.pendingChangesService.areChangesPending.subscribe({
+      next: (state) => {
+        this.getLocalData();
+      },
+    });
   }
 
   toggleDoomScrolling() {
@@ -37,6 +49,31 @@ export class NotificationsTabComponent {
     this.bindWatchingToggle = !this.bindWatchingToggle;
     chrome.storage.sync.set({
       bindWatchingNotification: this.bindWatchingToggle,
+    });
+  }
+
+  requestNotificationPermission() {
+    chrome.permissions
+      .request({
+        permissions: ['notifications'],
+      })
+      .then((granted) => {
+        if (granted) {
+          this.hasNotificationPermission = true;
+        } else {
+          this.hasNotificationPermission = false;
+        }
+      });
+    this.isNotificationPermissionRequested = true;
+  }
+
+  getLocalData() {
+    chrome.storage.sync.get('doomScrollingNotification').then((result) => {
+      this.doomScrollingToggle = result['doomScrollingNotification'];
+    });
+
+    chrome.storage.sync.get('bindWatchingNotification').then((result) => {
+      this.bindWatchingToggle = result['bindWatchingNotification'];
     });
   }
 }

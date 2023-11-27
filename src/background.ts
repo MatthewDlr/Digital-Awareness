@@ -7,7 +7,6 @@ let tabOpenedAt: Date = new Date();
 let intervalId: any;
 let lastScrollTop = 0;
 let scrollTreshold: number = 10;
-let currentTab: chrome.tabs.Tab;
 
 chrome.storage.sync.get('doomScrollingNotification', (result) => {
   if (result['doomScrollingNotification'] == true) {
@@ -20,7 +19,6 @@ chrome.storage.local.get('isDevMode', (result) => {
   isDevMode = result['isDevMode'] || false;
   console.log('isDevMode: ', isDevMode);
 });
-
 
 // Watching for scroll down event
 window.addEventListener(
@@ -55,26 +53,18 @@ function checkChanges() {
     return;
   }
 
-  if ((isDevMode && realScrollsCount > 5) || realScrollsCount > 100) {
+  if ((isDevMode && realScrollsCount > 4) || realScrollsCount > 100) {
     console.log('user is doom scrolling');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     clearInterval(intervalId);
     window.removeEventListener('scroll', function (e) {});
-    redirectToWaitPage(currentTab);
+    sendNotification();
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 1000);
   }
 }
 
-function redirectToWaitPage(currentTab: chrome.tabs.Tab) {
-  let redirectUrl = chrome.runtime.getURL(
-    'index.html#blocked/' +
-      encodeURIComponent(String(currentTab.id)) +
-      '/' +
-      encodeURIComponent(String(currentTab.url)),
-  );
-  if (currentTab.id !== undefined) {
-    chrome.tabs.update(currentTab.id, { url: redirectUrl });
-  }
+function sendNotification() {
+  chrome.runtime.sendMessage({ type: 'doomScrolling' });
 }

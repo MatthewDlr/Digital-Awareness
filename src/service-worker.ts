@@ -29,7 +29,6 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
         }
       });
     }
-
   });
 });
 
@@ -39,6 +38,27 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.tabs.onRemoved.addListener(function (tabid, removed) {
   console.log(tabid, ': tab closed');
+});
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.type == 'doomScrolling') {
+    chrome.storage.sync.get('doomScrollingNotification', (result) => {
+      if (result['doomScrollingNotification'] == true) {
+        chrome.notifications.create(
+          'doomScrollingNotification',
+          {
+            type: 'basic',
+            iconUrl: '/assets/logo128.png',
+            title: 'Doom Scrolling Detected',
+            message:
+              "Seems that you've been scrolling for a while, take a break!",
+            priority: 2,
+          },
+          function (notificationId) {},
+        );
+      }
+    });
+  }
 });
 
 function isWebsiteBlocked(

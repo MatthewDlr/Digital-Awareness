@@ -8,7 +8,8 @@
     "256": "./assets/logo256.png"
   },
   "host_permissions": ["*://*/*"],
-  "permissions": ["storage", "tabs", "activeTab", "webNavigation", "unlimitedStorage"],
+  "permissions": ["storage", "tabs", "activeTab", "webNavigation", "unlimitedStorage", "notifications"],
+  "optional_permissions":["notifications"],
   "action": {
     "default_popup": "index.html#/popup"
   },
@@ -22,6 +23,12 @@
       "matches": ["<all_urls>"],
       "js": ["background.js"],
       "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["doomScrollingPopup.html"],
+      "matches": ["<all_urls>"]
     }
   ]
 }

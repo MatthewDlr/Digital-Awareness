@@ -94,7 +94,7 @@ export class AwarenessPageComponent {
 
   // This means success as the user left the page before the timer expired
   closeBlockPage() {
-    const newTimerValue = Math.max(this.storedTimerValue - 1, 30);
+    const newTimerValue = Math.max(this.storedTimerValue - 5, 30);
     chrome.storage.sync.set({ timerValue: newTimerValue });
     this.allowedSitesService.incrementTimesBlocked(this.outputUrl.host)
     setTimeout(() => {
