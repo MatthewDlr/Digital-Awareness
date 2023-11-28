@@ -26,9 +26,4 @@
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
       var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
-
-  .shadow-inner-md:hover {
-    --tw-shadow: inset 0 0 8px 0 rgb(0 0 0 / 0.05);
-    --tw-shadow-colored: inset 0 0 8px 0 var(--tw-shadow-color);
-  }
 }
