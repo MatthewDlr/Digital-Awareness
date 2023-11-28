@@ -20,9 +20,15 @@
   }
 
   .shadow-inner-md {
-    --tw-shadow: inset 0 0 6px 0 rgb(0 0 0 / 0.05);
-    --tw-shadow-colored: inset 0 0 6px 0 var(--tw-shadow-color);
+    transition: all 0.4s ease-in-out !important;
+    --tw-shadow: inset 0 0 5px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: inset 0 0 5px 0 var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
       var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+
+  .shadow-inner-md:hover {
+    --tw-shadow: inset 0 0 8px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: inset 0 0 8px 0 var(--tw-shadow-color);
   }
 }

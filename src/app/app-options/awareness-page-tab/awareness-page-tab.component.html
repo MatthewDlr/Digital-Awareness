@@ -4,26 +4,63 @@
     Page widget
   </legend>
 
+  <!-- Random -->
+  <label
+    class="bg-white relative mt-5 flex cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+    [ngClass]="
+      selectedWidget == 'Random'
+        ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-25'
+        : 'border-gray-300 hover:ring-2 hover:ring-green-400'
+    "
+    (click)="updateSelectedWidget('Random')"
+  >
+    <span class="flex flex-1">
+      <span class="flex w-full items-center justify-center gap-3">
+        <span
+          id="project-type-0-label"
+          class="text-gray-900 block text-base font-medium"
+          >Random</span
+        >
+        <span
+          id="project-type-0-description-0"
+          class="text-gray-500 mt-[0.15rem] flex items-center text-sm"
+          >Display a random widget every time</span
+        >
+      </span>
+    </span>
+    <svg
+      class="text-green-500 h-6 w-6"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+      [ngClass]="selectedWidget == 'Random' ? 'visible' : 'invisible'"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+        clip-rule="evenodd"
+      />
+    </svg>
+    <span
+      class="pointer-events-none absolute -inset-px rounded-lg border-2 hover:border"
+      aria-hidden="true"
+      [ngClass]="
+        selectedWidget == 'Random' ? 'border-green-500' : 'border-transparent'
+      "
+    ></span>
+  </label>
+
   <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+    <!-- Quotes -->
     <label
       class="bg-white relative flex cursor-pointer rounded-lg border p-4 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       [ngClass]="
         selectedWidget == 'Quotes'
-          ? 'bg-green-50 bg-opacity-25'
-          : 'border-gray-300 hover:ring-2 hover:ring-green-500'
+          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-25'
+          : 'border-gray-300 hover:ring-2 hover:ring-green-400'
       "
-      (click)="selectedWidget = 'Quotes'"
+      (click)="updateSelectedWidget('Quotes')"
     >
-      <input
-        type="radio"
-        name="Quotes"
-        value="Quotes"
-        class="sr-only"
-        aria-labelledby="project-type-0-label"
-        aria-describedby="project-type-0-description-0 project-type-0-description-1"
-        [(ngModel)]="selectedWidget"
-        [ariaSelected]="selectedWidget == 'Quotes' ? true : false"
-      />
       <span class="flex flex-1">
         <span class="flex flex-col">
           <span
@@ -39,7 +76,7 @@
         </span>
       </span>
       <svg
-        class="text-green-600 h-5 w-5"
+        class="text-green-500 h-6 w-6"
         viewBox="0 0 20 20"
         fill="currentColor"
         aria-hidden="true"
@@ -55,27 +92,21 @@
         class="pointer-events-none absolute -inset-px rounded-lg border-2 hover:border"
         aria-hidden="true"
         [ngClass]="
-          selectedWidget == 'Quotes' ? 'border-green-600' : 'border-transparent'
+          selectedWidget == 'Quotes' ? 'border-green-500' : 'border-transparent'
         "
       ></span>
     </label>
+
+    <!-- Breathing -->
     <label
       class="bg-white relative flex cursor-pointer rounded-lg border p-4 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
-      (click)="selectedWidget = 'Breathing'"
+      (click)="updateSelectedWidget('Breathing')"
       [ngClass]="
         selectedWidget == 'Breathing'
-          ? 'bg-green-50 bg-opacity-25'
-          : 'border-gray-300 hover:ring-2 hover:ring-green-500'
+          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-25'
+          : 'border-gray-300 hover:ring-2 hover:ring-green-400'
       "
     >
-      <input
-        type="radio"
-        name="project-type"
-        value="Existing Customers"
-        class="sr-only"
-        aria-labelledby="project-type-1-label"
-        aria-describedby="project-type-1-description-0 project-type-1-description-1"
-      />
       <span class="flex flex-1">
         <span class="flex flex-col">
           <span
@@ -91,7 +122,7 @@
         </span>
       </span>
       <svg
-        class="text-green-600 h-5 w-5"
+        class="text-green-500 h-6 w-6"
         viewBox="0 0 20 20"
         fill="currentColor"
         aria-hidden="true"
@@ -108,28 +139,22 @@
         aria-hidden="true"
         [ngClass]="
           selectedWidget == 'Breathing'
-            ? 'border-green-600'
+            ? 'border-green-500'
             : 'border-transparent'
         "
       ></span>
     </label>
+
+    <!-- Tasks -->
     <label
       class="bg-white relative flex cursor-pointer rounded-lg border p-4 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
-      (click)="selectedWidget = 'Tasks'"
+      (click)="updateSelectedWidget('Tasks')"
       [ngClass]="
         selectedWidget == 'Tasks'
-          ? 'bg-green-50 bg-opacity-25'
-          : 'border-gray-300 hover:ring-2 hover:ring-green-500'
+          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-25'
+          : 'border-gray-300 hover:ring-2 hover:ring-green-400'
       "
     >
-      <input
-        type="radio"
-        name="project-type"
-        value="Trial Users"
-        class="sr-only"
-        aria-labelledby="project-type-2-label"
-        aria-describedby="project-type-2-description-0 project-type-2-description-1"
-      />
       <span class="flex flex-1">
         <span class="flex flex-col">
           <span
@@ -145,7 +170,7 @@
         </span>
       </span>
       <svg
-        class="text-green-600 h-5 w-5"
+        class="text-green-500 h-6 w-6"
         viewBox="0 0 20 20"
         fill="currentColor"
         aria-hidden="true"
@@ -162,9 +187,14 @@
         class="pointer-events-none absolute -inset-px rounded-lg border-2 hover:border"
         aria-hidden="true"
         [ngClass]="
-          selectedWidget == 'Tasks' ? 'border-green-600' : 'border-transparent'
+          selectedWidget == 'Tasks' ? 'border-green-500' : 'border-transparent'
         "
       ></span>
     </label>
   </div>
 </fieldset>
+
+<div
+  *ngIf="selectedWidget == 'Tasks' || selectedWidget == 'Random'"
+  class="mt-3"
+></div>

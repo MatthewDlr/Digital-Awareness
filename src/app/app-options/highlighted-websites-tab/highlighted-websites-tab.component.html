@@ -33,9 +33,11 @@
 
           Add new website
         </button>
-        <div class="absolute bottom-full mb-2 hidden group-hover:block justify-center">
-          <div class="text-black bg-black rounded px-4 py-2 text-sm bg-opacity-20">
-            {{OS === 'MacOS' ? '⌘' : 'Ctrl' }} + K
+        <div
+          class="absolute bottom-full mb-2 hidden justify-center !transition-all group-hover:block"
+        >
+          <div class="text-black bg-gray-200 rounded-full px-4 py-2 text-sm">
+            {{ OS === "MacOS" ? "⌘" : "Ctrl" }} + K
           </div>
         </div>
       </div>

@@ -118,6 +118,7 @@ export function defaultConfig() {
     .set({
       timerValue: 30, // Timer base value is 30 sec
       timeAllowed: 30, // When a website is allowed, the default duration is 30 min
+      awarenessPageWidget: "Quotes", // Widget to display on the awareness page
       doomScrollingNotification: true, // Notification when doom scrolling
       doomScrollingTreshold: 100, // Number of time the user can scroll before notification
       bindWatchingNotification: true, // Notification when bind watching
