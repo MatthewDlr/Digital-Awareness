@@ -1,9 +1,7 @@
 <ul role="list" class="space-y-3">
   <!-- Permission alert -->
-  <div
-    class="bg-orange-50 mb-3 rounded-xl p-4 dark:saturate-[0.75]"
-    *ngIf="!hasNotificationPermission"
-  >
+  @if (!hasNotificationPermission) {
+  <div class="bg-orange-50 mb-3 rounded-xl p-4 dark:saturate-[0.75]">
     <div class="flex h-full">
       <div class="flex items-center">
         <svg
@@ -27,29 +25,34 @@
             Permission required
           </h3>
           <div class="text-orange-600 text-sm font-light">
-            <p *ngIf="!isNotificationPermissionRequested">
-              You need to grant access notifications to use this feature.
-            </p>
-            <p *ngIf="isNotificationPermissionRequested">
-              You need to allow notifications trough your browser settings to use this feature.
-            </p>
+            {{
+              isNotificationPermissionRequested
+                ? "You need to allow notifications trough your browser settings to use this feature."
+                : "You need to grant access notifications to use this feature."
+            }}
           </div>
         </div>
+        @if (!isNotificationPermissionRequested) {
         <button
           (click)="requestNotificationPermission()"
-          *ngIf="!isNotificationPermissionRequested"
-          class="text-white orange-gradient ml-3 rounded-md px-4 py-2 text-sm font-medium !transform !transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-300 hover:dark:shadow-orange-800"
+          class="orange-gradient text-white ml-3 !transform rounded-md px-4 py-2 text-sm font-medium !transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-300 hover:dark:shadow-orange-800"
         >
           Grant permission
         </button>
+        }
       </div>
     </div>
   </div>
+  }
 
   <!-- Doom scrolling toggle -->
   <li
     class="flex w-full items-center justify-between rounded-xl border-[1px] px-6 py-4"
-    [ngClass]="doomScrollingToggle ? 'border-green-500 shadow-inner-md shadow-green-500' : 'border-gray-200'"
+    [ngClass]="
+      doomScrollingToggle
+        ? 'shadow-inner-md border-green-500 shadow-green-500'
+        : 'border-gray-200'
+    "
   >
     <span class="flex flex-grow flex-col">
       <span

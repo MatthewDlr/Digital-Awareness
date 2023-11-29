@@ -1,8 +1,10 @@
-<app-websites-palette *ngIf="isCommandPaletteShown"></app-websites-palette>
+@if (isCommandPaletteShown) {
+<app-websites-palette></app-websites-palette>
+}
 
 <!-- DevMode Warning-->
+@if (isDevModeEnabled()) {
 <div
-  *ngIf="isDevModeEnabled()"
   class="text-orange-600 bg-orange-50 fixed left-[-4.5rem] top-[10rem] z-10 flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
 >
   <svg
@@ -23,6 +25,7 @@
     <label class="text-base font-medium">DevMode is ON</label>
   </div>
 </div>
+}
 
 <div
   [ngClass]="
@@ -141,10 +144,12 @@
 
   <!-- Options Content -->
   <div class="fade-in-bottom" style="--delay: 0.5s">
-    <app-highlighted-websites-tab *ngIf="currentTab == 'blocklist'"></app-highlighted-websites-tab>
-    <app-awareness-page-tab *ngIf="currentTab == 'blockpage'"></app-awareness-page-tab>
-    <app-notifications-tab
-      *ngIf="currentTab == 'notifications'"
-    ></app-notifications-tab>
+    @if (currentTab == 'blocklist') {
+    <app-highlighted-websites-tab></app-highlighted-websites-tab>
+    } @else if (currentTab == 'blockpage') {
+    <app-awareness-page-tab></app-awareness-page-tab>
+    } @else if (currentTab == 'notifications') {
+    <app-notifications-tab></app-notifications-tab>
+    }
   </div>
 </div>

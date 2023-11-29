@@ -82,13 +82,15 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-300 overflow-scroll">
               <!-- User Websites -->
-              <tr *ngFor="let website of userWebsites; let i = index">
+              @for (website of userWebsites; track $index) {
+              <tr>
                 <td
                   class="text-gray-900 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6"
                 >
-                  <span *ngIf="editIndex != i">{{ website.host }}</span>
+                  @if (editIndex != $index) {
+                  <span>{{ website.host }}</span>
+                  } @else {
                   <div
-                    *ngIf="editIndex === i"
                     class="focus-within:ring-indigo-600 flex items-center rounded-md px-2 shadow-sm ring-1 ring-inset ring-gray-400 focus-within:ring-purple-500 sm:max-w-md"
                   >
                     <span
@@ -120,6 +122,7 @@
                       />
                     </svg>
                   </div>
+                  }
                 </td>
                 <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
                   {{ website.category }}
@@ -132,7 +135,7 @@
                 >
                   <a
                     class="text-purple-500 cursor-pointer underline hover:text-purple-600"
-                    (click)="enableEdit(i, website)"
+                    (click)="enableEdit($index, website)"
                   >
                     Edit
                   </a>
@@ -145,8 +148,11 @@
                 </td>
               </tr>
 
+              }
+
               <!-- Enforced Websites -->
-              <tr *ngFor="let website of enforcedWebsites" class="bg-gray-50">
+              @for (website of enforcedWebsites; track $index) {
+              <tr class="bg-gray-50">
                 <td
                   class="text-gray-900 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6"
                 >
@@ -165,6 +171,7 @@
                   <a class="text-gray-500 cursor-not-allowed"> Remove </a>
                 </td>
               </tr>
+              }
             </tbody>
           </table>
         </div>

@@ -194,7 +194,8 @@
   </div>
 </fieldset>
 
-<div
-  *ngIf="selectedWidget == 'Tasks' || selectedWidget == 'Random'"
-  class="mt-3"
-></div>
+@if (selectedWidget == 'Tasks' || selectedWidget == 'Random') {
+  <div
+  
+  ></div>
+}
