@@ -1,13 +1,13 @@
-import type { Configuration } from 'webpack';
+import type { Configuration } from "webpack";
 
 module.exports = {
   entry: {
     serviceWorker: {
-      import: 'src/service-worker.ts',
+      import: "src/service-worker.ts",
       runtime: false,
     },
     background: {
-      import: 'src/background.ts',
+      import: "src/background.ts",
       runtime: false,
     },
   },

@@ -1,10 +1,10 @@
-import { Component, isDevMode } from '@angular/core';
-import { PendingChangesService } from '../services/pending-changes/pending-changes.service';
+import { Component, isDevMode } from "@angular/core";
+import { PendingChangesService } from "../services/pending-changes/pending-changes.service";
 
 @Component({
-  selector: 'app-notifications-tab',
-  templateUrl: './notifications-tab.component.html',
-  styleUrls: ['./notifications-tab.component.css'],
+  selector: "app-notifications-tab",
+  templateUrl: "./notifications-tab.component.html",
+  styleUrls: ["./notifications-tab.component.css"],
 })
 export class NotificationsTabComponent {
   doomScrollingToggle: boolean = false;
@@ -16,13 +16,13 @@ export class NotificationsTabComponent {
   constructor(private pendingChangesService: PendingChangesService) {
     this.getLocalData();
     chrome.notifications.getPermissionLevel((level) => {
-      if (level === 'granted') {
+      if (level === "granted") {
         this.hasNotificationPermission = true;
         isDevMode()
           ? console.log(
-              'hasNotificationPermission: ',
-              this.hasNotificationPermission,
-            )
+            "hasNotificationPermission: ",
+            this.hasNotificationPermission,
+          )
           : null;
       }
     });
@@ -30,7 +30,7 @@ export class NotificationsTabComponent {
     chrome.storage.local.set({ isDevMode: isDevMode() });
 
     this.pendingChangesService.areChangesPending.subscribe({
-      next: (state) => {
+      next: () => {
         this.getLocalData();
       },
     });
@@ -57,7 +57,7 @@ export class NotificationsTabComponent {
   requestNotificationPermission() {
     chrome.permissions
       .request({
-        permissions: ['notifications'],
+        permissions: ["notifications"],
       })
       .then((granted) => {
         if (granted) {
@@ -70,12 +70,12 @@ export class NotificationsTabComponent {
   }
 
   getLocalData() {
-    chrome.storage.sync.get('doomScrollingNotification').then((result) => {
-      this.doomScrollingToggle = result['doomScrollingNotification'];
+    chrome.storage.sync.get("doomScrollingNotification").then((result) => {
+      this.doomScrollingToggle = result["doomScrollingNotification"];
     });
 
-    chrome.storage.sync.get('bindWatchingNotification').then((result) => {
-      this.bindWatchingToggle = result['bindWatchingNotification'];
+    chrome.storage.sync.get("bindWatchingNotification").then((result) => {
+      this.bindWatchingToggle = result["bindWatchingNotification"];
     });
   }
 }

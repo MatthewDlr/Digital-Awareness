@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AwarenessPageComponent } from './awareness-page.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { AwarenessPageComponent } from "./awareness-page.component";
 
-describe('AwarenessPageComponent', () => {
+describe("AwarenessPageComponent", () => {
   let component: AwarenessPageComponent;
   let fixture: ComponentFixture<AwarenessPageComponent>;
 
@@ -9,7 +9,7 @@ describe('AwarenessPageComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [AwarenessPageComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('AwarenessPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

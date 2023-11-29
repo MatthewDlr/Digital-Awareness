@@ -1,12 +1,12 @@
-import { Component, NgZone, isDevMode } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Quotes } from '../services/quotes';
-import { AllowedSitesService } from '../services/allowed-sites/allowed-sites.service';
+import { Component, NgZone, isDevMode } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Quotes } from "../services/quotes";
+import { AllowedSitesService } from "../services/allowed-sites/allowed-sites.service";
 
 @Component({
-  selector: 'app-awareness-page',
-  templateUrl: './awareness-page.component.html',
-  styleUrls: ['./awareness-page.component.css'],
+  selector: "app-awareness-page",
+  templateUrl: "./awareness-page.component.html",
+  styleUrls: ["./awareness-page.component.css"],
 })
 export class AwarenessPageComponent {
   storedTimerValue!: number;
@@ -24,8 +24,8 @@ export class AwarenessPageComponent {
   ) {
     // Getting url parameters
     this.route.params.subscribe((params) => {
-      this.tabId = decodeURIComponent(params['tabId']);
-      this.outputUrl = new URL(decodeURIComponent(params['outputURL']));
+      this.tabId = decodeURIComponent(params["tabId"]);
+      this.outputUrl = new URL(decodeURIComponent(params["outputURL"]));
     });
 
     // Getting timer value from the storage
@@ -33,9 +33,9 @@ export class AwarenessPageComponent {
       this.timerValue = 5;
       this.countdown();
     } else {
-      chrome.storage.sync.get('timerValue', (result) => {
+      chrome.storage.sync.get("timerValue", (result) => {
         this.ngZone.run(() => {
-          this.storedTimerValue = result['timerValue'];
+          this.storedTimerValue = result["timerValue"];
           this.timerValue = this.storedTimerValue ? this.storedTimerValue : 30;
         });
         this.countdown();
@@ -53,14 +53,13 @@ export class AwarenessPageComponent {
       setTimeout(() => {
         this.ngZone.run(() => {
           async function getCurrentTab() {
-            let queryOptions = { active: true, lastFocusedWindow: true };
-            let [tab] = await chrome.tabs.query(queryOptions);
+            const queryOptions = { active: true, lastFocusedWindow: true };
+            const [tab] = await chrome.tabs.query(queryOptions);
             return tab.id;
           }
 
           getCurrentTab().then((currentTabId) => {
-            if (currentTabId?.toString() != this.tabId || !document.hasFocus()) {
-            } else {
+            if (!(currentTabId?.toString() != this.tabId || !document.hasFocus())) {
               this.timerValue--;
             }
             this.countdown();
@@ -96,7 +95,7 @@ export class AwarenessPageComponent {
   closeBlockPage() {
     const newTimerValue = Math.max(this.storedTimerValue - 5, 30);
     chrome.storage.sync.set({ timerValue: newTimerValue });
-    this.allowedSitesService.incrementTimesBlocked(this.outputUrl.host)
+    this.allowedSitesService.incrementTimesBlocked(this.outputUrl.host);
     setTimeout(() => {
       window.close();
     }, 500);

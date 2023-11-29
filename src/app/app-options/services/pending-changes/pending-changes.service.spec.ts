@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { PendingChangesService } from './pending-changes.service';
+import { PendingChangesService } from "./pending-changes.service";
 
-describe('PendingChangesService', () => {
+describe("PendingChangesService", () => {
   let service: PendingChangesService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('PendingChangesService', () => {
     service = TestBed.inject(PendingChangesService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

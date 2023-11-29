@@ -1,9 +1,9 @@
-import { Injectable, isDevMode } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { watchedWebsite } from 'src/app/types';
+import { Injectable, isDevMode } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { watchedWebsite } from "src/app/types";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class PendingChangesService {
   areChangesPending: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
@@ -22,20 +22,20 @@ export class PendingChangesService {
   waitDuration = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
 
   constructor() {
-    chrome.storage.local.get(['pendingChanges'], (result) => {
-      if (result['pendingChanges']) {
-        this.areChangesPending.next(result['pendingChanges'].areChangesPending);
+    chrome.storage.local.get(["pendingChanges"], (result) => {
+      if (result["pendingChanges"]) {
+        this.areChangesPending.next(result["pendingChanges"].areChangesPending);
         this.validationDate.next(
-          new Date(result['pendingChanges'].validationDate) || new Date(),
+          new Date(result["pendingChanges"].validationDate) || new Date(),
         );
         this.websitesToDelete = new Set(
-          result['pendingChanges'].websitesToDelete,
+          result["pendingChanges"].websitesToDelete,
         );
-        this.websitesToEdit = new Set(result['pendingChanges'].websitesToEdit);
-        this.doomScrollingToggle = result['pendingChanges'].doomScrollingToggle;
+        this.websitesToEdit = new Set(result["pendingChanges"].websitesToEdit);
+        this.doomScrollingToggle = result["pendingChanges"].doomScrollingToggle;
 
         isDevMode()
-          ? console.log('Pending changes loaded: ', result['pendingChanges'])
+          ? console.log("Pending changes loaded: ", result["pendingChanges"])
           : null;
         this.checkChangesValidity();
       }
@@ -88,13 +88,13 @@ export class PendingChangesService {
 
   confirmPendingChanges() {
     if (!this.canBeValidated() || this.areChangesExpired()) {
-      isDevMode() ? console.log('Changes can not be validated') : null;
+      isDevMode() ? console.log("Changes can not be validated") : null;
       return;
     }
 
     if (this.websitesToDelete.size > 0 || this.websitesToEdit.size > 0) {
-      chrome.storage.sync.get(['userWebsites'], (result) => {
-        let userWebsites: watchedWebsite[] = result['userWebsites'] || [];
+      chrome.storage.sync.get(["userWebsites"], (result) => {
+        let userWebsites: watchedWebsite[] = result["userWebsites"] || [];
         this.websitesToDelete.forEach((host) => {
           userWebsites = userWebsites.filter(
             (website) => website.host !== host,
@@ -124,7 +124,7 @@ export class PendingChangesService {
 
   private checkChangesValidity() {
     if (!this.areChangesPending.getValue()) {
-      isDevMode() ? console.log('No pending changes') : null;
+      isDevMode() ? console.log("No pending changes") : null;
       return;
     }
 
@@ -146,7 +146,7 @@ export class PendingChangesService {
 
   private canBeValidated(): boolean {
     if (this.validationDate.getValue() < new Date()) {
-      isDevMode() ? console.log('Changes can be validated') : null;
+      isDevMode() ? console.log("Changes can be validated") : null;
       return true;
     }
     isDevMode() ? console.log("Changes can't be validated yet") : null;
@@ -184,8 +184,8 @@ export class PendingChangesService {
     });
 
     if (isDevMode()) {
-      chrome.storage.local.get(['pendingChanges'], (result) => {
-      isDevMode() ? console.log('Pending changes saved: ', result['pendingChanges']) : null;
+      chrome.storage.local.get(["pendingChanges"], (result) => {
+        isDevMode() ? console.log("Pending changes saved: ", result["pendingChanges"]) : null;
       });
     }
   }

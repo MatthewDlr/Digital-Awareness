@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { AllowedSitesService } from './allowed-sites.service';
+import { AllowedSitesService } from "./allowed-sites.service";
 
-describe('AllowedSitesService', () => {
+describe("AllowedSitesService", () => {
   let service: AllowedSitesService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('AllowedSitesService', () => {
     service = TestBed.inject(AllowedSitesService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

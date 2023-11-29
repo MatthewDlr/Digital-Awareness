@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { CommandPaletteService } from './command-palette.service';
+import { CommandPaletteService } from "./command-palette.service";
 
-describe('CommandPaletteService', () => {
+describe("CommandPaletteService", () => {
   let service: CommandPaletteService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('CommandPaletteService', () => {
     service = TestBed.inject(CommandPaletteService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import { AppComponent } from './app.component';
-import { CommonModule } from '@angular/common';
-import { AppRoutingModule } from './app-routing.module';
-import { AppPagesModule } from './app-pages/app-pages.module';
-import { OptionsModule } from './app-options/options.module';
-import { PopupComponent } from './popup/popup.component';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { HashLocationStrategy, LocationStrategy } from "@angular/common";
+import { AppComponent } from "./app.component";
+import { CommonModule } from "@angular/common";
+import { AppRoutingModule } from "./app-routing.module";
+import { AppPagesModule } from "./app-pages/app-pages.module";
+import { OptionsModule } from "./app-options/options.module";
+import { PopupComponent } from "./popup/popup.component";
 
 @NgModule({
   declarations: [

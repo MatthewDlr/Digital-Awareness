@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { NotificationsTabComponent } from './notifications-tab.component';
+import { NotificationsTabComponent } from "./notifications-tab.component";
 
-describe('NotificationsTabComponent', () => {
+describe("NotificationsTabComponent", () => {
   let component: NotificationsTabComponent;
   let fixture: ComponentFixture<NotificationsTabComponent>;
 
@@ -15,7 +15,7 @@ describe('NotificationsTabComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

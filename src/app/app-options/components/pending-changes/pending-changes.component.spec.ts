@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { PendingChangesComponent } from './pending-changes.component';
+import { PendingChangesComponent } from "./pending-changes.component";
 
-describe('PendingChangesComponent', () => {
+describe("PendingChangesComponent", () => {
   let component: PendingChangesComponent;
   let fixture: ComponentFixture<PendingChangesComponent>;
 
@@ -15,7 +15,7 @@ describe('PendingChangesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

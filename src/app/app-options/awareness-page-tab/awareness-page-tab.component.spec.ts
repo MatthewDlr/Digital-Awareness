@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { AwarenessPageTabComponent } from './awareness-page-tab.component';
+import { AwarenessPageTabComponent } from "./awareness-page-tab.component";
 
-describe('AwarenessPageTabComponent', () => {
+describe("AwarenessPageTabComponent", () => {
   let component: AwarenessPageTabComponent;
   let fixture: ComponentFixture<AwarenessPageTabComponent>;
 
@@ -15,7 +15,7 @@ describe('AwarenessPageTabComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

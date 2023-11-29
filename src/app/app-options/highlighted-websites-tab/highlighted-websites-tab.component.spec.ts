@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { HighlightedWebsitesTabComponent } from './highlighted-websites-tab.component';
+import { HighlightedWebsitesTabComponent } from "./highlighted-websites-tab.component";
 
-describe('HighlightedWebsitesTabComponent', () => {
+describe("HighlightedWebsitesTabComponent", () => {
   let component: HighlightedWebsitesTabComponent;
   let fixture: ComponentFixture<HighlightedWebsitesTabComponent>;
 
@@ -15,7 +15,7 @@ describe('HighlightedWebsitesTabComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

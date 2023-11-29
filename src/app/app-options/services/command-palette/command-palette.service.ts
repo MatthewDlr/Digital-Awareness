@@ -1,8 +1,8 @@
-import { Injectable, isDevMode } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable, isDevMode } from "@angular/core";
+import { Subject } from "rxjs";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class CommandPaletteService {
   isCommandPaletteShown: Subject<boolean> = new Subject<boolean>();
@@ -10,7 +10,7 @@ export class CommandPaletteService {
   constructor() {
     this.toggleCommandPalette(true);
     this.isCommandPaletteShown.subscribe((state) =>
-    isDevMode() ? console.log('Update command palette state: ', state) : null
+      isDevMode() ? console.log("Update command palette state: ", state) : null
     );
   }
 

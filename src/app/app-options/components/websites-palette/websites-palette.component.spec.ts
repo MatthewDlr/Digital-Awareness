@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { WebsitesPaletteComponent } from './websites-palette.component';
+import { WebsitesPaletteComponent } from "./websites-palette.component";
 
-describe('WebsitesPaletteComponent', () => {
+describe("WebsitesPaletteComponent", () => {
   let component: WebsitesPaletteComponent;
   let fixture: ComponentFixture<WebsitesPaletteComponent>;
 
@@ -15,7 +15,7 @@ describe('WebsitesPaletteComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

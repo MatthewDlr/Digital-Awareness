@@ -125,27 +125,27 @@ export function defaultConfig() {
       userWebsites: [], // Website the user will decide to block
       userCategories: [
         {
-          name: 'News',
+          name: "News",
           isActive: false
         },
         {
-          name: 'Social',
+          name: "Social",
           isActive: false
         },
         {
-          name: 'Shopping',
+          name: "Shopping",
           isActive: false
         },
         {
-          name: 'Streaming',
+          name: "Streaming",
           isActive: false
         },
         {
-          name: 'Adult',
+          name: "Adult",
           isActive: false
         },
         {
-          name: 'Gambling',
+          name: "Gambling",
           isActive: false
         }
       ]

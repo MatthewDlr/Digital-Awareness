@@ -1,15 +1,15 @@
-import { Component, isDevMode } from '@angular/core';
-import { PendingChangesService } from '../../services/pending-changes/pending-changes.service';
+import { Component, isDevMode } from "@angular/core";
+import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 
 @Component({
-  selector: 'app-pending-changes',
-  templateUrl: './pending-changes.component.html',
-  styleUrls: ['./pending-changes.component.css'],
+  selector: "app-pending-changes",
+  templateUrl: "./pending-changes.component.html",
+  styleUrls: ["./pending-changes.component.css"],
 })
 export class PendingChangesComponent {
   areChangesPending: boolean = false;
-  validationDate: string = '';
-  expirationDate: string = '';
+  validationDate: string = "";
+  expirationDate: string = "";
   canChangesBeValidated: boolean = false;
 
   timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
@@ -30,10 +30,10 @@ export class PendingChangesComponent {
     this.pendingChangesService.validationDate.subscribe({
       next: (date) => {
         this.validationDate = String(
-          date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0'),
+          date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0"),
         );
         const expirationDate = new Date(date.getTime() + this.timeToAdd);
-        this.expirationDate = String(expirationDate.getHours() + ':' + String(expirationDate.getMinutes()).padStart(2, '0'));
+        this.expirationDate = String(expirationDate.getHours() + ":" + String(expirationDate.getMinutes()).padStart(2, "0"));
       },
     });
   }
