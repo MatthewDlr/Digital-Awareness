@@ -13,13 +13,8 @@ module.exports = {
   },
   plugins: ["@typescript-eslint"],
   rules: {
-    indent: ["error", 2],
-    "linebreak-style": ["error", "unix"],
-    quotes: ["error", "double"],
-    semi: ["error", "always"],
     "@typescript-eslint/no-explicit-any": ["off"],
     "@typescript-eslint/ban-ts-comment": ["off"],
     "no-undef": ["off"],
-    "no-mixed-spaces-and-tabs": ["off"],
   },
 };
