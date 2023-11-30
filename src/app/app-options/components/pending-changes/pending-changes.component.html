@@ -300,11 +300,11 @@
         <div class="text-purple-600 mt-1 text-sm">
           @if (canChangesBeValidated) {
             <span>
-              To confirm your modifications, come back at {{ validationDate }}
+              You can confirm your modifications until {{ expirationDate }}
             </span>
           } @else {
             <span>
-              You can confirm your modifications until {{ expirationDate }}
+              To confirm your modifications, come back at {{ validationDate }}
             </span>
           }
         </div>
