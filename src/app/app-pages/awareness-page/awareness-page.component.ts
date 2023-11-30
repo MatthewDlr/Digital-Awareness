@@ -1,29 +1,32 @@
 import { Component, NgZone, isDevMode } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
-import { Quotes } from "../services/quotes";
+import { QuotesWidgetComponent } from "../quotes-widget/quotes-widget.component";
 import { AllowedSitesService } from "../services/allowed-sites/allowed-sites.service";
+import { BreathingWidgetComponent } from "../breathing-widget/breathing-widget.component";
+import { TasksWidgetComponent } from "../tasks-widget/tasks-widget.component";
 
 @Component({
   selector: "app-awareness-page",
+  standalone: true,
+  imports: [CommonModule, QuotesWidgetComponent, BreathingWidgetComponent, TasksWidgetComponent],
   templateUrl: "./awareness-page.component.html",
   styleUrls: ["./awareness-page.component.css"],
 })
 export class AwarenessPageComponent {
   storedTimerValue!: number;
   timerValue!: number;
-  quoteText!: string;
-  quoteAuthor!: string;
   outputUrl!: URL;
   tabId!: string;
+  widget: string = "Quotes";
 
   constructor(
     private ngZone: NgZone,
     private route: ActivatedRoute,
-    private quote: Quotes,
     private allowedSitesService: AllowedSitesService,
   ) {
     // Getting url parameters
-    this.route.params.subscribe((params) => {
+    this.route.params.subscribe(params => {
       this.tabId = decodeURIComponent(params["tabId"]);
       this.outputUrl = new URL(decodeURIComponent(params["outputURL"]));
     });
@@ -33,7 +36,7 @@ export class AwarenessPageComponent {
       this.timerValue = 5;
       this.countdown();
     } else {
-      chrome.storage.sync.get("timerValue", (result) => {
+      chrome.storage.sync.get("timerValue").then(result => {
         this.ngZone.run(() => {
           this.storedTimerValue = result["timerValue"];
           this.timerValue = this.storedTimerValue ? this.storedTimerValue : 30;
@@ -42,10 +45,14 @@ export class AwarenessPageComponent {
       });
     }
 
-    // Getting a random quote
-    const randomQuote = this.quote.getRandomQuote();
-    this.quoteText = randomQuote.text;
-    this.quoteAuthor = randomQuote.author;
+    // Getting widget value from the storage
+    chrome.storage.sync.get("awarenessPageWidget").then(result => {
+      this.widget = result["awarenessPageWidget"];
+      isDevMode() ? console.log("widget: ", this.widget) : null;
+      if (this.widget == "Random") {
+        this.widget = this.getRandomWidget();
+      }
+    });
   }
 
   countdown() {
@@ -58,7 +65,7 @@ export class AwarenessPageComponent {
             return tab.id;
           }
 
-          getCurrentTab().then((currentTabId) => {
+          getCurrentTab().then(currentTabId => {
             if (!(currentTabId?.toString() != this.tabId || !document.hasFocus())) {
               this.timerValue--;
             }
@@ -83,10 +90,7 @@ export class AwarenessPageComponent {
     chrome.storage.sync.set({ timerValue: newTimerValue });
 
     const minutesAllowed = isDevMode() ? 1 : 30;
-    this.allowedSitesService.allowWebsiteTemporary(
-      this.outputUrl.host,
-      minutesAllowed,
-    );
+    this.allowedSitesService.allowWebsiteTemporary(this.outputUrl.host, minutesAllowed);
 
     window.location.href = this.outputUrl.toString();
   }
@@ -99,5 +103,11 @@ export class AwarenessPageComponent {
     setTimeout(() => {
       window.close();
     }, 500);
+  }
+
+  getRandomWidget() {
+    const widgets = ["Quotes", "Breathing", "Tasks"];
+    const randomIndex = Math.floor(Math.random() * widgets.length);
+    return widgets[randomIndex];
   }
 }
