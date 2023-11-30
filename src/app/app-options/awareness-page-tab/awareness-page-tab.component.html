@@ -6,10 +6,10 @@
 
   <!-- Random -->
   <label
-    class="bg-white relative mt-5 flex cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+    class="bg-white relative mt-5 flex cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all !duration-500 !ease-in-out !transform focus:outline-none"
     [ngClass]="
       selectedWidget == 'Random'
-        ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50'
+        ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50 border-green-500'
         : 'border-gray-300 hover:ring-2 hover:ring-green-400'
     "
     (click)="updateSelectedWidget('Random')"
@@ -41,13 +41,6 @@
         clip-rule="evenodd"
       />
     </svg>
-    <span
-      class="pointer-events-none absolute -inset-px rounded-lg border-2 hover:border"
-      aria-hidden="true"
-      [ngClass]="
-        selectedWidget == 'Random' ? 'border-green-500' : 'border-transparent'
-      "
-    ></span>
   </label>
 
   <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
@@ -56,7 +49,7 @@
       class="bg-white relative flex cursor-pointer rounded-lg border p-4 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       [ngClass]="
         selectedWidget == 'Quotes'
-          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50'
+          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50 border-green-500'
           : 'border-gray-300 hover:ring-2 hover:ring-green-400'
       "
       (click)="updateSelectedWidget('Quotes')"
@@ -88,13 +81,6 @@
           clip-rule="evenodd"
         />
       </svg>
-      <span
-        class="pointer-events-none absolute -inset-px rounded-lg border-2 hover:border"
-        aria-hidden="true"
-        [ngClass]="
-          selectedWidget == 'Quotes' ? 'border-green-500' : 'border-transparent'
-        "
-      ></span>
     </label>
 
     <!-- Breathing -->
@@ -103,7 +89,7 @@
       (click)="updateSelectedWidget('Breathing')"
       [ngClass]="
         selectedWidget == 'Breathing'
-          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50'
+          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50 border-green-500'
           : 'border-gray-300 hover:ring-2 hover:ring-green-400'
       "
     >
@@ -134,15 +120,6 @@
           clip-rule="evenodd"
         />
       </svg>
-      <span
-        class="pointer-events-none absolute -inset-px rounded-lg border-2 hover:border"
-        aria-hidden="true"
-        [ngClass]="
-          selectedWidget == 'Breathing'
-            ? 'border-green-500'
-            : 'border-transparent'
-        "
-      ></span>
     </label>
 
     <!-- Tasks -->
