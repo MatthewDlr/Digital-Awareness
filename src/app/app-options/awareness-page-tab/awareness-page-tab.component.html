@@ -9,7 +9,7 @@
     class="bg-white relative mt-5 flex cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
     [ngClass]="
       selectedWidget == 'Random'
-        ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-25'
+        ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50'
         : 'border-gray-300 hover:ring-2 hover:ring-green-400'
     "
     (click)="updateSelectedWidget('Random')"
@@ -56,7 +56,7 @@
       class="bg-white relative flex cursor-pointer rounded-lg border p-4 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       [ngClass]="
         selectedWidget == 'Quotes'
-          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-25'
+          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50'
           : 'border-gray-300 hover:ring-2 hover:ring-green-400'
       "
       (click)="updateSelectedWidget('Quotes')"
@@ -71,7 +71,7 @@
           <span
             id="project-type-0-description-0"
             class="text-gray-500 mt-1 flex items-center text-sm"
-            >Display motivational quotes (Default)</span
+            >Display motivational quotes</span
           >
         </span>
       </span>
@@ -103,7 +103,7 @@
       (click)="updateSelectedWidget('Breathing')"
       [ngClass]="
         selectedWidget == 'Breathing'
-          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-25'
+          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50'
           : 'border-gray-300 hover:ring-2 hover:ring-green-400'
       "
     >
@@ -151,7 +151,7 @@
       (click)="updateSelectedWidget('Tasks')"
       [ngClass]="
         selectedWidget == 'Tasks'
-          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-25'
+          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50'
           : 'border-gray-300 hover:ring-2 hover:ring-green-400'
       "
     >
