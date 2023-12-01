@@ -34,7 +34,7 @@ export class BreathingWidgetComponent {
     this.text = "Exhale";
     await this.delay(3000);
 
-    if (this.timerValue > 5) {
+    if (this.timerValue >= 5) {
       this.text = "Hold";
       await this.delay(2000);
       this.breathe();
