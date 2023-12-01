@@ -35,13 +35,13 @@ export class BreathingWidgetComponent {
     await this.delay(3000);
     this.text = "Hold";
 
-    if (this.timerValue > 2) {
-      setTimeout(() => {
+    setTimeout(() => {
+      if (this.timerValue > 2) {
         this.breathe();
-      }, 2000);
-    } else {
-      this.text = "Done";
-    }
+      } else {
+        this.text = "Done";
+      }
+    }, 2000);
   }
 
   private delay(ms: number) {
