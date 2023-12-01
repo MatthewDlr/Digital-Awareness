@@ -9,5 +9,27 @@ import { CommonModule } from '@angular/common';
   styleUrl: './tasks-widget.component.css'
 })
 export class TasksWidgetComponent {
+  tasks!: string[];
+  randomTask!: string;
+
+  constructor() {
+    chrome.storage.sync.get(['awarenessPageTasks']).then((result) => {
+      this.tasks = result['awarenessPageTasks'] || ['', '', ''];
+
+      const nonEmptyTasks = this.tasks.filter((task) => task.length > 0);
+      if (nonEmptyTasks.length === 0) {
+        this.randomTask = 'No tasks found';
+        return;
+      }
+  
+      const randomIndex = Math.floor(Math.random() * nonEmptyTasks.length);
+      this.randomTask = nonEmptyTasks[randomIndex];
+
+    }).catch((error) => {
+      console.error(error);
+      this.randomTask = 'Error loading tasks';
+    });
+  }
+
 
 }

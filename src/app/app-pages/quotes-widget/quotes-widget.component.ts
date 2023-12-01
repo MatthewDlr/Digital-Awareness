@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { Quotes } from "../services/quotes";
+import { Quotes } from "./quotes";
 
 @Component({
   selector: "app-quotes-widget",

@@ -17,10 +17,8 @@ export class BreathingWidgetComponent {
     // Getting timer value from the awareness page
     effect(() => {
       this.timerValue = awarenessPageComponent.timerValue();
-      console.log("variable: ", this.timerValue);
     });
 
-    // After 3 seconds, start breathing exercise
     setTimeout(() => {
       this.breathe();
     }, 3000);
