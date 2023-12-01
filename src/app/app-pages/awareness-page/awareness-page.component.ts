@@ -1,4 +1,4 @@
-import { Component, NgZone, isDevMode } from "@angular/core";
+import { Component, isDevMode, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 import { QuotesWidgetComponent } from "../quotes-widget/quotes-widget.component";
@@ -15,13 +15,12 @@ import { TasksWidgetComponent } from "../tasks-widget/tasks-widget.component";
 })
 export class AwarenessPageComponent {
   storedTimerValue!: number;
-  timerValue!: number;
+  timerValue = signal(30);
   outputUrl!: URL;
   tabId!: string;
   widget: string = "Quotes";
 
   constructor(
-    private ngZone: NgZone,
     private route: ActivatedRoute,
     private allowedSitesService: AllowedSitesService,
   ) {
@@ -33,14 +32,11 @@ export class AwarenessPageComponent {
 
     // Getting timer value from the storage
     if (isDevMode()) {
-      this.timerValue = 5;
+      this.timerValue.set(5);
       this.countdown();
     } else {
       chrome.storage.sync.get("timerValue").then(result => {
-        this.ngZone.run(() => {
-          this.storedTimerValue = result["timerValue"];
-          this.timerValue = this.storedTimerValue ? this.storedTimerValue : 30;
-        });
+        this.timerValue.set(result["timerValue"]);
         this.countdown();
       });
     }
@@ -56,23 +52,20 @@ export class AwarenessPageComponent {
   }
 
   countdown() {
-    if (this.timerValue > 0) {
+    if (this.timerValue() > 0) {
       setTimeout(() => {
-        this.ngZone.run(() => {
-          async function getCurrentTab() {
-            const queryOptions = { active: true, lastFocusedWindow: true };
-            const [tab] = await chrome.tabs.query(queryOptions);
-            return tab.id;
+        async function getCurrentTab() {
+          const queryOptions = { active: true, lastFocusedWindow: true };
+          const [tab] = await chrome.tabs.query(queryOptions);
+          return tab.id;
+        }
+        getCurrentTab().then(currentTabId => {
+          if (!(currentTabId?.toString() != this.tabId || !document.hasFocus())) {
+            this.timerValue.update(value => value - 1);
           }
-
-          getCurrentTab().then(currentTabId => {
-            if (!(currentTabId?.toString() != this.tabId || !document.hasFocus())) {
-              this.timerValue--;
-            }
-            this.countdown();
-          });
+          this.countdown();
         });
-      }, 1100); // Yes, it's more than 1s
+      }, 1150); // Yes, it's more than 1s
     } else {
       this.waitBeforeClose();
     }

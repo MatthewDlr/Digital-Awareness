@@ -6,7 +6,7 @@
     class="fade-in-bottom bg-white flex min-h-[5rem] min-w-[5rem] items-center justify-center rounded-lg bg-opacity-40"
     style="--delay: 0.1s"
   >
-    <label class="text-gray-900 text-3xl" [ngClass]="timerValue < 6 ? 'animate-bounce' : ''">{{ timerValue }}</label>
+    <label class="text-gray-900 text-3xl" [ngClass]="timerValue() < 6 ? 'animate-bounce' : ''">{{ timerValue() }}</label>
   </div>
 
   <!-- Widget -->
@@ -41,18 +41,18 @@
     </div>
 
     <!-- Skip Timer Button -->
-    <div [ngClass]="timerValue == 0 ? 'visible' : 'invisible'" class="flex flex-col items-center gap-2">
+    <div [ngClass]="timerValue() == 0 ? 'visible' : 'invisible'" class="flex flex-col items-center gap-2">
       <button
         class="text-gray-500 text-sm underline opacity-50"
         (click)="skipTimer()"
-        [ngClass]="timerValue == 0 ? 'fade-in-bottom-small' : ''"
+        [ngClass]="timerValue() == 0 ? 'fade-in-bottom-small' : ''"
         style="--delay: 0.3s"
       >
         Continue to {{ outputUrl.hostname }}
       </button>
       <label
         class="text-gray-500 text-sm opacity-50"
-        [ngClass]="timerValue == 0 ? 'fade-in-bottom-small' : ''"
+        [ngClass]="timerValue() == 0 ? 'fade-in-bottom-small' : ''"
         style="--delay: 0.5s"
         >Otherwise, tab will close on its own
       </label>
