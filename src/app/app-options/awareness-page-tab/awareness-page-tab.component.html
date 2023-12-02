@@ -1,6 +1,7 @@
-<!-- Radio Group -->
+<!-- Page Widget -->
 <fieldset>
   <legend class="text-gray-900 text-base font-semibold leading-6">Page widget</legend>
+  <legend class="text-gray-800 text-sm font-base">Choose the widget you want to display on the awareness page</legend>
 
   <!-- Random -->
   <label
@@ -120,19 +121,21 @@
           >
         </span>
       </span>
-      <svg
-        class="text-green-500 h-6 w-6"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        aria-hidden="true"
-        [ngClass]="selectedWidget == 'Tasks' ? 'visible' : 'invisible'"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-          clip-rule="evenodd"
-        />
-      </svg>
+      @if (areTasksValid) {
+        <svg
+          class="text-green-500 h-6 w-6"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+          [ngClass]="selectedWidget == 'Tasks' ? 'visible' : 'invisible'"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      }
 
       <span
         class="pointer-events-none absolute -inset-px rounded-lg border-2 hover:border"
@@ -143,6 +146,7 @@
   </div>
 </fieldset>
 
+<!-- Tasks Details -->
 @if (selectedWidget == "Tasks" || selectedWidget == "Random") {
   <div class="flex flex-col gap-2 mt-4">
     <legend class="text-gray-900 text-sm font-medium">Specify your tasks and the goals you want to achieve</legend>
@@ -154,7 +158,8 @@
         type="text"
         class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm border placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6 bg-white bg-opacity-50"
         placeholder="Task 1"
-        (input)="updateTasks()"
+        (blur)="updateTasks()"
+        (input)="checkIfTasksValid()"
         [ngClass]="!areTasksValid ? 'border-red-500' : 'border-gray-300 focus:border-purple-500'"
         [(ngModel)]="tasks[0]"
       />
@@ -162,7 +167,8 @@
         type="text"
         class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm border placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6 bg-white bg-opacity-50"
         placeholder="Task 2"
-        (input)="updateTasks()"
+        (blur)="updateTasks()"
+        (input)="checkIfTasksValid()"
         [ngClass]="!areTasksValid ? 'border-red-500' : 'border-gray-300 focus:border-purple-500'"
         [(ngModel)]="tasks[1]"
       />
@@ -170,7 +176,8 @@
         type="text"
         class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm border placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6 bg-white bg-opacity-50"
         placeholder="Task 3"
-        (input)="updateTasks()"
+        (blur)="updateTasks()"
+        (input)="checkIfTasksValid()"
         [ngClass]="!areTasksValid ? 'border-red-500' : 'border-gray-300 focus:border-purple-500'"
         [(ngModel)]="tasks[2]"
       />
@@ -183,3 +190,77 @@
     }
   </div>
 }
+
+<!-- Timer Behavior -->
+<fieldset class="mt-10">
+  <legend class="text-gray-900 text-base font-semibold leading-6">Timer Behavior</legend>
+  <legend class="text-gray-800 text-sm font-base">Choose what happens when the user leaves the awareness page</legend>
+
+  <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+    <!-- Pause -->
+    <label
+      class="bg-white relative flex cursor-pointer rounded-lg border p-4 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+      [ngClass]="
+        timerBehavior == 'Pause'
+          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50 border-green-500'
+          : 'border-gray-300 hover:ring-2 hover:ring-green-400 hover:scale-[1.01]'
+      "
+      (click)="updateTimerBehavior('Pause')"
+    >
+      <span class="flex flex-1">
+        <span class="flex flex-col">
+          <span id="project-type-0-label" class="text-gray-900 block text-base font-medium">Pause</span>
+          <span id="project-type-0-description-0" class="text-gray-500 mt-1 flex items-center text-sm"
+            >Pause timer until page is focused again</span
+          >
+        </span>
+      </span>
+      <svg
+        class="text-green-500 h-6 w-6"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        aria-hidden="true"
+        [ngClass]="timerBehavior == 'Pause' ? 'visible' : 'invisible'"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </label>
+
+    <!-- Restart -->
+    <label
+      class="bg-white relative flex cursor-pointer rounded-lg border p-4 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+      (click)="updateTimerBehavior('Restart')"
+      [ngClass]="
+        timerBehavior == 'Restart'
+          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50 border-green-500'
+          : 'border-gray-300 hover:ring-2 hover:ring-green-400 hover:scale-[1.01]'
+      "
+    >
+      <span class="flex flex-1">
+        <span class="flex flex-col">
+          <span id="project-type-1-label" class="text-gray-900 block text-base font-medium">Restart</span>
+          <span id="project-type-1-description-0" class="text-gray-500 mt-1 flex items-center text-sm"
+            >Restart the timer</span
+          >
+        </span>
+      </span>
+      <svg
+        class="text-green-500 h-6 w-6"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        aria-hidden="true"
+        [ngClass]="timerBehavior == 'Restart' ? 'visible' : 'invisible'"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </label>
+  </div>
+</fieldset>

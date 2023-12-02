@@ -19,6 +19,7 @@ export class AwarenessPageComponent {
   outputUrl!: URL;
   tabId!: string;
   widget: string = "Quotes";
+  timerBehavior!: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,10 +33,12 @@ export class AwarenessPageComponent {
 
     // Getting timer value from the storage
     if (isDevMode()) {
+      this.storedTimerValue = 5;
       this.timerValue.set(5);
       this.countdown();
     } else {
       chrome.storage.sync.get("timerValue").then(result => {
+        this.storedTimerValue = result["timerValue"];
         this.timerValue.set(result["timerValue"]);
         this.countdown();
       });
@@ -49,6 +52,11 @@ export class AwarenessPageComponent {
         this.widget = this.getRandomWidget();
       }
     });
+
+    chrome.storage.sync.get(["timerBehavior"]).then(result => {
+      this.timerBehavior = result["timerBehavior"] || "None";
+      isDevMode() ? console.log("Timer behavior loaded: ", this.timerBehavior) : null;
+    });
   }
 
   countdown() {
@@ -60,8 +68,14 @@ export class AwarenessPageComponent {
           return tab.id;
         }
         getCurrentTab().then(currentTabId => {
+          // if the user is not on the tab, don't decrement the timer
           if (!(currentTabId?.toString() != this.tabId || !document.hasFocus())) {
             this.timerValue.update(value => value - 1);
+          } else {
+            // If the user is not on the tab, and the timer behavior is "Restart", restart the timer
+            if (this.timerBehavior == "Restart") {
+              this.timerValue.set(this.storedTimerValue);
+            }
           }
           this.countdown();
         });
@@ -79,7 +93,7 @@ export class AwarenessPageComponent {
 
   // This means failure as the user has waited for the timer to expire
   skipTimer() {
-    const newTimerValue = Math.min(this.storedTimerValue + 10, 180);
+    const newTimerValue = Math.min(this.storedTimerValue + 15, 180);
     chrome.storage.sync.set({ timerValue: newTimerValue });
 
     const minutesAllowed = isDevMode() ? 1 : 30;

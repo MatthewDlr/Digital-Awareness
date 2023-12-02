@@ -18,7 +18,7 @@ export class TasksWidgetComponent {
 
       const nonEmptyTasks = this.tasks.filter((task) => task.length > 0);
       if (nonEmptyTasks.length === 0) {
-        this.randomTask = 'No tasks found';
+        this.randomTask = 'Why not start to reflect on what goal you want to accomplish?';
         return;
       }
   
@@ -27,7 +27,7 @@ export class TasksWidgetComponent {
 
     }).catch((error) => {
       console.error(error);
-      this.randomTask = 'Error loading tasks';
+      this.randomTask = 'Why not start to reflect on what goal you want to accomplish?';
     });
   }
 

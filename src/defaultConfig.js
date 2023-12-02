@@ -116,9 +116,10 @@ export function defaultConfig() {
 
   chrome.storage.sync
     .set({
-      timerValue: 30, // Timer base value is 30 sec
-      timeAllowed: 30, // When a website is allowed, the default duration is 30 min
+      timerValue: 30, // Default timer value (in seconds)
+      timeAllowed: 30, // Default time allowed (in minutes)
       awarenessPageWidget: "Quotes", // Widget to display on the awareness page
+      timerBehavior: "Pause", // What to do when the awareness page is not focused
       doomScrollingNotification: true, // Notification when doom scrolling
       doomScrollingTreshold: 100, // Number of time the user can scroll before notification
       bindWatchingNotification: true, // Notification when bind watching

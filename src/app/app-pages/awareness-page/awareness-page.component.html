@@ -6,7 +6,9 @@
     class="fade-in-bottom bg-white flex min-h-[5rem] min-w-[5rem] items-center justify-center rounded-lg bg-opacity-40"
     style="--delay: 0.1s"
   >
-    <label class="text-gray-900 text-3xl" [ngClass]="timerValue() < 6 ? 'animate-bounce' : ''">{{ timerValue() }}</label>
+    <label class="text-gray-900 text-3xl" [ngClass]="timerValue() < 6 ? 'animate-bounce' : ''">{{
+      timerValue()
+    }}</label>
   </div>
 
   <!-- Widget -->
