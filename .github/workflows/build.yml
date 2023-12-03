@@ -25,11 +25,8 @@ jobs:
     - name: Build project
       run: npm run build
 
-    - name: Zip dist folder
-      run: zip -r dist.zip dist/
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: digital-awareness
-        path: dist.zip
+    - name: Upload package
+      run: npm publish
+      
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.REPO_TOKEN}}
