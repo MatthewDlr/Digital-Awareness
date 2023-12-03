@@ -6,8 +6,8 @@ module.exports = {
       import: "src/service-worker.ts",
       runtime: false,
     },
-    background: {
-      import: "src/background.ts",
+    doomScrolling: {
+      import: "src/doomScrolling.ts",
       runtime: false,
     },
   },
