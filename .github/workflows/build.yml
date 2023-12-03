@@ -23,7 +23,7 @@ jobs:
       run: npm install
 
     - name: Build project
-      run: npm run build -- --prod
+      run: npm run build
 
     - name: Zip dist folder
       run: zip -r dist.zip dist/
