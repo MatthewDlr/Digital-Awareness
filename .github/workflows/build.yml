@@ -1,4 +1,4 @@
-name: Build and Zip
+name: Build Extension
 
 on:
   push:
