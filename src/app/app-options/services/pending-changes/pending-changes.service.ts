@@ -1,13 +1,12 @@
 import { Injectable, isDevMode } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
 import { watchedWebsite } from "src/app/types";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class PendingChangesService {
-  areChangesPending: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  canChangesBeValidated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  stage: BehaviorSubject<stages> = new BehaviorSubject<stages>(stages.NoChanges);  
   validationDate: BehaviorSubject<Date> = new BehaviorSubject<Date>(new Date());
 
   websitesToDelete: Set<string> = new Set();
@@ -17,10 +16,10 @@ export class PendingChangesService {
   waitDuration = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
 
   constructor() {
-    chrome.storage.local.get(["pendingChanges"], result => {
+    chrome.storage.local.get(["pendingChanges"]).then(result => {
       if (result["pendingChanges"]) {
-        this.areChangesPending.next(result["pendingChanges"].areChangesPending);
-        this.validationDate.next(new Date(result["pendingChanges"].validationDate) || new Date());
+        this.stage.next(result["pendingChanges"].stage || stages.NoChanges);
+        this.validationDate.next(new Date(result["pendingChanges"].validationDate) || null);
         this.websitesToDelete = new Set(result["pendingChanges"].websitesToDelete);
         this.websitesToEdit = new Set(result["pendingChanges"].websitesToEdit);
 
@@ -55,61 +54,75 @@ export class PendingChangesService {
   discardPendingChanges() {
     this.websitesToDelete.clear();
     this.websitesToEdit.clear();
-    this.canChangesBeValidated.next(false);
-    this.areChangesPending.next(false);
+    this.stage.next(stages.NoChanges);
     this.savePendingChanges();
   }
 
-  confirmPendingChanges() {
-    if (!this.canBeValidated() || this.areChangesExpired()) {
+  async confirmPendingChanges() {
+    if (this.stage.getValue() != stages.ChangesCanBeValidated) {
       isDevMode() ? console.log("Changes can not be validated") : null;
       return;
     }
 
-    if (this.websitesToDelete.size > 0 || this.websitesToEdit.size > 0) {
-      chrome.storage.sync.get(["userWebsites"], result => {
-        let userWebsites: watchedWebsite[] = result["userWebsites"] || [];
-        this.websitesToDelete.forEach(host => {
-          userWebsites = userWebsites.filter(website => website.host !== host);
-        });
-
-        this.websitesToEdit.forEach(website => {
-          userWebsites.forEach(userWebsite => {
-            if (userWebsite.host === website.oldHost) {
-              userWebsite.host = website.newHost;
-            }
-          });
-        });
-
-        chrome.storage.sync.set({ userWebsites: userWebsites }).then(() => {
-          this.discardPendingChanges();
-        });
+    let userWebsites: watchedWebsite[] = [];
+    await chrome.storage.sync
+      .get(["userWebsites"])
+      .catch(error => {
+        console.error("Cannot get user websites: ", error);
+        return;
+      })
+      .then(result => {
+        if (!result!["userWebsites"]) {
+          isDevMode() ? console.log("No user websites found") : null;
+          return;
+        }
+        userWebsites = result!["userWebsites"];
       });
-    }
 
-    this.discardPendingChanges();
+    this.websitesToDelete.forEach(host => {
+      userWebsites = userWebsites.filter(website => website.host !== host);
+    });
+
+    this.websitesToEdit.forEach(website => {
+      userWebsites.forEach(userWebsite => {
+        if (userWebsite.host === website.oldHost) {
+          userWebsite.host = website.newHost;
+        }
+      });
+    });
+
+    chrome.storage.sync
+      .set({ userWebsites: userWebsites })
+      .then(() => {
+        this.discardPendingChanges();
+      })
+      .catch(error => {
+        console.error("Error while saving websites: ", error);
+      });
   }
 
   private checkChangesValidity() {
-    if (!this.areChangesPending.getValue()) {
+    if (this.stage.getValue() === stages.NoChanges) {
       isDevMode() ? console.log("No pending changes") : null;
       return;
     }
 
-    if (this.canBeValidated()) {
+    if (this.stage.getValue() === stages.ChangesPending) {
+      if (this.canBeValidated()) {
+        this.stage.next(stages.ChangesCanBeValidated);
+      }
+    }
+
+    if (this.stage.getValue() === stages.ChangesCanBeValidated) {
       if (this.areChangesExpired()) {
         this.discardPendingChanges();
-      } else {
-        this.canChangesBeValidated.next(true);
-        setTimeout(() => {
-          this.checkChangesValidity();
-        }, this.timeout);
+        return;
       }
-    } else {
-      setTimeout(() => {
-        this.checkChangesValidity();
-      }, this.timeout);
     }
+
+    setTimeout(() => {
+      this.checkChangesValidity();
+    }, this.timeout);
   }
 
   private canBeValidated(): boolean {
@@ -130,8 +143,7 @@ export class PendingChangesService {
   }
 
   private setPendingDuration() {
-    this.areChangesPending.next(true);
-    this.canChangesBeValidated.next(false);
+    this.stage.next(stages.ChangesPending);
     this.validationDate.next(new Date(new Date().getTime() + this.waitDuration));
     this.checkChangesValidity();
   }
@@ -139,7 +151,7 @@ export class PendingChangesService {
   private savePendingChanges() {
     chrome.storage.local.set({
       pendingChanges: {
-        areChangesPending: this.areChangesPending.getValue(),
+        stage: this.stage.getValue(),
         validationDate: this.validationDate.getValue().toString(),
         websitesToDelete: Array.from(this.websitesToDelete),
         websitesToEdit: Array.from(this.websitesToEdit),
@@ -152,4 +164,11 @@ export class PendingChangesService {
       });
     }
   }
+}
+
+export enum stages {
+  // Value are used as a string because they are used in the html template
+  NoChanges = "NoChanges",
+  ChangesPending = "ChangesPending", 
+  ChangesCanBeValidated = "ChangesCanBeValidated", 
 }

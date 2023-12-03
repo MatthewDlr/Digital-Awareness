@@ -10,35 +10,29 @@ import { CommonModule } from "@angular/common";
   styleUrls: ["./pending-changes.component.css"],
 })
 export class PendingChangesComponent {
-  areChangesPending: boolean = false;
   validationDate: string = "";
   expirationDate: string = "";
-  canChangesBeValidated: boolean = false;
+  stage: string = "NoChanges";
 
   timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
 
-  constructor(
-    private pendingChangesService: PendingChangesService,
-  ) {
-    this.pendingChangesService.areChangesPending.subscribe({
-      next: (state) => {
-        this.areChangesPending = state;
-      },
-    });
-    this.pendingChangesService.canChangesBeValidated.subscribe({
-      next: (state) => {
-        this.canChangesBeValidated = state;
-      },
-    });
+  constructor(private pendingChangesService: PendingChangesService) {
     this.pendingChangesService.validationDate.subscribe({
-      next: (date) => {
-        this.validationDate = String(
-          date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0"),
-        );
+      next: date => {
+        this.validationDate = String(date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0"));
         const expirationDate = new Date(date.getTime() + this.timeToAdd);
-        this.expirationDate = String(expirationDate.getHours() + ":" + String(expirationDate.getMinutes()).padStart(2, "0"));
+        this.expirationDate = String(
+          expirationDate.getHours() + ":" + String(expirationDate.getMinutes()).padStart(2, "0"),
+        );
       },
     });
+    this.pendingChangesService.stage.subscribe({
+      next: stage => {
+        this.stage = stage.toString();
+      },
+    });
+
+    console.log("stage: ", this.stage);
   }
 
   discardChanges() {
@@ -46,8 +40,6 @@ export class PendingChangesComponent {
   }
 
   confirmChanges() {
-    if (this.canChangesBeValidated) {
-      this.pendingChangesService.confirmPendingChanges();
-    }
+    this.pendingChangesService.confirmPendingChanges();
   }
 }

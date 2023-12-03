@@ -1,10 +1,10 @@
-@if (areChangesPending) {
+@if (stage != "NoChanges") {
   <div
     class="bg-purple-50 mb-2 flex h-fit flex-row items-center gap-4 rounded-xl px-4 py-3 animate-fade-up animate-duration-500"
     style="--delay: 0.1s"
   >
     <!-- SVG Timer Animation -->
-    @if (!canChangesBeValidated) {
+    @if (stage == "ChangesPending") {
       <svg
         class="h-10 w-10"
         id="20032"
@@ -16,18 +16,8 @@
           <g id="20032" opacity="1" style="mix-blend-mode: normal">
             <g>
               <defs>
-                <clipPath
-                  id="20032_clipPath"
-                  x="-50%"
-                  y="-50%"
-                  width="200%"
-                  height="200%"
-                >
-                  <path
-                    d="M0,0h32v0v32v0h-32v0v-32z"
-                    fill="white"
-                    clip-rule="nonzero"
-                  ></path>
+                <clipPath id="20032_clipPath" x="-50%" y="-50%" width="200%" height="200%">
+                  <path d="M0,0h32v0v32v0h-32v0v-32z" fill="white" clip-rule="nonzero"></path>
                 </clipPath>
               </defs>
               <g clip-path="url(#20032_clipPath)">
@@ -137,7 +127,7 @@
     }
 
     <!-- Validation Animation -->
-    @if (canChangesBeValidated) {
+    @if (stage == "ChangesCanBeValidated") {
       <svg
         class="h-10 w-10"
         id="20185"
@@ -149,18 +139,8 @@
           <g id="20185" opacity="1" style="mix-blend-mode: normal">
             <g>
               <defs>
-                <clipPath
-                  id="20185_clipPath"
-                  x="-50%"
-                  y="-50%"
-                  width="200%"
-                  height="200%"
-                >
-                  <path
-                    d="M0,0h32v0v32v0h-32v0v-32z"
-                    fill="white"
-                    clip-rule="nonzero"
-                  ></path>
+                <clipPath id="20185_clipPath" x="-50%" y="-50%" width="200%" height="200%">
+                  <path d="M0,0h32v0v32v0h-32v0v-32z" fill="white" clip-rule="nonzero"></path>
                 </clipPath>
               </defs>
               <g clip-path="url(#20185_clipPath)">
@@ -288,25 +268,16 @@
 
     <div class="mr-[0.15rem] flex w-full items-center justify-between gap-3">
       <div class="w-3/4">
-        @if (!canChangesBeValidated) {
-          <h3 class="text-purple-600 text-sm font-semibold">
-            Your changes are pending
-          </h3>
-        }
-        @if (canChangesBeValidated) {
-          <h3 class="text-purple-600 text-sm font-semibold">
-            You can validate your changes
-          </h3>
+        @if (stage == "ChangesPending") {
+          <h3 class="text-purple-600 text-sm font-semibold">Your changes are pending</h3>
+        } @else if (stage == "ChangesCanBeValidated") {
+          <h3 class="text-purple-600 text-sm font-semibold">You can validate your changes</h3>
         }
         <div class="text-purple-600 mt-1 text-sm">
-          @if (canChangesBeValidated) {
-            <span>
-              You can confirm your modifications until {{ expirationDate }}
-            </span>
-          } @else {
-            <span>
-              To confirm your modifications, come back at {{ validationDate }}
-            </span>
+          @if (stage == "ChangesPending") {
+            <span> You can confirm your modifications until {{ expirationDate }} </span>
+          } @else if (stage == "ChangesCanBeValidated") {
+            <span> To confirm your modifications, come back at {{ validationDate }} </span>
           }
         </div>
       </div>
@@ -315,7 +286,7 @@
           <button
             (click)="confirmChanges()"
             [ngClass]="
-              canChangesBeValidated
+              stage == 'ChangesCanBeValidated'
                 ? 'text-purple-600 cursor-pointer hover:bg-purple-100'
                 : 'text-gray-500 cursor-not-allowed'
             "
