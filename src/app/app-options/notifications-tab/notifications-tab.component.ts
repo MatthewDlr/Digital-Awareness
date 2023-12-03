@@ -1,8 +1,10 @@
 import { Component, isDevMode } from "@angular/core";
-import { PendingChangesService } from "../services/pending-changes/pending-changes.service";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-notifications-tab",
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: "./notifications-tab.component.html",
   styleUrls: ["./notifications-tab.component.css"],
 })
@@ -10,41 +12,28 @@ export class NotificationsTabComponent {
   doomScrollingToggle: boolean = false;
   bindWatchingToggle: boolean = false;
 
-  hasNotificationPermission: boolean = false;
+  hasNotificationPermission: boolean = true;
   isNotificationPermissionRequested: boolean = false;
 
-  constructor(private pendingChangesService: PendingChangesService) {
-    this.getLocalData();
-    chrome.notifications.getPermissionLevel((level) => {
-      if (level === "granted") {
-        this.hasNotificationPermission = true;
-        isDevMode()
-          ? console.log(
-            "hasNotificationPermission: ",
-            this.hasNotificationPermission,
-          )
-          : null;
+  constructor() {
+    this.loadSettings();
+    chrome.notifications.getPermissionLevel(level => {
+      isDevMode() ? console.log("hasNotificationPermission: ", level) : null;
+      if (level != "granted") {
+        this.hasNotificationPermission = false;
+        this.bindWatchingToggle = false;
+        this.doomScrollingToggle = false;
       }
     });
 
     chrome.storage.local.set({ isDevMode: isDevMode() });
-
-    this.pendingChangesService.areChangesPending.subscribe({
-      next: () => {
-        this.getLocalData();
-      },
-    });
   }
 
   toggleDoomScrolling() {
-    if (!this.doomScrollingToggle) {
-      this.doomScrollingToggle = true;
-      this.pendingChangesService.enableDoomScrolling();
-      chrome.storage.sync.set({ doomScrollingNotification: true });
-    } else {
-      this.doomScrollingToggle = false;
-      this.pendingChangesService.disableDoomScrolling();
-    }
+    this.doomScrollingToggle = !this.doomScrollingToggle;
+    chrome.storage.sync.set({
+      doomScrollingNotification: this.doomScrollingToggle,
+    });
   }
 
   toggleBindWatching() {
@@ -59,22 +48,25 @@ export class NotificationsTabComponent {
       .request({
         permissions: ["notifications"],
       })
-      .then((granted) => {
+      .then(granted => {
         if (granted) {
           this.hasNotificationPermission = true;
+          this.loadSettings();
         } else {
           this.hasNotificationPermission = false;
+          this.bindWatchingToggle = false;
+          this.doomScrollingToggle = false;
         }
       });
     this.isNotificationPermissionRequested = true;
   }
 
-  getLocalData() {
-    chrome.storage.sync.get("doomScrollingNotification").then((result) => {
+  async loadSettings() {
+    await chrome.storage.sync.get("doomScrollingNotification").then(result => {
       this.doomScrollingToggle = result["doomScrollingNotification"];
     });
 
-    chrome.storage.sync.get("bindWatchingNotification").then((result) => {
+    await chrome.storage.sync.get("bindWatchingNotification").then(result => {
       this.bindWatchingToggle = result["bindWatchingNotification"];
     });
   }

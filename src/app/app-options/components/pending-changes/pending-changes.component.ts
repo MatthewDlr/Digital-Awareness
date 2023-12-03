@@ -1,8 +1,11 @@
 import { Component, isDevMode } from "@angular/core";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-pending-changes",
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: "./pending-changes.component.html",
   styleUrls: ["./pending-changes.component.css"],
 })

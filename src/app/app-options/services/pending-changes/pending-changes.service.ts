@@ -6,37 +6,25 @@ import { watchedWebsite } from "src/app/types";
   providedIn: "root",
 })
 export class PendingChangesService {
-  areChangesPending: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false,
-  );
-  canChangesBeValidated: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false);
+  areChangesPending: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  canChangesBeValidated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   validationDate: BehaviorSubject<Date> = new BehaviorSubject<Date>(new Date());
 
   websitesToDelete: Set<string> = new Set();
   websitesToEdit: Set<{ oldHost: string; newHost: string }> = new Set();
 
-  doomScrollingToggle!: boolean | null;
-
   timeout = isDevMode() ? 1000 * 5 : 1000 * 60;
   waitDuration = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
 
   constructor() {
-    chrome.storage.local.get(["pendingChanges"], (result) => {
+    chrome.storage.local.get(["pendingChanges"], result => {
       if (result["pendingChanges"]) {
         this.areChangesPending.next(result["pendingChanges"].areChangesPending);
-        this.validationDate.next(
-          new Date(result["pendingChanges"].validationDate) || new Date(),
-        );
-        this.websitesToDelete = new Set(
-          result["pendingChanges"].websitesToDelete,
-        );
+        this.validationDate.next(new Date(result["pendingChanges"].validationDate) || new Date());
+        this.websitesToDelete = new Set(result["pendingChanges"].websitesToDelete);
         this.websitesToEdit = new Set(result["pendingChanges"].websitesToEdit);
-        this.doomScrollingToggle = result["pendingChanges"].doomScrollingToggle;
 
-        isDevMode()
-          ? console.log("Pending changes loaded: ", result["pendingChanges"])
-          : null;
+        isDevMode() ? console.log("Pending changes loaded: ", result["pendingChanges"]) : null;
         this.checkChangesValidity();
       }
     });
@@ -50,7 +38,7 @@ export class PendingChangesService {
 
   addWebsiteToEdit(oldHost: string, newHost: string) {
     let doesWebsiteReplaceAnother = false;
-    this.websitesToEdit.forEach((website) => {
+    this.websitesToEdit.forEach(website => {
       if (website.newHost === oldHost) {
         website.newHost = newHost;
         doesWebsiteReplaceAnother = true;
@@ -64,23 +52,9 @@ export class PendingChangesService {
     this.savePendingChanges();
   }
 
-  disableDoomScrolling() {
-    this.doomScrollingToggle = false;
-    this.setPendingDuration();
-    this.savePendingChanges();
-  }
-
-  enableDoomScrolling() {
-    if (this.doomScrollingToggle == false) {
-      this.doomScrollingToggle = null;
-      this.discardPendingChanges();
-    }
-  }
-
   discardPendingChanges() {
     this.websitesToDelete.clear();
     this.websitesToEdit.clear();
-    this.doomScrollingToggle = null;
     this.canChangesBeValidated.next(false);
     this.areChangesPending.next(false);
     this.savePendingChanges();
@@ -93,16 +67,14 @@ export class PendingChangesService {
     }
 
     if (this.websitesToDelete.size > 0 || this.websitesToEdit.size > 0) {
-      chrome.storage.sync.get(["userWebsites"], (result) => {
+      chrome.storage.sync.get(["userWebsites"], result => {
         let userWebsites: watchedWebsite[] = result["userWebsites"] || [];
-        this.websitesToDelete.forEach((host) => {
-          userWebsites = userWebsites.filter(
-            (website) => website.host !== host,
-          );
+        this.websitesToDelete.forEach(host => {
+          userWebsites = userWebsites.filter(website => website.host !== host);
         });
 
-        this.websitesToEdit.forEach((website) => {
-          userWebsites.forEach((userWebsite) => {
+        this.websitesToEdit.forEach(website => {
+          userWebsites.forEach(userWebsite => {
             if (userWebsite.host === website.oldHost) {
               userWebsite.host = website.newHost;
             }
@@ -113,10 +85,6 @@ export class PendingChangesService {
           this.discardPendingChanges();
         });
       });
-    }
-
-    if (this.doomScrollingToggle == false) {
-      chrome.storage.sync.set({ doomScrollingNotification: false });
     }
 
     this.discardPendingChanges();
@@ -154,9 +122,7 @@ export class PendingChangesService {
   }
 
   private areChangesExpired(): boolean {
-    const validUntil = new Date(
-      this.validationDate.getValue().getTime() + this.waitDuration,
-    );
+    const validUntil = new Date(this.validationDate.getValue().getTime() + this.waitDuration);
     if (validUntil > new Date()) {
       return false;
     }
@@ -166,9 +132,7 @@ export class PendingChangesService {
   private setPendingDuration() {
     this.areChangesPending.next(true);
     this.canChangesBeValidated.next(false);
-    this.validationDate.next(
-      new Date(new Date().getTime() + this.waitDuration),
-    );
+    this.validationDate.next(new Date(new Date().getTime() + this.waitDuration));
     this.checkChangesValidity();
   }
 
@@ -179,12 +143,11 @@ export class PendingChangesService {
         validationDate: this.validationDate.getValue().toString(),
         websitesToDelete: Array.from(this.websitesToDelete),
         websitesToEdit: Array.from(this.websitesToEdit),
-        doomScrollingToggle: this.doomScrollingToggle,
       },
     });
 
     if (isDevMode()) {
-      chrome.storage.local.get(["pendingChanges"], (result) => {
+      chrome.storage.local.get(["pendingChanges"], result => {
         isDevMode() ? console.log("Pending changes saved: ", result["pendingChanges"]) : null;
       });
     }

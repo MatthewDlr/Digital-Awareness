@@ -1,38 +1,34 @@
 @if (isCommandPaletteShown) {
-<app-websites-palette></app-websites-palette>
+  <app-websites-palette></app-websites-palette>
 }
 
 <!-- DevMode Warning-->
 @if (isDevModeEnabled()) {
-<div
-  class="text-orange-600 bg-orange-50 fixed left-[-4.5rem] top-[10rem] z-10 flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke-width="1.75"
-    stroke="currentColor"
-    class="h-6 w-6"
+  <div
+    class="text-orange-600 bg-orange-50 fixed left-[-4.5rem] top-[10rem] z-10 flex h-fit w-fit -rotate-90 items-center gap-3 rounded-b-lg stroke-orange-600 px-5 py-5"
   >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-    />
-  </svg>
-  <div class="mt-[0.10rem] flex items-baseline gap-2">
-    <label class="text-base font-medium">DevMode is ON</label>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.75"
+      stroke="currentColor"
+      class="h-6 w-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+      />
+    </svg>
+    <div class="mt-[0.10rem] flex items-baseline gap-2">
+      <label class="text-base font-medium">DevMode is ON</label>
+    </div>
   </div>
-</div>
 }
 
 <div
-  [ngClass]="
-    isCommandPaletteShown
-      ? 'fixed bottom-0 left-0 right-0 top-0 overflow-hidden'
-      : 'overflow-scroll'
-  "
+  [ngClass]="isCommandPaletteShown ? 'fixed bottom-0 left-0 right-0 top-0 overflow-hidden' : 'overflow-scroll'"
   class="bg-white flex h-fit min-h-[100vh] w-full !transform flex-col gap-5 px-64 py-20 !transition-all !duration-300 !ease-in-out max-xl:px-52 max-lg:px-32 max-md:px-16 max-sm:px-8"
 >
   <h1
@@ -43,25 +39,17 @@
   </h1>
 
   <!-- Pending Changes -->
-  <app-pending-changes
-    class="fade-in-bottom"
-    style="--delay: 0.2s"
-  ></app-pending-changes>
+  <app-pending-changes class="fade-in-bottom" style="--delay: 0.2s"></app-pending-changes>
 
   <!-- Tabs -->
-  <div
-    class="fade-in-bottom block w-full overflow-x-scroll"
-    style="--delay: 0.3s"
-  >
+  <div class="fade-in-bottom block w-full overflow-x-scroll" style="--delay: 0.3s">
     <div class="border-gray-200 border-b">
       <nav class="-mb-px flex space-x-10 max-lg:space-x-5" aria-label="Tabs">
         <!-- Highlighted Sites Tab -->
         <div
           (click)="currentTab = 'blocklist'"
           [ngClass]="
-            currentTab == 'blocklist'
-              ? 'text-green-500 !border-green-500'
-              : 'text-gray-500 hover:border-green-500'
+            currentTab == 'blocklist' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
           "
           class="group text-gray-500 flex w-52 cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
         >
@@ -87,9 +75,7 @@
         <div
           (click)="currentTab = 'blockpage'"
           [ngClass]="
-            currentTab == 'blockpage'
-              ? 'text-green-500 !border-green-500'
-              : 'text-gray-500 hover:border-green-500'
+            currentTab == 'blockpage' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
           "
           class="group text-gray-500 flex w-44 cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
         >
@@ -115,9 +101,7 @@
         <div
           (click)="currentTab = 'notifications'"
           [ngClass]="
-            currentTab == 'notifications'
-              ? 'text-green-500 !border-green-500'
-              : 'text-gray-500 hover:border-green-500'
+            currentTab == 'notifications' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
           "
           class="group text-gray-500 flex w-36 cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
         >
@@ -144,12 +128,12 @@
 
   <!-- Options Content -->
   <div class="fade-in-bottom" style="--delay: 0.5s">
-    @if (currentTab == 'blocklist') {
-    <app-highlighted-websites-tab></app-highlighted-websites-tab>
-    } @else if (currentTab == 'blockpage') {
-    <app-awareness-page-tab></app-awareness-page-tab>
-    } @else if (currentTab == 'notifications') {
-    <app-notifications-tab></app-notifications-tab>
+    @if (currentTab == "blocklist") {
+      <app-highlighted-websites-tab></app-highlighted-websites-tab>
+    } @else if (currentTab == "blockpage") {
+      <app-awareness-page-tab></app-awareness-page-tab>
+    } @else if (currentTab == "notifications") {
+      <app-notifications-tab></app-notifications-tab>
     }
   </div>
 </div>

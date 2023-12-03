@@ -1,7 +1,11 @@
 import { Component, isDevMode } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: "app-awareness-page-tab",
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: "./awareness-page-tab.component.html",
   styleUrls: ["./awareness-page-tab.component.css"],
 })
