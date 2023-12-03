@@ -3,13 +3,13 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 
 @Component({
-  selector: "app-awareness-page-tab",
+  selector: 'app-awareness-page-option',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: "./awareness-page-tab.component.html",
-  styleUrls: ["./awareness-page-tab.component.css"],
+  templateUrl: './awareness-page-option.component.html',
+  styleUrls: ['./awareness-page-option.component.css'],
 })
-export class AwarenessPageTabComponent {
+export class AwarenessPageOptionComponent {
   selectedWidget: string = "Quotes";
   tasks!: string[];
   areTasksValid: boolean = true;

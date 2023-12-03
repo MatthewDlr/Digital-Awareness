@@ -6,13 +6,13 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 
 @Component({
-  selector: "app-highlighted-websites-tab",
+  selector: 'app-highlighted-websites-option',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: "./highlighted-websites-tab.component.html",
-  styleUrls: ["./highlighted-websites-tab.component.css"],
+  templateUrl: './highlighted-websites-option.component.html',
+  styleUrls: ['./highlighted-websites-option.component.css'],
 })
-export class HighlightedWebsitesTabComponent {
+export class HighlightedWebsitesOptionComponent {
   enforcedWebsites: watchedWebsite[] = [];
   userWebsites: watchedWebsite[] = [];
   isCommandPaletteShown: boolean = false;
