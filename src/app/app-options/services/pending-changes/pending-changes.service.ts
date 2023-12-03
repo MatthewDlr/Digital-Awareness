@@ -60,7 +60,7 @@ export class PendingChangesService {
 
   async confirmPendingChanges() {
     if (this.stage.getValue() != stages.ChangesCanBeValidated) {
-      isDevMode() ? console.log("Changes can not be validated") : null;
+      isDevMode() ? console.warn("Changes can not be validated") : null;
       return;
     }
 
@@ -73,7 +73,7 @@ export class PendingChangesService {
       })
       .then(result => {
         if (!result!["userWebsites"]) {
-          isDevMode() ? console.log("No user websites found") : null;
+          isDevMode() ? console.warn("No user websites found") : null;
           return;
         }
         userWebsites = result!["userWebsites"];
@@ -130,7 +130,7 @@ export class PendingChangesService {
       isDevMode() ? console.log("Changes can be validated") : null;
       return true;
     }
-    isDevMode() ? console.log("Changes can't be validated yet") : null;
+    isDevMode() ? console.warn("Changes can't be validated yet") : null;
     return false;
   }
 

@@ -126,7 +126,7 @@ export function defaultConfig() {
       categoriesWebsites: [],
     })
     .then(() => {
-      console.log("enforcedWebsites set");
+      console.info("enforcedWebsites set");
     });
 
   chrome.storage.sync
@@ -166,6 +166,6 @@ export function defaultConfig() {
       ]
     })
     .then(() => {
-      console.log("sync set");
+      console.info("sync set");
     });
 }

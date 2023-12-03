@@ -7,7 +7,7 @@ import { watchedWebsite } from "src/app/types";
 export class AllowedSitesService {
   enforcedWebsites: watchedWebsite[] = [];
   userWebsites: watchedWebsite[] = [];
-  websiteOrigin: string = "Unknown";
+  websiteOrigin: string = "Enforced";
   initializationStep: number = 0;
 
   constructor() {
@@ -18,7 +18,7 @@ export class AllowedSitesService {
         this.initializationStep++;
       })
       .catch(error => {
-        isDevMode() ? console.log(error) : null;
+        isDevMode() ? console.error(error) : null;
       });
 
     chrome.storage.sync
@@ -28,14 +28,14 @@ export class AllowedSitesService {
         this.userWebsites = result["userWebsites"];
       })
       .catch(error => {
-        isDevMode() ? console.log(error) : null;
+        isDevMode() ? console.error(error) : null;
       });
   }
 
   getTimerValue(website: string): number {
-    // if (isDevMode()) {
-    //   return 5;
-    // }
+    if (isDevMode()) {
+      return 5;
+    }
 
     website = this.removeWWW(website);
 
@@ -50,7 +50,7 @@ export class AllowedSitesService {
         return userWebsite.timer;
       }
     }
-    isDevMode() ? console.log("Website not found in enforcedWebsites or userWebsites: ", website) : null;
+    isDevMode() ? console.error("Website not found in enforcedWebsites or userWebsites: ", website) : null;
     return 30;
   }
 
@@ -67,6 +67,8 @@ export class AllowedSitesService {
       this.updateWebsiteAllowedDate(userWebsite!, duration);
       userWebsite!.timer = newTimerValue;
       chrome.storage.sync.set({ userWebsites: this.userWebsites });
+    } else {
+      isDevMode() ? console.error("cannot allow this website: ", websiteToAllow) : null;
     }
   }
 
