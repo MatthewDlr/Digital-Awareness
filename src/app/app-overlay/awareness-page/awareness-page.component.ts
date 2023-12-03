@@ -30,21 +30,7 @@ export class AwarenessPageComponent {
       this.tabId = decodeURIComponent(params["tabId"]);
       this.outputUrl = new URL(decodeURIComponent(params["outputURL"]));
     });
-
-    // Getting timer value from the storage
-    if (isDevMode()) {
-      this.storedTimerValue = 5;
-      this.timerValue.set(5);
-      this.countdown();
-    } else {
-      chrome.storage.sync.get("timerValue").then(result => {
-        this.storedTimerValue = result["timerValue"];
-        this.timerValue.set(result["timerValue"]);
-        this.countdown();
-      });
-    }
-
-    // Getting widget value from the storage
+    
     chrome.storage.sync.get("awarenessPageWidget").then(result => {
       this.widget = result["awarenessPageWidget"];
       isDevMode() ? console.log("widget: ", this.widget) : null;
@@ -52,22 +38,36 @@ export class AwarenessPageComponent {
         this.widget = this.getRandomWidget();
       }
     });
-
+    
     chrome.storage.sync.get(["timerBehavior"]).then(result => {
       this.timerBehavior = result["timerBehavior"] || "None";
       isDevMode() ? console.log("Timer behavior loaded: ", this.timerBehavior) : null;
     });
+
+    // Sometimes the initialization of the allowedSitesService is not finished when the component is created
+    // So we wait for it to be finished before getting the timer value
+    let numberOfTry = 10;
+    const intervalId = setInterval(() => {
+      if (this.allowedSitesService.initializationStep == 2) {
+        clearInterval(intervalId);
+        this.storedTimerValue = this.allowedSitesService.getTimerValue(this.outputUrl.host);
+        this.timerValue.set(this.storedTimerValue);
+        this.countdown();
+      } else {
+        numberOfTry--;
+        if (numberOfTry == 0) {
+          clearInterval(intervalId);
+          throw new Error("Could not load the timer value");
+        }
+      }
+    }, 50);
+
   }
 
   countdown() {
     if (this.timerValue() > 0) {
       setTimeout(() => {
-        async function getCurrentTab() {
-          const queryOptions = { active: true, lastFocusedWindow: true };
-          const [tab] = await chrome.tabs.query(queryOptions);
-          return tab.id;
-        }
-        getCurrentTab().then(currentTabId => {
+        this.getCurrentTab().then(currentTabId => {
           // if the user is not on the tab, don't decrement the timer
           if (!(currentTabId?.toString() != this.tabId || !document.hasFocus())) {
             this.timerValue.update(value => value - 1);
@@ -85,6 +85,12 @@ export class AwarenessPageComponent {
     }
   }
 
+  async getCurrentTab() {
+    const queryOptions = { active: true, lastFocusedWindow: true };
+    const [tab] = await chrome.tabs.query(queryOptions);
+    return tab.id;
+  }
+
   waitBeforeClose() {
     setTimeout(() => {
       this.closeBlockPage();
@@ -94,10 +100,8 @@ export class AwarenessPageComponent {
   // This means failure as the user has waited for the timer to expire
   skipTimer() {
     const newTimerValue = Math.min(this.storedTimerValue + 15, 180);
-    chrome.storage.sync.set({ timerValue: newTimerValue });
-
     const minutesAllowed = isDevMode() ? 1 : 30;
-    this.allowedSitesService.allowWebsiteTemporary(this.outputUrl.host, minutesAllowed);
+    this.allowedSitesService.allowWebsiteTemporary(this.outputUrl.host, minutesAllowed, newTimerValue);
 
     window.location.href = this.outputUrl.toString();
   }
@@ -105,8 +109,8 @@ export class AwarenessPageComponent {
   // This means success as the user left the page before the timer expired
   closeBlockPage() {
     const newTimerValue = Math.max(this.storedTimerValue - 5, 30);
-    chrome.storage.sync.set({ timerValue: newTimerValue });
-    this.allowedSitesService.incrementTimesBlocked(this.outputUrl.host);
+
+    this.allowedSitesService.incrementTimesBlocked(this.outputUrl.host, newTimerValue);
     setTimeout(() => {
       window.close();
     }, 500);

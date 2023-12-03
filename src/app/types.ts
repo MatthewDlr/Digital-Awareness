@@ -1,5 +1,6 @@
 export type watchedWebsite = {
   host: string;
+  timer: number;
   allowedUntil: string;
   timesBlocked: number;
   timesAllowed: number;

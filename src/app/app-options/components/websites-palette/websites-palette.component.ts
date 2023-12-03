@@ -53,6 +53,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
       const blockedWebsite: watchedWebsite = {
         host: website.url,
         allowedUntil: "",
+        timer: 30,
         timesBlocked: 0,
         timesAllowed: 0,
         category: website.category || category.unknown,
