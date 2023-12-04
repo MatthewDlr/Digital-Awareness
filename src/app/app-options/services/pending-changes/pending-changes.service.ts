@@ -130,7 +130,7 @@ export class PendingChangesService {
       isDevMode() ? console.log("Changes can be validated") : null;
       return true;
     }
-    isDevMode() ? console.warn("Changes can't be validated yet") : null;
+    isDevMode() ? console.log("Changes can't be validated yet") : null;
     return false;
   }
 
