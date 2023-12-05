@@ -2,7 +2,7 @@
   <!-- Permission alert -->
   @defer {
     @if (!hasNotificationPermission) {
-      <div class="bg-orange-50 mb-3 rounded-xl p-4 dark:saturate-[0.75] fade-in-bottom-small" style="--delay: 0.1s">
+      <div class="bg-orange-50 mb-3 rounded-xl p-4 dark:saturate-[0.75] animate-fade-up animate-duration-500">
         <div class="flex h-full">
           <div class="flex items-center">
             <svg
@@ -47,9 +47,8 @@
 
   <!-- Doom scrolling toggle -->
   <li
-    class="flex w-full items-center justify-between rounded-xl border-[1px] px-6 py-4 fade-in-bottom-small"
+    class="flex w-full items-center justify-between rounded-xl border-[1px] px-6 py-4 animate-fade-up animate-duration-500"
     [ngClass]="doomScrollingToggle ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
-    style="--delay: 0.2s"
   >
     <span class="flex flex-grow flex-col">
       <span class="text-gray-900 text-base font-medium leading-6" id="availability-label">Prevent Doom Scrolling</span>

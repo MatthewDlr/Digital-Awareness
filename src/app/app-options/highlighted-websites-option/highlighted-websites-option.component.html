@@ -1,7 +1,7 @@
-<div class="mt-2 min-w-full fade-in-bottom-small" style="--delay: 0.1s">
-  <h1 class="text-gray-900 text-lg font-semibold leading-6">Websites</h1>
+<div class="mt-2 min-w-full animate-fade-up animate-duration-500">
+  <h1 class="text-gray-900 text-lg font-semibold leading-6 animate-fade-up animate-duration-500">Websites</h1>
   <div class="sm:flex sm:items-center">
-    <div class="w-full sm:flex-auto">
+    <div class="w-full sm:flex-auto animate-fade-up animate-duration-500">
       <p class="text-gray-700 mt-2 text-sm">
         For your wellbeing, certain websites we identified as the most
         time-consuming <br />
@@ -45,7 +45,7 @@
   </div>
 
   <!-- Table -->
-  <div class="mt-5 flow-root">
+  <div class="mt-5 flow-root animate-fade-up animate-delay-200 animate-duration-500">
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
         <div
@@ -83,7 +83,7 @@
             <tbody class="bg-white divide-y divide-gray-300 overflow-scroll">
               <!-- User Websites -->
               @for (website of userWebsites; track $index) {
-              <tr>
+              <tr class="animate-jump animate-duration-500">
                 <td
                   class="text-gray-900 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6"
                 >
@@ -147,12 +147,11 @@
                   </a>
                 </td>
               </tr>
-
               }
 
               <!-- Enforced Websites -->
               @for (website of enforcedWebsites; track $index) {
-              <tr class="bg-gray-50">
+              <tr class="bg-gray-50 animate-jump animate-duration-500">
                 <td
                   class="text-gray-900 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6"
                 >

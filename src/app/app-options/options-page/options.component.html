@@ -32,17 +32,16 @@
   class="bg-white flex h-fit min-h-[100vh] w-full !transform flex-col gap-5 px-64 py-20 !transition-all !duration-300 !ease-in-out max-xl:px-52 max-lg:px-32 max-md:px-16 max-sm:px-8"
 >
   <h1
-    class="fade-in-bottom green-gradient h-fit w-fit bg-clip-text py-2 text-4xl font-bold text-transparent"
-    style="--delay: 0.1s"
+    class="green-gradient h-fit w-fit bg-clip-text py-2 text-4xl font-bold text-transparent animate-fade-up animate-duration-500"
   >
     Options
   </h1>
 
   <!-- Pending Changes -->
-  <app-pending-changes class="fade-in-bottom" style="--delay: 0.2s"></app-pending-changes>
+  <app-pending-changes class="animate-fade-up animate-delay-100 animate-duration-500"></app-pending-changes>
 
   <!-- Tabs -->
-  <div class="fade-in-bottom block w-full overflow-x-scroll" style="--delay: 0.3s">
+  <div class="block w-full overflow-x-scroll animate-fade-up animate-delay-200 animate-duration-500">
     <div class="border-gray-200 border-b">
       <nav class="-mb-px flex space-x-10 max-lg:space-x-5" aria-label="Tabs">
         <!-- Highlighted Sites Tab -->
@@ -127,7 +126,7 @@
   </div>
 
   <!-- Options Content -->
-  <div class="fade-in-bottom" style="--delay: 0.5s">
+  <div class="animate-fade-up animate-delay-300 animate-duration-500">
     @if (currentTab == "blocklist") {
       <app-highlighted-websites-option></app-highlighted-websites-option>
     } @else if (currentTab == "blockpage") {

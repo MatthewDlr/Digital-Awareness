@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Digital Awareness",
   "version": "1.2",
-  "description": "A powerful website blocker",
+  "description": "Unlearn bad habits and become more aware of your digital life.",
   "icons": {
     "128": "./assets/logo128.png",
     "256": "./assets/logo256.png"
