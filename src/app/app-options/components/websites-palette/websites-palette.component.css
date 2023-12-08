@@ -1,14 +1,14 @@
 @keyframes jump {
-    0%, 100% {
-        transform: scale(100%);
+    0% {
+        transform: scale(80%);
     }
-    10% {
-        transform: scale(90%);
-    }
-    50% {
+    60% {
         transform: scale(105%);
+    }
+    100% {
+        transform: scale(100%);
     }
 }
 .animate-jump-custom {
-    animation: jump .3s both ease-in-out
+    animation: jump .25s forwards ease-out
 }
