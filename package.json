@@ -8,11 +8,11 @@
     "build:prod": "ng build ",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix && prettier --write ."
   },
   "husky": {
     "hooks": {
-      "pre-push": "eslint --fix && git add ."
+      "pre-commit": "eslint . --fix && prettier --write"
     }
   },
   "private": true,

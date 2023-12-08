@@ -1,14 +1,14 @@
 @keyframes jump {
-    0% {
-        transform: scale(80%);
-    }
-    60% {
-        transform: scale(105%);
-    }
-    100% {
-        transform: scale(100%);
-    }
+  0% {
+    transform: scale(80%);
+  }
+  60% {
+    transform: scale(105%);
+  }
+  100% {
+    transform: scale(100%);
+  }
 }
 .animate-jump-custom {
-    animation: jump .25s forwards ease-out
+  animation: jump 0.25s forwards ease-out;
 }

@@ -27,11 +27,7 @@
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "src/assets",
-              "src/manifest.json",
-              "src/doomScrollingPopup.html"
-            ],
+            "assets": ["src/assets", "src/manifest.json", "src/doomScrollingPopup.html"],
             "styles": ["src/styles.css"],
             "scripts": []
           },

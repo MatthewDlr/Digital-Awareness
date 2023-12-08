@@ -31,22 +31,17 @@
   [ngClass]="isCommandPaletteShown ? 'fixed bottom-0 left-0 right-0 top-0 overflow-hidden' : 'overflow-scroll'"
   class="bg-white flex h-fit min-h-[100vh] w-full !transform flex-col gap-5 px-64 py-20 !transition-all !duration-300 !ease-in-out max-xl:px-52 max-lg:px-32 max-md:px-16 max-sm:px-8"
 >
-  <div class="flex gap-5 items-center animate-fade-up animate-duration-500">
-    <img src="/assets/logo-512.png" alt="" class="w-12 h-12">
-  
-    <h1
-      class="green-gradient h-fit w-fit bg-clip-text py-2 text-4xl font-bold text-transparent -mt-1"
-    >
-      Options
-    </h1>
+  <div class="flex animate-fade-up items-center gap-5 animate-duration-500">
+    <img src="/assets/logo-512.png" alt="" class="h-12 w-12" />
 
+    <h1 class="green-gradient -mt-1 h-fit w-fit bg-clip-text py-2 text-4xl font-bold text-transparent">Options</h1>
   </div>
 
   <!-- Pending Changes -->
   <app-pending-changes class="animate-fade-up animate-delay-100 animate-duration-500"></app-pending-changes>
 
   <!-- Tabs -->
-  <div class="block w-full overflow-x-scroll animate-fade-up animate-delay-200 animate-duration-500">
+  <div class="block w-full animate-fade-up overflow-x-scroll animate-delay-200 animate-duration-500">
     <div class="border-gray-200 border-b">
       <nav class="-mb-px flex space-x-10 max-lg:space-x-5" aria-label="Tabs">
         <!-- Highlighted Sites Tab -->
