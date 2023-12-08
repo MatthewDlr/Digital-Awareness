@@ -4,7 +4,6 @@ export type Website = {
   url: string;
   category: category;
   isBlocked?: boolean;
-  selected?: boolean;
 };
 
 // Thank you Copilot for generating this list

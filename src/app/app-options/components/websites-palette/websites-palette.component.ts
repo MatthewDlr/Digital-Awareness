@@ -21,15 +21,16 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     category: category.unknown,
     performed: false,
   };
+  saveError: boolean = false;
 
   constructor(private commandPaletteService: CommandPaletteService) {
     chrome.storage.sync.get("userWebsites").then(result => {
       this.userWebsites = result["userWebsites"];
-      this.matchCommonAndUserWebsites();
+      this.flagBlockedWebsites();
     });
     chrome.storage.local.get("enforcedWebsites").then(result => {
       this.enforcedWebsites = result["enforcedWebsites"];
-      this.matchCommonAndUserWebsites();
+      this.flagBlockedWebsites();
     });
   }
 
@@ -39,13 +40,18 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     this.searchInput.nativeElement.focus();
   }
 
-  // Listen for the enter key, esc or cmd+k/ctrl+k to validate
+  // Listen for the enter key or cmd+k/ctrl+k to validate
   @HostListener("document:keydown.enter", ["$event"])
-  @HostListener("document:keydown.escape", ["$event"])
   @HostListener("document:keydown.meta.k", ["$event"])
   @HostListener("document:keydown.control.k", ["$event"])
   onKeydownHandler() {
     this.blockSelectedWebsites();
+  }
+
+  // Listen for the escape key to close without saving
+  @HostListener("document:keydown.escape", ["$event"])
+  onKeydownHandlerEscape() {
+    this.toggleCommandPalette(false);
   }
 
   blockSelectedWebsites() {
@@ -64,14 +70,19 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     chrome.storage.sync
       .set({ userWebsites: this.userWebsites })
       .then(() => {
-        for (const website of this.selectedWebsites) {
-          website.selected = false;
-        }
+        this.saveError = false;
         this.selectedWebsites = [];
         this.toggleCommandPalette(false);
       })
       .catch(error => {
         console.error("Error while blocking websites:", error);
+        this.saveError = true;
+        this.userWebsites.filter(userWebsite => {
+          return !this.selectedWebsites.find(selectedWebsite => {
+            return userWebsite.host == selectedWebsite.url;
+          });
+        });
+        isDevMode() ? console.log("userWebsites filtered: ", this.userWebsites) : null;
       });
   }
 
@@ -84,13 +95,11 @@ export class WebsitesPaletteComponent implements AfterViewInit {
       return;
     }
 
-    if (website.selected) {
-      const index = this.selectedWebsites.indexOf(website);
-      this.selectedWebsites.splice(index, 1);
-      website.selected = false;
-    } else {
+    const index = this.selectedWebsites.indexOf(website);
+    if (index == -1) {
       this.selectedWebsites.push(website);
-      website.selected = true;
+    } else {
+      this.selectedWebsites.splice(index, 1);
     }
   }
 
@@ -130,18 +139,20 @@ export class WebsitesPaletteComponent implements AfterViewInit {
       if (website.category == this.suggestion.category && !website.isBlocked) {
         if (!this.suggestion.performed) {
           this.selectedWebsites.push(website);
-          website.selected = true;
         } else {
           const index = this.selectedWebsites.indexOf(website);
           this.selectedWebsites.splice(index, 1);
-          website.selected = false;
         }
       }
     }
     this.suggestion.performed = !this.suggestion.performed;
   }
 
-  matchCommonAndUserWebsites() {
+  isWebsiteSelected(website: Website) {
+    return this.selectedWebsites.includes(website);
+  }
+
+  flagBlockedWebsites() {
     for (const searchResult of this.searchResults) {
       const isBlocked = Boolean(
         this.userWebsites.find(website => {
@@ -183,6 +194,6 @@ export class WebsitesPaletteComponent implements AfterViewInit {
         category: category.unknown,
       });
     }
-    this.matchCommonAndUserWebsites();
+    this.flagBlockedWebsites();
   }
 }
