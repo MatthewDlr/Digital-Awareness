@@ -15,5 +15,5 @@ export enum category {
   shopping = "Shopping",
   news = "News",
   music = "Music",
-  unknown = ""
+  unknown = "",
 }

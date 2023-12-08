@@ -141,29 +141,29 @@ export function defaultConfig() {
       userCategories: [
         {
           name: "News",
-          isActive: false
+          isActive: false,
         },
         {
           name: "Social",
-          isActive: false
+          isActive: false,
         },
         {
           name: "Shopping",
-          isActive: false
+          isActive: false,
         },
         {
           name: "Streaming",
-          isActive: false
+          isActive: false,
         },
         {
           name: "Adult",
-          isActive: false
+          isActive: false,
         },
         {
           name: "Gambling",
-          isActive: false
-        }
-      ]
+          isActive: false,
+        },
+      ],
     })
     .then(() => {
       console.info("sync set");

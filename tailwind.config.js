@@ -1,11 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
-  plugins: [
-    require("nightwind"),
-    require("@tailwindcss/forms"),
-    require("tailwindcss-animated"),
-  ],
+  plugins: [require("nightwind"), require("@tailwindcss/forms"), require("tailwindcss-animated")],
   content: ["./src/**/*.{html,js}"],
   theme: {
     extend: {

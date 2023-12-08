@@ -8,7 +8,7 @@ describe("AwarenessPageOptionComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AwarenessPageOptionComponent]
+      declarations: [AwarenessPageOptionComponent],
     });
     fixture = TestBed.createComponent(AwarenessPageOptionComponent);
     component = fixture.componentInstance;

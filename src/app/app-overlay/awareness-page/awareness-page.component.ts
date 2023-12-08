@@ -30,7 +30,7 @@ export class AwarenessPageComponent {
       this.tabId = decodeURIComponent(params["tabId"]);
       this.outputUrl = new URL(decodeURIComponent(params["outputURL"]));
     });
-    
+
     chrome.storage.sync.get("awarenessPageWidget").then(result => {
       this.widget = result["awarenessPageWidget"];
       isDevMode() ? console.log("widget: ", this.widget) : null;
@@ -38,7 +38,7 @@ export class AwarenessPageComponent {
         this.widget = this.getRandomWidget();
       }
     });
-    
+
     chrome.storage.sync.get(["timerBehavior"]).then(result => {
       this.timerBehavior = result["timerBehavior"] || "None";
       isDevMode() ? console.log("Timer behavior loaded: ", this.timerBehavior) : null;
@@ -61,7 +61,6 @@ export class AwarenessPageComponent {
         }
       }
     }, 50);
-
   }
 
   countdown() {

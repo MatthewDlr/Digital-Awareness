@@ -92,7 +92,7 @@ export const commonWebsites: Website[] = [
   { url: "tv.apple.com", category: category.streaming },
   { url: "canalplus.com", category: category.streaming },
   { url: "mycanal.fr", category: category.streaming },
-  
+
   { url: "amazon.com", category: category.shopping },
   { url: "walmart.com", category: category.shopping },
   { url: "target.com", category: category.shopping },

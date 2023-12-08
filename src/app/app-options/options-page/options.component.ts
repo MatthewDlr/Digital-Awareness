@@ -11,7 +11,14 @@ import { PendingChangesComponent } from "../components/pending-changes/pending-c
 @Component({
   selector: "app-options",
   standalone: true,
-  imports: [AwarenessPageOptionComponent, HighlightedWebsitesOptionComponent, NotificationsOptionComponent, WebsitesPaletteComponent, PendingChangesComponent, CommonModule],
+  imports: [
+    AwarenessPageOptionComponent,
+    HighlightedWebsitesOptionComponent,
+    NotificationsOptionComponent,
+    WebsitesPaletteComponent,
+    PendingChangesComponent,
+    CommonModule,
+  ],
   templateUrl: "./options.component.html",
   styleUrls: ["./options.component.css"],
 })
@@ -25,7 +32,7 @@ export class OptionsComponent {
     private ngZone: NgZone,
   ) {
     this.commandPaletteService.isCommandPaletteShown.subscribe({
-      next: (state) => {
+      next: state => {
         this.isCommandPaletteShown = state;
       },
     });

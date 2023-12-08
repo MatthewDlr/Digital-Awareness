@@ -2,11 +2,11 @@ import { Component, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-notifications-option',
+  selector: "app-notifications-option",
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './notifications-option.component.html',
-  styleUrls: ['./notifications-option.component.css'],
+  templateUrl: "./notifications-option.component.html",
+  styleUrls: ["./notifications-option.component.css"],
 })
 export class NotificationsOptionComponent {
   doomScrollingToggle: boolean = false;

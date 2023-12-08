@@ -8,7 +8,7 @@ describe("WebsitesPaletteComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [WebsitesPaletteComponent]
+      declarations: [WebsitesPaletteComponent],
     });
     fixture = TestBed.createComponent(WebsitesPaletteComponent);
     component = fixture.componentInstance;

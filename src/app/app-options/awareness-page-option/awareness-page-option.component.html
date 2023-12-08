@@ -1,15 +1,15 @@
 <!-- Page Widget -->
 <fieldset class="animate-fade-up animate-delay-0 animate-duration-500">
   <legend class="text-gray-900 text-lg font-semibold leading-6">Page widget</legend>
-  <legend class="text-gray-800 text-sm font-base">Choose the widget you want to display on the page</legend>
+  <legend class="font-base text-gray-800 text-sm">Choose the widget you want to display on the page</legend>
 
   <!-- Random -->
   <label
-    class="bg-white relative mt-5 flex cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all !duration-500 !ease-in-out !transform focus:outline-none"
+    class="bg-white relative mt-5 flex !transform cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
     [ngClass]="
       selectedWidget == 'Random'
-        ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50 border-green-500'
-        : 'border-gray-300 hover:ring-2 hover:ring-green-400 hover:scale-[1.02]'
+        ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
+        : 'border-gray-300 hover:scale-[1.02] hover:ring-2 hover:ring-green-400'
     "
     (click)="updateSelectedWidget('Random')"
   >
@@ -42,8 +42,8 @@
       class="bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       [ngClass]="
         selectedWidget == 'Quotes'
-          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50 border-green-500'
-          : 'border-gray-300 hover:ring-2 hover:ring-green-400 hover:scale-[1.02]'
+          ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
+          : 'border-gray-300 hover:scale-[1.02] hover:ring-2 hover:ring-green-400'
       "
       (click)="updateSelectedWidget('Quotes')"
     >
@@ -76,8 +76,8 @@
       (click)="updateSelectedWidget('Breathing')"
       [ngClass]="
         selectedWidget == 'Breathing'
-          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50 border-green-500'
-          : 'border-gray-300 hover:ring-2 hover:ring-green-400 hover:scale-[1.02]'
+          ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
+          : 'border-gray-300 hover:scale-[1.02] hover:ring-2 hover:ring-green-400'
       "
     >
       <span class="flex flex-1">
@@ -110,7 +110,7 @@
       [ngClass]="
         selectedWidget == 'Tasks'
           ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50'
-          : 'border-gray-300 hover:ring-2 hover:ring-green-400 hover:scale-[1.02]'
+          : 'border-gray-300 hover:scale-[1.02] hover:ring-2 hover:ring-green-400'
       "
     >
       <span class="flex flex-1">
@@ -148,15 +148,15 @@
 
 <!-- Tasks Details -->
 @if (selectedWidget == "Tasks" || selectedWidget == "Random") {
-  <div class="flex flex-col gap-2 mt-4 animate-fade-up animate-delay-100 animate-duration-500">
+  <div class="mt-4 flex animate-fade-up flex-col gap-2 animate-delay-100 animate-duration-500">
     <legend class="text-gray-900 text-sm font-medium">Specify your tasks and the goals you want to achieve</legend>
     @defer {
       @if (!areTasksValid) {
-        <p class="mt-2 text-sm text-red-500">Fill out at least one task</p>
+        <p class="text-red-500 mt-2 text-sm">Fill out at least one task</p>
       }
       <input
         type="text"
-        class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm border placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6 bg-white bg-opacity-50"
+        class="bg-white text-gray-900 block w-full rounded-md border bg-opacity-50 py-1.5 shadow-sm placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6"
         placeholder="Task 1"
         (blur)="updateTasks()"
         (input)="checkIfTasksValid()"
@@ -165,7 +165,7 @@
       />
       <input
         type="text"
-        class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm border placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6 bg-white bg-opacity-50"
+        class="bg-white text-gray-900 block w-full rounded-md border bg-opacity-50 py-1.5 shadow-sm placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6"
         placeholder="Task 2"
         (blur)="updateTasks()"
         (input)="checkIfTasksValid()"
@@ -174,7 +174,7 @@
       />
       <input
         type="text"
-        class="block w-full rounded-md py-1.5 text-gray-900 shadow-sm border placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6 bg-white bg-opacity-50"
+        class="bg-white text-gray-900 block w-full rounded-md border bg-opacity-50 py-1.5 shadow-sm placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6"
         placeholder="Task 3"
         (blur)="updateTasks()"
         (input)="checkIfTasksValid()"
@@ -183,9 +183,9 @@
       />
     } @loading {
       <div class="animate-pulse">
-        <div class="h-4 bg-gray-300 rounded w-1/4"></div>
-        <div class="h-4 bg-gray-300 rounded w-2/3"></div>
-        <div class="h-4 bg-gray-300 rounded w-2/5"></div>
+        <div class="bg-gray-300 h-4 w-1/4 rounded"></div>
+        <div class="bg-gray-300 h-4 w-2/3 rounded"></div>
+        <div class="bg-gray-300 h-4 w-2/5 rounded"></div>
       </div>
     }
   </div>
@@ -194,7 +194,7 @@
 <!-- Timer Behavior -->
 <fieldset class="mt-10 animate-fade-up animate-delay-200 animate-duration-500">
   <legend class="text-gray-900 text-lg font-semibold leading-6">Timer Behavior</legend>
-  <legend class="text-gray-800 text-sm font-base">Choose how the timer should behave when you leave the page</legend>
+  <legend class="font-base text-gray-800 text-sm">Choose how the timer should behave when you leave the page</legend>
 
   <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
     <!-- Pause -->
@@ -202,8 +202,8 @@
       class="bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       [ngClass]="
         timerBehavior == 'Pause'
-          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50 border-green-500'
-          : 'border-gray-300 hover:ring-2 hover:ring-green-400 hover:scale-[1.02]'
+          ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
+          : 'border-gray-300 hover:scale-[1.02] hover:ring-2 hover:ring-green-400'
       "
       (click)="updateTimerBehavior('Pause')"
     >
@@ -236,8 +236,8 @@
       (click)="updateTimerBehavior('Restart')"
       [ngClass]="
         timerBehavior == 'Restart'
-          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50 border-green-500'
-          : 'border-gray-300 hover:ring-2 hover:ring-green-400 hover:scale-[1.02]'
+          ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
+          : 'border-gray-300 hover:scale-[1.02] hover:ring-2 hover:ring-green-400'
       "
     >
       <span class="flex flex-1">
