@@ -7,26 +7,31 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
+  
     - name: Set up Node.js
       uses: actions/setup-node@v4.0.0
       with:
         node-version: '18'
-
+  
     - name: Install dependencies
       run: npm install
+    
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Lint codebase
+      run: eslint . --fix
+    - name: Format codebase
+      run: prettier --write
 
+  build:
+    runs-on: ubuntu-latest
+    steps:
     - name: Build project
       run: npm run build
 
-    - name: Upload package
-      run: npm publish
-      
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.REPO_TOKEN}}
