@@ -1,7 +1,7 @@
 # Digital Awareness
 Unlearn bad digital habits
 
-Supported Browsers
+Supported Browsers <br>
 ![Google Chrome](https://img.shields.io/badge/Google_chrome-4285F4?style=for-the-badge&logo=Google-chrome&logoColor=white)
 
 ## Development Setup
@@ -26,11 +26,11 @@ If you modify the manifest, or the .ts files at the root of the project, you wil
 For everything related to the angular app, you can simply close and reopen the page.
 
 ### Lint
-https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E
+![Prettier](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E) <br>
 This project relies on eslint and prettier to enforce a unified and clean code style.
 
-Run `npm run lint` to lint the project ; also a hook is setup to run the linter before each commit. 
-Please do not commit if the linter fails and do not disable the linter.
+Run `npm run lint` to lint the project ; also a hook is setup to run the linter before each commit. <br>
+Please **do not** commit if the linter fails and **do not** disable the linter.
 
 ### Test
 Currently, tests are not implemented.
@@ -48,9 +48,9 @@ If you find a bug or have a feature request, please open an issue on the issue t
 Pull requests are welcome. Please make sure that your changes reflect the vision of the project.
 
 ## License
-This project is licensed under Commons Clause License. 
-Lern more at https://commonsclause.com.
+This project is licensed under Commons Clause License. <br>
+Learn more at https://commonsclause.com.
 
 ## Credits
-Made with ❤️ by Matthieu Delarue, 2023.
-This project is inspired by the Digital Wellbeing feature, introduced in Android 9 and made by Google.
+Made with ❤️ by Matthieu Delarue, 2023. <br>
+This project is inspired by the [Digital Wellbeing feature](https://www.android.com/digital-wellbeing), introduced in Android 9 and made by Google.
