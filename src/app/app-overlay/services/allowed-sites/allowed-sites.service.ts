@@ -33,21 +33,17 @@ export class AllowedSitesService {
   }
 
   getTimerValue(website: string): number {
-    if (isDevMode()) {
-      return 5;
-    }
-
     website = this.removeWWW(website);
 
     const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == website);
     if (enforcedWebsite) {
       this.websiteOrigin = "Enforced";
-      return enforcedWebsite.timer;
+      return isDevMode() ? 5 : enforcedWebsite.timer;
     } else {
       const userWebsite = this.userWebsites.find(userWebsite => userWebsite.host == website);
       if (userWebsite) {
         this.websiteOrigin = "User";
-        return userWebsite.timer;
+        return isDevMode() ? 5 : userWebsite.timer;
       }
     }
     isDevMode() ? console.error("Website not found in enforcedWebsites or userWebsites: ", website) : null;

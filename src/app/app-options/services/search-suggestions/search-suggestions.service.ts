@@ -1,7 +1,6 @@
-import { Injectable, isDevMode } from "@angular/core";
+import { Injectable } from "@angular/core";
 import FuzzySearch from "fuzzy-search";
 import { mostPopularWebsites, Website, searchSuggestions } from "../../common/websites-list";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { watchedWebsite, category } from "../../../types";
 
 const COMMONS_HOSTS_EXTENSIONS = [".com", ".org", ".io", ".co"];
@@ -9,25 +8,19 @@ const COMMONS_HOSTS_EXTENSIONS = [".com", ".org", ".io", ".co"];
 @Injectable({
   providedIn: "root",
 })
-export class SearchSuggestionsService {
+export class SearchService {
   private websiteSearch: FuzzySearch<Website>;
   private enforcedWebsites: watchedWebsite[] = [];
   userWebsites: watchedWebsite[] = [];
-  results: searchSuggestions = {
-    websites: [],
-    customWebsites: [],
-    selectedWebsites: [],
+  suggestions: searchSuggestions = {
+    Suggestions: [],
+    Results: [],
+    Selected: [],
   };
 
   constructor() {
-    chrome.storage.sync.get("userWebsites").then(result => {
-      this.userWebsites = result["userWebsites"] || [];
-    });
-    chrome.storage.local.get("enforcedWebsites").then(result => {
-      this.enforcedWebsites = result["enforcedWebsites"] || [];
-    });
-
-    this.websiteSearch = new FuzzySearch(mostPopularWebsites, ["url", "category"], {
+    this.loadStoredWebsites();
+    this.websiteSearch = new FuzzySearch(mostPopularWebsites, ["host", "category"], {
       caseSensitive: false,
       sort: true,
     });
@@ -35,53 +28,69 @@ export class SearchSuggestionsService {
 
   performSearch(searchQuery: string) {
     if (searchQuery.trim() == "") {
-      this.results.websites = [];
-      this.results.customWebsites = [];
+      this.suggestions.Suggestions = [];
+      this.suggestions.Results = [];
       return;
     }
 
     searchQuery = this.cleanURL(searchQuery);
-    isDevMode() ? console.log("searchQuery: ", searchQuery) : null;
     this.searchInWebsites(searchQuery);
     this.generateCustomWebsites(searchQuery);
   }
 
   addSelectedWebsite(website: Website) {
-    if (this.results.selectedWebsites.find(selectedWebsite => selectedWebsite.host == website.host)) {
+    if (this.suggestions.Selected.find(selectedWebsite => selectedWebsite.host == website.host)) {
       return;
     }
-    this.results.selectedWebsites.push(website);
+    this.suggestions.Selected.push(website);
   }
 
   removeSelectedWebsite(website: Website) {
-    const index = this.results.selectedWebsites.indexOf(website);
-    this.results.selectedWebsites.splice(index, 1);
+    const index = this.suggestions.Selected.indexOf(website);
+    this.suggestions.Selected.splice(index, 1);
+  }
+
+  clearSuggestions() {
+    for (const website of this.suggestions.Selected) {
+      website.isSelected = false;
+    }
+    this.suggestions.Selected = [];
+    this.suggestions.Suggestions = [];
+    this.suggestions.Results = [];
+  }
+
+  loadStoredWebsites() {
+    chrome.storage.sync.get("userWebsites").then(result => {
+      this.userWebsites = result["userWebsites"] || [];
+    });
+    chrome.storage.local.get("enforcedWebsites").then(result => {
+      this.enforcedWebsites = result["enforcedWebsites"] || [];
+    });
   }
 
   private searchInWebsites(searchQuery: string) {
-    let searchResults = this.websiteSearch.search(searchQuery);
-    isDevMode() ? console.log(searchResults) : null;
-    searchResults = searchResults.filter(result => !this.isWebsiteBlocked(result.host));
-    searchResults.slice(0, 5);
-
-    this.results.websites = searchResults;
+    const searchResults = this.websiteSearch.search(searchQuery).slice(0, 5);
+    searchResults.forEach(website => {
+      website.isBlocked = this.isWebsiteBlocked(website.host);
+    });
+    this.suggestions.Suggestions = searchResults;
   }
 
   private generateCustomWebsites(searchQuery: string) {
-    this.results.customWebsites = [];
+    this.suggestions.Results = [];
 
     // Check if the url end with a . + 2, 3 or 4 characters
     const hasAnExtension = searchQuery.match(new RegExp(/\.([a-z0-9]{2,5})$/));
     if (!hasAnExtension) {
       for (const extension of COMMONS_HOSTS_EXTENSIONS) {
-        this.results.customWebsites.push({
+        this.suggestions.Results.push({
           host: searchQuery + extension,
           category: category.unknown,
           isBlocked: this.isWebsiteBlocked(searchQuery + extension) ? true : false,
         });
       }
     }
-    this.results.customWebsites.push({
+    this.suggestions.Results.push({
       host: searchQuery,
       category: category.unknown,
       isBlocked: this.isWebsiteBlocked(searchQuery) ? true : false,

@@ -30,7 +30,7 @@
           (input)="onSearch($event)"
           type="text"
           class="text-gray-800 h-12 w-full border-0 bg-transparent pr-4 placeholder-gray-400 focus:ring-0 sm:text-sm"
-          placeholder="Search a website or a category"
+          placeholder="Type a website to get started"
           role="combobox"
           aria-expanded="false"
           aria-controls="options"
@@ -70,27 +70,34 @@
 
       <!--Search Results-->
       <div class="mt-3 h-full max-h-96 overflow-y-scroll rounded-md">
-        @for (category of searchSuggestionService.results | keyvalue :sortCategories; track $index) {
-          <!-- Websites Results-->
-          @if (category.value) {
-            <h2 class="text-gray-900 mt-2 animate-fade-up text-sm font-semibold !transition-all animate-duration-300">
+        <!-- No Results -->
+        @if (searchService.suggestions.Results.length == 0 && searchService.suggestions.Selected.length == 0 && searchService.suggestions.Suggestions.length == 0 ) {
+          <app-search-animation></app-search-animation>
+        }
+
+        @for (category of searchService.suggestions | keyvalue: sortCategories; track $index) {
+          <!-- Category Name -->
+          @if (category.value.length > 0) {
+            <h2 class="text-gray-900 mt-3 animate-fade-up text-sm font-semibold !transition-all animate-duration-300">
               {{ category.key }}
             </h2>
           }
 
+          <!-- Category Results -->
           @for (website of category.value; track $index) {
             <ul class="mt-2">
               <li
-                class="group text-gray-500 flex animate-fade-up cursor-default select-none items-center rounded-lg p-3 !transition-all animate-duration-300"
+                class="group text-gray-500 flex animate-fade-up cursor-default select-none items-center rounded-lg px-3 py-2 !transition-all animate-duration-300"
                 (click)="toggleWebsiteSelection(website)"
-                [ngClass]="
+                [ngClass]="[
                   website.isSelected
-                    ? 'text-green-500 bg-green-100 bg-opacity-75 dark:bg-opacity-50'
-                    : 'bg-opacity-75 hover:bg-gray-100 dark:bg-opacity-50'
-                "
+                    ? 'text-green-500 bg-green-100 bg-opacity-50'
+                    : 'hover:bg-gray-200 hover:bg-opacity-50',
+                  website.isBlocked ? 'cursor-not-allowed' : ''
+                ]"
               >
                 <div class="text-gray-600 flex w-4/5 items-baseline justify-start gap-3">
-                  <span class="text-base font-medium">
+                  <span class="text-base font-normal">
                     {{ website.host }}
                   </span>
 

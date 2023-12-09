@@ -1,14 +1,15 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, HostListener, isDevMode } from "@angular/core";
 import { CommandPaletteService } from "../../services/command-palette/command-palette.service";
-import { SearchSuggestionsService } from "../../services/search-suggestions/search-suggestions.service";
+import { SearchService } from "../../services/search-suggestions/search-suggestions.service";
 import { Website } from "../../common/websites-list";
 import { watchedWebsite, category } from "../../../types";
+import { SearchAnimationComponent } from "../search-animation/search-animation.component";
 import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-websites-palette",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SearchAnimationComponent],
   templateUrl: "./websites-palette.component.html",
   styleUrls: ["./websites-palette.component.css"],
 })
@@ -17,8 +18,11 @@ export class WebsitesPaletteComponent implements AfterViewInit {
 
   constructor(
     private commandPaletteService: CommandPaletteService,
-    public searchSuggestionService: SearchSuggestionsService,
-  ) {}
+    public searchService: SearchService,
+  ) {
+    this.searchService.loadStoredWebsites();
+    this.searchService.clearSuggestions();
+  }
 
   // Focus on the search input when the component is loaded
   @ViewChild("search") searchInput!: ElementRef;
@@ -41,24 +45,29 @@ export class WebsitesPaletteComponent implements AfterViewInit {
   }
 
   blockSelectedWebsites() {
-    const userWebsites = this.searchSuggestionService.userWebsites;
-    if (userWebsites.length == 0) {
+    const userWebsites = this.searchService.userWebsites;
+    const selectedWebsites = this.searchService.suggestions.Selected;
+
+    if (selectedWebsites.length == 0) {
+      this.toggleCommandPalette(false);
+      isDevMode() ? console.log("No websites selected, nothing to save") : null;
       return;
     }
 
-    for (const selectedWebsite of this.searchSuggestionService.results.selectedWebsites) {
-      if (!userWebsites.find(userWebsite => userWebsite.host == selectedWebsite.host)) {
-        userWebsites.push(this.createWatchedWebsite(selectedWebsite.host));
-      }
+    for (const selectedWebsite of selectedWebsites) {
+      userWebsites.push(this.createWatchedWebsite(selectedWebsite));
     }
-    isDevMode() ? console.log(userWebsites) : null;
     chrome.storage.sync
       .set({ userWebsites: userWebsites })
       .then(() => {
-        this.saveError = false;
+        this.searchService.clearSuggestions();
         this.toggleCommandPalette(false);
+        chrome.storage.sync.get("userWebsites").then(result => {
+          console.log("Saved websites:", result["userWebsites"]);
+        });
       })
       .catch(error => {
+        this.searchService.loadStoredWebsites();
         console.error("Error while blocking websites:", error);
         this.saveError = true;
       });
@@ -70,7 +79,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
 
   onSearch(event: Event) {
     const searchQuery = (event.target as HTMLInputElement).value;
-    this.searchSuggestionService.performSearch(searchQuery);
+    this.searchService.performSearch(searchQuery);
   }
 
   toggleWebsiteSelection(website: Website) {
@@ -79,25 +88,25 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     }
     website.isSelected = !website.isSelected;
     if (website.isSelected) {
-      this.searchSuggestionService.addSelectedWebsite(website);
+      this.searchService.addSelectedWebsite(website);
     } else {
-      this.searchSuggestionService.removeSelectedWebsite(website);
+      this.searchService.removeSelectedWebsite(website);
     }
   }
 
   sortCategories = (a: any, b: any) => {
-    const order: { [key: string]: number } = { websites: 1, customWebsites: 2, selectedWebsites: 3 };
+    const order: { [key: string]: number } = { Suggestions: 1, Results: 2, Selected: 3 };
     return (order[a.key] || 0) - (order[b.key] || 0);
   };
 
-  private createWatchedWebsite(host: string): watchedWebsite {
+  private createWatchedWebsite(website: Website): watchedWebsite {
     return {
-      host: host,
+      host: website.host,
       timer: 30,
       allowedUntil: "",
       timesBlocked: 0,
       timesAllowed: 0,
-      category: category.unknown,
+      category: website.category || category.unknown,
     };
   }
 }
