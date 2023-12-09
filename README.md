@@ -53,4 +53,4 @@ Learn more at https://commonsclause.com.
 
 ## Credits
 Made with ❤️ by Matthieu Delarue, 2023. <br>
-This project is inspired by the [Digital Wellbeing feature](https://www.android.com/digital-wellbeing), introduced in Android 9 and made by Google.
+This project is inspired by the [Digital Wellbeing experiment](https://www.android.com/digital-wellbeing), introduced in Android 9 by Google.
