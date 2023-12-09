@@ -88,12 +88,12 @@ export class AllowedSitesService {
     }
   }
 
-  removeWWW(website: string): string {
+  private removeWWW(website: string): string {
     if (website.substring(0, 3) == "www") return website.substring(4);
     return website;
   }
 
-  updateWebsiteAllowedDate(website: watchedWebsite, duration: number) {
+  private updateWebsiteAllowedDate(website: watchedWebsite, duration: number) {
     website.allowedUntil = new Date(Date.now() + duration * 60000).toString();
     website.timesAllowed++;
   }
