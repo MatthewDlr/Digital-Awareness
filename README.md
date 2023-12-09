@@ -2,17 +2,17 @@
 Unlearn bad digital habits
 
 Supported Browsers
-https://img.shields.io/badge/Google_chrome-4285F4?style=for-the-badge&logo=Google-chrome&logoColor=white
+![Google Chrome](https://img.shields.io/badge/Google_chrome-4285F4?style=for-the-badge&logo=Google-chrome&logoColor=white)
 
 ## Development Setup
 [![Build Extension](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/build.yml/badge.svg)](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/build.yml)
 
 ### Tech Stack
-https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white
-https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
-https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white
-
+![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=Webpack&logoColor=white)
 
 ### Installation
 Run `npm install` to install get started and install all dependencies.
@@ -40,11 +40,6 @@ Run `ng build` to build the project for production.
 The build artifacts will be stored in the `dist/` directory.
 
 ## Contributing
-
-### Contributors
-<a href = "https://github.com/madushadhanushka/simple-sqlite/graphs/contributors">
-  <img src = "https://contrib.rocks/image?repo=madushadhanushka/simple-sqlite"/>
-</a>
 
 ### Issues
 If you find a bug or have a feature request, please open an issue on the issue tracker.
