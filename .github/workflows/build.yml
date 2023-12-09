@@ -45,6 +45,7 @@ jobs:
           path: ./digital-awareness.zip
 
   publish:
+    needs: build
     runs-on: ubuntu-latest
     steps:
 
