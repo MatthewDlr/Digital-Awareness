@@ -7,6 +7,7 @@ import { NotificationsOptionComponent } from "../notifications-option/notificati
 import { CommonModule } from "@angular/common";
 import { WebsitesPaletteComponent } from "../components/websites-palette/websites-palette.component";
 import { PendingChangesComponent } from "../components/pending-changes/pending-changes.component";
+import { AboutComponent } from "../about/about.component";
 
 @Component({
   selector: "app-options",
@@ -17,6 +18,7 @@ import { PendingChangesComponent } from "../components/pending-changes/pending-c
     NotificationsOptionComponent,
     WebsitesPaletteComponent,
     PendingChangesComponent,
+    AboutComponent,
     CommonModule,
   ],
   templateUrl: "./options.component.html",
