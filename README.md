@@ -15,7 +15,7 @@ Supported Browsers <br>
 ![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=Webpack&logoColor=white)
 
 ### Installation
-Run `npm install` to install get started and install all dependencies.
+Run `npm install` to get started and install all dependencies.
 
 ### Develop
 Run `npm run watch` to start the development server.
