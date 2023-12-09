@@ -88,7 +88,8 @@
         @if (
           searchService.suggestions.Results.length == 0 &&
           searchService.suggestions.Selected.length == 0 &&
-          searchService.suggestions.Suggestions.length == 0
+          searchService.suggestions.Suggestions.length == 0 &&
+          saveError == false
         ) {
           <app-search-animation></app-search-animation>
         }

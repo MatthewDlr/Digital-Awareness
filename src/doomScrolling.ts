@@ -62,11 +62,12 @@ function checkChanges() {
     clearInterval(intervalId);
     window.removeEventListener("scroll", function () {});
     sendNotification();
-    if (!isDevMode) {
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }, 1000);
-    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setTimeout(() => {
+      if (window.scrollY > 0) {
+        window.scrollTo({ top: 0 });
+      }
+    }, 1000);
   }
 }
 
