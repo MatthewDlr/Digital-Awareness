@@ -36,20 +36,20 @@ jobs:
         run: npm run build
 
       - name: Zip build 
-        run: zip -r extension.zip dist
+        run: zip -r digital-awareness.zip dist
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
           name: digital-awareness
-          path: /dist
+          path: ./digital-awareness.zip
 
   publish:
     runs-on: ubuntu-latest
     steps:
 
     - name: Download artifact
-      uses: actions/download-artifact@v3.1.3
+      uses: actions/download-artifact@v3
       with:
         name: digital-awareness
 
