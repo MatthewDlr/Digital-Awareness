@@ -1,7 +1,7 @@
 import { Component, HostListener } from "@angular/core";
 import { watchedWebsite } from "src/app/types";
-import { CommandPaletteService } from "../../services/command-palette/command-palette.service";
-import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
+import { CommandPaletteService } from "../services/command-palette/command-palette.service";
+import { PendingChangesService } from "../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 

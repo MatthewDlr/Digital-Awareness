@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { Routes } from "@angular/router";
 import { PopupComponent } from "./popup/popup.component";
-import { OptionsComponent } from "./app-options/components/options-page/options.component";
+import { OptionsComponent } from "./app-options/options-page/options.component";
 import { AwarenessPageComponent } from "./app-overlay/awareness-page/awareness-page.component";
 
 const routes: Routes = [
