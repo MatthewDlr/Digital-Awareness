@@ -35,14 +35,11 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Zip build 
-        run: cd dist && zip -r digital-awareness.zip .
-
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
           name: digital-awareness
-          path: ./dist/digital-awareness.zip
+          path: /dist 
 
   publish:
     needs: build
