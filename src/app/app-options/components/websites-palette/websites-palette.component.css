@@ -1,3 +1,7 @@
+.animate-jump-custom {
+  animation: jump 0.25s forwards ease-out;
+}
+
 @keyframes jump {
   0% {
     transform: scale(80%);
@@ -8,7 +12,4 @@
   100% {
     transform: scale(100%);
   }
-}
-.animate-jump-custom {
-  animation: jump 0.25s forwards ease-out;
 }

@@ -5,16 +5,18 @@ import { Website } from "../../common/websites-list";
 import { watchedWebsite, category } from "../../../types";
 import { SearchAnimationComponent } from "../search-animation/search-animation.component";
 import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: "app-websites-palette",
   standalone: true,
-  imports: [CommonModule, SearchAnimationComponent],
+  imports: [CommonModule, SearchAnimationComponent, FormsModule],
   templateUrl: "./websites-palette.component.html",
   styleUrls: ["./websites-palette.component.css"],
 })
 export class WebsitesPaletteComponent implements AfterViewInit {
   saveError: boolean = false;
+  searchQuery: string = "";
 
   constructor(
     private commandPaletteService: CommandPaletteService,
@@ -24,8 +26,10 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     this.searchService.clearSuggestions();
   }
 
-  // Focus on the search input when the component is loaded
   @ViewChild("search") searchInput!: ElementRef;
+  @ViewChild("saveError") saveErrorElement!: ElementRef;
+
+  // Focus on the search input when the component is loaded
   ngAfterViewInit(): void {
     this.searchInput.nativeElement.focus();
   }
@@ -67,9 +71,15 @@ export class WebsitesPaletteComponent implements AfterViewInit {
         });
       })
       .catch(error => {
+        this.saveError = true;
         this.searchService.loadStoredWebsites();
         console.error("Error while blocking websites:", error);
-        this.saveError = true;
+        setTimeout(() => {
+          this.saveErrorElement.nativeElement.classList.remove("animate-shake");
+          setTimeout(() => {
+            this.saveErrorElement.nativeElement.classList.add("animate-shake");
+          }, 25);
+        }, 50);
       });
   }
 
@@ -77,9 +87,13 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     this.commandPaletteService.toggleCommandPalette(state);
   }
 
-  onSearch(event: Event) {
-    const searchQuery = (event.target as HTMLInputElement).value;
-    this.searchService.performSearch(searchQuery);
+  onSearch() {
+    this.searchService.performSearch(this.searchQuery);
+  }
+
+  onClear() {
+    this.searchQuery = "";
+    this.searchService.performSearch(this.searchQuery);
   }
 
   toggleWebsiteSelection(website: Website) {
