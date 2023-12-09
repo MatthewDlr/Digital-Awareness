@@ -42,14 +42,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: digital-awareness
-          path: digital-awareness.zip
+          path: /dist
 
   publish:
     runs-on: ubuntu-latest
     steps:
 
     - name: Download artifact
-      uses: actions/download-artifact@v3v3.1.3
+      uses: actions/download-artifact@v3.1.3
       with:
         name: digital-awareness
 
