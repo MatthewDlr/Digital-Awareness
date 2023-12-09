@@ -36,7 +36,7 @@ jobs:
         run: npm run build
 
       - name: Zip build 
-        run: zip -r digital-awareness.zip
+        run: cd dist && zip -r ../digital-awareness.zip .
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
