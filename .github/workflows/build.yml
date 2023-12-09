@@ -2,36 +2,63 @@ name: Build Extension
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-  
-    - name: Set up Node.js
-      uses: actions/setup-node@v4.0.0
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: "18"
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint codebase
+        run: npm run lint
+
+      - name: Build project
+        run: npm run build
+
+      - name: Zip build 
+        run: zip -r extension.zip dist
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: digital-awareness
+          path: digital-awareness.zip
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Download artifact
+      uses: actions/download-artifact@v3
       with:
-        node-version: '18'
+        name: digital-awareness
 
-    - name: Cache dependencies
-      uses: actions/cache@v3
+    - name: Upload to Chrome Web Store
+      uses: mobilefirstllc/cws-publish@latest
       with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-
-    - name: Install dependencies
-      run: npm install
-    
-    - name: Lint codebase
-      run: npm run lint
-
-    - name: Build project
-      run: npm run build
-
+        action: "testers" # one of: upload, publish, testers
+        client_id: ${{ secrets.CLIENT }}
+        client_secret: ${{ secrets.SECRET }}
+        refresh_token: ${{ secrets.TOKEN }}
+        extension_id: "32-CHAR EXTENSION ID"
+        zip_file: "./digital-awareness.zip"
