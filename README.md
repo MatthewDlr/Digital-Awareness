@@ -25,6 +25,12 @@ Then click on `Load unpacked` and select the `dist/` directory.
 If you modify the manifest, or the .ts files at the root of the project, you will need to reload the extension to see the changes.
 For everything related to the angular app, you can simply close and reopen the page.
 
+### Dependencies
+Please, be cautious when adding new dependencies to the project. <br>
+If you need to add a new dependency, make sure it is really necessary and that it is well maintained.
+
+If a dependency is creating conflicts, never, ever, use `--force` to add it anyway<br>
+
 ### Lint
 ![Prettier](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E) <br>
 This project relies on eslint and prettier to enforce a unified and clean code style.
