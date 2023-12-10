@@ -34,6 +34,10 @@ export class AwarenessPageOptionComponent {
   updateSelectedWidget(widget: string) {
     this.selectedWidget = widget;
     chrome.storage.sync.set({ awarenessPageWidget: widget });
+
+    if (widget == "Tasks" || widget == "Random") {
+      this.checkIfTasksValid();
+    }
   }
 
   updateTimerBehavior(timerBehavior: string) {
