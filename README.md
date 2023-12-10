@@ -33,7 +33,7 @@ Run `npm run watch` to start the development server.
 To test the extension, go to `chrome://extensions/` and enable developer mode.
 Then click on `Load unpacked` and select the `dist/` directory.
 
-Currently, you can't use `ng serve` to start the development server since it doesn't run the custom webpack configuration and some files are missing from the compilation.
+Currently, you can't use `ng serve` to start the development server since it doesn't run the custom webpack configuration, some files are missing from the compilation.
 
 If you modify the manifest, or the .ts files at the root of the project, you will need to reload the extension to see the changes.
 For everything related to the angular app, you can simply close and reopen the page.
