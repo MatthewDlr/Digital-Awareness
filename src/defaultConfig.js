@@ -131,6 +131,7 @@ export function defaultConfig() {
 
   chrome.storage.sync
     .set({
+      isActivated: true, // Extension activation
       timeAllowed: 30, // Default time allowed (in minutes)
       awarenessPageWidget: "Quotes", // Widget to display on the awareness page
       timerBehavior: "Pause", // What to do when the awareness page is not focused

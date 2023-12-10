@@ -7,7 +7,7 @@ import { AwarenessPageComponent } from "./app-overlay/awareness-page/awareness-p
 
 const routes: Routes = [
   { path: "popup", component: PopupComponent },
-  { path: "options", component: OptionsComponent },
+  { path: "options/:tab", component: OptionsComponent },
   { path: "blocked/:tabId/:outputURL", component: AwarenessPageComponent },
 ];
 

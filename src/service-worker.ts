@@ -33,7 +33,25 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 });
 
 chrome.runtime.onInstalled.addListener(() => {
-  defaultConfig();
+  chrome.storage.sync.get(["isActivated"]).then(result => {
+    if (result["isActivated"]) {
+      console.log("Extension already activated");
+    } else {
+      defaultConfig();
+    }
+  });
+});
+
+chrome.runtime.onUpdateAvailable.addListener(function (details) {
+  console.log("updating to version " + details.version);
+  chrome.runtime.reload();
+  const redirectUrl = chrome.runtime.getURL("index.html#options/about");
+  chrome.tabs.create({ url: redirectUrl });
+});
+
+chrome.runtime.onSuspend.addListener(function () {
+  console.log("Unloading.");
+  chrome.storage.sync.set({ isActivated: false });
 });
 
 chrome.tabs.onRemoved.addListener(function (tabid) {
