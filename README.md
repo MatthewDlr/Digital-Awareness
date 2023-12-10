@@ -1,6 +1,6 @@
 <p align="center">
      
-  <img width="175" src="https://github.com/MatthewDlr/Digital-Awareness/assets/57815261/0ec3f885-5c1a-4898-b351-fce217ca932b" alt="Digital Awareness logo">
+  <img width="150" src="https://github.com/MatthewDlr/Digital-Awareness/assets/57815261/0ec3f885-5c1a-4898-b351-fce217ca932b" alt="Digital Awareness logo">
 </p>
 
 <h3 align="center">Digital Awareness</h3>
