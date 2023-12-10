@@ -18,6 +18,7 @@
 ## Features
 ✅ Prevent yourself from opening distracting websites mindlessly <br>
 ✅ Automatically adapts based on your usage <br>
+✅ Get insights on your digital habits <br>
 ✅ Add your own websites <br>
 ✅ Customize the page with quotes, breathing exercises or your own goals <br>
 ✅ Prevent doom scrolling <br>
