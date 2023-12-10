@@ -1,6 +1,7 @@
 # Digital Awareness
 Unlearn bad digital habits
 
+
 Supported Browsers <br>
 ![Google Chrome](https://img.shields.io/badge/Google_chrome-4285F4?style=for-the-badge&logo=Google-chrome&logoColor=white)
 
@@ -46,6 +47,7 @@ Run `ng build` to build the project for production.
 The build artifacts will be stored in the `dist/` directory.
 
 ## Contributing
+⭐ Star us, it motivates us a lot!
 
 ### Issues
 If you find a bug or have a feature request, please open an issue on the [issues tracker](https://github.com/MatthewDlr/Digital-Awareness/issues).
