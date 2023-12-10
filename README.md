@@ -48,7 +48,7 @@ The build artifacts will be stored in the `dist/` directory.
 ## Contributing
 
 ### Issues
-If you find a bug or have a feature request, please open an issue on the issue tracker.
+If you find a bug or have a feature request, please open an issue on the [issues tracker](https://github.com/MatthewDlr/Digital-Awareness/issues).
 
 ### Pull Requests
 Pull requests are welcome. Please make sure that your changes reflect the vision of the project.
