@@ -1,0 +1,66 @@
+name: Build Extension
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: "18"
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint codebase
+        run: npm run lint
+
+      - name: Build project
+        run: npm run build
+
+      - name: Zip build artifact
+        run: cd dist && zip -r digital-awareness.zip .
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: digital-awareness
+          path: dist/digital-awareness.zip
+          retention-days: 7
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: digital-awareness
+
+    - name: Upload to Chrome Web Store
+      uses: mobilefirstllc/cws-publish@latest
+      with:
+        action: "testers" # one of: upload, publish, testers
+        client_id: ${{ secrets.CLIENT_ID }}
+        client_secret: ${{ secrets.CLIENT_SECRET }}
+        refresh_token: ${{ secrets.REFRESH_TOKEN }}
+        extension_id: ${{ vars.EXTENSION_ID}}
+        zip_file: "./digital-awareness.zip"
