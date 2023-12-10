@@ -1,9 +1,19 @@
-# Digital Awareness
-Unlearn bad digital habits
+<p align="center">
+     
+  <img width="175" src="https://github.com/MatthewDlr/Digital-Awareness/assets/57815261/0ec3f885-5c1a-4898-b351-fce217ca932b" alt="Digital Awareness logo">
+</p>
+
+<h3 align="center">Digital Awareness</h3>
+<h4 align="center">Unlearn bad digital habits</h4>
 
 
-Supported Browsers <br>
-![Google Chrome](https://img.shields.io/badge/Google_chrome-4285F4?style=for-the-badge&logo=Google-chrome&logoColor=white)
+<p align="center">
+  
+  <img width="175" src="https://img.shields.io/badge/Google_chrome-4285F4?style=for-the-badge&logo=Google-chrome&logoColor=white" alt="Google Chrome"> 
+  
+</p>
+
+<br>
 
 ## Development Setup
 [![Build Extension](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/build.yml/badge.svg)](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/build.yml)
