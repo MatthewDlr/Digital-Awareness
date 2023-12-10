@@ -10,7 +10,7 @@
   },
   "host_permissions": ["*://*/*"],
   "permissions": ["storage", "tabs", "activeTab", "webNavigation", "unlimitedStorage", "notifications"],
-  "options_page": "index.html#/options/about",
+  "options_page": "index.html#/options/''",
   "background": {
     "service_worker": "serviceWorker.js",
     "type": "module"
