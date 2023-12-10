@@ -10,11 +10,10 @@ export type watchedWebsite = {
 export enum category {
   social = "Social",
   streaming = "Streaming",
-  adult = "Adult",
   gambling = "Gambling",
   games = "Games",
   shopping = "Shopping",
   news = "News",
   music = "Music",
-  unknown = ""
+  unknown = "",
 }

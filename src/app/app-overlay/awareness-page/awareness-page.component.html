@@ -3,8 +3,7 @@
 >
   <!-- Timer -->
   <div
-    class="fade-in-bottom bg-white flex min-h-[5rem] min-w-[5rem] items-center justify-center rounded-lg bg-opacity-40"
-    style="--delay: 0.1s"
+    class="bg-white flex min-h-[5rem] min-w-[5rem] animate-fade-up items-center justify-center rounded-lg bg-opacity-40 animate-duration-500"
   >
     <label class="text-gray-900 text-3xl" [ngClass]="timerValue() < 6 ? 'animate-bounce' : ''">{{
       timerValue()
@@ -12,7 +11,7 @@
   </div>
 
   <!-- Widget -->
-  <div class="fade-in-bottom" style="--delay: 0.3s">
+  <div class="animate-fade-up animate-delay-200 animate-duration-500">
     @switch (widget) {
       @case ("Quotes") {
         <app-quotes-widget></app-quotes-widget>
@@ -28,9 +27,9 @@
 
   <div class="flex flex-col items-center justify-center gap-5">
     <!-- Go Back Button -->
-    <div class="fade-in-bottom m-3" style="--delay: 0.6s" (click)="closeBlockPage()">
+    <div class="animate-fade-up animate-delay-[400ms] animate-duration-500" (click)="closeBlockPage()">
       <button
-        class="rotating-stroke bg-white text-gray-800 border-purple-500 inline-flex items-center rounded-md border-b-2 bg-opacity-40 px-6 py-2 font-bold shadow-md !transition-all delay-100 hover:text-white hover:bg-purple-500 hover:border-purple-600 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500 hover:transition-all"
+        class="bg-white text-gray-800 border-purple-500 inline-flex items-center rounded-md border-b-2 bg-opacity-40 px-6 py-2 font-bold shadow-md !transition-all delay-100 animate-duration-300 animate-ease-in-out hover:text-white hover:bg-purple-500 hover:border-purple-600 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500 hover:transition-all"
       >
         <span class="mr-2 text-sm font-medium">Go Back</span>
         <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -47,15 +46,13 @@
       <button
         class="text-gray-500 text-sm underline opacity-50"
         (click)="skipTimer()"
-        [ngClass]="timerValue() == 0 ? 'fade-in-bottom-small' : ''"
-        style="--delay: 0.3s"
+        [ngClass]="timerValue() == 0 ? 'animate-fade-up animate-duration-500' : ''"
       >
         Continue to {{ outputUrl.hostname }}
       </button>
       <label
         class="text-gray-500 text-sm opacity-50"
-        [ngClass]="timerValue() == 0 ? 'fade-in-bottom-small' : ''"
-        style="--delay: 0.5s"
+        [ngClass]="timerValue() == 0 ? 'animate-fade-up animate-delay-300 animate-duration-500' : ''"
         >Otherwise, tab will close on its own
       </label>
     </div>

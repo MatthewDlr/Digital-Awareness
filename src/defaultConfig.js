@@ -131,6 +131,7 @@ export function defaultConfig() {
 
   chrome.storage.sync
     .set({
+      isActivated: true, // Extension activation
       timeAllowed: 30, // Default time allowed (in minutes)
       awarenessPageWidget: "Quotes", // Widget to display on the awareness page
       timerBehavior: "Pause", // What to do when the awareness page is not focused
@@ -141,29 +142,29 @@ export function defaultConfig() {
       userCategories: [
         {
           name: "News",
-          isActive: false
+          isActive: false,
         },
         {
           name: "Social",
-          isActive: false
+          isActive: false,
         },
         {
           name: "Shopping",
-          isActive: false
+          isActive: false,
         },
         {
           name: "Streaming",
-          isActive: false
+          isActive: false,
         },
         {
           name: "Adult",
-          isActive: false
+          isActive: false,
         },
         {
           name: "Gambling",
-          isActive: false
-        }
-      ]
+          isActive: false,
+        },
+      ],
     })
     .then(() => {
       console.info("sync set");

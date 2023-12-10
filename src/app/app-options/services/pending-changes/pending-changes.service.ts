@@ -6,7 +6,7 @@ import { BehaviorSubject } from "rxjs";
   providedIn: "root",
 })
 export class PendingChangesService {
-  stage: BehaviorSubject<stages> = new BehaviorSubject<stages>(stages.NoChanges);  
+  stage: BehaviorSubject<stages> = new BehaviorSubject<stages>(stages.NoChanges);
   validationDate: BehaviorSubject<Date> = new BehaviorSubject<Date>(new Date());
 
   websitesToDelete: Set<string> = new Set();
@@ -130,7 +130,7 @@ export class PendingChangesService {
       isDevMode() ? console.log("Changes can be validated") : null;
       return true;
     }
-    isDevMode() ? console.warn("Changes can't be validated yet") : null;
+    isDevMode() ? console.log("Changes can't be validated yet") : null;
     return false;
   }
 
@@ -169,6 +169,6 @@ export class PendingChangesService {
 export enum stages {
   // Value are used as a string because they are used in the html template
   NoChanges = "NoChanges",
-  ChangesPending = "ChangesPending", 
-  ChangesCanBeValidated = "ChangesCanBeValidated", 
+  ChangesPending = "ChangesPending",
+  ChangesCanBeValidated = "ChangesCanBeValidated",
 }

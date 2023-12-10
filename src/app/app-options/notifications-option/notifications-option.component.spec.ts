@@ -8,7 +8,7 @@ describe("NotificationsOptionComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NotificationsOptionComponent]
+      declarations: [NotificationsOptionComponent],
     });
     fixture = TestBed.createComponent(NotificationsOptionComponent);
     component = fixture.componentInstance;

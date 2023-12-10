@@ -2,7 +2,7 @@
   <!-- Permission alert -->
   @defer {
     @if (!hasNotificationPermission) {
-      <div class="bg-orange-50 mb-3 rounded-xl p-4 dark:saturate-[0.75] fade-in-bottom-small" style="--delay: 0.1s">
+      <div class="bg-orange-50 mb-3 animate-fade-up rounded-xl p-4 animate-duration-500 dark:saturate-[0.75]">
         <div class="flex h-full">
           <div class="flex items-center">
             <svg
@@ -34,7 +34,7 @@
             @if (!isNotificationPermissionRequested) {
               <button
                 (click)="requestNotificationPermission()"
-                class="orange-gradient text-white ml-3 !transform rounded-md px-4 py-2 text-sm font-medium !transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-300 hover:dark:shadow-orange-800"
+                class="orange-gradient text-white ml-3 !transform rounded-md px-4 py-2 text-sm font-medium !transition-all hover:scale-110 hover:shadow-lg hover:shadow-orange-300 hover:dark:shadow-orange-800"
               >
                 Grant permission
               </button>
@@ -47,12 +47,11 @@
 
   <!-- Doom scrolling toggle -->
   <li
-    class="flex w-full items-center justify-between rounded-xl border-[1px] px-6 py-4 fade-in-bottom-small"
+    class="flex w-full animate-fade-up items-center justify-between rounded-xl border-[1px] px-6 py-4 animate-duration-500"
     [ngClass]="doomScrollingToggle ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
-    style="--delay: 0.2s"
   >
     <span class="flex flex-grow flex-col">
-      <span class="text-gray-900 text-sm font-medium leading-6" id="availability-label">Prevent Doom Scrolling</span>
+      <span class="text-gray-900 text-base font-medium leading-6" id="availability-label">Prevent Doom Scrolling</span>
       <span class="text-gray-500 text-sm" id="availability-description"
         >Send a notification when you've been scrolling for too long.</span
       >
@@ -63,7 +62,7 @@
       [disabled]="!hasNotificationPermission"
       (click)="toggleDoomScrolling()"
       type="button"
-      class="group bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent !transition-all !duration-300 !ease-in-out disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-105"
+      class="group bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent !transition-all !duration-300 !ease-in-out disabled:bg-gray-200 hover:scale-110 disabled:cursor-not-allowed"
       role="switch"
       aria-checked="false"
       aria-labelledby="availability-label"

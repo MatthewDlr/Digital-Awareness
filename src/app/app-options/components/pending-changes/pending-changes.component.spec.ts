@@ -8,7 +8,7 @@ describe("PendingChangesComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PendingChangesComponent]
+      declarations: [PendingChangesComponent],
     });
     fixture = TestBed.createComponent(PendingChangesComponent);
     component = fixture.componentInstance;

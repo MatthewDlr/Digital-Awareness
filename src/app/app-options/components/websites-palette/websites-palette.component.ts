@@ -1,77 +1,85 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, HostListener, isDevMode } from "@angular/core";
 import { CommandPaletteService } from "../../services/command-palette/command-palette.service";
-import { commonWebsites, Website } from "../websites-list";
+import { SearchService } from "../../services/search-suggestions/search-suggestions.service";
+import { Website } from "../../common/websites-list";
 import { watchedWebsite, category } from "../../../types";
+import { SearchAnimationComponent } from "../search-animation/search-animation.component";
 import { CommonModule } from "@angular/common";
-import FuzzySearch from "fuzzy-search";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: "app-websites-palette",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SearchAnimationComponent, FormsModule],
   templateUrl: "./websites-palette.component.html",
   styleUrls: ["./websites-palette.component.css"],
 })
 export class WebsitesPaletteComponent implements AfterViewInit {
-  searchResults: Website[] = commonWebsites;
-  userWebsites: watchedWebsite[] = [];
-  enforcedWebsites: watchedWebsite[] = [];
-  selectedWebsites: Website[] = [];
-  suggestion: { category: category; performed: boolean } = {
-    category: category.unknown,
-    performed: false,
-  };
+  saveError: boolean = false;
+  searchQuery: string = "";
 
-  constructor(private commandPaletteService: CommandPaletteService) {
-    chrome.storage.sync.get("userWebsites").then(result => {
-      this.userWebsites = result["userWebsites"];
-      this.matchCommonAndUserWebsites();
-    });
-    chrome.storage.local.get("enforcedWebsites").then(result => {
-      this.enforcedWebsites = result["enforcedWebsites"];
-      this.matchCommonAndUserWebsites();
-    });
+  constructor(
+    private commandPaletteService: CommandPaletteService,
+    public searchService: SearchService,
+  ) {
+    this.searchService.loadStoredWebsites();
+    this.searchService.clearSuggestions();
   }
 
-  // Focus on the search input when the component is loaded
   @ViewChild("search") searchInput!: ElementRef;
+  @ViewChild("saveError") saveErrorElement!: ElementRef;
+
+  // Focus on the search input when the component is loaded
   ngAfterViewInit(): void {
     this.searchInput.nativeElement.focus();
   }
 
-  // Listen for the enter key, esc or cmd+k/ctrl+k to validate
+  // Listen for the enter key or cmd+k/ctrl+k to validate
   @HostListener("document:keydown.enter", ["$event"])
-  @HostListener("document:keydown.escape", ["$event"])
   @HostListener("document:keydown.meta.k", ["$event"])
   @HostListener("document:keydown.control.k", ["$event"])
   onKeydownHandler() {
     this.blockSelectedWebsites();
   }
 
+  // Listen for the escape key to close without saving
+  @HostListener("document:keydown.escape", ["$event"])
+  onKeydownHandlerEscape() {
+    this.toggleCommandPalette(false);
+  }
+
   blockSelectedWebsites() {
-    for (const website of this.selectedWebsites) {
-      const blockedWebsite: watchedWebsite = {
-        host: website.url,
-        allowedUntil: "",
-        timer: 30,
-        timesBlocked: 0,
-        timesAllowed: 0,
-        category: website.category || category.unknown,
-      };
-      this.userWebsites.push(blockedWebsite);
+    const userWebsites = this.searchService.userWebsites;
+    const selectedWebsites = this.searchService.suggestions.Selected;
+
+    if (selectedWebsites.length == 0) {
+      this.toggleCommandPalette(false);
+      isDevMode() ? console.log("No websites selected, nothing to save") : null;
+      return;
     }
-    isDevMode() ? console.log(this.selectedWebsites) : null;
+
+    for (const selectedWebsite of selectedWebsites) {
+      userWebsites.push(this.createWatchedWebsite(selectedWebsite));
+    }
     chrome.storage.sync
-      .set({ userWebsites: this.userWebsites })
+      .set({ userWebsites: userWebsites })
       .then(() => {
-        for (const website of this.selectedWebsites) {
-          website.selected = false;
-        }
-        this.selectedWebsites = [];
+        this.searchService.clearSuggestions();
         this.toggleCommandPalette(false);
+        chrome.storage.sync.get("userWebsites").then(result => {
+          console.log("Saved websites:", result["userWebsites"]);
+        });
       })
       .catch(error => {
+        this.saveError = true;
+        this.searchService.loadStoredWebsites();
         console.error("Error while blocking websites:", error);
+        setTimeout(() => {
+          this.saveErrorElement.nativeElement.classList.remove("animate-shake");
+          setTimeout(() => {
+            this.saveErrorElement.nativeElement.classList.add("animate-shake");
+          }, 25);
+        }, 50);
       });
   }
 
@@ -79,110 +87,40 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     this.commandPaletteService.toggleCommandPalette(state);
   }
 
+  onSearch() {
+    this.searchService.performSearch(this.searchQuery);
+  }
+
+  onClear() {
+    this.searchQuery = "";
+    this.searchService.performSearch(this.searchQuery);
+  }
+
   toggleWebsiteSelection(website: Website) {
     if (website.isBlocked) {
       return;
     }
-
-    if (website.selected) {
-      const index = this.selectedWebsites.indexOf(website);
-      this.selectedWebsites.splice(index, 1);
-      website.selected = false;
+    website.isSelected = !website.isSelected;
+    if (website.isSelected) {
+      this.searchService.addSelectedWebsite(website);
     } else {
-      this.selectedWebsites.push(website);
-      website.selected = true;
+      this.searchService.removeSelectedWebsite(website);
     }
   }
 
-  processSearch(event: Event) {
-    let searchQuery = (event.target as HTMLInputElement).value;
+  sortCategories = (a: any, b: any) => {
+    const order: { [key: string]: number } = { Suggestions: 1, Results: 2, Selected: 3 };
+    return (order[a.key] || 0) - (order[b.key] || 0);
+  };
 
-    // Removing the www. and the url parameters
-    if (searchQuery.substring(0, 3) == "www") searchQuery = searchQuery.substring(4);
-    if (searchQuery.includes("/")) {
-      searchQuery = searchQuery.substring(0, searchQuery.indexOf("/"));
-    }
-
-    const fuzzy = new FuzzySearch(commonWebsites, ["url", "category"], {
-      caseSensitive: false,
-      sort: true,
-    });
-    this.searchResults = fuzzy.search(searchQuery);
-    if (this.searchResults.length == 0) {
-      this.generateResults(searchQuery);
-    }
-
-    this.processSuggestion(searchQuery.trim());
-  }
-
-  processSuggestion(searchQuery: string) {
-    for (const value of Object.values(category)) {
-      const search = searchQuery.charAt(0).toUpperCase() + searchQuery.slice(1).toLowerCase();
-      if (value.toString() == search && !(value.toString() == this.suggestion.category.toString())) {
-        this.suggestion.category = value;
-        this.suggestion.performed = false;
-      }
-    }
-  }
-
-  performSuggestion() {
-    for (const website of commonWebsites) {
-      if (website.category == this.suggestion.category && !website.isBlocked) {
-        if (!this.suggestion.performed) {
-          this.selectedWebsites.push(website);
-          website.selected = true;
-        } else {
-          const index = this.selectedWebsites.indexOf(website);
-          this.selectedWebsites.splice(index, 1);
-          website.selected = false;
-        }
-      }
-    }
-    this.suggestion.performed = !this.suggestion.performed;
-  }
-
-  matchCommonAndUserWebsites() {
-    for (const searchResult of this.searchResults) {
-      const isBlocked = Boolean(
-        this.userWebsites.find(website => {
-          return website.host == searchResult.url;
-        }) ||
-          this.enforcedWebsites.find(website => {
-            return website.host == searchResult.url;
-          }),
-      );
-      searchResult.isBlocked = isBlocked;
-    }
-  }
-
-  generateResults(text: string) {
-    // Check if the url end with a . + 2 or 3 letters
-    const regex = new RegExp(/\.([a-z]{2,4})$/);
-    const match = text.match(regex);
-
-    if (match) {
-      this.searchResults.push({ url: text, category: category.unknown });
-    } else {
-      if (text.endsWith(".")) {
-        text = text.substring(0, text.length - 1);
-      }
-      this.searchResults.push({
-        url: text + ".com",
-        category: category.unknown,
-      });
-      this.searchResults.push({
-        url: text + ".org",
-        category: category.unknown,
-      });
-      this.searchResults.push({
-        url: text + ".net",
-        category: category.unknown,
-      });
-      this.searchResults.push({
-        url: text + ".co",
-        category: category.unknown,
-      });
-    }
-    this.matchCommonAndUserWebsites();
+  private createWatchedWebsite(website: Website): watchedWebsite {
+    return {
+      host: website.host,
+      timer: 30,
+      allowedUntil: "",
+      timesBlocked: 0,
+      timesAllowed: 0,
+      category: website.category || category.unknown,
+    };
   }
 }

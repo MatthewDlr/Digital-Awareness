@@ -5,6 +5,4 @@ import { Component } from "@angular/core";
   templateUrl: "./popup.component.html",
   styleUrls: ["./popup.component.css"],
 })
-export class PopupComponent {
-
-}
+export class PopupComponent {}

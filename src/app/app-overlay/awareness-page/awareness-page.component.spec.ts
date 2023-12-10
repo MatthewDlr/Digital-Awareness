@@ -7,9 +7,8 @@ describe("AwarenessPageComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AwarenessPageComponent]
-    })
-      .compileComponents();
+      declarations: [AwarenessPageComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

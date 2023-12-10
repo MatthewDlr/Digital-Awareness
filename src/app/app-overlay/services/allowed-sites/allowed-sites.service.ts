@@ -33,21 +33,17 @@ export class AllowedSitesService {
   }
 
   getTimerValue(website: string): number {
-    if (isDevMode()) {
-      return 5;
-    }
-
     website = this.removeWWW(website);
 
     const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == website);
     if (enforcedWebsite) {
       this.websiteOrigin = "Enforced";
-      return enforcedWebsite.timer;
+      return isDevMode() ? 5 : enforcedWebsite.timer;
     } else {
       const userWebsite = this.userWebsites.find(userWebsite => userWebsite.host == website);
       if (userWebsite) {
         this.websiteOrigin = "User";
-        return userWebsite.timer;
+        return isDevMode() ? 5 : userWebsite.timer;
       }
     }
     isDevMode() ? console.error("Website not found in enforcedWebsites or userWebsites: ", website) : null;
@@ -88,12 +84,12 @@ export class AllowedSitesService {
     }
   }
 
-  removeWWW(website: string): string {
+  private removeWWW(website: string): string {
     if (website.substring(0, 3) == "www") return website.substring(4);
     return website;
   }
 
-  updateWebsiteAllowedDate(website: watchedWebsite, duration: number) {
+  private updateWebsiteAllowedDate(website: watchedWebsite, duration: number) {
     website.allowedUntil = new Date(Date.now() + duration * 60000).toString();
     website.timesAllowed++;
   }

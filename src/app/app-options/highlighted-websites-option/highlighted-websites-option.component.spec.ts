@@ -8,7 +8,7 @@ describe("HighlightedWebsitesOptionComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [HighlightedWebsitesOptionComponent]
+      declarations: [HighlightedWebsitesOptionComponent],
     });
     fixture = TestBed.createComponent(HighlightedWebsitesOptionComponent);
     component = fixture.componentInstance;
