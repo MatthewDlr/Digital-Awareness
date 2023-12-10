@@ -38,6 +38,7 @@ chrome.runtime.onInstalled.addListener(() => {
       console.log("Extension already activated");
     } else {
       defaultConfig();
+      chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
     }
   });
 });
@@ -45,8 +46,7 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onUpdateAvailable.addListener(function (details) {
   console.log("updating to version " + details.version);
   chrome.runtime.reload();
-  const redirectUrl = chrome.runtime.getURL("index.html#options/about");
-  chrome.tabs.create({ url: redirectUrl });
+  chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
 });
 
 chrome.runtime.onSuspend.addListener(function () {
