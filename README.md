@@ -15,6 +15,15 @@
 
 <br>
 
+## Features
+✅ Prevent yourself from opening distracting websites mindlessly <br>
+✅ Automatically adapts based on your usage <br>
+✅ Add your own websites <br>
+✅ Customize the page with quotes, breathing exercises or your own goals <br>
+✅ Prevent doom scrolling <br>
+✅ Dark mode <br>
+✅ Absolutely free <br>
+
 ## Development Setup
 [![Build Extension](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/build.yml/badge.svg)](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/build.yml)
 
