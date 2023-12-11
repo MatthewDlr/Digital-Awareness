@@ -84,4 +84,7 @@ Learn more at https://commonsclause.com.
 
 ## Credits
 Made with ❤️ by Matthieu Delarue, 2023. <br>
-This project is inspired by the [Digital Wellbeing experiment](https://www.android.com/digital-wellbeing), introduced in Android 9 by Google.
+<br>
+<ins>Inspiration sources: </ins> <br>
+- [Consistency](https://github.com/patresk/consistency), a Chrome extension made by @patresk.
+- [Digital Wellbeing](https://www.android.com/digital-wellbeing), an experiment introduced in Android 9 by Google.
