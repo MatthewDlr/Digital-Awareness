@@ -88,9 +88,8 @@ Learn more at https://commonsclause.com.
 
 ## Credits
 Made with ❤️ by Matthieu Delarue, 2023. <br>
-<br>
-<ins>Inspiration sources: </ins> <br>
 
-<a href="https://github.com/patresk/consistency" target="_blank">Consistency,</a> a Chrome extension made by @patresk. <br>
+**Inspiration sources** <br>
+<a href="https://github.com/patresk/consistency" target="_blank">Consistency,</a> a Chrome extension made by [@patresk](https://github.com/patresk). <br>
 <a href="https://www.android.com/digital-wellbeing" target="_blank">Digital Wellbeing,</a> an experiment introduced in Android 9 by Google. <br>
 
