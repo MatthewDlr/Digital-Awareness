@@ -50,8 +50,6 @@ Be aware that when the extension in running in development mode, it behaves diff
 If you modify the manifest, or the .ts files at the root of the project, you will need to reload the extension to see your changes.
 For everything related to the angular app, you can simply close and reopen the page. 
 
-Finally, you can build the extension for production with `ng build`, the output will be in the `./dist folder`
-
 ### Dependencies
 ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white) <br>
 Please, be cautious when adding new dependencies to the project. <br>
