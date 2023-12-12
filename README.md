@@ -31,7 +31,6 @@
 [![CodeQL](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/github-code-scanning/codeql)
 
 ### Tech Stack
-![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
@@ -54,6 +53,7 @@ For everything related to the angular app, you can simply close and reopen the p
 Finally, you can build the extension for production with `ng build`, the output will be in the `./dist folder`
 
 ### Dependencies
+![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white) <br>
 Please, be cautious when adding new dependencies to the project. <br>
 If you need to add a new dependency, make sure it is really necessary and that it is well maintained.
 
