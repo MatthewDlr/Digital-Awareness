@@ -68,7 +68,7 @@ Please **do not** commit if the linter fails and **do not** disable the linter.
 Currently, tests are not implemented.
 
 ### Build
-Run `ng build` to build the project for production. 
+Run `ng build` or `npm run build` to build the project for production. 
 The build artifacts will be stored in the `dist/` directory.
 
 ## Contributing
