@@ -49,15 +49,6 @@ chrome.runtime.onUpdateAvailable.addListener(function (details) {
   chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
 });
 
-chrome.runtime.onSuspend.addListener(function () {
-  console.log("Unloading.");
-  chrome.storage.sync.set({ isActivated: false });
-});
-
-chrome.tabs.onRemoved.addListener(function (tabid) {
-  console.log(tabid, ": tab closed");
-});
-
 chrome.runtime.onMessage.addListener(function (request) {
   if (request.type == "doomScrolling") {
     chrome.storage.sync.get("doomScrollingNotification", result => {
