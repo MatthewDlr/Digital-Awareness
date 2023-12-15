@@ -27,7 +27,7 @@
 ✅ Absolutely free <br>
 
 ## Development Setup
-[![Build Extension](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/build.yml/badge.svg)](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/build.yml)
+[![Deployment](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/deployment.yml/badge.svg)](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/deployment.yml)
 [![CodeQL](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/github-code-scanning/codeql)
 
 ### Tech Stack
