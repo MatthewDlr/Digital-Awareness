@@ -36,13 +36,6 @@ export class NotificationsOptionComponent {
     });
   }
 
-  toggleBindWatching() {
-    this.bindWatchingToggle = !this.bindWatchingToggle;
-    chrome.storage.sync.set({
-      bindWatchingNotification: this.bindWatchingToggle,
-    });
-  }
-
   requestNotificationPermission() {
     chrome.permissions
       .request({
