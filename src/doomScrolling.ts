@@ -16,7 +16,7 @@ chrome.storage.sync.get("doomScrollingNotification", result => {
   }
 });
 
-console.log("isDevMode: " + isDevMode());
+isDevMode() ? console.log("isDevMode: " + isDevMode()) : null;
 
 chrome.storage.sync.get("doomScrollingTreshold", result => {
   scrollTreshold = result["doomScrollingTreshold"];
@@ -54,7 +54,7 @@ function checkChanges() {
     return;
   }
 
-  if ((isDevMode && realScrollsCount > 5) || realScrollsCount > scrollTreshold) {
+  if ((isDevMode() && realScrollsCount > 5) || realScrollsCount > scrollTreshold) {
     console.log("user is doom scrolling");
     isDevMode() ? null : window.scrollTo({ top: 0, behavior: "smooth" });
     clearInterval(intervalId);
