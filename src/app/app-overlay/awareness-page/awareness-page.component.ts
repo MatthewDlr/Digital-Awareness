@@ -78,7 +78,7 @@ export class AwarenessPageComponent {
           }
           this.countdown();
         });
-      }, 1150); // Yes, it's more than 1s
+      }, 1100); // Yes, it's more than 1s
     } else {
       this.waitBeforeClose();
     }
@@ -116,6 +116,7 @@ export class AwarenessPageComponent {
   }
 
   computeNewTimerValue(): number {
+    // Timer is increased using a logarithmic function to increase rapidly at the beginning and then slowly
     const timerIncrease = Math.round(10 * Math.log10(5000 / this.storedTimerValue));
     const newValue = Math.min(this.storedTimerValue + timerIncrease, 180);
     isDevMode() ? console.log("New timer value: ", newValue) : null;
