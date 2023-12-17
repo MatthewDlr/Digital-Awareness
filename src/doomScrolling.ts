@@ -1,5 +1,6 @@
+import { isDevMode } from "@angular/core";
+
 let isDoomScrollingEnabled: boolean = false;
-let isDevMode = false;
 let totalScrolls: number = 0;
 let previousScrollCount: number = 0;
 let realScrollsCount: number = 0;
@@ -15,13 +16,11 @@ chrome.storage.sync.get("doomScrollingNotification", result => {
   }
 });
 
-chrome.storage.local.get("isDevMode", result => {
-  isDevMode = result["isDevMode"] || false;
-});
+console.log("isDevMode: " + isDevMode());
 
 chrome.storage.sync.get("doomScrollingTreshold", result => {
   scrollTreshold = result["doomScrollingTreshold"];
-  isDevMode ? console.log("scrollTreshold: ", scrollTreshold) : null;
+  isDevMode() ? console.log("scrollTreshold: ", scrollTreshold) : null;
 });
 
 // Watching for scroll down event
@@ -46,18 +45,18 @@ window.addEventListener("keydown", function (e) {
 function checkChanges() {
   if (previousScrollCount < totalScrolls) {
     realScrollsCount++;
-    isDevMode ? console.log("user scrolled: " + realScrollsCount + " times") : null;
+    isDevMode() ? console.log("user scrolled: " + realScrollsCount + " times") : null;
   }
   previousScrollCount = totalScrolls;
 
-  if (!isDevMode && tabOpenedAt > new Date(Date.now() - 1000 * 60 * 10)) {
-    isDevMode ? console.log("Wait 10 min before checking") : null;
+  if (!isDevMode() && tabOpenedAt > new Date(Date.now() - 1000 * 60 * 10)) {
+    isDevMode() ? console.log("Wait 10 min before checking") : null;
     return;
   }
 
   if ((isDevMode && realScrollsCount > 5) || realScrollsCount > scrollTreshold) {
     console.log("user is doom scrolling");
-    isDevMode ? null : window.scrollTo({ top: 0, behavior: "smooth" });
+    isDevMode() ? null : window.scrollTo({ top: 0, behavior: "smooth" });
     clearInterval(intervalId);
     window.removeEventListener("scroll", function () {});
     sendNotification();

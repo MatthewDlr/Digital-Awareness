@@ -1,4 +1,5 @@
 import { defaultConfig } from "./defaultConfig.js";
+import { isDevMode } from "@angular/core";
 
 chrome.webNavigation.onCommitted.addListener(function (details) {
   // Avoid showing blockpage if the request is made in background or isn't http/https
@@ -33,8 +34,8 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 });
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get(["isActivated"]).then(result => {
-    if (result["isActivated"]) {
+  chrome.storage.sync.get(["isActivated "]).then(result => {
+    if (result["isActivated"] && !isDevMode()) {
       console.log("Extension already activated");
     } else {
       defaultConfig();

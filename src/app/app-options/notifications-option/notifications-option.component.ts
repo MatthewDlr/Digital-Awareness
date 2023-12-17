@@ -25,8 +25,6 @@ export class NotificationsOptionComponent {
         this.doomScrollingToggle = false;
       }
     });
-
-    chrome.storage.local.set({ isDevMode: isDevMode() });
   }
 
   toggleDoomScrolling() {
