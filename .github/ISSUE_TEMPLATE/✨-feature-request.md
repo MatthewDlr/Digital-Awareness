@@ -2,9 +2,8 @@
 name: "✨ Feature request"
 about: Suggest an idea to improve the digital awareness project
 title: "[Feature]"
-labels: ''
-assignees: ''
-
+labels: ""
+assignees: ""
 ---
 
 **Explain what your feature is about**

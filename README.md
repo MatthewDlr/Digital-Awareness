@@ -27,10 +27,12 @@
 ✅ Absolutely free <br>
 
 ## Development Setup
+
 [![Deployment](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/deployment.yml/badge.svg)](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/deployment.yml)
 [![CodeQL](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/MatthewDlr/Digital-Awareness/actions/workflows/github-code-scanning/codeql)
 
 ### Tech Stack
+
 ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
@@ -50,9 +52,10 @@ Currently, you can't use `ng serve` to start the development server since it doe
 Be aware that when the extension in running in development mode, it behaves differently ; all timers are much faster and won't adapts to your usage and, you'll also get much more logs in the page console. To avoid affecting the user experience, please limit your own logging to development mode using the `isDevMode()` function of Angular.
 
 If you modify the manifest, or the .ts files at the root of the project, you will need to reload the extension to see your changes.
-For everything related to the angular app, you can simply close and reopen the page. 
+For everything related to the angular app, you can simply close and reopen the page.
 
 ### Dependencies
+
 ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white) <br>
 Please, be cautious when adding new dependencies to the project. <br>
 If you need to add a new dependency, make sure it is really necessary and that it is well maintained.
@@ -72,7 +75,8 @@ Please **do not** commit if the linter fails and **do not** disable the linter.
 Currently, tests are not implemented.
 
 ### Build
-Run `ng build` or `npm run build` to build the project for production. 
+
+Run `ng build` or `npm run build` to build the project for production.
 The build artifacts will be stored in the `dist/` directory.
 
 ## Contributing
@@ -88,6 +92,7 @@ If you find a bug or have a feature request, please open an issue on the [issues
 Pull requests are welcome. Please make sure that your changes reflect the vision of the project.
 
 ## Credits
+
 Made with ❤️ by Matthieu Delarue, 2023. <br>
 
 **Inspiration sources** <br>
