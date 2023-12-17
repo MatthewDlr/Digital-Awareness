@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: success()
         with:
-          name: digital-awareness
+          name: digital-awareness.zip
           path: dist/digital-awareness.zip
           retention-days: 7
 
@@ -51,7 +51,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: digital-awareness
+          name: digital-awareness.zip
 
       - name: Upload to Chrome Web Store
         uses: mobilefirstllc/cws-publish@latest
