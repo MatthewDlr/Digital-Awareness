@@ -98,7 +98,7 @@ export class AwarenessPageComponent {
 
   // This means failure as the user has waited for the timer to expire
   skipTimer() {
-    const newTimerValue = Math.min(this.storedTimerValue + 15, 180);
+    const newTimerValue = this.computeNewTimerValue();
     const minutesAllowed = isDevMode() ? 1 : 30;
     this.allowedSitesService.allowWebsiteTemporary(this.outputUrl.host, minutesAllowed, newTimerValue);
 
@@ -113,6 +113,13 @@ export class AwarenessPageComponent {
     setTimeout(() => {
       window.close();
     }, 500);
+  }
+
+  computeNewTimerValue(): number {
+    const timerIncrease = Math.round(10 * Math.log10(5000 / this.storedTimerValue));
+    const newValue = Math.min(this.storedTimerValue + timerIncrease, 180);
+    isDevMode() ? console.log("New timer value: ", newValue) : null;
+    return newValue;
   }
 
   getRandomWidget() {
