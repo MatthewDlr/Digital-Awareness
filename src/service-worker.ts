@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener(function (request) {
       if (result["doomScrollingNotification"] == true) {
         chrome.notifications.create("doomScrollingNotification", {
           type: "basic",
-          iconUrl: "/assets/icon-512.png",
+          iconUrl: "/assets/logo-512.png",
           title: "Doom Scrolling Detected",
           message: "Seems that you've been scrolling for a while, let's take a break!",
           priority: 2,
