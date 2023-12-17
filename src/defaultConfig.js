@@ -122,8 +122,15 @@ export function defaultConfig() {
           timesAllowed: 0,
           category: "Shopping",
         },
+        {
+          host: "temu.com",
+          allowedUntil: "",
+          timer: 30,
+          timesBlocked: 0,
+          timesAllowed: 0,
+          category: "Shopping",
+        },
       ],
-      categoriesWebsites: [],
     })
     .then(() => {
       console.info("enforcedWebsites set");
@@ -134,37 +141,10 @@ export function defaultConfig() {
       isActivated: true, // Extension activation
       timeAllowed: 30, // Default time allowed (in minutes)
       awarenessPageWidget: "Quotes", // Widget to display on the awareness page
-      timerBehavior: "Pause", // What to do when the awareness page is not focused
+      timerBehavior: "Restart", // What to do when the awareness page is not focused
       doomScrollingNotification: true, // Notification when doom scrolling
-      doomScrollingTreshold: 100, // Number of time the user can scroll before notification
-      bindWatchingNotification: true, // Notification when bind watching
+      doomScrollingTreshold: 125, // Number of time the user can scroll before notification
       userWebsites: [], // Website the user will decide to block
-      userCategories: [
-        {
-          name: "News",
-          isActive: false,
-        },
-        {
-          name: "Social",
-          isActive: false,
-        },
-        {
-          name: "Shopping",
-          isActive: false,
-        },
-        {
-          name: "Streaming",
-          isActive: false,
-        },
-        {
-          name: "Adult",
-          isActive: false,
-        },
-        {
-          name: "Gambling",
-          isActive: false,
-        },
-      ],
     })
     .then(() => {
       console.info("sync set");

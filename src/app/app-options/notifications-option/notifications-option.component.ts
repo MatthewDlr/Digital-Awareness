@@ -25,21 +25,12 @@ export class NotificationsOptionComponent {
         this.doomScrollingToggle = false;
       }
     });
-
-    chrome.storage.local.set({ isDevMode: isDevMode() });
   }
 
   toggleDoomScrolling() {
     this.doomScrollingToggle = !this.doomScrollingToggle;
     chrome.storage.sync.set({
       doomScrollingNotification: this.doomScrollingToggle,
-    });
-  }
-
-  toggleBindWatching() {
-    this.bindWatchingToggle = !this.bindWatchingToggle;
-    chrome.storage.sync.set({
-      bindWatchingNotification: this.bindWatchingToggle,
     });
   }
 
