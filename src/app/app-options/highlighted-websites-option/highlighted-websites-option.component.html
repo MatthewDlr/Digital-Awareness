@@ -45,8 +45,10 @@
   <div class="mt-5 flow-root animate-fade-up animate-delay-200 animate-duration-500">
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-        <div class="max-h-[30rem] overflow-scroll shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-          <table class="min-w-full divide-y-0 divide-gray-300">
+        <div
+          class="max-h-[30rem] overflow-scroll shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg dark:ring-white"
+        >
+          <table class="min-w-full divide-y-0 divide-gray-300 dark:divide-gray-700">
             <thead class="bg-green-50">
               <tr class="cursor-default">
                 <th scope="col" class="text-gray-900 w-1/2 py-3.5 pl-5 text-left text-sm font-semibold">Website</th>
@@ -55,7 +57,7 @@
                 <th scope="col" class="text-gray-900 w-1/6 py-3.5 text-left text-sm font-semibold">Actions</th>
               </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-300 overflow-scroll">
+            <tbody class="bg-white divide-y divide-gray-300 overflow-scroll dark:divide-gray-700">
               <!-- User Websites -->
               @for (website of userWebsites; track $index) {
                 <tr class="animate-fade-up animate-delay-[400ms] animate-duration-500">
