@@ -8,7 +8,6 @@ platformBrowserDynamic()
   .catch(err => console.error(err));
 
 nightwind.initNightwind();
-
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
   nightwind.toggle();
 });

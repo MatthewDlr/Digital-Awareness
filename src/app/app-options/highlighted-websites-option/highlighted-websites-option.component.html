@@ -3,7 +3,7 @@
   <div class="sm:flex sm:items-center">
     <div class="w-full animate-fade-up animate-duration-500 sm:flex-auto">
       <p class="text-gray-700 mt-2 text-sm">
-        For your wellbeing, certain websites we identified as the most time-consuming <br />
+        For your wellbeing, some websites we identified as the most time-consuming <br />
         cannot be removed from the list.
       </p>
     </div>
@@ -21,7 +21,7 @@
             stroke-width="1.5"
             stroke="currentColor"
             aria-hidden="true"
-            class="h-6 w-6"
+            class="size-6"
           >
             <path
               stroke-linecap="round"
@@ -45,17 +45,19 @@
   <div class="mt-5 flow-root animate-fade-up animate-delay-200 animate-duration-500">
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-        <div class="max-h-[30rem] overflow-scroll shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-          <table class="min-w-full divide-y-0 divide-gray-300">
-            <thead class="bg-green-50">
-              <tr class="cursor-default">
-                <th scope="col" class="text-gray-900 w-1/2 py-3.5 pl-5 text-left text-sm font-semibold">Website</th>
-                <th scope="col" class="text-gray-900 w-1/6 py-3.5 text-left text-sm font-semibold">Category</th>
-                <th scope="col" class="text-gray-900 w-1/6 py-3.5 text-left text-sm font-semibold">Awareness Ratio</th>
-                <th scope="col" class="text-gray-900 w-1/6 py-3.5 text-left text-sm font-semibold">Actions</th>
+        <div
+          class="max-h-[30rem] overflow-scroll shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg dark:ring-white"
+        >
+          <table class="min-w-full divide-y-0 divide-gray-300 dark:divide-gray-700">
+            <thead class="bg-green-500">
+              <tr class="cursor-default *:text-white *:text-left *:text-sm *:font-semibold">
+                <th scope="col" class="w-1/2 py-3.5 pl-5">Website</th>
+                <th scope="col" class="w-1/6 py-3.5">Category</th>
+                <th scope="col" class="w-1/6 py-3.5">Awareness Ratio</th>
+                <th scope="col" class="w-1/6 py-3.5">Actions</th>
               </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-300 overflow-scroll">
+            <tbody class="bg-white divide-y divide-gray-300 overflow-scroll dark:divide-gray-700">
               <!-- User Websites -->
               @for (website of userWebsites; track $index) {
                 <tr class="animate-fade-up animate-delay-[400ms] animate-duration-500">
@@ -83,7 +85,7 @@
                           viewBox="0 0 24 24"
                           stroke-width="1"
                           stroke="currentColor"
-                          class="h-6 w-6 transform cursor-pointer stroke-purple-500 transition-all hover:scale-110"
+                          class="size-6 transform cursor-pointer stroke-purple-500 transition-all hover:scale-110"
                         >
                           <path
                             stroke-linecap="round"
@@ -95,7 +97,7 @@
                     }
                   </td>
                   <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
-                    {{ website.category }}
+                    {{ website.category || "Unknown" }}
                   </td>
                   <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
                     {{ computeBlockedScore(website) }}

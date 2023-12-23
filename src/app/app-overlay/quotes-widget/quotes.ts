@@ -58,6 +58,22 @@ export class Quotes {
       author: "James Clear, Atomic Habits",
     },
     {
+      text: '"With the same habits, you’ll end up with the same results. But with better habits, anything is possible."',
+      author: "James Clear, Atomic Habits",
+    },
+    {
+      text: '"The seed of every habit is a single, tiny decision."',
+      author: "James Clear, Atomic Habits",
+    },
+    {
+      text: '"Your identity emerges out of your habits."',
+      author: "James Clear, Atomic Habits",
+    },
+    {
+      text: '"Building habits in the present allows you to do more of what you want in the future.""',
+      author: "James Clear, Atomic Habits",
+    },
+    {
       text: '"Who you are is defined by what you’re willing to struggle for"',
       author: "Mark Manson, The Subtle Art of Not Giving a F*ck",
     },
@@ -96,18 +112,6 @@ export class Quotes {
     {
       text: '"We cannot become what we want by remaining what we are"',
       author: "Max Depree",
-    },
-    {
-      text: "Is this really the best use of your time?",
-      author: "",
-    },
-    {
-      text: "If you have no meaningful reason to go there, then walk away",
-      author: "",
-    },
-    {
-      text: "Wondering, is this all?",
-      author: "",
     },
   ];
 
