@@ -7,8 +7,8 @@ const DEFAULT_ALLOWED_DURATION = 30;
   providedIn: "root",
 })
 export class WebsitesService {
-  enforcedWebsites!: watchedWebsite[] 
-  userWebsites!: watchedWebsite[]
+  enforcedWebsites!: watchedWebsite[];
+  userWebsites!: watchedWebsite[];
   websiteOrigin: string = "Enforced";
   currentWebsite!: watchedWebsite;
 
