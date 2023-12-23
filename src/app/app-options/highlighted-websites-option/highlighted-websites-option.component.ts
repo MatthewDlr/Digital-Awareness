@@ -65,10 +65,10 @@ export class HighlightedWebsitesOptionComponent {
   }
 
   computeBlockedScore(website: watchedWebsite): string {
-    let score = (website.timesBlocked * 100) / (website.timesBlocked + website.timesAllowed);
+    let score = ((website.timesBlocked - website.timesAllowed) / (website.timesBlocked + website.timesAllowed)) * 100;
     if (score) {
       score = Math.round(score);
-      return score + "%";
+      return String(score);
     }
     return "Never blocked";
   }

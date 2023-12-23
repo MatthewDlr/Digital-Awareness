@@ -2,7 +2,7 @@ import { Component, isDevMode, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 import { QuotesWidgetComponent } from "../quotes-widget/quotes-widget.component";
-import { AllowedSitesService } from "../services/allowed-sites/allowed-sites.service";
+import { WebsitesService } from "../services/websites/websites.service";
 import { BreathingWidgetComponent } from "../breathing-widget/breathing-widget.component";
 import { TasksWidgetComponent } from "../tasks-widget/tasks-widget.component";
 
@@ -23,7 +23,7 @@ export class AwarenessPageComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private allowedSitesService: AllowedSitesService,
+    private websitesService: WebsitesService,
   ) {
     // Getting url parameters
     this.route.params.subscribe(params => {
@@ -48,9 +48,9 @@ export class AwarenessPageComponent {
     // So we wait for it to be finished before getting the timer value
     let numberOfTry = 10;
     const intervalId = setInterval(() => {
-      if (this.allowedSitesService.initializationStep == 2) {
+      if (this.websitesService.isInitialized()) {
         clearInterval(intervalId);
-        this.storedTimerValue = this.allowedSitesService.getTimerValue(this.outputUrl.host);
+        this.storedTimerValue = this.websitesService.getTimerValue(this.outputUrl.host);
         this.timerValue.set(this.storedTimerValue);
         this.countdown();
       } else {
@@ -66,18 +66,16 @@ export class AwarenessPageComponent {
   countdown() {
     if (this.timerValue() > 0) {
       setTimeout(() => {
-        this.getCurrentTab().then(currentTabId => {
-          // if the user is not on the tab, don't decrement the timer
-          if (!(currentTabId?.toString() != this.tabId || !document.hasFocus())) {
-            this.timerValue.update(value => value - 1);
-          } else {
-            // If the user is not on the tab, and the timer behavior is "Restart", restart the timer
-            if (this.timerBehavior == "Restart") {
-              this.timerValue.set(this.storedTimerValue);
-            }
+        // if the user is not on the tab, don't decrement the timer
+        if (document.hasFocus() || isDevMode()) {
+          this.timerValue.update(value => value - 1);
+        } else {
+          // If the user is not on the tab, and the timer behavior is "Restart", restart the timer
+          if (this.timerBehavior == "Restart" && !isDevMode()) {
+            this.timerValue.set(this.storedTimerValue);
           }
-          this.countdown();
-        });
+        }
+        this.countdown();
       }, 1100); // Yes, it's more than 1s
     } else {
       this.waitBeforeClose();
@@ -93,34 +91,22 @@ export class AwarenessPageComponent {
   waitBeforeClose() {
     setTimeout(() => {
       this.closeBlockPage();
-    }, 15000);
+    }, 10000);
   }
 
   // This means failure as the user has waited for the timer to expire
   skipTimer() {
-    const newTimerValue = this.computeNewTimerValue();
-    const minutesAllowed = isDevMode() ? 1 : 30;
-    this.allowedSitesService.allowWebsiteTemporary(this.outputUrl.host, minutesAllowed, newTimerValue);
+    this.websitesService.allowWebsiteTemporary();
 
     window.location.href = this.outputUrl.toString();
   }
 
   // This means success as the user left the page before the timer expired
   closeBlockPage() {
-    const newTimerValue = Math.max(this.storedTimerValue - 5, 30);
-
-    this.allowedSitesService.incrementTimesBlocked(this.outputUrl.host, newTimerValue);
+    this.websitesService.incrementTimesBlocked();
     setTimeout(() => {
       window.close();
     }, 500);
-  }
-
-  computeNewTimerValue(): number {
-    // Timer is increased using a logarithmic function to increase rapidly at the beginning and then slowly
-    const timerIncrease = Math.round(10 * Math.log10(5000 / this.storedTimerValue));
-    const newValue = Math.min(this.storedTimerValue + timerIncrease, 180);
-    isDevMode() ? console.log("New timer value: ", newValue) : null;
-    return newValue;
   }
 
   getRandomWidget() {

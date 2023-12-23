@@ -13,7 +13,7 @@ export class BreathingWidgetComponent {
   text: string = "Get Ready";
   timerValue!: number;
 
-  constructor(awarenessPageComponent: AwarenessPageComponent) {
+  constructor(private awarenessPageComponent: AwarenessPageComponent) {
     // Getting timer value from the awareness page
     effect(() => {
       this.timerValue = awarenessPageComponent.timerValue();
