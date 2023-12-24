@@ -64,39 +64,38 @@ export class WebsitesService {
     return timerValue;
   }
 
-  allowWebsiteTemporary() {
+  allowWebsiteTemporary(): void {
     const timeAllowed = isDevMode() ? 1 : DEFAULT_ALLOWED_DURATION;
     console.log(this.currentWebsite);
 
-    const website =
-      this.websiteOrigin === "Enforced"
-        ? this.enforcedWebsites.find(site => site.host === this.currentWebsite.host)
-        : this.userWebsites.find(site => site.host === this.currentWebsite.host);
-    if (!website) {
+    if (this.websiteOrigin == "Enforced") {
+      const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == this.currentWebsite.host);
+      this.updateWebsiteAllowedDate(enforcedWebsite!, timeAllowed);
+      enforcedWebsite!.timer = this.computeNewTimerValue();
+      chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites });
+    } else if (this.websiteOrigin == "User") {
+      const userWebsite = this.userWebsites.find(userWebsite => userWebsite.host == this.currentWebsite.host);
+      this.updateWebsiteAllowedDate(userWebsite!, timeAllowed);
+      userWebsite!.timer = this.computeNewTimerValue();
+      chrome.storage.sync.set({ userWebsites: this.userWebsites });
+    } else {
       isDevMode() ? console.error("cannot allow this website: ", this.currentWebsite) : null;
-      return;
     }
-
-    this.updateWebsiteAllowedDate(website!, timeAllowed);
-    website!.timer = this.computeNewTimerValue();
-    this.websiteOrigin === "Enforced"
-      ? chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites })
-      : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 
   incrementTimesBlocked() {
-    if (this.websiteOrigin !== "Enforced" && this.websiteOrigin !== "User") {
-      isDevMode() ? console.error("invalid website origin: ", this.websiteOrigin) : null;
-      return;
-    }
-
-    const website =
-      this.websiteOrigin === "Enforced"
-        ? this.enforcedWebsites.find(site => site.host === this.currentWebsite.host)
-        : this.userWebsites.find(site => site.host === this.currentWebsite.host);
-    if (!website) {
-      isDevMode() ? console.error("cannot increment times blocked for non-existent website") : null;
-      return;
+    if (this.websiteOrigin == "Enforced") {
+      const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == this.currentWebsite.host);
+      enforcedWebsite!.timesBlocked++;
+      enforcedWebsite!.timer -= 5;
+      chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites });
+    } else if (this.websiteOrigin == "User") {
+      const userWebsite = this.userWebsites.find(userWebsite => userWebsite.host == this.currentWebsite.host);
+      userWebsite!.timesBlocked++;
+      userWebsite!.timer -= 5;
+      chrome.storage.sync.set({ userWebsites: this.userWebsites });
+    } else {
+      isDevMode() ? console.error("cannot increment this website: ", this.currentWebsite) : null;
     }
   }
 
