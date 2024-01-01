@@ -1,5 +1,6 @@
 import { Component, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Component({
   selector: "app-notifications-option",
@@ -15,7 +16,7 @@ export class NotificationsOptionComponent {
   hasNotificationPermission: boolean = true;
   isNotificationPermissionRequested: boolean = false;
 
-  constructor() {
+  constructor(private soundsEngine: SoundsEngineService) {
     this.loadSettings();
     chrome.notifications.getPermissionLevel(level => {
       isDevMode() ? console.log("hasNotificationPermission: ", level) : null;
@@ -32,6 +33,7 @@ export class NotificationsOptionComponent {
     chrome.storage.sync.set({
       doomScrollingNotification: this.doomScrollingToggle,
     });
+    this.soundsEngine.click();
   }
 
   requestNotificationPermission() {

@@ -1,6 +1,7 @@
 import { Component, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Component({
   selector: "app-awareness-page-option",
@@ -15,7 +16,7 @@ export class AwarenessPageOptionComponent {
   areTasksValid: boolean = true;
   timerBehavior!: string;
 
-  constructor() {
+  constructor(private soundsEngine: SoundsEngineService) {
     chrome.storage.sync.get(["awarenessPageWidget"]).then(result => {
       this.selectedWidget = result["awarenessPageWidget"];
     });
@@ -34,6 +35,7 @@ export class AwarenessPageOptionComponent {
   updateSelectedWidget(widget: string) {
     this.selectedWidget = widget;
     chrome.storage.sync.set({ awarenessPageWidget: widget });
+    this.soundsEngine.click();
 
     if (widget == "Tasks" || widget == "Random") {
       this.checkIfTasksValid();
@@ -43,12 +45,14 @@ export class AwarenessPageOptionComponent {
   updateTimerBehavior(timerBehavior: string) {
     this.timerBehavior = timerBehavior;
     chrome.storage.sync.set({ timerBehavior: timerBehavior });
+    this.soundsEngine.click();
     isDevMode() ? console.log("Timer behavior saved: ", this.timerBehavior) : null;
   }
 
   checkIfTasksValid() {
     if (this.tasks[0] == "" && this.tasks[1] == "" && this.tasks[2] == "") {
       this.areTasksValid = false;
+      this.soundsEngine.error();
     } else {
       this.areTasksValid = true;
     }
@@ -57,8 +61,15 @@ export class AwarenessPageOptionComponent {
   updateTasks() {
     if (!this.areTasksValid) return;
 
-    chrome.storage.sync.set({ awarenessPageTasks: this.tasks }).then(() => {
-      isDevMode() ? console.log("Tasks saved: ", this.tasks) : null;
-    });
+    chrome.storage.sync
+      .set({ awarenessPageTasks: this.tasks })
+      .then(() => {
+        isDevMode() ? console.log("Tasks saved: ", this.tasks) : null;
+      })
+      .catch(error => {
+        isDevMode() ? console.error(error) : null;
+        this.areTasksValid = false;
+        this.soundsEngine.error();
+      });
   }
 }
