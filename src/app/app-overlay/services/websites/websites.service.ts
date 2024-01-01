@@ -1,9 +1,9 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { watchedWebsite } from "src/app/types";
 
-const DEFAULT_ALLOWED_DURATION = 30; // In minutes. When the user allow the website (aka failure), this define how long the website will get whitelisted and accessible without need to wait the timer to dwindle
-const DEFAULT_INTERVAL_DURATION = 15; // In minutes. When the user click on "Go back" (aka success), this define how long the extension will wait before taking in consideration a new entry for this button (like a cooldown)
-const MAX_TIMER_VALUE = 3; // In minutes. Refers to the maximum time the timer can reach, despite user behavior
+const DEFAULT_ALLOWED_DURATION = 30; // In minutes. When the user allow the website (aka failure), this defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
+const DEFAULT_INTERVAL_DURATION = 15; // In minutes. When the user clicks on "Go back" (aka success), this defines the cooldown period before the extension considers a new activation of this button.
+const MAX_TIMER_VALUE = 3; // In minutes. This specifies the maximum value the timer can be set to, regardless of user actions.
 
 @Injectable({
   providedIn: "root",
@@ -11,8 +11,8 @@ const MAX_TIMER_VALUE = 3; // In minutes. Refers to the maximum time the timer c
 export class WebsitesService {
   enforcedWebsites!: watchedWebsite[];
   userWebsites!: watchedWebsite[];
-  websiteOrigin: string = "Enforced"; // Refers to whether the website is blocked by default by the extension (enforced) or by the user (User)
   currentWebsite!: watchedWebsite;
+  websiteOrigin: string = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
 
   constructor() {
     chrome.storage.local
@@ -42,34 +42,41 @@ export class WebsitesService {
     this.currentWebsite = this.getCurrentWebsite(website);
     if (isDevMode()) return 5;
 
-    const timerValue = this.currentWebsite.timer || 30;
+    let timerValue = this.currentWebsite.timer || 30;
     const score = this.computeWebsiteScore(this.currentWebsite);
 
-    // If the user has not interacted with the website enough, we don't change the timer value
+    // The timer value remains unchanged if the user has not interacted with the website sufficiently.
     if (score == -1) {
       return timerValue;
     }
 
-    // If the user user a bad score, we increase the timer value to nudge him and make him go back
+    // If the user has a low score, we increase the timer value as a nudge to encourage the user to go back.
     if (score < 10) {
-      return timerValue * 1.75;
+      timerValue *= 1.75;
+    } else if (score < 20) {
+      timerValue *= 1.5;
     }
-    if (score < 20) {
-      return timerValue * 1.5;
-    }
-
-    // If the user user a good score, we reduce slightly the timer value to tell him it's okay to access the website
-    if (score > 90) {
-      return timerValue / 1.25;
-    }
-    if (score > 80) {
-      return timerValue / 1.1;
+    // If the user has a high score, we slightly reduce the timer value to indicate that accessing the website is OK.
+    else if (score > 90) {
+      timerValue /= 1.25;
+    } else if (score > 80) {
+      timerValue /= 1.1;
     }
 
-    return timerValue;
+    // We adjust the timer value based on the last time the user allowed access to the website.
+    // If he allowed access 1 day ago, then the timer remains unchanged; however, if the last allowance was 7 days ago, the value is divided by 1.49
+    const daysSinceLastAllowed = this.clamp(
+      (Date.now() - new Date(this.currentWebsite.allowedUntil).getTime()) / (1000 * 60 * 60 * 24),
+      1,
+      7,
+    );
+    const dayCoef = (daysSinceLastAllowed ^ 2) / 100 + 1;
+    timerValue /= dayCoef;
+
+    return Math.round(timerValue);
   }
 
-  // This is called when the user decide to visit the website, it counts as a 'failure'
+  // This is called when the user chooses to visit the website, it counts as a 'failure.'
   allowWebsiteTemporary(): void {
     const websiteAllowed =
       this.websiteOrigin == "Enforced"
@@ -89,7 +96,7 @@ export class WebsitesService {
       : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 
-  // This is called when the user decide to click on "Go back", it counts as a 'success'
+  // This is called when the user chooses to click on "Go back", it counts as a 'success'
   incrementTimesBlocked() {
     const websiteBlocked =
       this.websiteOrigin == "Enforced"
@@ -120,8 +127,8 @@ export class WebsitesService {
       : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 
-  // Return a score between 0 and 100 that aims to score the current habit of the user for this website
-  // If there is not enough data to provide a reliable score, it returns -1
+  // Returns a score ranging from 0 to 100 aiming to assess the user's current habit concerning this website.
+  // If there is not enough data to compute a reliable score, -1 is returned.
   computeWebsiteScore(website: watchedWebsite): number {
     const accuracy = website.timesBlocked + website.timesAllowed;
     if (accuracy < 5) {
@@ -134,21 +141,21 @@ export class WebsitesService {
       (Date.now() - new Date(website.allowedUntil).getTime()) / (1000 * 60 * 60 * 24),
       1,
       7,
-    ); // Return the number of days since the last time the website was allowed with min 1 and max 7
-    const lastAllowedScore = (daysSinceLastAllowed / 7) * 10;
+    );
+    const lastAllowedScore = (daysSinceLastAllowed / 7) * 10; // Compute a score based on the number of days since the last time the website was allowed with min 1 and max 7
 
     const score = Math.round(websiteScore + lastAllowedScore);
     isDevMode() ? console.log("Website Score for " + website.host + " is " + score) : null;
     return score;
   }
 
-  // Algorithm to compute the new timer value when the user allow a website (failure)
+  // Algorithm to compute the new timer value when the user allows a website (failure)
   private computeNewIncreasedValue(): number {
     const currentValue = this.currentWebsite.timer || 30;
     const score = this.computeWebsiteScore(this.currentWebsite);
     let newValue = currentValue;
 
-    // The lower the score, the more aggrevise the increase function is
+    // The lower the score, the more aggressive the increase function becomes.
     if (score == -1 || (score >= 30 && score <= 70)) {
       newValue += (newValue / 8) ^ 1.5; // Default increase function.
     } else if (score < 30) {
@@ -161,7 +168,7 @@ export class WebsitesService {
     return newValue;
   }
 
-  // Algorithm to compute the new timer value when the user go back (success)
+  // Algorithm to compute the new timer value when the user goes back (success)
   private computeNewDecreasedValue(): number {
     const currentValue = this.currentWebsite.timer || 30;
     const score = this.computeWebsiteScore(this.currentWebsite);

@@ -21,9 +21,7 @@ export class PendingChangesComponent {
       next: date => {
         this.validationDate = String(date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0"));
         const expirationDate = new Date(date.getTime() + this.timeToAdd);
-        this.expirationDate = String(
-          expirationDate.getHours() + ":" + String(expirationDate.getMinutes()).padStart(2, "0"),
-        );
+        this.expirationDate = String(expirationDate.getHours() + ":" + String(expirationDate.getMinutes()).padStart(2, "0"));
       },
     });
     this.pendingChangesService.stage.subscribe({
