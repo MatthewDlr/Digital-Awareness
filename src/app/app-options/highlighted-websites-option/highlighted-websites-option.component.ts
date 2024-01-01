@@ -4,6 +4,7 @@ import { CommandPaletteService } from "../services/command-palette/command-palet
 import { PendingChangesService } from "../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { WebsitesService } from "src/app/app-overlay/services/websites/websites.service";
 
 @Component({
   selector: "app-highlighted-websites-option",
@@ -25,6 +26,7 @@ export class HighlightedWebsitesOptionComponent {
   constructor(
     private commandPaletteService: CommandPaletteService,
     private pendingChangesService: PendingChangesService,
+    private websitesService: WebsitesService,
   ) {
     this.getWebsites();
     this.generateRandomWidth();
@@ -64,13 +66,8 @@ export class HighlightedWebsitesOptionComponent {
     this.commandPaletteService.toggleCommandPalette(state);
   }
 
-  computeBlockedScore(website: watchedWebsite): string {
-    let score = ((website.timesBlocked - website.timesAllowed) / (website.timesBlocked + website.timesAllowed)) * 100;
-    if (score) {
-      score = Math.round(score);
-      return String(score);
-    }
-    return "Never blocked";
+  computeBlockedScore(website: watchedWebsite): number {
+    return this.websitesService.computeWebsiteScore(website);
   }
 
   generateRandomWidth() {
