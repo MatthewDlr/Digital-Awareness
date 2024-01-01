@@ -132,7 +132,6 @@ export class WebsitesService {
   computeWebsiteScore(website: watchedWebsite): number {
     const accuracy = website.timesBlocked + website.timesAllowed;
     if (accuracy < 5) {
-      isDevMode() ? console.log("Not enough data to provide a reliable score for " + website.host) : null;
       return -1;
     }
 

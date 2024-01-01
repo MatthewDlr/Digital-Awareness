@@ -1,4 +1,4 @@
-import { Component, HostListener } from "@angular/core";
+import { Component, HostListener, ViewChild } from "@angular/core";
 import { watchedWebsite } from "src/app/types";
 import { CommandPaletteService } from "../services/command-palette/command-palette.service";
 import { PendingChangesService } from "../services/pending-changes/pending-changes.service";
@@ -17,7 +17,6 @@ export class HighlightedWebsitesOptionComponent {
   enforcedWebsites: watchedWebsite[] = [];
   userWebsites: watchedWebsite[] = [];
   isCommandPaletteShown: boolean = false;
-  randomWidths: any[] = [];
   OS: string = this.getOS();
 
   editIndex: number = -1;
@@ -29,7 +28,6 @@ export class HighlightedWebsitesOptionComponent {
     private websitesService: WebsitesService,
   ) {
     this.getWebsites();
-    this.generateRandomWidth();
     this.commandPaletteService.isCommandPaletteShown.subscribe({
       next: state => {
         this.isCommandPaletteShown = state;
@@ -70,17 +68,6 @@ export class HighlightedWebsitesOptionComponent {
     return this.websitesService.computeWebsiteScore(website);
   }
 
-  generateRandomWidth() {
-    for (let i = 0; i < 6; i++) {
-      const rowValues = [];
-      for (let c = 0; c < 3; c++) {
-        const randomPercentage = Math.floor(Math.random() * 60) + 30; // generates a random number between 30 and 90
-        rowValues.push(`${randomPercentage}%`);
-      }
-      this.randomWidths.push(rowValues);
-    }
-  }
-
   getWebsites() {
     Promise.all([chrome.storage.local.get("enforcedWebsites"), chrome.storage.sync.get("userWebsites")]).then(
       ([enforcedResult, userResult]) => {
@@ -90,9 +77,13 @@ export class HighlightedWebsitesOptionComponent {
     );
   }
 
+  @ViewChild("hostInput") input!: { nativeElement: HTMLInputElement };
   enableEdit(index: number, websiteToEdit: watchedWebsite) {
     this.editIndex = index;
     this.oldHost = websiteToEdit.host;
+    setTimeout(() => {
+      this.input.nativeElement.focus();
+    }, 0);
   }
 
   editWebsite(websiteToEdit: watchedWebsite) {
