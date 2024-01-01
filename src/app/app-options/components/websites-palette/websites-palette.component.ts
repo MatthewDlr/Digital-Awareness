@@ -118,6 +118,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
       host: website.host,
       timer: 30,
       allowedUntil: "",
+      blockedAt: "",
       timesBlocked: 0,
       timesAllowed: 0,
       category: website.category || category.unknown,
