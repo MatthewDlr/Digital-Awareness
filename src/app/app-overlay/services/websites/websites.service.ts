@@ -1,8 +1,8 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { watchedWebsite } from "src/app/types";
 
-const DEFAULT_ALLOWED_DURATION = 30; // In minutes. When the user allow the website (aka failure), this defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
-const DEFAULT_INTERVAL_DURATION = 15; // In minutes. When the user clicks on "Go back" (aka success), this defines the cooldown period before the extension considers a new activation of this button.
+const DEFAULT_ALLOWED_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user allow the website (aka failure), this defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
+const DEFAULT_INTERVAL_DURATION = isDevMode() ? 1 : 15; // In minutes. When the user clicks on "Go back" (aka success), this defines the cooldown period before the extension considers a new activation of this button.
 const MAX_TIMER_VALUE = 3; // In minutes. This specifies the maximum value the timer can be set to, regardless of user actions.
 
 @Injectable({
@@ -65,12 +65,8 @@ export class WebsitesService {
 
     // We adjust the timer value based on the last time the user allowed access to the website.
     // If he allowed access 1 day ago, then the timer remains unchanged; however, if the last allowance was 7 days ago, the value is divided by 1.49
-    const daysSinceLastAllowed = this.clamp(
-      (Date.now() - new Date(this.currentWebsite.allowedUntil).getTime()) / (1000 * 60 * 60 * 24),
-      1,
-      7,
-    );
-    const dayCoef = (daysSinceLastAllowed ^ 2) / 100 + 1;
+    const daysSinceLastAllowed = this.getDaysSinceLastAllowed(this.currentWebsite);
+    const dayCoef = daysSinceLastAllowed ** 2 / 100 + 1;
     timerValue /= dayCoef;
 
     return Math.round(timerValue);
@@ -108,12 +104,9 @@ export class WebsitesService {
       return;
     }
 
-    const delay = isDevMode() ? 30000 : DEFAULT_INTERVAL_DURATION * 60000;
-    if (new Date(websiteBlocked.blockedAt).getTime() + delay > Date.now()) {
+    if (new Date(websiteBlocked.blockedAt).getTime() + DEFAULT_INTERVAL_DURATION * 60000 > Date.now()) {
       isDevMode()
-        ? console.log(
-            "Website was blocked less than " + DEFAULT_INTERVAL_DURATION + " minutes ago, not incrementing the counter",
-          )
+        ? alert("Website was blocked less than " + DEFAULT_INTERVAL_DURATION + " minutes ago, not incrementing the counter")
         : null;
       return;
     }
@@ -136,11 +129,7 @@ export class WebsitesService {
     }
 
     const websiteScore = ((website.timesBlocked - website.timesAllowed) / accuracy) * 40 + 50; // 90% of the score depends on the ratio between times blocked and times allowed
-    const daysSinceLastAllowed = this.clamp(
-      (Date.now() - new Date(website.allowedUntil).getTime()) / (1000 * 60 * 60 * 24),
-      1,
-      7,
-    );
+    const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
     const lastAllowedScore = (daysSinceLastAllowed / 7) * 10; // Compute a score based on the number of days since the last time the website was allowed with min 1 and max 7
 
     const score = Math.round(websiteScore + lastAllowedScore);
@@ -154,16 +143,20 @@ export class WebsitesService {
     const score = this.computeWebsiteScore(this.currentWebsite);
     let newValue = currentValue;
 
+    const daysSinceLastAllowed = this.getDaysSinceLastAllowed(this.currentWebsite);
+    if (daysSinceLastAllowed >= 6) return currentValue; // If the user has not allowed the website for 6 days or more, we do not increase the timer value because it's likely that he has good habits.
+
     // The lower the score, the more aggressive the increase function becomes.
     if (score == -1 || (score >= 30 && score <= 70)) {
-      newValue += (newValue / 8) ^ 1.5; // Default increase function.
+      newValue += (newValue / 8) ** 1.5; // Default increase function.
     } else if (score < 30) {
-      newValue += (newValue / 8) ^ 2;
+      newValue += (newValue / 8) ** 2;
     } else if (score > 70 && score < 90) {
-      newValue += (newValue / 10) ^ 1.35;
+      newValue += (newValue / 10) ** 1.35;
     }
     newValue = Math.round(this.clamp(newValue, 30, MAX_TIMER_VALUE * 60));
-    isDevMode() ? console.log("The timer value increase from " + currentValue + "s to " + newValue + "s") : null;
+    isDevMode() ? alert("The timer value increased from " + currentValue + "s to " + newValue + "s") : null;
+
     return newValue;
   }
 
@@ -176,10 +169,10 @@ export class WebsitesService {
     if (score == -1) {
       newValue -= 10;
     } else {
-      newValue -= Math.round((score ^ 2) / 250); // The higher the score, the more the timer dwindle
+      newValue -= Math.round(score ** 2 / 250); // The higher the score, the more the timer dwindle
     }
     newValue = this.clamp(newValue, 30, MAX_TIMER_VALUE * 60);
-    isDevMode() ? console.log("The timer value decreased from " + currentValue + "s to " + newValue + "s") : null;
+    isDevMode() ? alert("The timer value decreased from " + currentValue + "s to " + newValue + "s") : null;
     return newValue;
   }
 
@@ -207,13 +200,16 @@ export class WebsitesService {
   }
 
   private updateWebsiteAllowedDate(website: watchedWebsite) {
-    const timeAllowed = isDevMode() ? 1 : DEFAULT_ALLOWED_DURATION;
-    website.allowedUntil = new Date(Date.now() + timeAllowed * 60000).toString();
+    website.allowedUntil = new Date(Date.now() + DEFAULT_ALLOWED_DURATION * 60000).toString();
     website.timesAllowed++;
-    isDevMode() ? console.log("Allowing " + website.host + " for " + timeAllowed + " min") : null;
+    isDevMode() ? console.log("Allowing " + website.host + " for " + DEFAULT_ALLOWED_DURATION + " min") : null;
   }
 
   private clamp(value: number, min: number, max: number) {
     return Math.min(Math.max(value, min), max);
+  }
+
+  private getDaysSinceLastAllowed(website: watchedWebsite): number {
+    return this.clamp((Date.now() - new Date(website.allowedUntil).getTime()) / (1000 * 60 * 60 * 24), 1, 7);
   }
 }

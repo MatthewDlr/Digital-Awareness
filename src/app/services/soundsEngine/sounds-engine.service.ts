@@ -1,6 +1,6 @@
 import { Injectable, isDevMode } from "@angular/core";
 
-const GLOBAL_VOLUME = 0.5;
+const GLOBAL_VOLUME = 0.75;
 
 @Injectable({
   providedIn: "root",
