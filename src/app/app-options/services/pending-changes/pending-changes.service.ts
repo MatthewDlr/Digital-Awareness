@@ -69,11 +69,13 @@ export class PendingChangesService {
     await chrome.storage.sync
       .get(["userWebsites"])
       .catch(error => {
+        this.soundsEngine.error();
         console.error("Cannot get user websites: ", error);
         return;
       })
       .then(result => {
         if (!result!["userWebsites"]) {
+          this.soundsEngine.error();
           isDevMode() ? console.warn("No user websites found") : null;
           return;
         }
@@ -95,9 +97,11 @@ export class PendingChangesService {
     chrome.storage.sync
       .set({ userWebsites: userWebsites })
       .then(() => {
+        this.soundsEngine.success();
         this.discardPendingChanges();
       })
       .catch(error => {
+        this.soundsEngine.error();
         console.error("Error while saving websites: ", error);
       });
   }

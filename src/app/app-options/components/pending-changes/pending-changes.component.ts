@@ -43,7 +43,6 @@ export class PendingChangesComponent {
   }
 
   confirmChanges() {
-    this.soundsEngine.success();
     this.pendingChangesService.confirmPendingChanges();
   }
 }
