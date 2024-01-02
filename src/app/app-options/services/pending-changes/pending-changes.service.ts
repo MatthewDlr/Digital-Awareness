@@ -36,6 +36,19 @@ export class PendingChangesService {
     this.savePendingChanges();
   }
 
+  isWebsitePending(host: string): boolean {
+    if (this.websitesToDelete.has(host)) {
+      return true;
+    }
+    // @ts-ignore: Not all code paths return a value.
+    this.websitesToEdit.forEach(website => {
+      if (website.oldHost === host || website.newHost === host) {
+        return true;
+      }
+    });
+    return false;
+  }
+
   addWebsiteToEdit(oldHost: string, newHost: string) {
     let doesWebsiteReplaceAnother = false;
     this.websitesToEdit.forEach(website => {

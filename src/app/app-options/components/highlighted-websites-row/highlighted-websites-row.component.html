@@ -1,0 +1,53 @@
+<td
+  class="text-gray-900 whitespace-nowrap pl-4 pr-3 text-sm font-medium sm:pl-6"
+  [ngClass]="isEditEnabled ? 'py-2' : 'py-4'"
+>
+  @if (!isEditEnabled) {
+    <span>{{ website.host }}</span>
+  } @else {
+    <div
+      class="focus-within:ring-indigo-600 flex items-center rounded-md px-2 shadow-sm ring-1 ring-inset ring-gray-400 focus-within:ring-purple-500 sm:max-w-md"
+    >
+      <span class="text-gray-400 flex select-none items-center sm:text-sm">https://</span>
+      <input
+        #hostInput
+        type="text"
+        name="company-website"
+        id="company-website"
+        class="text-gray-900 block flex-1 border-0 bg-transparent py-1.5 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+        placeholder="example.com"
+        [(ngModel)]="website.host"
+        (blur)="editWebsite()"
+      />
+      <svg
+        (click)="editWebsite()"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1"
+        stroke="currentColor"
+        class="size-6 transform cursor-pointer stroke-purple-500 transition-all hover:scale-110"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    </div>
+  }
+</td>
+<td class="text-gray-500 whitespace-nowrap py-4 text-sm">
+  {{ website.category }}
+</td>
+<td class="text-gray-500 whitespace-nowrap py-4 text-sm">
+  @if (awarenessRatio == -1) {
+    Still learning
+  } @else {
+    {{ awarenessRatio }} %
+  }
+</td>
+<td class="relative flex items-center gap-5 whitespace-nowrap py-4 pr-3 text-right text-sm font-medium sm:pr-6">
+  <a class="text-purple-500 cursor-pointer underline hover:text-purple-600" (click)="enableEdit()"> Edit </a>
+  <a class="text-purple-500 cursor-pointer underline hover:text-purple-600" (click)="removeWebsite()"> Remove </a>
+</td>
