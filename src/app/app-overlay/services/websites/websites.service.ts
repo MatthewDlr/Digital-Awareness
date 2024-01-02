@@ -129,11 +129,11 @@ export class WebsitesService {
       return -1;
     }
 
-    const websiteScore = ((website.timesBlocked - website.timesAllowed) / accuracy) * 40 + 50; // 90% of the score depends on the ratio between times blocked and times allowed
+    const websiteScore = 210 * Math.log10((website.timesBlocked - website.timesAllowed) / accuracy + 2);
     const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
-    const lastAllowedScore = (daysSinceLastAllowed / 7) * 10; // Compute a score based on the number of days since the last time the website was allowed with min 1 and max 7
+    const lastAllowedScore = Math.log2(daysSinceLastAllowed * 4);
 
-    const score = Math.round(websiteScore + lastAllowedScore);
+    const score = this.clamp(Math.round(websiteScore + lastAllowedScore), 0, 100);
     isDevMode() ? console.log("Website Score for " + website.host + " is " + score) : null;
     return score;
   }

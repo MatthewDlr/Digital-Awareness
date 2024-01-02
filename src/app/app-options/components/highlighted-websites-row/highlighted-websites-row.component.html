@@ -50,7 +50,9 @@
     awarenessRatio == -1 ? 'text-gray-500' : ''
   ]"
 >
-  @if (awarenessRatio == -1) {
+  @if (isDevMode) {
+    {{ awarenessRatio }}, {{website.timesAllowed}}, {{website.timesBlocked}}
+  } @else if (awarenessRatio == -1) {
     ⏳ Learning
   } @else {
     {{ awarenessRatio }} %

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, Input, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, HostListener, Input, ViewChild, ChangeDetectorRef, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { watchedWebsite } from "src/app/types";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
@@ -21,8 +21,10 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
   isEditEnabled: boolean = false;
   oldHost: string = "";
   awarenessRatio = -1;
+  isDevMode = isDevMode();
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private pendingChangesService: PendingChangesService,
     private soundsEngine: SoundsEngineService,
     private websitesService: WebsitesService,
@@ -30,6 +32,7 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.awarenessRatio = this.websitesService.computeWebsiteScore(this.website);
+    this.cdRef.detectChanges();
   }
 
   @HostListener("document:keydown.enter", ["$event"])
