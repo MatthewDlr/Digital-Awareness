@@ -51,7 +51,7 @@
   ]"
 >
   @if (isDevMode) {
-    {{ awarenessRatio }}, {{website.timesAllowed}}, {{website.timesBlocked}}
+    {{ awarenessRatio }}, {{ website.timesAllowed }}, {{ website.timesBlocked }}
   } @else if (awarenessRatio == -1) {
     ⏳ Learning
   } @else {
