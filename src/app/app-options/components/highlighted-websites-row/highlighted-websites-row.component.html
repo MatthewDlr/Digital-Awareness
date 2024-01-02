@@ -2,7 +2,7 @@
   class="text-gray-900 whitespace-nowrap pl-4 pr-3 text-sm font-medium sm:pl-6"
   [ngClass]="isEditEnabled ? 'py-2' : 'py-4'"
 >
-  @if (!isEditEnabled) {
+  @if (!isEditEnabled || isEnforced) {
     <span>{{ website.host }}</span>
   } @else {
     <div
@@ -40,14 +40,41 @@
 <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
   {{ website.category }}
 </td>
-<td class="text-gray-500 whitespace-nowrap py-4 text-sm">
+<td
+  class="whitespace-nowrap py-4 text-sm"
+  [ngClass]="[
+    awarenessRatio >= 70 ? 'text-green-500 font-bold' : '',
+    awarenessRatio < 30 && awarenessRatio > 15 ? 'text-orange-500' : '',
+    awarenessRatio <= 15 && awarenessRatio >= 0 ? 'text-red-500' : '',
+    awarenessRatio >= 30 && awarenessRatio < 70 ? 'text-blue-500' : '',
+    awarenessRatio == -1 ? 'text-gray-500' : ''
+  ]"
+>
   @if (awarenessRatio == -1) {
-    Still learning
+    ⏳ Learning
   } @else {
     {{ awarenessRatio }} %
   }
 </td>
 <td class="relative flex items-center gap-5 whitespace-nowrap py-4 pr-3 text-right text-sm font-medium sm:pr-6">
-  <a class="text-purple-500 cursor-pointer underline hover:text-purple-600" (click)="enableEdit()"> Edit </a>
-  <a class="text-purple-500 cursor-pointer underline hover:text-purple-600" (click)="removeWebsite()"> Remove </a>
+  <a
+    [ngClass]="
+      isEnforced || isPending
+        ? 'text-gray-600 cursor-not-allowed'
+        : 'text-purple-500 cursor-pointer underline hover:text-purple-600'
+    "
+    (click)="enableEdit()"
+  >
+    Edit
+  </a>
+  <a
+    [ngClass]="
+      isEnforced || isPending
+        ? 'text-gray-600 cursor-not-allowed'
+        : 'text-purple-500 cursor-pointer underline hover:text-purple-600'
+    "
+    (click)="removeWebsite()"
+  >
+    Remove
+  </a>
 </td>

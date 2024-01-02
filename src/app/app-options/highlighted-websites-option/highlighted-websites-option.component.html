@@ -2,9 +2,8 @@
   <h1 class="text-gray-900 animate-fade-up text-lg font-semibold leading-6 animate-duration-500">Websites</h1>
   <div class="sm:flex sm:items-center">
     <div class="w-full animate-fade-up animate-duration-500 sm:flex-auto">
-      <p class="text-gray-700 mt-2 text-sm">
-        For your wellbeing, some websites we identified as the most time-consuming <br />
-        cannot be removed from the list.
+      <p class="text-gray-700 mt-2 w-full text-balance text-sm">
+        For your wellbeing, some websites we identified as the most time-consuming cannot be removed from the list.
       </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -57,9 +56,13 @@
                 <tr
                   app-highlighted-websites-row
                   [website]="website"
-                  [enforced]="false"
-                  [areModificationsPending]="isWebsiteHasChangesPending(website.host)"
+                  [isEnforced]="false"
+                  [isPending]="websitesPendingEdit.has(website.host) || pendingChangesService.websitesToDelete.has(website.host)"
                   class="animate-fade-up animate-delay-[400ms] animate-duration-500"
+                  [ngClass]="[
+                    pendingChangesService.websitesToDelete.has(website.host) ? 'bg-red-50' : '',
+                    websitesPendingEdit.has(website.host) ? 'bg-purple-50' : ''
+                  ]"
                 ></tr>
               }
 
@@ -68,8 +71,8 @@
                 <tr
                   app-highlighted-websites-row
                   [website]="website"
-                  [enforced]="true"
-                  class="animate-fade-up animate-delay-[400ms] animate-duration-500"
+                  [isEnforced]="true"
+                  class="bg-gray-50 animate-fade-up animate-delay-[400ms] animate-duration-500"
                 ></tr>
               }
             </tbody>

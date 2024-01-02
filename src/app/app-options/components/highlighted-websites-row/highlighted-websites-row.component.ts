@@ -15,8 +15,8 @@ import { FormsModule } from "@angular/forms";
 })
 export class HighlightedWebsitesRowComponent implements AfterViewInit {
   @Input({ required: true }) website!: watchedWebsite;
-  @Input({ required: true }) enforced!: boolean;
-  @Input({ required: false }) areModificationsPending: boolean = false;
+  @Input({ required: true }) isEnforced!: boolean;
+  @Input() isPending!: boolean;
 
   isEditEnabled: boolean = false;
   oldHost: string = "";
@@ -42,7 +42,7 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
 
   @ViewChild("hostInput") input!: { nativeElement: HTMLInputElement };
   enableEdit() {
-    if (this.enforced) return;
+    if (this.isEnforced || this.isPending) return;
 
     this.soundsEngine.pop();
     this.isEditEnabled = true;
@@ -53,7 +53,7 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
   }
 
   editWebsite() {
-    if (this.enforced) return;
+    if (this.isEnforced || this.isPending) return;
 
     this.website.host = this.website.host.trim();
     this.isEditEnabled = false;
@@ -64,7 +64,7 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
   }
 
   removeWebsite() {
-    if (this.enforced) return;
+    if (this.isEnforced || this.isPending) return;
 
     this.soundsEngine.erase();
     this.pendingChangesService.addWebsiteToRemove(this.website.host);

@@ -17,13 +17,14 @@ import { HighlightedWebsitesRowComponent } from "../components/highlighted-websi
 export class HighlightedWebsitesOptionComponent {
   enforcedWebsites!: watchedWebsite[];
   userWebsites!: watchedWebsite[];
+  websitesPendingEdit: Set<string> = new Set();
   isCommandPaletteShown: boolean = false;
   OS: string = this.getOS();
 
   constructor(
     private soundsEngine: SoundsEngineService,
     private commandPaletteService: CommandPaletteService,
-    private pendingChangesService: PendingChangesService,
+    public pendingChangesService: PendingChangesService,
   ) {
     this.commandPaletteService.isCommandPaletteShown.subscribe({
       next: state => {
@@ -31,6 +32,7 @@ export class HighlightedWebsitesOptionComponent {
         if (!state) {
           setTimeout(() => {
             this.getWebsites();
+            this.getWebsitesPendingEdit();
           }, 100);
         }
       },
@@ -38,6 +40,7 @@ export class HighlightedWebsitesOptionComponent {
     this.pendingChangesService.stage.subscribe({
       next: () => {
         this.getWebsites();
+        this.getWebsitesPendingEdit();
       },
     });
   }
@@ -66,8 +69,11 @@ export class HighlightedWebsitesOptionComponent {
     });
   }
 
-  isWebsiteHasChangesPending(host: string): boolean {
-    return this.pendingChangesService.isWebsitePending(host);
+  getWebsitesPendingEdit() {
+    this.websitesPendingEdit.clear();
+    this.pendingChangesService.websitesToEdit.forEach(website => {
+      this.websitesPendingEdit.add(website.oldHost);
+    });
   }
 
   getOS(): string {
