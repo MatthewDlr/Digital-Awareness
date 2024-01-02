@@ -1,6 +1,7 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { watchedWebsite } from "src/app/types";
 import { BehaviorSubject } from "rxjs";
+import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +16,7 @@ export class PendingChangesService {
   timeout = isDevMode() ? 1000 * 5 : 1000 * 60;
   waitDuration = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
 
-  constructor() {
+  constructor(private soundsEngine: SoundsEngineService) {
     chrome.storage.local.get(["pendingChanges"]).then(result => {
       if (result["pendingChanges"]) {
         this.stage.next(result["pendingChanges"].stage || stages.NoChanges);
@@ -109,12 +110,14 @@ export class PendingChangesService {
 
     if (this.stage.getValue() === stages.ChangesPending) {
       if (this.canBeValidated()) {
+        this.soundsEngine.alert();
         this.stage.next(stages.ChangesCanBeValidated);
       }
     }
 
     if (this.stage.getValue() === stages.ChangesCanBeValidated) {
       if (this.areChangesExpired()) {
+        this.soundsEngine.erase();
         this.discardPendingChanges();
         return;
       }

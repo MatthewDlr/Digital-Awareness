@@ -29,11 +29,17 @@ export class NotificationsOptionComponent {
   }
 
   toggleDoomScrolling() {
-    this.doomScrollingToggle = !this.doomScrollingToggle;
+    if (this.doomScrollingToggle) {
+      this.soundsEngine.switchOFF();
+      this.doomScrollingToggle = false;
+    } else {
+      this.soundsEngine.switchON();
+      this.doomScrollingToggle = true;
+    }
+
     chrome.storage.sync.set({
       doomScrollingNotification: this.doomScrollingToggle,
     });
-    this.soundsEngine.click();
   }
 
   requestNotificationPermission() {
@@ -43,9 +49,11 @@ export class NotificationsOptionComponent {
       })
       .then(granted => {
         if (granted) {
+          this.soundsEngine.success();
           this.hasNotificationPermission = true;
           this.loadSettings();
         } else {
+          this.soundsEngine.error();
           this.hasNotificationPermission = false;
           this.bindWatchingToggle = false;
           this.doomScrollingToggle = false;

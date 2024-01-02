@@ -1,5 +1,7 @@
 import { Injectable, isDevMode } from "@angular/core";
 
+const GLOBAL_VOLUME = 0.5;
+
 @Injectable({
   providedIn: "root",
 })
@@ -12,6 +14,7 @@ export class SoundsEngineService {
     if (!this.audio.canPlayType("audio/wav")) {
       this.supported = false;
     }
+    this.audio.volume = GLOBAL_VOLUME;
     isDevMode() ? console.log("SoundsEngine Status: ", this.supported) : null;
   }
 
@@ -35,5 +38,25 @@ export class SoundsEngineService {
 
   error() {
     this.playAudio("error");
+  }
+
+  switchON() {
+    this.playAudio("switch-on");
+  }
+
+  switchOFF() {
+    this.playAudio("switch-off");
+  }
+
+  pop() {
+    this.playAudio("pop");
+  }
+
+  erase() {
+    this.playAudio("erase");
+  }
+
+  alert() {
+    this.playAudio("alert");
   }
 }

@@ -5,6 +5,8 @@ import { PendingChangesService } from "../services/pending-changes/pending-chang
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { WebsitesService } from "src/app/app-overlay/services/websites/websites.service";
+import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
+
 
 @Component({
   selector: "app-highlighted-websites-option",
@@ -23,6 +25,7 @@ export class HighlightedWebsitesOptionComponent {
   oldHost!: string;
 
   constructor(
+    private soundsEngine: SoundsEngineService,
     private commandPaletteService: CommandPaletteService,
     private pendingChangesService: PendingChangesService,
     private websitesService: WebsitesService,
@@ -62,6 +65,7 @@ export class HighlightedWebsitesOptionComponent {
 
   toggleCommandPalette(state: boolean) {
     this.commandPaletteService.toggleCommandPalette(state);
+    this.soundsEngine.pop();
   }
 
   computeBlockedScore(website: watchedWebsite): number {
@@ -79,6 +83,7 @@ export class HighlightedWebsitesOptionComponent {
 
   @ViewChild("hostInput") input!: { nativeElement: HTMLInputElement };
   enableEdit(index: number, websiteToEdit: watchedWebsite) {
+    this.soundsEngine.pop();
     this.editIndex = index;
     this.oldHost = websiteToEdit.host;
     setTimeout(() => {
@@ -99,6 +104,7 @@ export class HighlightedWebsitesOptionComponent {
   }
 
   removeWebsite(websiteToDelete: watchedWebsite) {
+    this.soundsEngine.erase();
     this.userWebsites = this.userWebsites.filter(website => website.host !== websiteToDelete.host);
     this.pendingChangesService.addWebsiteToRemove(websiteToDelete.host);
   }
