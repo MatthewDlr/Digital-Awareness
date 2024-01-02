@@ -1,6 +1,7 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { watchedWebsite } from "src/app/types";
 import { BehaviorSubject } from "rxjs";
+import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +16,7 @@ export class PendingChangesService {
   timeout = isDevMode() ? 1000 * 5 : 1000 * 60;
   waitDuration = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
 
-  constructor() {
+  constructor(private soundsEngine: SoundsEngineService) {
     chrome.storage.local.get(["pendingChanges"]).then(result => {
       if (result["pendingChanges"]) {
         this.stage.next(result["pendingChanges"].stage || stages.NoChanges);
@@ -33,6 +34,19 @@ export class PendingChangesService {
     this.websitesToDelete.add(host);
     this.setPendingDuration();
     this.savePendingChanges();
+  }
+
+  isWebsitePending(host: string): boolean {
+    if (this.websitesToDelete.has(host)) {
+      return true;
+    }
+    // @ts-ignore: Not all code paths return a value.
+    this.websitesToEdit.forEach(website => {
+      if (website.oldHost === host || website.newHost === host) {
+        return true;
+      }
+    });
+    return false;
   }
 
   addWebsiteToEdit(oldHost: string, newHost: string) {
@@ -68,11 +82,13 @@ export class PendingChangesService {
     await chrome.storage.sync
       .get(["userWebsites"])
       .catch(error => {
+        this.soundsEngine.error();
         console.error("Cannot get user websites: ", error);
         return;
       })
       .then(result => {
         if (!result!["userWebsites"]) {
+          this.soundsEngine.error();
           isDevMode() ? console.warn("No user websites found") : null;
           return;
         }
@@ -94,9 +110,11 @@ export class PendingChangesService {
     chrome.storage.sync
       .set({ userWebsites: userWebsites })
       .then(() => {
+        this.soundsEngine.success();
         this.discardPendingChanges();
       })
       .catch(error => {
+        this.soundsEngine.error();
         console.error("Error while saving websites: ", error);
       });
   }
@@ -109,12 +127,14 @@ export class PendingChangesService {
 
     if (this.stage.getValue() === stages.ChangesPending) {
       if (this.canBeValidated()) {
+        this.soundsEngine.alert();
         this.stage.next(stages.ChangesCanBeValidated);
       }
     }
 
     if (this.stage.getValue() === stages.ChangesCanBeValidated) {
       if (this.areChangesExpired()) {
+        this.soundsEngine.erase();
         this.discardPendingChanges();
         return;
       }

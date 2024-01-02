@@ -2,9 +2,8 @@
   <h1 class="text-gray-900 animate-fade-up text-lg font-semibold leading-6 animate-duration-500">Websites</h1>
   <div class="sm:flex sm:items-center">
     <div class="w-full animate-fade-up animate-duration-500 sm:flex-auto">
-      <p class="text-gray-700 mt-2 text-sm">
-        For your wellbeing, some websites we identified as the most time-consuming <br />
-        cannot be removed from the list.
+      <p class="text-gray-700 mt-2 w-full text-balance text-sm">
+        For your wellbeing, some websites we identified as the most time-consuming cannot be removed from the list.
       </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -23,19 +22,13 @@
             aria-hidden="true"
             class="size-6"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </svg>
 
           Add new website
         </button>
         <div class="absolute bottom-full mb-2 hidden justify-center !transition-all group-hover:block">
-          <div class="text-black bg-gray-200 rounded-full px-4 py-2 text-sm">
-            {{ OS === "MacOS" ? "⌘" : "Ctrl" }} + K
-          </div>
+          <div class="text-black bg-gray-200 rounded-full px-4 py-2 text-sm">{{ OS === "MacOS" ? "⌘" : "Ctrl" }} + K</div>
         </div>
       </div>
     </div>
@@ -46,7 +39,7 @@
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
         <div
-          class="max-h-[30rem] overflow-scroll shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg dark:ring-white"
+          class="max-h-[30rem] overflow-scroll shadow ring-1 ring-gray-300 ring-opacity-5 sm:rounded-lg dark:ring-gray-700"
         >
           <table class="min-w-full divide-y-0 divide-gray-300 dark:divide-gray-700">
             <thead class="bg-green-500">
@@ -60,82 +53,27 @@
             <tbody class="bg-white divide-y divide-gray-300 overflow-scroll dark:divide-gray-700">
               <!-- User Websites -->
               @for (website of userWebsites; track $index) {
-                <tr class="animate-fade-up animate-delay-[400ms] animate-duration-500">
-                  <td class="text-gray-900 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6">
-                    @if (editIndex != $index) {
-                      <span>{{ website.host }}</span>
-                    } @else {
-                      <div
-                        class="focus-within:ring-indigo-600 flex items-center rounded-md px-2 shadow-sm ring-1 ring-inset ring-gray-400 focus-within:ring-purple-500 sm:max-w-md"
-                      >
-                        <span class="text-gray-400 flex select-none items-center sm:text-sm">https://</span>
-                        <input
-                          type="text"
-                          name="company-website"
-                          id="company-website"
-                          class="text-gray-900 block flex-1 border-0 bg-transparent py-1.5 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                          placeholder="example.com"
-                          [(ngModel)]="website.host"
-                          (blur)="editWebsite(website)"
-                        />
-                        <svg
-                          (click)="editWebsite(website)"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1"
-                          stroke="currentColor"
-                          class="size-6 transform cursor-pointer stroke-purple-500 transition-all hover:scale-110"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      </div>
-                    }
-                  </td>
-                  <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
-                    {{ website.category || "Unknown" }}
-                  </td>
-                  <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
-                    {{ computeBlockedScore(website) }}
-                  </td>
-                  <td class="relative flex gap-5 whitespace-nowrap py-4 pr-3 text-right text-sm font-medium sm:pr-6">
-                    <a
-                      class="text-purple-500 cursor-pointer underline hover:text-purple-600"
-                      (click)="enableEdit($index, website)"
-                    >
-                      Edit
-                    </a>
-                    <a
-                      class="text-purple-500 cursor-pointer underline hover:text-purple-600"
-                      (click)="removeWebsite(website)"
-                    >
-                      Remove
-                    </a>
-                  </td>
-                </tr>
+                <tr
+                  app-highlighted-websites-row
+                  [website]="website"
+                  [isEnforced]="false"
+                  [isPending]="websitesPendingEdit.has(website.host) || pendingChangesService.websitesToDelete.has(website.host)"
+                  class="animate-fade-up animate-delay-[400ms] animate-duration-500"
+                  [ngClass]="[
+                    pendingChangesService.websitesToDelete.has(website.host) ? 'bg-red-50' : '',
+                    websitesPendingEdit.has(website.host) ? 'bg-purple-50' : ''
+                  ]"
+                ></tr>
               }
 
               <!-- Enforced Websites -->
               @for (website of enforcedWebsites; track $index) {
-                <tr class="bg-gray-50 animate-fade-up animate-delay-[400ms] animate-duration-500">
-                  <td class="text-gray-900 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6">
-                    {{ website.host }}
-                  </td>
-                  <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
-                    {{ website.category }}
-                  </td>
-                  <td class="text-gray-500 whitespace-nowrap py-4 text-sm">
-                    {{ computeBlockedScore(website) }}
-                  </td>
-                  <td class="relative flex gap-5 whitespace-nowrap py-4 pr-3 text-right text-sm font-medium sm:pr-6">
-                    <a class="text-gray-500 cursor-not-allowed"> Edit </a>
-                    <a class="text-gray-500 cursor-not-allowed"> Remove </a>
-                  </td>
-                </tr>
+                <tr
+                  app-highlighted-websites-row
+                  [website]="website"
+                  [isEnforced]="true"
+                  class="bg-gray-50 animate-fade-up animate-delay-[400ms] animate-duration-500"
+                ></tr>
               }
             </tbody>
           </table>

@@ -72,8 +72,8 @@
               <h3 class="text-orange-700 text-base font-medium">Unable to save data</h3>
               <div class="text-orange-700 mt-1 text-sm">
                 <p>
-                  Due to Chrome's storage limitations, the number of website you can add is limited. Please review and
-                  adjust your selections, then try again. <br />
+                  Due to Chrome's storage limitations, the number of website you can add is limited. Please review and adjust
+                  your selections, then try again. <br />
                   Press <strong>escape</strong> to close without saving.
                 </p>
               </div>
@@ -109,9 +109,7 @@
                 class="group text-gray-500 flex animate-fade-up cursor-default select-none items-center rounded-lg px-3 py-2 !transition-all animate-duration-300"
                 (click)="toggleWebsiteSelection(website)"
                 [ngClass]="[
-                  website.isSelected
-                    ? 'text-green-500 bg-green-100 bg-opacity-50'
-                    : 'hover:bg-gray-200 hover:bg-opacity-50',
+                  website.isSelected ? 'text-green-500 bg-green-100 bg-opacity-50' : 'hover:bg-gray-200 hover:bg-opacity-50',
                   website.isBlocked ? 'cursor-not-allowed' : ''
                 ]"
               >

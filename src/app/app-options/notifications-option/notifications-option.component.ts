@@ -1,5 +1,6 @@
 import { Component, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Component({
   selector: "app-notifications-option",
@@ -15,7 +16,7 @@ export class NotificationsOptionComponent {
   hasNotificationPermission: boolean = true;
   isNotificationPermissionRequested: boolean = false;
 
-  constructor() {
+  constructor(private soundsEngine: SoundsEngineService) {
     this.loadSettings();
     chrome.notifications.getPermissionLevel(level => {
       isDevMode() ? console.log("hasNotificationPermission: ", level) : null;
@@ -28,7 +29,14 @@ export class NotificationsOptionComponent {
   }
 
   toggleDoomScrolling() {
-    this.doomScrollingToggle = !this.doomScrollingToggle;
+    if (this.doomScrollingToggle) {
+      this.soundsEngine.switchOFF();
+      this.doomScrollingToggle = false;
+    } else {
+      this.soundsEngine.switchON();
+      this.doomScrollingToggle = true;
+    }
+
     chrome.storage.sync.set({
       doomScrollingNotification: this.doomScrollingToggle,
     });
@@ -41,9 +49,11 @@ export class NotificationsOptionComponent {
       })
       .then(granted => {
         if (granted) {
+          this.soundsEngine.success();
           this.hasNotificationPermission = true;
           this.loadSettings();
         } else {
+          this.soundsEngine.error();
           this.hasNotificationPermission = false;
           this.bindWatchingToggle = false;
           this.doomScrollingToggle = false;

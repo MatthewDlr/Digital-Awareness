@@ -6,6 +6,7 @@ import { watchedWebsite, category } from "../../../types";
 import { SearchAnimationComponent } from "../search-animation/search-animation.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Component({
   selector: "app-websites-palette",
@@ -19,6 +20,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
   searchQuery: string = "";
 
   constructor(
+    private soundsEngine: SoundsEngineService,
     private commandPaletteService: CommandPaletteService,
     public searchService: SearchService,
   ) {
@@ -64,6 +66,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     chrome.storage.sync
       .set({ userWebsites: userWebsites })
       .then(() => {
+        this.soundsEngine.success();
         this.searchService.clearSuggestions();
         this.toggleCommandPalette(false);
         chrome.storage.sync.get("userWebsites").then(result => {
@@ -71,6 +74,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
         });
       })
       .catch(error => {
+        this.soundsEngine.error();
         this.saveError = true;
         this.searchService.loadStoredWebsites();
         console.error("Error while blocking websites:", error);
@@ -93,6 +97,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
 
   onClear() {
     this.searchQuery = "";
+    this.soundsEngine.erase();
     this.searchService.performSearch(this.searchQuery);
   }
 
@@ -102,8 +107,10 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     }
     website.isSelected = !website.isSelected;
     if (website.isSelected) {
+      this.soundsEngine.switchON();
       this.searchService.addSelectedWebsite(website);
     } else {
+      this.soundsEngine.switchOFF();
       this.searchService.removeSelectedWebsite(website);
     }
   }
@@ -118,6 +125,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
       host: website.host,
       timer: 30,
       allowedUntil: "",
+      blockedAt: "",
       timesBlocked: 0,
       timesAllowed: 0,
       category: website.category || category.unknown,

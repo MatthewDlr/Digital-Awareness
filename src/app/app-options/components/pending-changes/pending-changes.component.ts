@@ -1,6 +1,7 @@
 import { Component, isDevMode } from "@angular/core";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
+import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Component({
   selector: "app-pending-changes",
@@ -16,14 +17,15 @@ export class PendingChangesComponent {
 
   timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
 
-  constructor(private pendingChangesService: PendingChangesService) {
+  constructor(
+    private soundsEngine: SoundsEngineService,
+    private pendingChangesService: PendingChangesService,
+  ) {
     this.pendingChangesService.validationDate.subscribe({
       next: date => {
         this.validationDate = String(date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0"));
         const expirationDate = new Date(date.getTime() + this.timeToAdd);
-        this.expirationDate = String(
-          expirationDate.getHours() + ":" + String(expirationDate.getMinutes()).padStart(2, "0"),
-        );
+        this.expirationDate = String(expirationDate.getHours() + ":" + String(expirationDate.getMinutes()).padStart(2, "0"));
       },
     });
     this.pendingChangesService.stage.subscribe({
@@ -36,6 +38,7 @@ export class PendingChangesComponent {
   }
 
   discardChanges() {
+    this.soundsEngine.erase();
     this.pendingChangesService.discardPendingChanges();
   }
 

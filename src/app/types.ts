@@ -2,6 +2,7 @@ export type watchedWebsite = {
   host: string;
   timer: number;
   allowedUntil: string;
+  blockedAt: string;
   timesBlocked: number;
   timesAllowed: number;
   category: category;
@@ -15,5 +16,5 @@ export enum category {
   shopping = "Shopping",
   news = "News",
   music = "Music",
-  unknown = "",
+  unknown = "Unknown",
 }
