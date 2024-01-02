@@ -57,7 +57,9 @@
                   app-highlighted-websites-row
                   [website]="website"
                   [isEnforced]="false"
-                  [isPending]="websitesPendingEdit.has(website.host) || pendingChangesService.websitesToDelete.has(website.host)"
+                  [isPending]="
+                    websitesPendingEdit.has(website.host) || pendingChangesService.websitesToDelete.has(website.host)
+                  "
                   class="animate-fade-up animate-delay-[400ms] animate-duration-500"
                   [ngClass]="[
                     pendingChangesService.websitesToDelete.has(website.host) ? 'bg-red-50' : '',
