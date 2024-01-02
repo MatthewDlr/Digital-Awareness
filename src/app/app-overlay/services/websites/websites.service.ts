@@ -1,6 +1,7 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { watchedWebsite } from "src/app/types";
 
+const DEFAULT_TIMER_VALUE = isDevMode() ? 3 : 30; // In seconds. This is the default value for the timer when the user has to wait to access the website.
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user allow the website (aka failure), this defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
 const DEFAULT_INTERVAL_DURATION = isDevMode() ? 1 : 15; // In minutes. When the user clicks on "Go back" (aka success), this defines the cooldown period before the extension considers a new activation of this button.
 const MAX_TIMER_VALUE = 3; // In minutes. This specifies the maximum value the timer can be set to, regardless of user actions.
@@ -40,9 +41,9 @@ export class WebsitesService {
 
   getTimerValue(website: string): number {
     this.currentWebsite = this.getCurrentWebsite(website);
-    if (isDevMode()) return 5;
+    if (isDevMode()) return DEFAULT_TIMER_VALUE;
 
-    let timerValue = this.currentWebsite.timer || 30;
+    let timerValue = this.currentWebsite.timer || DEFAULT_TIMER_VALUE;
     const score = this.computeWebsiteScore(this.currentWebsite);
 
     // The timer value remains unchanged if the user has not interacted with the website sufficiently.
@@ -139,7 +140,7 @@ export class WebsitesService {
 
   // Algorithm to compute the new timer value when the user allows a website (failure)
   private computeNewIncreasedValue(): number {
-    const currentValue = this.currentWebsite.timer || 30;
+    const currentValue = this.currentWebsite.timer || DEFAULT_TIMER_VALUE;
     const score = this.computeWebsiteScore(this.currentWebsite);
     let newValue = currentValue;
 
@@ -162,7 +163,7 @@ export class WebsitesService {
 
   // Algorithm to compute the new timer value when the user goes back (success)
   private computeNewDecreasedValue(): number {
-    const currentValue = this.currentWebsite.timer || 30;
+    const currentValue = this.currentWebsite.timer || DEFAULT_TIMER_VALUE;
     const score = this.computeWebsiteScore(this.currentWebsite);
     let newValue = currentValue;
 

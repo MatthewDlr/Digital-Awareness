@@ -14,12 +14,13 @@ import { TasksWidgetComponent } from "../tasks-widget/tasks-widget.component";
   styleUrls: ["./awareness-page.component.css"],
 })
 export class AwarenessPageComponent {
-  storedTimerValue!: number;
+  originalTimerValue!: number;
   timerValue = signal(30);
   outputUrl!: URL;
   tabId!: string;
   widget: string = "Quotes";
   timerBehavior!: string;
+  isWindowFocused: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,14 +45,18 @@ export class AwarenessPageComponent {
       isDevMode() ? console.log("Timer behavior loaded: ", this.timerBehavior) : null;
     });
 
+    document.addEventListener("visibilitychange", () => {
+      document.hidden ? (this.isWindowFocused = false) : (this.isWindowFocused = true);
+    });
+
     // Sometimes the initialization of the allowedSitesService is not finished when the component is created
     // So we wait for it to be finished before getting the timer value
     let numberOfTry = 10;
     const intervalId = setInterval(() => {
       if (this.websitesService.isInitialized()) {
         clearInterval(intervalId);
-        this.storedTimerValue = this.websitesService.getTimerValue(this.outputUrl.host);
-        this.timerValue.set(this.storedTimerValue);
+        this.originalTimerValue = this.websitesService.getTimerValue(this.outputUrl.host);
+        this.timerValue.set(this.originalTimerValue);
         this.countdown();
       } else {
         numberOfTry--;
@@ -66,13 +71,12 @@ export class AwarenessPageComponent {
   countdown() {
     if (this.timerValue() > 0) {
       setTimeout(() => {
-        // if the user is not on the tab, don't decrement the timer
-        if (document.hasFocus() || isDevMode()) {
+        if ((document.hasFocus() && this.isWindowFocused) || isDevMode()) {
           this.timerValue.update(value => value - 1);
         } else {
-          // If the user is not on the tab, and the timer behavior is "Restart", restart the timer
-          if (this.timerBehavior == "Restart" && !isDevMode()) {
-            this.timerValue.set(this.storedTimerValue);
+          // If the user is not on the tab, and the timer behavior is "Restart", restart the timer; otherwise, don't dwindle the timer.
+          if (this.timerBehavior == "Restart") {
+            this.timerValue.set(this.originalTimerValue);
           }
         }
         this.countdown();
