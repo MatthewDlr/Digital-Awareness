@@ -2,8 +2,8 @@ import { Injectable, isDevMode } from "@angular/core";
 import { watchedWebsite } from "src/app/types";
 
 const DEFAULT_TIMER_VALUE = isDevMode() ? 3 : 30; // In seconds. This is the default value for the timer when the user has to wait to access the website.
-const DEFAULT_ALLOWED_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user allow the website (aka failure), this defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
-const DEFAULT_INTERVAL_DURATION = isDevMode() ? 1 : 15; // In minutes. When the user clicks on "Go back" (aka success), this defines the cooldown period before the extension considers a new activation of this button.
+const DEFAULT_ALLOWED_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user allow the website (aka failure), defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
+const DEFAULT_COOLDOWN_DURATION = isDevMode() ? 1 : 15; // In minutes. When the user clicks on "Go back" (aka success), defines the cooldown period before the timer will start be decreased again. (If not set, the user could just spam the button to increae it's score and dwindle the timer).
 const MAX_TIMER_VALUE = 3; // In minutes. This specifies the maximum value the timer can be set to, regardless of user actions.
 const INCREASE_COEF = 1; // The higher the value, the more aggressively the timer value increases.
 
@@ -107,9 +107,9 @@ export class WebsitesService {
       return;
     }
 
-    if (new Date(websiteBlocked.blockedAt).getTime() + DEFAULT_INTERVAL_DURATION * 60000 > Date.now()) {
+    if (new Date(websiteBlocked.blockedAt).getTime() + DEFAULT_COOLDOWN_DURATION * 60000 > Date.now()) {
       isDevMode()
-        ? alert("Website was blocked less than " + DEFAULT_INTERVAL_DURATION + " minutes ago, not incrementing the counter")
+        ? alert("Website was blocked less than " + DEFAULT_COOLDOWN_DURATION + " minutes ago, not incrementing the counter")
         : null;
       return;
     }
