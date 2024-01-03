@@ -5,6 +5,7 @@ const DEFAULT_TIMER_VALUE = isDevMode() ? 3 : 30; // In seconds. This is the def
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user allow the website (aka failure), this defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
 const DEFAULT_INTERVAL_DURATION = isDevMode() ? 1 : 15; // In minutes. When the user clicks on "Go back" (aka success), this defines the cooldown period before the extension considers a new activation of this button.
 const MAX_TIMER_VALUE = 3; // In minutes. This specifies the maximum value the timer can be set to, regardless of user actions.
+const INCREASE_COEF = 1; // The higher the value, the more aggressively the timer value increases.
 
 @Injectable({
   providedIn: "root",
@@ -47,16 +48,17 @@ export class WebsitesService {
     const score = this.computeWebsiteScore(this.currentWebsite);
 
     // The timer value remains unchanged if the user has not interacted with the website sufficiently.
-    if (score == -1) {
-      return timerValue;
-    }
+    if (score == -1) return timerValue;
 
     // If the user has a low score, we increase the timer value as a nudge to encourage the user to go back.
     if (score < 10) {
-      timerValue *= 1.75;
+      timerValue *= 1.75 * INCREASE_COEF;
     } else if (score < 20) {
-      timerValue *= 1.5;
+      timerValue *= 1.5 * INCREASE_COEF;
+    } else if (score < 30) {
+      timerValue *= 1.25 * INCREASE_COEF;
     }
+
     // If the user has a high score, we slightly reduce the timer value to indicate that accessing the website is OK.
     else if (score > 90) {
       timerValue /= 1.25;
@@ -125,9 +127,7 @@ export class WebsitesService {
   // If there is not enough data to compute a reliable score, -1 is returned.
   computeWebsiteScore(website: watchedWebsite): number {
     const accuracy = website.timesBlocked + website.timesAllowed;
-    if (accuracy < 5) {
-      return -1;
-    }
+    if (accuracy < 5) return -1;
 
     const websiteScore = 210 * Math.log10((website.timesBlocked - website.timesAllowed) / accuracy + 2);
     const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
@@ -149,14 +149,18 @@ export class WebsitesService {
 
     // The lower the score, the more aggressive the increase function becomes.
     if (score == -1 || (score >= 30 && score <= 70)) {
-      newValue += (newValue / 8) ** 1.5; // Default increase function.
-    } else if (score < 30) {
-      newValue += (newValue / 8) ** 2;
+      newValue += (newValue / 10) ** 1.75 * INCREASE_COEF; // Default increase function.
+    } else if (score < 30 && score > 15) {
+      newValue += (newValue / 10) ** 2.25 * INCREASE_COEF;
+    } else if (score <= 15) {
+      newValue += (newValue / 10) ** 2.5 * INCREASE_COEF;
     } else if (score > 70 && score < 90) {
-      newValue += (newValue / 10) ** 1.35;
+      newValue += (newValue / 10) ** 1.4 * INCREASE_COEF;
     }
     newValue = Math.round(this.clamp(newValue, 30, MAX_TIMER_VALUE * 60));
-    isDevMode() ? alert("The timer value increased from " + currentValue + "s to " + newValue + "s") : null;
+    isDevMode()
+      ? alert("The timer value increased from " + currentValue + "s to " + newValue + "s" + " (score: " + score + ")")
+      : null;
 
     return newValue;
   }
@@ -165,15 +169,19 @@ export class WebsitesService {
   private computeNewDecreasedValue(): number {
     const currentValue = this.currentWebsite.timer || DEFAULT_TIMER_VALUE;
     const score = this.computeWebsiteScore(this.currentWebsite);
+    const daysSinceLastAllowed = this.getDaysSinceLastAllowed(this.currentWebsite);
     let newValue = currentValue;
 
-    if (score == -1) {
-      newValue -= 10;
-    } else {
-      newValue -= Math.round(score ** 2 / 250); // The higher the score, the more the timer dwindle
-    }
+    if (daysSinceLastAllowed >= 6) return DEFAULT_TIMER_VALUE; // If last access was 6 days ago or more, then it's likely that the user has good habits, so we set the timer to the default value.
+
+    const adjust = daysSinceLastAllowed / 10 - 0.1; // Return a value between 0 and 0.4 based on the last time the user allowed the website.
+    const coef = Math.max(Math.log10(score) - 0.5, 0); // Return a value between 0 and 1.5 based on the score.
+    newValue = Math.round(newValue / (coef + adjust));
     newValue = this.clamp(newValue, 30, MAX_TIMER_VALUE * 60);
-    isDevMode() ? alert("The timer value decreased from " + currentValue + "s to " + newValue + "s") : null;
+
+    isDevMode()
+      ? alert("The timer value decreased from " + currentValue + "s to " + newValue + "s" + " (score: " + score + ")")
+      : null;
     return newValue;
   }
 
