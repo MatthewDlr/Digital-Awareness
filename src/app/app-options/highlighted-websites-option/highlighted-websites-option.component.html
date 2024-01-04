@@ -62,8 +62,10 @@
                   "
                   class="animate-fade-up animate-delay-[400ms] animate-duration-500"
                   [ngClass]="[
-                    pendingChangesService.websitesToDelete.has(website.host) ? 'bg-red-50 dark:bg-opacity-50 saturate-[0.8]' : '',
-                    websitesPendingEdit.has(website.host) ? 'bg-purple-50 dark:bg-opacity-50 saturate-[0.8]' : ''
+                    pendingChangesService.websitesToDelete.has(website.host)
+                      ? 'bg-red-50 saturate-[0.8] dark:bg-opacity-50'
+                      : '',
+                    websitesPendingEdit.has(website.host) ? 'bg-purple-50 saturate-[0.8] dark:bg-opacity-50' : ''
                   ]"
                 ></tr>
               }
