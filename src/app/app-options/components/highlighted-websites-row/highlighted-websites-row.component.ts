@@ -45,7 +45,10 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
 
   @ViewChild("hostInput") input!: { nativeElement: HTMLInputElement };
   enableEdit() {
-    if (this.isEnforced || this.isPending) return;
+    if (this.isEnforced || this.isPending) {
+      this.soundsEngine.notAllowed();
+      return;
+    }
 
     this.soundsEngine.pop();
     this.isEditEnabled = true;
@@ -56,7 +59,10 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
   }
 
   editWebsite() {
-    if (this.isEnforced || this.isPending) return;
+    if (this.isEnforced || this.isPending) {
+      this.soundsEngine.notAllowed();
+      return;
+    }
 
     this.website.host = this.website.host.trim();
     this.isEditEnabled = false;
@@ -67,9 +73,11 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
   }
 
   removeWebsite() {
-    if (this.isEnforced || this.isPending) return;
-
-    this.soundsEngine.erase();
-    this.pendingChangesService.addWebsiteToRemove(this.website.host);
+    if (this.isEnforced || this.isPending) {
+      this.soundsEngine.notAllowed();
+    } else {
+      this.soundsEngine.erase();
+      this.pendingChangesService.addWebsiteToRemove(this.website.host);
+    }
   }
 }

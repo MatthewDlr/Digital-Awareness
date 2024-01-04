@@ -59,4 +59,8 @@ export class SoundsEngineService {
   alert() {
     this.playAudio("alert");
   }
+
+  notAllowed() {
+    this.playAudio("not-allowed");
+  }
 }
