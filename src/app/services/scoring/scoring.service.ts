@@ -34,12 +34,15 @@ export class ScoringService {
     let newValue = currentValue;
 
     if (daysSinceLastAllowed >= 6) return DEFAULT_TIMER_VALUE; // If last access was 6 days ago or more, then it's likely that the user has good habits, so we set the timer to the default value.
-    if (score == -1) return Math.max((newValue /= 1.2), 30); // Default decrease function.
 
-    const adjust = daysSinceLastAllowed / 10 - 0.1; // Return a value between 0 and 0.4 based on the last time the user allowed the website.
-    const coef = Math.max(Math.log10(score) - 0.5, 0); // Return a value between 0 and 1.5 based on the score.
-    newValue = Math.round(newValue / (coef + adjust));
-    newValue = this.clamp(newValue, 30, MAX_TIMER_VALUE * 60);
+    if (score == -1) {
+      newValue = Math.max((newValue /= 1.2), 30); // Default decrease function.
+    } else {
+      const adjust = daysSinceLastAllowed / 10 - 0.1; // Return a value between 0 and 0.4 based on the last time the user allowed the website.
+      const coef = Math.max(Math.log10(score) - 0.5, 0); // Return a value between 0 and 1.5 based on the score.
+      newValue = Math.round(newValue / (coef + adjust));
+      newValue = this.clamp(newValue, 30, MAX_TIMER_VALUE * 60);
+    }
 
     isDevMode()
       ? alert("The timer value decreased from " + currentValue + "s to " + newValue + "s" + " (score: " + score + ")")
@@ -102,7 +105,6 @@ export class ScoringService {
     const dayCoef = daysSinceLastAllowed ** 2 / 100 + 1;
     timerValue /= dayCoef;
 
-    if (isDevMode()) return DEFAULT_TIMER_VALUE;
     return Math.round(timerValue);
   }
 

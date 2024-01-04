@@ -53,6 +53,7 @@ export class WebsitesService {
     const nudgedValue = this.scoringService.nudgeTimerValue(this.currentWebsite);
     isDevMode() ? console.log("Timer value has been nudged from " + timerValue + "s to " + nudgedValue + "s") : null;
 
+    if (isDevMode()) return 3;
     return nudgedValue;
   }
 
