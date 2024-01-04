@@ -33,11 +33,9 @@ export class AwarenessPageComponent {
     });
 
     chrome.storage.sync.get("awarenessPageWidget").then(result => {
-      this.widget = result["awarenessPageWidget"];
+      this.widget = result["awarenessPageWidget"] || "Quotes";
       isDevMode() ? console.log("widget: ", this.widget) : null;
-      if (this.widget == "Random") {
-        this.widget = this.getRandomWidget();
-      }
+      if (this.widget == "Random") this.widget = this.getRandomWidget();
     });
 
     chrome.storage.sync.get(["timerBehavior"]).then(result => {
@@ -49,23 +47,13 @@ export class AwarenessPageComponent {
       document.hidden ? (this.isWindowFocused = false) : (this.isWindowFocused = true);
     });
 
-    // Sometimes the initialization of the allowedSitesService is not finished when the component is created
-    // So we wait for it to be finished before getting the timer value
-    let numberOfTry = 10;
-    const intervalId = setInterval(() => {
-      if (this.websitesService.isInitialized()) {
-        clearInterval(intervalId);
-        this.originalTimerValue = this.websitesService.getTimerValue(this.outputUrl.host);
+    websitesService.areWebsitesLoaded.subscribe(areWebsitesLoaded => {
+      if (areWebsitesLoaded) {
+        this.originalTimerValue = websitesService.getTimerValue(this.outputUrl.host);
         this.timerValue.set(this.originalTimerValue);
         this.countdown();
-      } else {
-        numberOfTry--;
-        if (numberOfTry == 0) {
-          clearInterval(intervalId);
-          throw new Error("Could not load the timer value");
-        }
       }
-    }, 50);
+    });
   }
 
   countdown() {
@@ -94,7 +82,7 @@ export class AwarenessPageComponent {
 
   waitBeforeClose() {
     setTimeout(() => {
-      this.closeBlockPage();
+      window.close();
     }, 10000);
   }
 

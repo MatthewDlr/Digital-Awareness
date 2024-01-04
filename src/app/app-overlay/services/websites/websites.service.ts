@@ -1,4 +1,5 @@
 import { Injectable, isDevMode } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
 import { watchedWebsite } from "src/app/types";
 
 const DEFAULT_TIMER_VALUE = isDevMode() ? 3 : 30; // In seconds. This is the default value for the timer when the user has to wait to access the website.
@@ -11,6 +12,7 @@ const INCREASE_COEF = 1; // The higher the value, the more aggressively the time
   providedIn: "root",
 })
 export class WebsitesService {
+  areWebsitesLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   enforcedWebsites!: watchedWebsite[];
   userWebsites!: watchedWebsite[];
   currentWebsite!: watchedWebsite;
@@ -21,6 +23,7 @@ export class WebsitesService {
       .get("enforcedWebsites")
       .then(result => {
         this.enforcedWebsites = result["enforcedWebsites"] || [];
+        this.checkIfWebsitesLoaded();
       })
       .catch(error => {
         isDevMode() ? console.error(error) : null;
@@ -30,18 +33,24 @@ export class WebsitesService {
       .get("userWebsites")
       .then(result => {
         this.userWebsites = result["userWebsites"] || [];
+        this.checkIfWebsitesLoaded();
       })
       .catch(error => {
         isDevMode() ? console.error(error) : null;
       });
   }
 
-  isInitialized(): boolean {
-    return this.enforcedWebsites && this.userWebsites ? true : false;
+  checkIfWebsitesLoaded() {
+    if (this.enforcedWebsites && this.userWebsites) {
+      this.areWebsitesLoaded.next(true);
+      isDevMode() ? console.info("Websites correctly retrieved from chrome storage") : null;
+    } else {
+      this.areWebsitesLoaded.next(false);
+    }
   }
 
-  getTimerValue(website: string): number {
-    this.currentWebsite = this.getCurrentWebsite(website);
+  getTimerValue(host: string): number {
+    this.currentWebsite = this.getCurrentWebsite(host);
     if (isDevMode()) return DEFAULT_TIMER_VALUE;
 
     let timerValue = this.currentWebsite.timer || DEFAULT_TIMER_VALUE;
@@ -173,6 +182,7 @@ export class WebsitesService {
     let newValue = currentValue;
 
     if (daysSinceLastAllowed >= 6) return DEFAULT_TIMER_VALUE; // If last access was 6 days ago or more, then it's likely that the user has good habits, so we set the timer to the default value.
+    if (score == -1) return Math.max((newValue /= 1.2), 30); // Default decrease function.
 
     const adjust = daysSinceLastAllowed / 10 - 0.1; // Return a value between 0 and 0.4 based on the last time the user allowed the website.
     const coef = Math.max(Math.log10(score) - 0.5, 0); // Return a value between 0 and 1.5 based on the score.
@@ -185,22 +195,22 @@ export class WebsitesService {
     return newValue;
   }
 
-  private getCurrentWebsite(website: string): watchedWebsite {
-    website = this.removeWWW(website);
+  private getCurrentWebsite(host: string): watchedWebsite {
+    host = this.removeWWW(host);
 
-    const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == website);
+    const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == host);
     if (enforcedWebsite) {
       this.websiteOrigin = "Enforced";
       return enforcedWebsite;
     }
 
-    const userWebsite = this.userWebsites.find(userWebsite => userWebsite.host == website);
+    const userWebsite = this.userWebsites.find(userWebsite => userWebsite.host == host);
     if (userWebsite) {
       this.websiteOrigin = "User";
       return userWebsite;
     }
 
-    throw new Error("Website not found in chrome storage: " + website);
+    throw new Error("Website not found in chrome storage: " + host);
   }
 
   private removeWWW(website: string): string {
@@ -219,6 +229,7 @@ export class WebsitesService {
   }
 
   private getDaysSinceLastAllowed(website: watchedWebsite): number {
+    if (!website.allowedUntil) return 1;
     return this.clamp((Date.now() - new Date(website.allowedUntil).getTime()) / (1000 * 60 * 60 * 24), 1, 7);
   }
 }
