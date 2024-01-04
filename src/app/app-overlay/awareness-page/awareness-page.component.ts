@@ -101,7 +101,7 @@ export class AwarenessPageComponent {
     }, 500);
   }
 
-  getRandomWidget() {
+  private getRandomWidget() {
     const widgets = ["Quotes", "Breathing", "Tasks"];
     const randomIndex = Math.floor(Math.random() * widgets.length);
     return widgets[randomIndex];
