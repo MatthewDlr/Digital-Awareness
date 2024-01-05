@@ -1,32 +1,32 @@
 .hover-animation::before {
-    content: "";
-    position: absolute;
+  content: "";
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  opacity: 25%;
+  background: white;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+}
+
+.hover-animation:hover:before {
+  animation: anim-in 0.7s forwards ease-out;
+}
+
+@keyframes anim-in {
+  100% {
+    opacity: 0%;
+    border-radius: 0;
+    width: 250px;
+    height: 200px;
+  }
+  0% {
     width: 0px;
     height: 0px;
-    opacity: 25%;
-    background: white;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin: auto;
+    border-radius: 100%;
+    opacity: 20%;
   }
-  
-  .hover-animation:hover:before {
-    animation: anim-in 0.7s forwards ease-out;
-  }
-  
-  @keyframes anim-in {
-    100% {
-      opacity: 0%;
-      border-radius: 0;
-      width: 250px;
-      height: 200px;
-    }
-    0% {
-      width: 0px;
-      height: 0px;
-      border-radius: 100%;
-      opacity: 20%;
-    }
-  }
+}
