@@ -15,7 +15,7 @@ export class SoundsEngineService {
       this.supported = false;
     }
     this.audio.volume = GLOBAL_VOLUME;
-    isDevMode() ? console.log("SoundsEngine Status: ", this.supported) : null;
+    isDevMode() ? console.info("SoundsEngine Status: ", this.supported) : null;
   }
 
   private playAudio(audioName: string) {
