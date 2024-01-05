@@ -43,6 +43,10 @@ export class PendingChangesComponent {
   }
 
   confirmChanges() {
+    if (this.stage != "ChangesCanBeValidated") {
+      this.soundsEngine.notAllowed();
+      return;
+    }
     this.pendingChangesService.confirmPendingChanges();
   }
 }
