@@ -4,11 +4,11 @@ import { FormsModule } from "@angular/forms";
 import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Component({
-  selector: 'app-awareness-page',
+  selector: "app-awareness-page",
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './awareness-page.component.html',
-  styleUrls: ['./awareness-page.component.css'],
+  templateUrl: "./awareness-page.component.html",
+  styleUrls: ["./awareness-page.component.css"],
 })
 export class AwarenessPageComponent {
   selectedWidget: string = "Quotes";
