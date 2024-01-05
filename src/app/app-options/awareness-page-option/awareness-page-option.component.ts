@@ -35,7 +35,7 @@ export class AwarenessPageOptionComponent {
   updateSelectedWidget(widget: string) {
     this.selectedWidget = widget;
     chrome.storage.sync.set({ awarenessPageWidget: widget });
-    this.soundsEngine.click();
+    this.soundsEngine.select();
 
     if (widget == "Tasks" || widget == "Random") {
       this.checkIfTasksValid();
@@ -45,7 +45,7 @@ export class AwarenessPageOptionComponent {
   updateTimerBehavior(timerBehavior: string) {
     this.timerBehavior = timerBehavior;
     chrome.storage.sync.set({ timerBehavior: timerBehavior });
-    this.soundsEngine.click();
+    this.soundsEngine.select();
     isDevMode() ? console.log("Timer behavior saved: ", this.timerBehavior) : null;
   }
 

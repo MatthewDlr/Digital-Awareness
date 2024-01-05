@@ -28,10 +28,6 @@ export class SoundsEngineService {
     });
   }
 
-  click() {
-    this.playAudio("click");
-  }
-
   success() {
     this.playAudio("success");
   }
