@@ -50,7 +50,7 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
       return;
     }
 
-    this.soundsEngine.pop();
+    this.soundsEngine.select();
     this.isEditEnabled = true;
     this.oldHost = this.website.host;
     setTimeout(() => {

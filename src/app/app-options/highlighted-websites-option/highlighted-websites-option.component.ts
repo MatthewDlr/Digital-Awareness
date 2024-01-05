@@ -54,7 +54,7 @@ export class HighlightedWebsitesOptionComponent {
 
   toggleCommandPalette(state: boolean) {
     this.commandPaletteService.toggleCommandPalette(state);
-    this.soundsEngine.pop();
+    this.soundsEngine.selectHard();
   }
 
   getWebsites() {

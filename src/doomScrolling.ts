@@ -47,7 +47,7 @@ function checkChanges() {
   }
   previousScrollCount = totalScrolls;
 
-  if (!isDevMode() && tabOpenedAt > new Date(Date.now() - 1000 * 60 * 10)) {
+  if (!isDevMode() && tabOpenedAt > new Date(Date.now() - 10 * 6000)) {
     isDevMode() ? console.log("Wait 10 min before checking") : null;
     return;
   }

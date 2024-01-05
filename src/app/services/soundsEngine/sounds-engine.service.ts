@@ -48,10 +48,6 @@ export class SoundsEngineService {
     this.playAudio("switch-off");
   }
 
-  pop() {
-    this.playAudio("pop");
-  }
-
   erase() {
     this.playAudio("erase");
   }
@@ -62,5 +58,17 @@ export class SoundsEngineService {
 
   notAllowed() {
     this.playAudio("not-allowed");
+  }
+
+  appear() {
+    this.playAudio("appear");
+  }
+
+  select() {
+    this.playAudio("select");
+  }
+
+  selectHard() {
+    this.playAudio("select-hard");
   }
 }

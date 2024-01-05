@@ -9,6 +9,7 @@ import { WebsitesPaletteComponent } from "../components/websites-palette/website
 import { PendingChangesComponent } from "../components/pending-changes/pending-changes.component";
 import { AboutComponent } from "../about/about.component";
 import { ActivatedRoute } from "@angular/router";
+import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Component({
   selector: "app-options",
@@ -31,6 +32,7 @@ export class OptionsComponent {
 
   constructor(
     private route: ActivatedRoute,
+    private soundsEngine: SoundsEngineService,
     public commandPaletteService: CommandPaletteService,
     public pendingChangesService: PendingChangesService,
   ) {
@@ -59,6 +61,11 @@ export class OptionsComponent {
         this.isCommandPaletteShown = state;
       },
     });
+  }
+
+  setCurrentTab(tab: string) {
+    this.soundsEngine.selectHard();
+    this.currentTab = tab;
   }
 
   isDevModeEnabled() {

@@ -66,7 +66,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     chrome.storage.sync
       .set({ userWebsites: userWebsites })
       .then(() => {
-        this.soundsEngine.success();
+        this.soundsEngine.appear();
         this.searchService.clearSuggestions();
         this.toggleCommandPalette(false);
         chrome.storage.sync.get("userWebsites").then(result => {
@@ -105,14 +105,9 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     if (website.isBlocked) {
       return;
     }
+    this.soundsEngine.select();
     website.isSelected = !website.isSelected;
-    if (website.isSelected) {
-      this.soundsEngine.switchON();
-      this.searchService.addSelectedWebsite(website);
-    } else {
-      this.soundsEngine.switchOFF();
-      this.searchService.removeSelectedWebsite(website);
-    }
+    website.isSelected ? this.searchService.addSelectedWebsite(website) : this.searchService.removeSelectedWebsite(website);
   }
 
   sortCategories = (a: any, b: any) => {

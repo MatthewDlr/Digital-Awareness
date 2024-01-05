@@ -47,7 +47,7 @@
         <!-- Highlighted Sites Tab -->
         <div class="flex w-full items-center justify-start gap-5">
           <div
-            (click)="currentTab = 'blocklist'"
+            (click)="setCurrentTab('blocklist')"
             [ngClass]="
               currentTab == 'blocklist' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
             "
@@ -73,7 +73,7 @@
 
           <!-- Awareness Page Tab -->
           <div
-            (click)="currentTab = 'blockpage'"
+            (click)="setCurrentTab('blockpage')"
             [ngClass]="
               currentTab == 'blockpage' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
             "
@@ -99,7 +99,7 @@
 
           <!-- Notifications Tab -->
           <div
-            (click)="currentTab = 'notifications'"
+            (click)="setCurrentTab('notifications')"
             [ngClass]="
               currentTab == 'notifications' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
             "
@@ -123,7 +123,7 @@
             <span>Notifications</span>
           </div>
         </div>
-        <div class="group" (click)="currentTab = 'about'">
+        <div class="group" (click)="setCurrentTab('about')">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
