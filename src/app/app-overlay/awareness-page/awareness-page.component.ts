@@ -89,7 +89,6 @@ export class AwarenessPageComponent {
   // This means failure as the user has waited for the timer to expire
   skipTimer() {
     this.websitesService.allowWebsiteTemporary();
-
     window.location.href = this.outputUrl.toString();
   }
 

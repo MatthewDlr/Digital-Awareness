@@ -3,8 +3,9 @@ import { BehaviorSubject } from "rxjs";
 import { ScoringService } from "src/app/services/scoring/scoring.service";
 import { watchedWebsite } from "src/app/types";
 
-const DEFAULT_ALLOWED_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user allow the website (aka failure), defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
-const DEFAULT_COOLDOWN_DURATION = isDevMode() ? 1 : 15; // In minutes. When the user clicks on "Go back" (aka success), defines the cooldown period before the timer will start be decreased again. (If not set, the user could just spam the button to increae it's score and dwindle the timer).
+const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website (aka failure), defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
+const DEFAULT_COOLDOWN_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user clicks on "Go back" (aka success), defines the cooldown period before the timer will start be decreased again. (If not set, the user could just spam the button to increase it's score and dwindle the timer).
+const PREVENT_FRAUD_DURATION = isDevMode() ? 1 : 15; // In minutes. If the user clicks on "Go back" but then wait reopen the same website and wait the cooldown, this value measure the time between these two events. If it's too short, it means that the user can keep a fair score by clicking on "Go back" just before reopen and accessing the website.
 
 @Injectable({
   providedIn: "root",
@@ -72,6 +73,18 @@ export class WebsitesService {
     websiteAllowed.allowedUntil = new Date(Date.now() + DEFAULT_ALLOWED_DURATION * 60000).toString();
     websiteAllowed.timesAllowed++;
     websiteAllowed.timer = this.scoringService.computeNewIncreasedValue(this.currentWebsite);
+
+    // If the user went back (blocked) just before allowing the website, it could means that he's trying to keep a fair score, so we decrement the timesBlocked counter.
+    if (new Date(websiteAllowed.blockedAt).getTime() + PREVENT_FRAUD_DURATION * 60000 > Date.now()) {
+      isDevMode()
+        ? alert(
+            "Website was blocked less than " +
+              PREVENT_FRAUD_DURATION +
+              " minutes ago, decrementing the time blocked to keep a fair score",
+          )
+        : null;
+      websiteAllowed.timesBlocked--;
+    }
 
     this.websiteOrigin == "Enforced"
       ? chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites })

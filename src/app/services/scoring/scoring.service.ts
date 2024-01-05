@@ -4,6 +4,7 @@ import { watchedWebsite } from "src/app/types";
 const DEFAULT_TIMER_VALUE = isDevMode() ? 3 : 30; // In seconds. This is the default value for the timer when the user has to wait to access the website.
 const MAX_TIMER_VALUE = 3; // In minutes. This specifies the maximum value the timer can be set to, regardless of user actions.
 const INCREASE_COEF = 1; // The higher the value, the more aggressively the timer value increases.
+const DECREASE_COEF = 1; // The higher the value, the more aggressively the timer value decreases.
 
 @Injectable({
   providedIn: "root",
@@ -36,13 +37,14 @@ export class ScoringService {
     if (daysSinceLastAllowed >= 6) return DEFAULT_TIMER_VALUE; // If last access was 6 days ago or more, then it's likely that the user has good habits, so we set the timer to the default value.
 
     if (score == -1) {
-      newValue = Math.max((newValue /= 1.2), 30); // Default decrease function.
+      newValue = Math.max((newValue /= 1.175 * DECREASE_COEF), 30); // Default decrease function.
     } else {
+      const coef = Math.max(Math.log10(score) - 0.5 / DECREASE_COEF, 0); // Return a value between 0 and 1.5 based on the score.
       const adjust = daysSinceLastAllowed / 10 - 0.1; // Return a value between 0 and 0.4 based on the last time the user allowed the website.
-      const coef = Math.max(Math.log10(score) - 0.5, 0); // Return a value between 0 and 1.5 based on the score.
       newValue = Math.round(newValue / (coef + adjust));
       newValue = this.clamp(newValue, 30, MAX_TIMER_VALUE * 60);
     }
+    newValue = Math.round(newValue);
 
     isDevMode()
       ? alert("The timer value decreased from " + currentValue + "s to " + newValue + "s" + " (score: " + score + ")")
@@ -60,7 +62,7 @@ export class ScoringService {
 
     // The lower the score, the more aggressive the increase function becomes.
     if (score == -1 || (score >= 30 && score <= 70)) {
-      newValue += (newValue / 10) ** 1.75 * INCREASE_COEF; // Default increase function.
+      newValue += (newValue / 8) ** 1.75 * INCREASE_COEF; // Default increase function.
     } else if (score < 30 && score > 15) {
       newValue += (newValue / 10) ** 2.25 * INCREASE_COEF;
     } else if (score <= 15) {
