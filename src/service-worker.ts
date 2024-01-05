@@ -30,7 +30,8 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 });
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get(["isActivated "]).then(result => {
+  chrome.storage.sync.get(["isActivated"]).then(result => {
+    console.log("isDevMode: " + isDevMode());
     if (result["isActivated"] && !isDevMode()) {
       console.log("Extension is already activated");
     } else {
