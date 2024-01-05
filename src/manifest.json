@@ -8,6 +8,9 @@
     "256": "./assets/logo-256.png",
     "512": "./assets/logo-512.png"
   },
+  "action": {
+    "default_popup": ""
+  },
   "host_permissions": ["*://*/*"],
   "permissions": ["storage", "tabs", "webNavigation", "unlimitedStorage", "notifications"],
   "options_page": "index.html#/options/''",

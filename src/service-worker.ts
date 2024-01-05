@@ -36,7 +36,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.get(["isActivated "]).then(result => {
     if (result["isActivated"] && !isDevMode()) {
-      console.log("Extension already activated");
+      console.log("Extension is already activated");
     } else {
       defaultConfig();
       chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
@@ -45,9 +45,20 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onUpdateAvailable.addListener(function (details) {
-  console.log("updating to version " + details.version);
-  chrome.runtime.reload();
-  chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
+  chrome.action.setBadgeText({ text: "New" });
+  chrome.action.setBadgeTextColor({ color: "#fff" });
+  chrome.action.setBadgeBackgroundColor({ color: "#7c3aed" });
+  console.log("Digital Araweness is ready to be updated (v" + details.version + ")");
+});
+
+chrome.action.onClicked.addListener(function () {
+  chrome.runtime.requestUpdateCheck(function (status) {
+    if (status == "update_available") {
+      chrome.runtime.reload();
+      chrome.browserAction.setBadgeText({ text: "" });
+      chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
+    }
+  });
 });
 
 chrome.runtime.onMessage.addListener(function (request) {
