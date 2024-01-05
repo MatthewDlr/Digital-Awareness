@@ -4,13 +4,13 @@ import { FormsModule } from "@angular/forms";
 import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Component({
-  selector: "app-awareness-page-option",
+  selector: "app-awareness-page",
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: "./awareness-page-option.component.html",
-  styleUrls: ["./awareness-page-option.component.css"],
+  templateUrl: "./awareness-page.component.html",
+  styleUrls: ["./awareness-page.component.css"],
 })
-export class AwarenessPageOptionComponent {
+export class AwarenessPageComponent {
   selectedWidget: string = "Quotes";
   tasks!: string[];
   areTasksValid: boolean = true;
@@ -35,7 +35,7 @@ export class AwarenessPageOptionComponent {
   updateSelectedWidget(widget: string) {
     this.selectedWidget = widget;
     chrome.storage.sync.set({ awarenessPageWidget: widget });
-    this.soundsEngine.click();
+    this.soundsEngine.select();
 
     if (widget == "Tasks" || widget == "Random") {
       this.checkIfTasksValid();
@@ -45,7 +45,7 @@ export class AwarenessPageOptionComponent {
   updateTimerBehavior(timerBehavior: string) {
     this.timerBehavior = timerBehavior;
     chrome.storage.sync.set({ timerBehavior: timerBehavior });
-    this.soundsEngine.click();
+    this.soundsEngine.select();
     isDevMode() ? console.log("Timer behavior saved: ", this.timerBehavior) : null;
   }
 

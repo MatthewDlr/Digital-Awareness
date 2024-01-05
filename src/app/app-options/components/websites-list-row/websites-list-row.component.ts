@@ -1,19 +1,19 @@
-import { AfterViewInit, Component, HostListener, Input, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, HostListener, Input, ViewChild, ChangeDetectorRef, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { watchedWebsite } from "src/app/types";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
-import { WebsitesService } from "src/app/app-overlay/services/websites/websites.service";
+import { ScoringService } from "src/app/services/scoring/scoring.service";
 import { FormsModule } from "@angular/forms";
 
 @Component({
-  selector: "tr[app-highlighted-websites-row]",
+  selector: "tr[websites-list-row]",
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: "./highlighted-websites-row.component.html",
-  styleUrl: "./highlighted-websites-row.component.css",
+  templateUrl: "./websites-list-row.component.html",
+  styleUrl: "./websites-list-row.component.css",
 })
-export class HighlightedWebsitesRowComponent implements AfterViewInit {
+export class WebsitesListRowComponent implements AfterViewInit {
   @Input({ required: true }) website!: watchedWebsite;
   @Input({ required: true }) isEnforced!: boolean;
   @Input() isPending!: boolean;
@@ -21,15 +21,18 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
   isEditEnabled: boolean = false;
   oldHost: string = "";
   awarenessRatio = -1;
+  isDevMode = isDevMode();
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private pendingChangesService: PendingChangesService,
     private soundsEngine: SoundsEngineService,
-    private websitesService: WebsitesService,
+    private scoringService: ScoringService,
   ) {}
 
   ngAfterViewInit(): void {
-    this.awarenessRatio = this.websitesService.computeWebsiteScore(this.website);
+    this.awarenessRatio = this.scoringService.computeWebsiteScore(this.website);
+    this.cdRef.detectChanges();
   }
 
   @HostListener("document:keydown.enter", ["$event"])
@@ -42,9 +45,12 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
 
   @ViewChild("hostInput") input!: { nativeElement: HTMLInputElement };
   enableEdit() {
-    if (this.isEnforced || this.isPending) return;
+    if (this.isEnforced || this.isPending) {
+      this.soundsEngine.notAllowed();
+      return;
+    }
 
-    this.soundsEngine.pop();
+    this.soundsEngine.select();
     this.isEditEnabled = true;
     this.oldHost = this.website.host;
     setTimeout(() => {
@@ -53,7 +59,10 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
   }
 
   editWebsite() {
-    if (this.isEnforced || this.isPending) return;
+    if (this.isEnforced || this.isPending) {
+      this.soundsEngine.notAllowed();
+      return;
+    }
 
     this.website.host = this.website.host.trim();
     this.isEditEnabled = false;
@@ -64,9 +73,11 @@ export class HighlightedWebsitesRowComponent implements AfterViewInit {
   }
 
   removeWebsite() {
-    if (this.isEnforced || this.isPending) return;
-
-    this.soundsEngine.erase();
-    this.pendingChangesService.addWebsiteToRemove(this.website.host);
+    if (this.isEnforced || this.isPending) {
+      this.soundsEngine.notAllowed();
+    } else {
+      this.soundsEngine.erase();
+      this.pendingChangesService.addWebsiteToRemove(this.website.host);
+    }
   }
 }

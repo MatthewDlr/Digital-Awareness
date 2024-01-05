@@ -46,11 +46,13 @@
     awarenessRatio >= 70 ? 'text-green-500 font-bold' : '',
     awarenessRatio < 30 && awarenessRatio > 15 ? 'text-orange-500' : '',
     awarenessRatio <= 15 && awarenessRatio >= 0 ? 'text-red-500' : '',
-    awarenessRatio >= 30 && awarenessRatio < 70 ? 'text-blue-500' : '',
+    awarenessRatio >= 30 && awarenessRatio < 70 ? 'text-blue-500 font-medium' : '',
     awarenessRatio == -1 ? 'text-gray-500' : ''
   ]"
 >
-  @if (awarenessRatio == -1) {
+  @if (isDevMode) {
+    {{ awarenessRatio }}, {{ website.timesAllowed }}, {{ website.timesBlocked }}
+  } @else if (awarenessRatio == -1) {
     ⏳ Learning
   } @else {
     {{ awarenessRatio }} %

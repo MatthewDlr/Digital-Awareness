@@ -2,7 +2,7 @@
   <h1 class="text-gray-900 animate-fade-up text-lg font-semibold leading-6 animate-duration-500">Websites</h1>
   <div class="sm:flex sm:items-center">
     <div class="w-full animate-fade-up animate-duration-500 sm:flex-auto">
-      <p class="text-gray-700 mt-2 w-full text-balance text-sm">
+      <p class="text-gray-700 mt-2 w-full text-pretty text-sm">
         For your wellbeing, some websites we identified as the most time-consuming cannot be removed from the list.
       </p>
     </div>
@@ -46,7 +46,7 @@
               <tr class="cursor-default *:text-white *:text-left *:text-sm *:font-semibold">
                 <th scope="col" class="w-1/2 py-3.5 pl-5">Website</th>
                 <th scope="col" class="w-1/6 py-3.5">Category</th>
-                <th scope="col" class="w-1/6 py-3.5">Awareness Ratio</th>
+                <th scope="col" class="w-1/6 py-3.5">Awareness Score</th>
                 <th scope="col" class="w-1/6 py-3.5">Actions</th>
               </tr>
             </thead>
@@ -54,7 +54,7 @@
               <!-- User Websites -->
               @for (website of userWebsites; track $index) {
                 <tr
-                  app-highlighted-websites-row
+                  websites-list-row
                   [website]="website"
                   [isEnforced]="false"
                   [isPending]="
@@ -62,8 +62,10 @@
                   "
                   class="animate-fade-up animate-delay-[400ms] animate-duration-500"
                   [ngClass]="[
-                    pendingChangesService.websitesToDelete.has(website.host) ? 'bg-red-50' : '',
-                    websitesPendingEdit.has(website.host) ? 'bg-purple-50' : ''
+                    pendingChangesService.websitesToDelete.has(website.host)
+                      ? 'bg-red-50 saturate-[0.8] dark:bg-opacity-50'
+                      : '',
+                    websitesPendingEdit.has(website.host) ? 'bg-purple-50 saturate-[0.8] dark:bg-opacity-50' : ''
                   ]"
                 ></tr>
               }
@@ -71,7 +73,7 @@
               <!-- Enforced Websites -->
               @for (website of enforcedWebsites; track $index) {
                 <tr
-                  app-highlighted-websites-row
+                  websites-list-row
                   [website]="website"
                   [isEnforced]="true"
                   class="bg-gray-50 animate-fade-up animate-delay-[400ms] animate-duration-500"

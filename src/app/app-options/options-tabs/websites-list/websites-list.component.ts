@@ -1,20 +1,20 @@
 import { Component, HostListener, isDevMode } from "@angular/core";
 import { watchedWebsite } from "src/app/types";
-import { CommandPaletteService } from "../services/command-palette/command-palette.service";
-import { PendingChangesService } from "../services/pending-changes/pending-changes.service";
+import { CommandPaletteService } from "../../services/command-palette/command-palette.service";
+import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
-import { HighlightedWebsitesRowComponent } from "../components/highlighted-websites-row/highlighted-websites-row.component";
+import { WebsitesListRowComponent } from "../../components/websites-list-row/websites-list-row.component";
 
 @Component({
-  selector: "app-highlighted-websites-option",
+  selector: "app-websites-list",
   standalone: true,
-  imports: [CommonModule, FormsModule, HighlightedWebsitesRowComponent],
-  templateUrl: "./highlighted-websites-option.component.html",
-  styleUrls: ["./highlighted-websites-option.component.css"],
+  imports: [CommonModule, FormsModule, WebsitesListRowComponent],
+  templateUrl: "./websites-list.component.html",
+  styleUrls: ["./websites-list.component.css"],
 })
-export class HighlightedWebsitesOptionComponent {
+export class WebsitesListComponent {
   enforcedWebsites!: watchedWebsite[];
   userWebsites!: watchedWebsite[];
   websitesPendingEdit: Set<string> = new Set();
@@ -54,7 +54,7 @@ export class HighlightedWebsitesOptionComponent {
 
   toggleCommandPalette(state: boolean) {
     this.commandPaletteService.toggleCommandPalette(state);
-    this.soundsEngine.pop();
+    this.soundsEngine.selectHard();
   }
 
   getWebsites() {

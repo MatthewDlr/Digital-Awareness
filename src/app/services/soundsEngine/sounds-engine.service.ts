@@ -1,6 +1,6 @@
 import { Injectable, isDevMode } from "@angular/core";
 
-const GLOBAL_VOLUME = 0.5;
+const GLOBAL_VOLUME = 0.75;
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +15,7 @@ export class SoundsEngineService {
       this.supported = false;
     }
     this.audio.volume = GLOBAL_VOLUME;
-    isDevMode() ? console.log("SoundsEngine Status: ", this.supported) : null;
+    isDevMode() ? console.info("SoundsEngine Status: ", this.supported) : null;
   }
 
   private playAudio(audioName: string) {
@@ -26,10 +26,6 @@ export class SoundsEngineService {
     this.audio.play().catch(error => {
       isDevMode() ? console.error(error) : null;
     });
-  }
-
-  click() {
-    this.playAudio("click");
   }
 
   success() {
@@ -48,15 +44,27 @@ export class SoundsEngineService {
     this.playAudio("switch-off");
   }
 
-  pop() {
-    this.playAudio("pop");
-  }
-
   erase() {
     this.playAudio("erase");
   }
 
   alert() {
     this.playAudio("alert");
+  }
+
+  notAllowed() {
+    this.playAudio("not-allowed");
+  }
+
+  appear() {
+    this.playAudio("appear");
+  }
+
+  select() {
+    this.playAudio("select");
+  }
+
+  selectHard() {
+    this.playAudio("select-hard");
   }
 }
