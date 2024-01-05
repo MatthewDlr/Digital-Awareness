@@ -48,7 +48,7 @@ Run `npm run watch` to start the development server.
 To test the extension, go to `chrome://extensions/` and enable developer mode.
 Then click on `Load unpacked` and select the output folder
 
-Currently, you can't use `ng serve` to start the development server since it doesn't run the custom webpack configuration, it results in missing from the compilation output.
+Do not use angular commands like `ng serve`and `ng build` since it doesn't run the custom webpack configuration and custom flags, it results in missing files from the compilation output and unexpected behaviors accross the extension.
 Be aware that when the extension in running in development mode, it behaves differently ; all timers are much faster and won't adapts to your usage and, you'll also get much more logs in the page console. To avoid affecting the user experience, please limit your own logging to development mode using the `isDevMode()` function of Angular.
 
 If you modify the manifest, or the .ts files at the root of the project, you will need to reload the extension to see your changes.
