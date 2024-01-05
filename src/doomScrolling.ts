@@ -16,8 +16,6 @@ chrome.storage.sync.get("doomScrollingNotification", result => {
   }
 });
 
-isDevMode() ? console.log("isDevMode: " + isDevMode()) : null;
-
 chrome.storage.sync.get("doomScrollingTreshold", result => {
   scrollTreshold = result["doomScrollingTreshold"];
   isDevMode() ? console.log("scrollTreshold: ", scrollTreshold) : null;
