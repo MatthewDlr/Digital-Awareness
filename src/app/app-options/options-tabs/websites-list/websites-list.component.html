@@ -54,7 +54,7 @@
               <!-- User Websites -->
               @for (website of userWebsites; track $index) {
                 <tr
-                  app-highlighted-websites-row
+                  websites-list-row
                   [website]="website"
                   [isEnforced]="false"
                   [isPending]="
@@ -73,7 +73,7 @@
               <!-- Enforced Websites -->
               @for (website of enforcedWebsites; track $index) {
                 <tr
-                  app-highlighted-websites-row
+                  websites-list-row
                   [website]="website"
                   [isEnforced]="true"
                   class="bg-gray-50 animate-fade-up animate-delay-[400ms] animate-duration-500"

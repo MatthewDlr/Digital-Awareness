@@ -13,7 +13,7 @@
   },
   "host_permissions": ["*://*/*"],
   "permissions": ["storage", "tabs", "webNavigation", "unlimitedStorage", "notifications"],
-  "options_page": "index.html#/options/''",
+  "options_page": "index.html#/options",
   "background": {
     "service_worker": "serviceWorker.js",
     "type": "module"

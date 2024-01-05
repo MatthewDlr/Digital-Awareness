@@ -7,13 +7,13 @@ import { ScoringService } from "src/app/services/scoring/scoring.service";
 import { FormsModule } from "@angular/forms";
 
 @Component({
-  selector: "tr[app-highlighted-websites-row]",
+  selector: "tr[websites-list-row]",
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: "./highlighted-websites-row.component.html",
-  styleUrl: "./highlighted-websites-row.component.css",
+  templateUrl: "./websites-list-row.component.html",
+  styleUrl: "./websites-list-row.component.css",
 })
-export class HighlightedWebsitesRowComponent implements AfterViewInit {
+export class WebsitesListRowComponent implements AfterViewInit {
   @Input({ required: true }) website!: watchedWebsite;
   @Input({ required: true }) isEnforced!: boolean;
   @Input() isPending!: boolean;
