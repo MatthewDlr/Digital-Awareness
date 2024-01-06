@@ -39,7 +39,7 @@ export class OptionsComponent {
     public pendingChangesService: PendingChangesService,
   ) {
     this.route.params.subscribe(params => {
-      this.currentTab = params["tab"] ? params["tab"] : "blocklist";
+      this.currentTab = params["tab"] ? params["tab"] : "default-tab";
     });
 
     this.commandPaletteService.isCommandPaletteShown.subscribe({
