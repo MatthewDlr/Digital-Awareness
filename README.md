@@ -7,9 +7,8 @@
 <h4 align="center">Unlearn bad digital habits</h4>
 
 <p align="center">
-  
-  <img width="175" src="https://img.shields.io/badge/Google_chrome-4285F4?style=for-the-badge&logo=Google-chrome&logoColor=white" alt="Google Chrome"> 
-  <p align="center">Coming soon to the Chrome Web Store</p>
+
+  <img width="175" src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/HRs9MPufa1J1h5glNhut.png" alt="Chrome Web Store"> 
 
 </p>
 
