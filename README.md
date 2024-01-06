@@ -48,11 +48,12 @@ Run `npm run watch` to start the development server.
 To test the extension, go to `chrome://extensions/` and enable developer mode.
 Then click on `Load unpacked` and select the output folder
 
-Do not use angular commands like `ng serve`and `ng build` since it doesn't run the custom webpack configuration and custom flags, it results in missing files from the compilation output and unexpected behaviors accross the extension.
-Be aware that when the extension in running in development mode, it behaves differently ; all timers are much faster and won't adapts to your usage and, you'll also get much more logs in the page console. To avoid affecting the user experience, please limit your own logging to development mode using the `isDevMode()` function of Angular.
+Please do not use angular commands like `ng serve`and `ng build` since it doesn't run the custom webpack configuration and custom flags, it results in missing files from the compilation output and unexpected behaviors accross the extension. <br>
+
+Be aware that when the extension in running in development mode, it behaves differently ; all timers are much faster and won't adapts to your usage and you'll also get much more logs in the page console. To avoid affecting the user experience, please limit your own logging to development mode using the `isDevMode()` function of Angular.
 
 If you modify the manifest, or the .ts files at the root of the project, you will need to reload the extension to see your changes.
-For everything related to the angular app, you can simply close and reopen the page.
+For everything related to the angular app, you can simply reload the page.
 
 ### Dependencies
 
@@ -70,13 +71,13 @@ This project relies on eslint and prettier to enforce a unified and clean code s
 Run `npm run lint` to lint the project ; also a hook is setup to run the linter before each commit. <br>
 Please **do not** commit if the linter fails and **do not** disable the linter.
 
-### Test
+### Tests
 
 Currently, tests are not implemented.
 
 ### Build
 
-Run `ng build` or `npm run build` to build the project for production.
+Run `npm run build` to build the project for production.
 The build artifacts will be stored in the `dist/` directory.
 
 ## Contributing
