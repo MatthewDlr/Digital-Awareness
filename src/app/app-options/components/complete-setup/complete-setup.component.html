@@ -1,0 +1,51 @@
+@if (!isSetupCompleted) {
+  <div
+    class="blue-gradient mb-2 flex h-fit animate-fade-up flex-row items-center gap-4 rounded-xl px-4 py-3 animate-duration-500"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      aria-hidden="true"
+      data-slot="icon"
+      class="size-8 stroke-white"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+      />
+    </svg>
+
+    <div class="mr-[0.15rem] flex w-full items-center justify-between gap-3">
+      <div class="w-3/4">
+        <h3 class="text-white text-sm font-semibold">Finish Setup</h3>
+        <div class="text-white text-balance text-sm">
+          <span
+            >To improve your experience, allow digital awareness to run in incognito mode. Rest assured, we do not track or
+            store any of your web browsing history.</span
+          >
+        </div>
+      </div>
+      <div class="flex w-1/4 justify-end">
+        <div class="flex gap-3">
+          <button
+            (click)="dismissSetup()"
+            type="button"
+            class="text-white rounded-md px-3 py-2 text-sm font-medium hover:bg-white/10"
+          >
+            No thanks
+          </button>
+          <button
+            (click)="openExtensionSettings()"
+            type="button"
+            class="text-blue-600 !transform rounded-md bg-white/90 px-3 py-2 text-sm font-medium !transition-all hover:scale-105 hover:rounded-lg"
+          >
+            Enable
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

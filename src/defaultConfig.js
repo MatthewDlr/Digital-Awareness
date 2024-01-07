@@ -128,4 +128,6 @@ export function defaultConfig() {
     .catch(error => {
       console.error("Failed to write the default configuration: " + error);
     });
+
+  chrome.storage.local.set({ isSetupDismissed: false });
 }
