@@ -1,6 +1,6 @@
 import { Component, isDevMode } from "@angular/core";
 import { Location } from "@angular/common";
-import { CommandPaletteService } from "../services/command-palette/command-palette.service";
+import { WebsitePaletteService } from "../services/website-palette/website-palette.service";
 import { PendingChangesService } from "../services/pending-changes/pending-changes.service";
 import { AwarenessPageComponent } from "../options-tabs/awareness-page/awareness-page.component";
 import { WebsitesListComponent } from "../options-tabs/websites-list/websites-list.component";
@@ -37,7 +37,7 @@ export class OptionsComponent {
     private route: ActivatedRoute,
     private location: Location,
     private soundsEngine: SoundsEngineService,
-    public commandPaletteService: CommandPaletteService,
+    public commandPaletteService: WebsitePaletteService,
     public pendingChangesService: PendingChangesService,
   ) {
     this.route.params.subscribe(params => {

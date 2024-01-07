@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, HostListener, isDevMode } from "@angular/core";
-import { CommandPaletteService } from "../../services/command-palette/command-palette.service";
+import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { SearchService } from "../../services/search-suggestions/search-suggestions.service";
 import { Website } from "../../common/websites-list";
 import { watchedWebsite, category } from "../../../types";
@@ -21,7 +21,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
 
   constructor(
     private soundsEngine: SoundsEngineService,
-    private commandPaletteService: CommandPaletteService,
+    private commandPaletteService: WebsitePaletteService,
     public searchService: SearchService,
   ) {
     this.searchService.loadStoredWebsites();

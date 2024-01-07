@@ -4,7 +4,7 @@ import { Subject } from "rxjs";
 @Injectable({
   providedIn: "root",
 })
-export class CommandPaletteService {
+export class WebsitePaletteService {
   isCommandPaletteShown: Subject<boolean> = new Subject<boolean>();
 
   constructor() {

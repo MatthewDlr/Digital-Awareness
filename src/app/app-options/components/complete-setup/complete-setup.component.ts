@@ -31,7 +31,6 @@ export class CompleteSetupComponent {
   }
 
   openExtensionSettings() {
-    // redirect to the details page of the extension page of the web browser
     chrome.tabs.create({ url: "chrome://extensions/?id=" + chrome.runtime.id });
   }
 }
