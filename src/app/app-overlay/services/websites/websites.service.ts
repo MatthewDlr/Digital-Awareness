@@ -18,7 +18,7 @@ export class WebsitesService {
   websiteOrigin: string = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
 
   constructor(private scoringService: ScoringService) {
-    chrome.storage.local
+    chrome.storage.sync
       .get("enforcedWebsites")
       .then(result => {
         this.enforcedWebsites = result["enforcedWebsites"] || [];
@@ -87,7 +87,7 @@ export class WebsitesService {
     }
 
     this.websiteOrigin == "Enforced"
-      ? chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites })
+      ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })
       : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 
@@ -115,7 +115,7 @@ export class WebsitesService {
     websiteBlocked.timer = this.scoringService.computeNewDecreasedValue(this.currentWebsite);
 
     this.websiteOrigin == "Enforced"
-      ? chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites })
+      ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })
       : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 

@@ -17,7 +17,7 @@ export class PendingChangesService {
   waitDuration = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
 
   constructor(private soundsEngine: SoundsEngineService) {
-    chrome.storage.local.get(["pendingChanges"]).then(result => {
+    chrome.storage.sync.get(["pendingChanges"]).then(result => {
       if (result["pendingChanges"]) {
         this.stage.next(result["pendingChanges"].stage || stages.NoChanges);
         this.validationDate.next(new Date(result["pendingChanges"].validationDate) || null);
@@ -169,7 +169,7 @@ export class PendingChangesService {
   }
 
   private savePendingChanges() {
-    chrome.storage.local.set({
+    chrome.storage.sync.set({
       pendingChanges: {
         stage: this.stage.getValue(),
         validationDate: this.validationDate.getValue().toString(),
@@ -179,7 +179,7 @@ export class PendingChangesService {
     });
 
     if (isDevMode()) {
-      chrome.storage.local.get(["pendingChanges"], result => {
+      chrome.storage.sync.get(["pendingChanges"], result => {
         isDevMode() ? console.log("Pending changes saved: ", result["pendingChanges"]) : null;
       });
     }

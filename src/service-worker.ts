@@ -8,7 +8,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
   let commitedWebsite = new URL(details.url).host;
   if (commitedWebsite.substring(0, 4) == "www.") commitedWebsite = commitedWebsite.substring(4);
 
-  chrome.storage.local.get(["enforcedWebsites"]).then(result => {
+  chrome.storage.sync.get(["enforcedWebsites"]).then(result => {
     // Check if the website blocked by the list of mandatory blocked websites
     const enforcedWebsites = result["enforcedWebsites"];
     const isEnforced = isWebsiteBlocked(commitedWebsite, enforcedWebsites);

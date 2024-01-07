@@ -1,6 +1,12 @@
 export function defaultConfig() {
-  chrome.storage.local
+  chrome.storage.sync
     .set({
+      isActivated: true, // Extension activation
+      awarenessPageWidget: "Quotes", // Widget to display on the awareness page
+      timerBehavior: "Restart", // What to do when the awareness page is not focused
+      doomScrollingNotification: true, // Notification when doom scrolling
+      doomScrollingTreshold: 125, // Number of time the user can scroll before notification
+      userWebsites: [], // Website the user will decide to block
       enforcedWebsites: [
         {
           host: "youtube.com",
@@ -99,22 +105,6 @@ export function defaultConfig() {
           category: "Social",
         },
         {
-          host: "music.youtube.com",
-          allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
-          category: "Music",
-        },
-        {
-          host: "spotify.com",
-          allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
-          category: "Music",
-        },
-        {
           host: "aliexpress.com",
           allowedUntil: "",
           timer: 30,
@@ -133,19 +123,9 @@ export function defaultConfig() {
       ],
     })
     .then(() => {
-      console.info("enforcedWebsites set");
-    });
-
-  chrome.storage.sync
-    .set({
-      isActivated: true, // Extension activation
-      awarenessPageWidget: "Quotes", // Widget to display on the awareness page
-      timerBehavior: "Restart", // What to do when the awareness page is not focused
-      doomScrollingNotification: true, // Notification when doom scrolling
-      doomScrollingTreshold: 125, // Number of time the user can scroll before notification
-      userWebsites: [], // Website the user will decide to block
+      console.info("Default configuration successfully written !");
     })
-    .then(() => {
-      console.info("sync set");
+    .catch(error => {
+      console.error("Failed to write the default configuration: " + error);
     });
 }

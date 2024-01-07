@@ -32,7 +32,9 @@
   class="bg-white flex h-fit min-h-[100vh] w-full !transform flex-col gap-5 px-52 py-20 !transition-all !duration-300 !ease-in-out max-xl:px-44 max-lg:px-32 max-md:px-16 max-sm:px-8"
 >
   <div class="flex animate-fade-up items-center gap-5 animate-duration-500">
-    <img src="/assets/logo-512.png" alt="" class="size-12 hover:animate-spin" />
+    <div class="group">
+      <img src="/assets/logo-512.png" alt="" class="size-12 group-hover:animate-spin" />
+    </div>
 
     <h1 class="green-gradient -mt-1 h-fit w-fit bg-clip-text py-2 text-4xl font-bold text-transparent">Options</h1>
   </div>
@@ -49,7 +51,9 @@
           <div
             (click)="setCurrentTab('websites-list')"
             [ngClass]="
-              currentTab == 'websites-list' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
+              currentTab == 'websites-list' || currentTab == 'default-tab'
+                ? 'text-green-500 !border-green-500'
+                : 'text-gray-500 hover:border-green-500'
             "
             class="group text-gray-500 flex w-fit cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
           >

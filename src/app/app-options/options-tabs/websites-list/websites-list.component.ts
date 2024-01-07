@@ -58,7 +58,7 @@ export class WebsitesListComponent {
   }
 
   getWebsites() {
-    chrome.storage.local.get("enforcedWebsites").then(result => {
+    chrome.storage.sync.get("enforcedWebsites").then(result => {
       this.enforcedWebsites = result["enforcedWebsites"] || [];
       isDevMode() ? console.log("Enforced Websites successfully fetched") : null;
     });
