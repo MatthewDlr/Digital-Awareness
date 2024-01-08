@@ -44,14 +44,14 @@
   class="whitespace-nowrap py-4 text-sm"
   [ngClass]="[
     awarenessRatio >= 70 ? 'text-green-500 font-bold' : '',
-    awarenessRatio < 30 && awarenessRatio > 15 ? 'text-orange-500' : '',
-    awarenessRatio <= 15 && awarenessRatio >= 0 ? 'text-red-500' : '',
+    awarenessRatio < 30 && awarenessRatio > 15 ? 'text-orange-500 font-medium' : '',
+    awarenessRatio <= 15 && awarenessRatio >= 0 ? 'text-red-500 font-medium' : '',
     awarenessRatio >= 30 && awarenessRatio < 70 ? 'text-blue-500 font-medium' : '',
     awarenessRatio == -1 ? 'text-gray-500' : ''
   ]"
 >
-  @if (isDevMode) {
-    {{ awarenessRatio }}, {{ website.timesAllowed }}, {{ website.timesBlocked }}
+  @if (website.timesAllowed + website.timesBlocked == 0) {
+    Never visited
   } @else if (awarenessRatio == -1) {
     ⏳ Learning
   } @else {
