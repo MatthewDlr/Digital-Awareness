@@ -30,13 +30,22 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 });
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get(["isActivated"]).then(result => {
-    console.log("isDevMode: " + isDevMode());
-    if (result["isActivated"] && !isDevMode()) {
-      console.log("Extension is already activated");
-    } else {
-      defaultConfig();
+  chrome.storage.local.get(["isUpdating"]).then(result => {
+    const isUpdating = result["isUpdating"] || false;
+    isDevMode() ? console.log("isUpdating: " + isUpdating) : null;
+    if (isUpdating) {
+      chrome.storage.local.set({ isUpdating: false });
+      chrome.action.setBadgeText({ text: "" });
       chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
+    } else {
+      chrome.storage.sync.get(["isActivated"]).then(result => {
+        const isActivated = result["isActivated"] || false;
+        console.log("isActivated: " + isActivated);
+        if (!isActivated) {
+          defaultConfig();
+          chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
+        }
+      });
     }
   });
 });
@@ -49,11 +58,10 @@ chrome.runtime.onUpdateAvailable.addListener(function (details) {
 });
 
 chrome.action.onClicked.addListener(function () {
-  chrome.runtime.requestUpdateCheck(function (status) {
-    if (status == "update_available") {
+  chrome.runtime.requestUpdateCheck(function (statut) {
+    if (statut == "update_available") {
+      chrome.storage.local.set({ isUpdating: true });
       chrome.runtime.reload();
-      chrome.browserAction.setBadgeText({ text: "" });
-      chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
     }
   });
 });
@@ -87,6 +95,10 @@ chrome.runtime.onMessage.addListener(function (request) {
       }
     });
   }
+});
+
+chrome.runtime.onSuspend.addListener(function () {
+  chrome.storage.local.set({ isUpdating: true });
 });
 
 function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean {
