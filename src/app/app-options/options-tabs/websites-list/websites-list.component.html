@@ -38,9 +38,7 @@
   <div class="mt-5 flow-root animate-fade-up animate-delay-200 animate-duration-500">
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-        <div
-          class="max-h-[30rem] overflow-scroll shadow ring-1 ring-gray-300 ring-opacity-5 dark:ring-gray-700 sm:rounded-lg"
-        >
+        <div class="max-h-[30rem] overflow-scroll shadow ring-1 ring-gray-300 ring-opacity-5 dark:ring-gray-700 sm:rounded-lg">
           <table class="min-w-full divide-y-0 divide-gray-300 dark:divide-gray-700">
             <thead class="bg-green-500">
               <tr class="cursor-default *:text-white *:text-left *:text-sm *:font-semibold">
@@ -57,14 +55,10 @@
                   websites-list-row
                   [website]="website"
                   [isEnforced]="false"
-                  [isPending]="
-                    websitesPendingEdit.has(website.host) || pendingChangesService.websitesToDelete.has(website.host)
-                  "
+                  [isPending]="websitesPendingEdit.has(website.host) || pendingChangesService.websitesToDelete.has(website.host)"
                   class="animate-fade-up animate-delay-[400ms] animate-duration-500"
                   [ngClass]="[
-                    pendingChangesService.websitesToDelete.has(website.host)
-                      ? 'bg-red-50 saturate-[0.8] dark:bg-opacity-50'
-                      : '',
+                    pendingChangesService.websitesToDelete.has(website.host) ? 'bg-red-50 saturate-[0.8] dark:bg-opacity-50' : '',
                     websitesPendingEdit.has(website.host) ? 'bg-purple-50 saturate-[0.8] dark:bg-opacity-50' : ''
                   ]"
                 ></tr>

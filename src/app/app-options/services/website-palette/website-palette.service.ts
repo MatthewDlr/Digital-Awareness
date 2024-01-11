@@ -9,9 +9,7 @@ export class WebsitePaletteService {
 
   constructor() {
     this.toggleCommandPalette(true);
-    this.isCommandPaletteShown.subscribe(state =>
-      isDevMode() ? console.log("Update command palette state: ", state) : null,
-    );
+    this.isCommandPaletteShown.subscribe(state => (isDevMode() ? console.log("Update command palette state: ", state) : null));
   }
 
   toggleCommandPalette(state: boolean) {

@@ -43,10 +43,7 @@
 
     <!-- Skip Timer Button -->
     <div [ngClass]="timerValue() == 0 ? 'visible' : 'invisible'" class="flex flex-col items-center gap-2">
-      <div
-        class="text-gray-500 text-sm opacity-50"
-        [ngClass]="timerValue() == 0 ? 'animate-fade-up animate-duration-500' : ''"
-      >
+      <div class="text-gray-500 text-sm opacity-50" [ngClass]="timerValue() == 0 ? 'animate-fade-up animate-duration-500' : ''">
         Continue to
         <button class="underline decoration-wavy" (click)="skipTimer()">
           {{ outputUrl.hostname }}

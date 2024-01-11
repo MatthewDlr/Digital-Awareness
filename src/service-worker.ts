@@ -39,7 +39,9 @@ chrome.runtime.onInstalled.addListener(() => {
     if (!isActivated) {
       defaultConfig();
     }
-    chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
+    isDevMode()
+      ? console.log("Extension version: " + chrome.runtime.getManifest().version)
+      : chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
   });
 });
 
@@ -111,8 +113,6 @@ function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean
 }
 
 function redirectToWaitPage(details: any) {
-  const redirectUrl = chrome.runtime.getURL(
-    "index.html#blocked/" + encodeURIComponent(details.tabId) + "/" + encodeURIComponent(details.url),
-  );
+  const redirectUrl = chrome.runtime.getURL("index.html#blocked/" + encodeURIComponent(btoa(details.url)));
   chrome.tabs.update(details.tabId, { url: redirectUrl });
 }

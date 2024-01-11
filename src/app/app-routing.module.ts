@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: "popup", component: PopupComponent },
   { path: "options", component: OptionsComponent },
   { path: "options/:tab", component: OptionsComponent },
-  { path: "blocked/:tabId/:outputURL", component: AwarenessPageComponent },
+  { path: "blocked/:outputURL", component: AwarenessPageComponent },
 ];
 
 @NgModule({
