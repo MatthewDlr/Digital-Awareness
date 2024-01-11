@@ -1,5 +1,8 @@
 import { defaultConfig } from "./defaultConfig.js";
 import { isDevMode } from "@angular/core";
+import resolveConfig from "tailwindcss/resolveConfig";
+import tailwindConfig from "tailwind.config.js";
+const fullConfig = resolveConfig(tailwindConfig);
 
 chrome.webNavigation.onCommitted.addListener(function (details) {
   // Avoid showing blockpage if the request is made in background or isn't http/https
@@ -30,37 +33,27 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 });
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.get(["isUpdating"]).then(result => {
-    const isUpdating = result["isUpdating"] || false;
-    isDevMode() ? console.log("isUpdating: " + isUpdating) : null;
-    if (isUpdating) {
-      chrome.storage.local.set({ isUpdating: false });
-      chrome.action.setBadgeText({ text: "" });
-      chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
-    } else {
-      chrome.storage.sync.get(["isActivated"]).then(result => {
-        const isActivated = result["isActivated"] || false;
-        console.log("isActivated: " + isActivated);
-        if (!isActivated) {
-          defaultConfig();
-          chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
-        }
-      });
+  chrome.storage.sync.get(["isActivated"]).then(result => {
+    const isActivated = result["isActivated"] || false;
+    console.log("isActivated: " + isActivated);
+    if (!isActivated) {
+      defaultConfig();
     }
+    chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
   });
 });
 
 chrome.runtime.onUpdateAvailable.addListener(function (details) {
   chrome.action.setBadgeText({ text: "New" });
   chrome.action.setBadgeTextColor({ color: "#fff" });
-  chrome.action.setBadgeBackgroundColor({ color: "#7c3aed" });
+  chrome.action.setBadgeBackgroundColor({ color: fullConfig.theme.colors.purple["600"] });
   console.log("Digital Araweness is ready to be updated (v" + details.version + ")");
 });
 
 chrome.action.onClicked.addListener(function () {
   chrome.runtime.requestUpdateCheck(function (statut) {
     if (statut == "update_available") {
-      chrome.storage.local.set({ isUpdating: true });
+      chrome.action.setBadgeText({ text: "" });
       chrome.runtime.reload();
     }
   });
@@ -97,10 +90,6 @@ chrome.runtime.onMessage.addListener(function (request) {
   }
 });
 
-chrome.runtime.onSuspend.addListener(function () {
-  chrome.storage.local.set({ isUpdating: true });
-});
-
 function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean {
   const blockedWebsite = blockedWebsites.find(website => {
     return website.host === commitedHost;
@@ -113,7 +102,7 @@ function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean
 
   const allowedUntil: Date = new Date(blockedWebsite.allowedUntil);
   if (allowedUntil > new Date()) {
-    console.log("Website is temporary allowed until: ", allowedUntil);
+    isDevMode() ? console.log("Website is temporary allowed until: ", allowedUntil) : null;
     return false;
   }
 
