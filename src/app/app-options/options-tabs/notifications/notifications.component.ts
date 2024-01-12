@@ -17,7 +17,7 @@ export class NotificationsComponent {
   isNotificationPermissionRequested: boolean = false;
 
   constructor(private soundsEngine: SoundsEngineService) {
-    this.loadSettings();
+    this.loadNotificationsSettings();
     chrome.notifications.getPermissionLevel(level => {
       isDevMode() ? console.log("hasNotificationPermission: ", level) : null;
       if (level != "granted") {
@@ -51,7 +51,7 @@ export class NotificationsComponent {
         if (granted) {
           this.soundsEngine.success();
           this.hasNotificationPermission = true;
-          this.loadSettings();
+          this.loadNotificationsSettings();
         } else {
           this.soundsEngine.error();
           this.hasNotificationPermission = false;
@@ -62,12 +62,9 @@ export class NotificationsComponent {
     this.isNotificationPermissionRequested = true;
   }
 
-  async loadSettings() {
-    await chrome.storage.sync.get("doomScrollingNotification").then(result => {
+  async loadNotificationsSettings() {
+    await chrome.storage.sync.get(["doomScrollingNotification", "bindWatchingNotification"]).then(result => {
       this.doomScrollingToggle = result["doomScrollingNotification"];
-    });
-
-    await chrome.storage.sync.get("bindWatchingNotification").then(result => {
       this.bindWatchingToggle = result["bindWatchingNotification"];
     });
   }

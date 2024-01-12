@@ -17,7 +17,6 @@ export class AwarenessPageComponent {
   originalTimerValue!: number;
   timerValue = signal(30);
   outputUrl!: URL;
-  tabId!: string;
   widget: string = "Quotes";
   timerBehavior!: string;
   isWindowFocused: boolean = true;
@@ -28,8 +27,7 @@ export class AwarenessPageComponent {
   ) {
     // Getting url parameters
     this.route.params.subscribe(params => {
-      this.tabId = decodeURIComponent(params["tabId"]);
-      this.outputUrl = new URL(decodeURIComponent(params["outputURL"]));
+      this.outputUrl = new URL(atob(decodeURIComponent(params["outputURL"])));
     });
 
     chrome.storage.sync.get("awarenessPageWidget").then(result => {

@@ -4,6 +4,10 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class Quotes {
+  getRandomQuote() {
+    return this.QUOTES_LIST[Math.floor(Math.random() * this.QUOTES_LIST.length)];
+  }
+
   private QUOTES_LIST = [
     {
       text: '"The best preparation for tomorrow is doing your best today"',
@@ -58,19 +62,19 @@ export class Quotes {
       author: "James Clear, Atomic Habits",
     },
     {
-      text: '"With the same habits, you’ll end up with the same results. But with better habits, anything is possible."',
+      text: '"With the same habits, you’ll end up with the same results. But with better habits, anything is possible"',
       author: "James Clear, Atomic Habits",
     },
     {
-      text: '"The seed of every habit is a single, tiny decision."',
+      text: '"The seed of every habit is a single, tiny decision"',
       author: "James Clear, Atomic Habits",
     },
     {
-      text: '"Your identity emerges out of your habits."',
+      text: '"Your identity emerges out of your habits"',
       author: "James Clear, Atomic Habits",
     },
     {
-      text: '"Building habits in the present allows you to do more of what you want in the future.""',
+      text: '"Building habits in the present allows you to do more of what you want in the future""',
       author: "James Clear, Atomic Habits",
     },
     {
@@ -106,16 +110,16 @@ export class Quotes {
       author: "Jordan Peterson, 12 Rules For Life",
     },
     {
-      text: '"Passion. Action. Noble intention… Creates progress"',
-      author: "Tom Hardy",
-    },
-    {
       text: '"We cannot become what we want by remaining what we are"',
       author: "Max Depree",
     },
+    {
+      text: '"Attention without intention is wasted energy"',
+      author: "Chris Bailey, Hyperfocus",
+    },
+    {
+      text: '"We are what we pay attention to, and almost nothing influences our productivity and creativity as much as the information we\'ve consumed in the past"',
+      author: "Chris Bailey, Hyperfocus",
+    },
   ];
-
-  getRandomQuote() {
-    return this.QUOTES_LIST[Math.floor(Math.random() * this.QUOTES_LIST.length)];
-  }
 }

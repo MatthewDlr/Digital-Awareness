@@ -1,6 +1,6 @@
 import { Component, HostListener, isDevMode } from "@angular/core";
 import { watchedWebsite } from "src/app/types";
-import { CommandPaletteService } from "../../services/command-palette/command-palette.service";
+import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -23,7 +23,7 @@ export class WebsitesListComponent {
 
   constructor(
     private soundsEngine: SoundsEngineService,
-    private commandPaletteService: CommandPaletteService,
+    private commandPaletteService: WebsitePaletteService,
     public pendingChangesService: PendingChangesService,
   ) {
     this.commandPaletteService.isCommandPaletteShown.subscribe({
@@ -58,7 +58,7 @@ export class WebsitesListComponent {
   }
 
   getWebsites() {
-    chrome.storage.local.get("enforcedWebsites").then(result => {
+    chrome.storage.sync.get("enforcedWebsites").then(result => {
       this.enforcedWebsites = result["enforcedWebsites"] || [];
       isDevMode() ? console.log("Enforced Websites successfully fetched") : null;
     });

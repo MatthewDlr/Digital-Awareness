@@ -63,7 +63,7 @@ export class SearchService {
     chrome.storage.sync.get("userWebsites").then(result => {
       this.userWebsites = result["userWebsites"] || [];
     });
-    chrome.storage.local.get("enforcedWebsites").then(result => {
+    chrome.storage.sync.get("enforcedWebsites").then(result => {
       this.enforcedWebsites = result["enforcedWebsites"] || [];
     });
   }

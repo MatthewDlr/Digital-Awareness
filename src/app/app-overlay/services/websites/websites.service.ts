@@ -18,7 +18,7 @@ export class WebsitesService {
   websiteOrigin: string = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
 
   constructor(private scoringService: ScoringService) {
-    chrome.storage.local
+    chrome.storage.sync
       .get("enforcedWebsites")
       .then(result => {
         this.enforcedWebsites = result["enforcedWebsites"] || [];
@@ -50,9 +50,8 @@ export class WebsitesService {
 
   getTimerValue(host: string): number {
     this.currentWebsite = this.findCurrentWebsite(host);
-    const timerValue = this.currentWebsite.timer;
     const nudgedValue = this.scoringService.nudgeTimerValue(this.currentWebsite);
-    isDevMode() ? console.log("Timer value has been nudged from " + timerValue + "s to " + nudgedValue + "s") : null;
+    isDevMode() ? console.log("Timer has been nudged from " + this.currentWebsite.timer + "s to " + nudgedValue + "s") : null;
 
     if (isDevMode()) return 3;
     return nudgedValue;
@@ -76,6 +75,7 @@ export class WebsitesService {
 
     // If the user went back (blocked) just before allowing the website, it could means that he's trying to keep a fair score, so we decrement the timesBlocked counter.
     if (new Date(websiteAllowed.blockedAt).getTime() + PREVENT_FRAUD_DURATION * 60000 > Date.now()) {
+      // eslint-disable-next-line prettier/prettier
       isDevMode()
         ? alert(
             "Website was blocked less than " +
@@ -87,7 +87,7 @@ export class WebsitesService {
     }
 
     this.websiteOrigin == "Enforced"
-      ? chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites })
+      ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })
       : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 
@@ -115,7 +115,7 @@ export class WebsitesService {
     websiteBlocked.timer = this.scoringService.computeNewDecreasedValue(this.currentWebsite);
 
     this.websiteOrigin == "Enforced"
-      ? chrome.storage.local.set({ enforcedWebsites: this.enforcedWebsites })
+      ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })
       : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 

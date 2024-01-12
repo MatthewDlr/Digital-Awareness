@@ -1,5 +1,8 @@
 import { defaultConfig } from "./defaultConfig.js";
 import { isDevMode } from "@angular/core";
+import resolveConfig from "tailwindcss/resolveConfig";
+import tailwindConfig from "tailwind.config.js";
+const fullConfig = resolveConfig(tailwindConfig);
 
 chrome.webNavigation.onCommitted.addListener(function (details) {
   // Avoid showing blockpage if the request is made in background or isn't http/https
@@ -8,7 +11,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
   let commitedWebsite = new URL(details.url).host;
   if (commitedWebsite.substring(0, 4) == "www.") commitedWebsite = commitedWebsite.substring(4);
 
-  chrome.storage.local.get(["enforcedWebsites"]).then(result => {
+  chrome.storage.sync.get(["enforcedWebsites"]).then(result => {
     // Check if the website blocked by the list of mandatory blocked websites
     const enforcedWebsites = result["enforcedWebsites"];
     const isEnforced = isWebsiteBlocked(commitedWebsite, enforcedWebsites);
@@ -31,29 +34,29 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.get(["isActivated"]).then(result => {
-    console.log("isDevMode: " + isDevMode());
-    if (result["isActivated"] && !isDevMode()) {
-      console.log("Extension is already activated");
-    } else {
+    const isActivated = result["isActivated"] || false;
+    console.log("isActivated: " + isActivated);
+    if (!isActivated) {
       defaultConfig();
-      chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
     }
+    isDevMode()
+      ? console.log("Extension version: " + chrome.runtime.getManifest().version)
+      : chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
   });
 });
 
 chrome.runtime.onUpdateAvailable.addListener(function (details) {
   chrome.action.setBadgeText({ text: "New" });
   chrome.action.setBadgeTextColor({ color: "#fff" });
-  chrome.action.setBadgeBackgroundColor({ color: "#7c3aed" });
+  chrome.action.setBadgeBackgroundColor({ color: fullConfig.theme.colors.purple["600"] });
   console.log("Digital Araweness is ready to be updated (v" + details.version + ")");
 });
 
 chrome.action.onClicked.addListener(function () {
-  chrome.runtime.requestUpdateCheck(function (status) {
-    if (status == "update_available") {
+  chrome.runtime.requestUpdateCheck(function (statut) {
+    if (statut == "update_available") {
+      chrome.action.setBadgeText({ text: "" });
       chrome.runtime.reload();
-      chrome.browserAction.setBadgeText({ text: "" });
-      chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
     }
   });
 });
@@ -101,7 +104,7 @@ function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean
 
   const allowedUntil: Date = new Date(blockedWebsite.allowedUntil);
   if (allowedUntil > new Date()) {
-    console.log("Website is temporary allowed until: ", allowedUntil);
+    isDevMode() ? console.log("Website is temporary allowed until: ", allowedUntil) : null;
     return false;
   }
 
@@ -110,8 +113,6 @@ function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean
 }
 
 function redirectToWaitPage(details: any) {
-  const redirectUrl = chrome.runtime.getURL(
-    "index.html#blocked/" + encodeURIComponent(details.tabId) + "/" + encodeURIComponent(details.url),
-  );
+  const redirectUrl = chrome.runtime.getURL("index.html#blocked/" + encodeURIComponent(btoa(details.url)));
   chrome.tabs.update(details.tabId, { url: redirectUrl });
 }

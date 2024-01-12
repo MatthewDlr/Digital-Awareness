@@ -4,14 +4,12 @@ import { Subject } from "rxjs";
 @Injectable({
   providedIn: "root",
 })
-export class CommandPaletteService {
+export class WebsitePaletteService {
   isCommandPaletteShown: Subject<boolean> = new Subject<boolean>();
 
   constructor() {
     this.toggleCommandPalette(true);
-    this.isCommandPaletteShown.subscribe(state =>
-      isDevMode() ? console.log("Update command palette state: ", state) : null,
-    );
+    this.isCommandPaletteShown.subscribe(state => (isDevMode() ? console.log("Update command palette state: ", state) : null));
   }
 
   toggleCommandPalette(state: boolean) {
