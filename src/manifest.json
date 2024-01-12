@@ -24,5 +24,6 @@
       "js": ["doomScrolling.js"],
       "run_at": "document_end"
     }
-  ]
+  ],
+  "incognito": "split"
 }
