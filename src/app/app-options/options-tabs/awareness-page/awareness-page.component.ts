@@ -50,9 +50,9 @@ export class AwarenessPageComponent {
   }
 
   checkIfTasksValid() {
-    if (this.tasks[0] == "" && this.tasks[1] == "" && this.tasks[2] == "") {
+    if (this.tasks[0].trim() == "" && this.tasks[1].trim() == "" && this.tasks[2].trim() == "") {
+      if (this.areTasksValid) this.soundsEngine.error();
       this.areTasksValid = false;
-      this.soundsEngine.error();
     } else {
       this.areTasksValid = true;
     }
