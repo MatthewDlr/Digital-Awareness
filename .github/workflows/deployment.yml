@@ -42,7 +42,7 @@ jobs:
         with:
           name: digital-awareness.zip
           path: dist/digital-awareness.zip
-          retention-days: 7
+          retention-days: 30
 
   publish:
     needs: build
