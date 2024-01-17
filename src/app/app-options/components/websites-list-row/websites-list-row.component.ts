@@ -31,7 +31,7 @@ export class WebsitesListRowComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.awarenessRatio = this.scoringService.computeWebsiteScore(this.website);
+    this.awarenessRatio = this.scoringService.getScoreOf(this.website);
     this.cdRef.detectChanges();
   }
 

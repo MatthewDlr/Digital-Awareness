@@ -145,9 +145,4 @@ export class WebsitesService {
   private clamp(value: number, min: number, max: number) {
     return Math.min(Math.max(value, min), max);
   }
-
-  private getDaysSinceLastAllowed(website: watchedWebsite): number {
-    if (!website.allowedUntil) return 1;
-    return this.clamp((Date.now() - new Date(website.allowedUntil).getTime()) / (1000 * 60 * 60 * 24), 1, 7);
-  }
 }
