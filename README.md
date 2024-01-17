@@ -8,8 +8,9 @@
 
 <p align="center">
 
-  <img width="175" src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/HRs9MPufa1J1h5glNhut.png" alt="Chrome Web Store">
-
+<a href="https://chromewebstore.google.com/detail/digital-awareness/eciijpgppecgdjfemignfbgnnhnmnkia?hl=en">
+  <img src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/HRs9MPufa1J1h5glNhut.png" alt="Chrome Web Store" style="width: 200px">
+</a>
 </p>
 
 <br>
@@ -24,6 +25,7 @@
 ✅ Prevent doom scrolling <br>
 ✅ Dark mode <br>
 ✅ Absolutely free <br>
+✅ Compatible with any Chromium-based web browser <br>
 
 ## Development Setup
 
@@ -47,9 +49,9 @@ Run `npm run watch` to start the development server.
 To test the extension, go to `chrome://extensions/` and enable developer mode.
 Then click on `Load unpacked` and select the output folder
 
-Please do not use angular commands like `ng serve`and `ng build` since it doesn't run the custom webpack configuration and custom flags, it results in missing files from the compilation output and unexpected behaviors accross the extension. <br>
+Please do not use angular commands like `ng serve`and `ng build` since it doesn't run the custom webpack configuration and custom flags, it results in missing files from the compilation output and unexpected behaviors across the extension. <br>
 
-Be aware that when the extension in running in development mode, it behaves differently ; all timers are much faster and won't adapts to your usage and you'll also get much more logs in the page console. To avoid affecting the user experience, please limit your own logging to development mode using the `isDevMode()` function of Angular.
+Be aware that when the extension in running in development mode, it behaves differently ; all timers are much faster and won't adapt to your usage and, you'll also get much more logs in the page console. To avoid affecting the user experience, please limit your own logging to development mode using the `isDevMode()` function of Angular.
 
 If you modify the manifest, or the .ts files at the root of the project, you will need to reload the extension to see your changes.
 For everything related to the angular app, you can simply reload the page.
@@ -64,6 +66,7 @@ If a dependency is creating conflicts, never, ever, use `--force` to add it anyw
 
 ### Lint
 
+![ESlint](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white)
 ![Prettier](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E) <br>
 This project relies on eslint and prettier to enforce a unified and clean code style.
 
