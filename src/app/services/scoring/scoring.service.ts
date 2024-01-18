@@ -10,11 +10,23 @@ const DECREASE_COEF = 1; // The higher the value, the more aggressively the time
   providedIn: "root",
 })
 export class ScoringService {
-  constructor() {}
+  private currentWebsite!: string;
+  private currentScore!: number;
+
+  getScoreOf(website: watchedWebsite): number {
+    if (website.host == this.currentWebsite && this.currentScore) {
+      isDevMode() ? console.log("Score has been fetched directly from the service") : null;
+      return this.currentScore;
+    }
+
+    this.currentScore = this.computeWebsiteScore(website);
+    this.currentWebsite = website.host;
+    return this.currentScore;
+  }
 
   // Returns a score ranging from 0 to 100 aiming to assess the user's current habit concerning this website.
   // If there is not enough data to compute a reliable score, -1 is returned.
-  computeWebsiteScore(website: watchedWebsite): number {
+  private computeWebsiteScore(website: watchedWebsite): number {
     const accuracy = website.timesBlocked + website.timesAllowed;
     if (accuracy < 5) return -1;
 
@@ -30,7 +42,7 @@ export class ScoringService {
   // Algorithm to compute the new timer value when the user goes back (success)
   computeNewDecreasedValue(website: watchedWebsite): number {
     const currentValue = website.timer;
-    const score = this.computeWebsiteScore(website);
+    const score = this.getScoreOf(website);
     const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
     let newValue = currentValue;
 
@@ -54,7 +66,7 @@ export class ScoringService {
 
   computeNewIncreasedValue(website: watchedWebsite): number {
     const currentValue = website.timer;
-    const score = this.computeWebsiteScore(website);
+    const score = this.getScoreOf(website);
     let newValue = currentValue;
 
     const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
@@ -81,7 +93,7 @@ export class ScoringService {
   // This function adjust the timer value as an incentive to nudge the user in the good direction.
   nudgeTimerValue(website: watchedWebsite): number {
     let timerValue = website.timer;
-    const score = this.computeWebsiteScore(website);
+    const score = this.getScoreOf(website);
 
     if (score == -1) return timerValue; // The timer value remains unchanged if the user has not interacted with the website sufficiently.
 
@@ -101,13 +113,22 @@ export class ScoringService {
       timerValue /= 1.1;
     }
 
-    // We adjust the timer value based on the last time the user allowed access to the website.
-    // If he allowed access 1 day ago, then the timer remains unchanged; however, if the last allowance was 7 days ago, the value is divided by 1.49
+    // We adjust the timer value based on the last time the user accessed to the website.
+    // If he accessed 1 day ago, then the timer remains unchanged; however, if the last allowance was 7 days ago, the value is divided by 1.49
     const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
     const dayCoef = daysSinceLastAllowed ** 2 / 100 + 1;
     timerValue /= dayCoef;
 
     return Math.round(timerValue);
+  }
+
+  // Return a number between 1 and 0.57 that take in consideration the days since the website has not been opened
+  getAllowedCoef(website: watchedWebsite): number {
+    const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
+    const coef = 1 - Math.log10(daysSinceLastAllowed) / 2;
+    isDevMode() ? alert("AllowedCoef is: " + coef) : null;
+
+    return coef;
   }
 
   private clamp(value: number, min: number, max: number) {

@@ -42,7 +42,7 @@ jobs:
         with:
           name: digital-awareness.zip
           path: dist/digital-awareness.zip
-          retention-days: 7
+          retention-days: 30
 
   publish:
     needs: build
@@ -56,7 +56,7 @@ jobs:
       - name: Upload to Chrome Web Store
         uses: mobilefirstllc/cws-publish@latest
         with:
-          action: "testers" # one of: upload, publish, testers
+          action: "publish" # one of: upload, publish, testers
           client_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
           refresh_token: ${{ secrets.REFRESH_TOKEN }}

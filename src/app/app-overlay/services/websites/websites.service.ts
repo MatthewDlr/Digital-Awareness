@@ -19,33 +19,15 @@ export class WebsitesService {
 
   constructor(private scoringService: ScoringService) {
     chrome.storage.sync
-      .get("enforcedWebsites")
+      .get(["enforcedWebsites", "userWebsites"])
       .then(result => {
         this.enforcedWebsites = result["enforcedWebsites"] || [];
-        this.checkIfWebsitesLoaded();
-      })
-      .catch(error => {
-        isDevMode() ? console.error(error) : null;
-      });
-
-    chrome.storage.sync
-      .get("userWebsites")
-      .then(result => {
         this.userWebsites = result["userWebsites"] || [];
-        this.checkIfWebsitesLoaded();
+        this.areWebsitesLoaded.next(true);
       })
       .catch(error => {
         isDevMode() ? console.error(error) : null;
       });
-  }
-
-  checkIfWebsitesLoaded() {
-    if (this.enforcedWebsites && this.userWebsites) {
-      this.areWebsitesLoaded.next(true);
-      isDevMode() ? console.info("Websites correctly retrieved from chrome storage") : null;
-    } else {
-      this.areWebsitesLoaded.next(false);
-    }
   }
 
   getTimerValue(host: string): number {
@@ -53,8 +35,7 @@ export class WebsitesService {
     const nudgedValue = this.scoringService.nudgeTimerValue(this.currentWebsite);
     isDevMode() ? console.log("Timer has been nudged from " + this.currentWebsite.timer + "s to " + nudgedValue + "s") : null;
 
-    if (isDevMode()) return 3;
-    return nudgedValue;
+    return isDevMode() ? 3 : nudgedValue;
   }
 
   // This is called when the user chooses to visit the website, it counts as a 'failure.'
@@ -69,20 +50,13 @@ export class WebsitesService {
       return;
     }
 
+    websiteAllowed.timesAllowed += this.scoringService.getAllowedCoef(websiteAllowed);
     websiteAllowed.allowedUntil = new Date(Date.now() + DEFAULT_ALLOWED_DURATION * 60000).toString();
-    websiteAllowed.timesAllowed++;
     websiteAllowed.timer = this.scoringService.computeNewIncreasedValue(this.currentWebsite);
 
     // If the user went back (blocked) just before allowing the website, it could means that he's trying to keep a fair score, so we decrement the timesBlocked counter.
     if (new Date(websiteAllowed.blockedAt).getTime() + PREVENT_FRAUD_DURATION * 60000 > Date.now()) {
-      // eslint-disable-next-line prettier/prettier
-      isDevMode()
-        ? alert(
-            "Website was blocked less than " +
-              PREVENT_FRAUD_DURATION +
-              " minutes ago, decrementing the time blocked to keep a fair score",
-          )
-        : null;
+      isDevMode() ? alert("Website was already blocked less than " + PREVENT_FRAUD_DURATION + " minutes ago") : null;
       websiteAllowed.timesBlocked--;
     }
 
@@ -104,14 +78,12 @@ export class WebsitesService {
     }
 
     if (new Date(websiteBlocked.blockedAt).getTime() + DEFAULT_COOLDOWN_DURATION * 60000 > Date.now()) {
-      isDevMode()
-        ? alert("Website was blocked less than " + DEFAULT_COOLDOWN_DURATION + " minutes ago, not incrementing the counter")
-        : null;
+      isDevMode() ? alert("Website was blocked less than " + DEFAULT_COOLDOWN_DURATION + " minutes ago") : null;
       return;
     }
 
-    websiteBlocked.blockedAt = new Date().toString();
     websiteBlocked.timesBlocked++;
+    websiteBlocked.blockedAt = new Date().toString();
     websiteBlocked.timer = this.scoringService.computeNewDecreasedValue(this.currentWebsite);
 
     this.websiteOrigin == "Enforced"
@@ -140,14 +112,5 @@ export class WebsitesService {
   private removeWWW(website: string): string {
     if (website.substring(0, 3) == "www") return website.substring(4);
     return website;
-  }
-
-  private clamp(value: number, min: number, max: number) {
-    return Math.min(Math.max(value, min), max);
-  }
-
-  private getDaysSinceLastAllowed(website: watchedWebsite): number {
-    if (!website.allowedUntil) return 1;
-    return this.clamp((Date.now() - new Date(website.allowedUntil).getTime()) / (1000 * 60 * 60 * 24), 1, 7);
   }
 }
