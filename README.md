@@ -1,16 +1,14 @@
 <p align="center">
-     
   <img width="150" src="https://github.com/MatthewDlr/Digital-Awareness/assets/57815261/0ec3f885-5c1a-4898-b351-fce217ca932b" alt="Digital Awareness logo">
 </p>
 
 <h3 align="center">Digital Awareness</h3>
-<h4 align="center">Unlearn bad digital habits</h4>
+<p align="center">Unlearn bad browsing habits and become more aware of your digital life.</p>
 
 <p align="center">
-
-<a href="https://chromewebstore.google.com/detail/digital-awareness/eciijpgppecgdjfemignfbgnnhnmnkia?hl=en">
-  <img src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/HRs9MPufa1J1h5glNhut.png" alt="Chrome Web Store" style="width: 200px">
-</a>
+  <a href="https://chromewebstore.google.com/detail/digital-awareness/eciijpgppecgdjfemignfbgnnhnmnkia?hl=en">
+    <img src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/HRs9MPufa1J1h5glNhut.png" alt="Chrome Web Store" style="width: 200px">
+  </a>
 </p>
 
 <br>
