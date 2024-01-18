@@ -113,13 +113,22 @@ export class ScoringService {
       timerValue /= 1.1;
     }
 
-    // We adjust the timer value based on the last time the user allowed access to the website.
-    // If he allowed access 1 day ago, then the timer remains unchanged; however, if the last allowance was 7 days ago, the value is divided by 1.49
+    // We adjust the timer value based on the last time the user accessed to the website.
+    // If he accessed 1 day ago, then the timer remains unchanged; however, if the last allowance was 7 days ago, the value is divided by 1.49
     const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
     const dayCoef = daysSinceLastAllowed ** 2 / 100 + 1;
     timerValue /= dayCoef;
 
     return Math.round(timerValue);
+  }
+
+  // Return a number between 1 and 0.57 that take in consideration the days since the website has not been opened
+  getAllowedCoef(website: watchedWebsite): number {
+    const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
+    const coef = 1 - Math.log10(daysSinceLastAllowed) / 2;
+    isDevMode() ? alert("AllowedCoef is: " + coef) : null;
+
+    return coef;
   }
 
   private clamp(value: number, min: number, max: number) {
