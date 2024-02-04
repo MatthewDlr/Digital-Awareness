@@ -47,16 +47,29 @@
 
   <!-- Doom scrolling toggle -->
   <li
-    class="flex w-full animate-fade-up items-center justify-between rounded-xl px-6 py-4 animate-duration-500"
-    [ngClass]="
-      doomScrollingToggle ? 'shadow-inner-md border-green-500 border-[1px] shadow-green-500' : 'border-gray-200 border-2'
-    "
+    class="flex w-full animate-fade-up items-center justify-between rounded-xl border px-6 py-4 animate-duration-500"
+    [ngClass]="doomScrollingToggle ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
   >
-    <span class="flex flex-grow flex-col">
-      <span class="text-gray-900 text-base font-medium leading-6" id="availability-label">Prevent Doom Scrolling</span>
-      <span class="text-gray-500 text-sm" id="availability-description"
-        >Send a notification when you've been scrolling for too long.</span
-      >
+    <span class="flex flex-grow flex-col gap-1">
+      <div class="flex gap-2">
+        <span class="text-gray-900 text-base font-medium leading-6" id="availability-label">Prevent Doom Scrolling</span>
+        <span class="text-green-700 bg-green-100 inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold">2.0</span>
+      </div>
+      <div class="gap-1">
+        <span class="text-gray-500 text-sm" id="availability-description"
+          >The deeper you scroll, the dimmer the screen gets ; making it harder to read. 
+        </span>
+        <span class="text-gray-500 text-sm font-light italic">
+          Powered by
+        </span>
+        <a
+          href="https://github.com/benjchan/Anchor/tree/master"
+          target="_blank"
+          class="hover:green-gradient text-gray-500 text-sm italic font-light hover:cursor-pointer hover:bg-clip-text hover:text-transparent"
+          >Anchor</a
+        >
+        <span>.</span>
+      </div>
     </span>
 
     <button
@@ -70,7 +83,6 @@
       aria-labelledby="availability-label"
       aria-describedby="availability-description"
     >
-      <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
       <span
         [ngClass]="doomScrollingToggle ? 'translate-x-5' : 'translate-x-0'"
         aria-hidden="true"

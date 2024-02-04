@@ -45,7 +45,7 @@
 }
 
 .anchor .sea {
-  @apply pointer-events-none fixed left-0 top-0 z-50 h-full w-full bg-gray-950/90 opacity-0 mix-blend-darken;
+  @apply pointer-events-none fixed left-0 top-0 z-50 h-full w-full bg-gray-950/95 opacity-0 mix-blend-darken;
 }
 
 .anchor .depth {
