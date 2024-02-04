@@ -38,81 +38,33 @@
 
 .anchor * {
   pointer-events: none;
-  font-family: "Helvetica", "Arial", sans-serif !important;
 }
 
 .anchor {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.anchor .creatures {
-  position: absolute;
-  width: 100%;
-  z-index: 1000000001;
-  top: 0;
-  left: 0;
+  @apply pointer-events-none absolute right-0 top-0 h-fit w-full overflow-hidden;
 }
 
 .anchor .sea {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  @apply bg-gray-950/85;
-  z-index: 1000000000;
-  opacity: 0;
-  mix-blend-mode: darken;
-  pointer-events: none;
+  @apply pointer-events-none fixed left-0 top-0 z-50 h-full w-full bg-gray-950/90 opacity-0 mix-blend-darken;
 }
 
 .anchor .depth {
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100%;
-  width: auto;
-  z-index: 1000000001;
-  padding: 29px 20px;
-  box-sizing: border-box;
+  @apply fixed right-0 top-0 h-full w-auto z-50 py-4 px-5 box-border;
 }
 
 .anchor .depth--line {
-  width: 20px;
-  height: 2px;
-  position: relative;
+  @apply bg-green-600 relative h-1 w-5;
   margin-bottom: calc((100vh - 66px) / 4);
-  background: red;
 }
 
 .anchor .depth--marker {
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 60px;
-  z-index: 1000000001;
-  height: 100%;
-  padding: 20px 20px;
-  box-sizing: border-box;
+  @apply fixed right-0 top-0 z-50 box-border h-full w-10 p-4;
 }
 
 .anchor .marker {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: red;
-  border-radius: 50%;
+  @apply bg-green-600 absolute h-5 w-5 rounded-xl;
 }
 
 .anchor .marker span {
-  position: absolute;
-  right: 150%;
-  top: 50%;
-  transform: translate(0, -50%);
+  @apply absolute right-[150%] top-1/2 min-w-12 translate-y-[-50%] transform;
 }
