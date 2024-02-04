@@ -21,7 +21,7 @@ chrome.storage.sync.get("doomScrollingNotification", result => {
     const depth = document.createElement("div");
     depth.className = "depth";
     anchor.appendChild(depth);
- 
+
     if (isDevMode()) {
       for (let i = 0; i < 5; i++) {
         const line = document.createElement("div");

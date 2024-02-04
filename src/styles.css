@@ -49,7 +49,7 @@
 }
 
 .anchor .depth {
-  @apply fixed right-0 top-0 h-full w-auto z-50 py-4 px-5 box-border;
+  @apply fixed right-0 top-0 z-50 box-border h-full w-auto px-5 py-4;
 }
 
 .anchor .depth--line {
