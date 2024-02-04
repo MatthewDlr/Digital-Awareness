@@ -1,11 +1,12 @@
-export function defaultConfig() {
+// Function use to write the default configuration just after the extension is installed
+export function writeDefaultConfig() {
   chrome.storage.sync
     .set({
       isActivated: true, // Extension activation
       awarenessPageWidget: "Quotes", // Widget to display on the awareness page
       timerBehavior: "Restart", // What to do when the awareness page is not focused
-      doomScrollingNotification: true, // Notification when doom scrolling
-      doomScrollingTreshold: 125, // Number of time the user can scroll before notification
+      doomScrollingToggle: true, // Screen dimming when doom scrolling
+      bingeWatchingToggle: true, // Alert when binge watching on supported websites
       userWebsites: [], // Website the user will decide to block
       enforcedWebsites: [
         {
@@ -129,5 +130,32 @@ export function defaultConfig() {
       console.error("Failed to write the default configuration: " + error);
     });
 
-  chrome.storage.local.set({ isSetupDismissed: false });
+  chrome.storage.local.set({ isSetupDismissed: false }, { bingeWatchingSupportedWebsites: ["youtube"] });
+}
+
+// Function use to update the configuration when a new version of the extension is installed
+export function updateConfig() {
+  chrome.storage.sync.remove(["doomScrollingTreshold"]);
+
+  chrome.storage.local.get(["bingeWatchingSupportedWebsites"]).then(result => {
+    if (result.bingeWatchingSupportedWebsites === undefined) {
+      chrome.storage.local.set({ bingeWatchingSupportedWebsites: ["youtube"] });
+    }
+  });
+
+  chrome.storage.sync.get(["doomScrollingNotification"]).then(result => {
+    if (result.doomScrollingNotification) {
+      chrome.storage.sync.set({ doomScrollingToggle: result["doomScrollingNotification"] });
+      chrome.storage.sync.remove(["doomScrollingNotification"]);
+      chrome.storage.sync.remove(["bindWatchingNotification"]);
+    }
+  });
+
+  chrome.storage.sync.get(["doomScrollingToggle"]).then(result => {
+    if (result.doomScrollingNotification === undefined) {
+      chrome.storage.sync.set({ doomScrollingToggle: true });
+    }
+  });
+
+  console.info("Configuration successfully updated !");
 }

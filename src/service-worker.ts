@@ -1,4 +1,4 @@
-import { defaultConfig } from "./defaultConfig.js";
+import { writeDefaultConfig, updateConfig } from "./defaultConfig.js";
 import { isDevMode } from "@angular/core";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "tailwind.config.js";
@@ -37,7 +37,9 @@ chrome.runtime.onInstalled.addListener(() => {
     const isActivated = result["isActivated"] || false;
     console.log("isActivated: " + isActivated);
     if (!isActivated) {
-      defaultConfig();
+      writeDefaultConfig();
+    } else {
+      updateConfig();
     }
     isDevMode()
       ? console.log("Extension version: " + chrome.runtime.getManifest().version)

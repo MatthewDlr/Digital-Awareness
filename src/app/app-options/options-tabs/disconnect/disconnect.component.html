@@ -1,7 +1,7 @@
-<ul role="list" class="space-y-3">
+<ul role="list" class="mt-6 flex flex-col gap-10">
   <!-- Doom scrolling toggle -->
   <li
-    class="mt-3 flex w-full animate-fade-up items-center justify-between rounded-xl border px-6 py-4 animate-duration-500"
+    class="flex w-full animate-fade-up items-center justify-between rounded-xl border px-6 py-4 animate-duration-500"
     [ngClass]="doomScrollingToggle ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
   >
     <span class="flex flex-grow flex-col gap-1">
@@ -36,6 +36,46 @@
     >
       <span
         [ngClass]="doomScrollingToggle ? 'translate-x-5' : 'translate-x-0'"
+        aria-hidden="true"
+        class="bg-white pointer-events-none inline-block h-5 w-5 translate-x-0 !transform rounded-full shadow !transition-all !duration-200 !ease-in-out group-disabled:bg-gray-400"
+      ></span>
+    </button>
+  </li>
+
+  <!-- Binge Watch toggle -->
+  <li
+    class="flex w-full animate-fade-up items-center justify-between rounded-xl border px-6 py-4 animate-duration-500"
+    [ngClass]="bingeWatchingToggle ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
+  >
+    <span class="flex flex-grow flex-col gap-1">
+      <div class="flex gap-2">
+        <span class="text-gray-900 text-base font-medium leading-6" id="availability-label">Prevent Binge Watching</span>
+      </div>
+      <span class="text-gray-500 text-sm" id="availability-description">
+        Remind yourself to take a break after a video ends.
+      </span>
+      <div class="flex">
+        <span class="text-gray-500 text-sm font-light"> Supported websites: &nbsp; </span>
+        <div class="text-gray-500 text-sm font-light italic">
+          @for (website of bingeWatchingSupportedWebsites; track $index) {
+            <span>{{website}}</span>,&nbsp;
+          }
+        </div>
+      </div>
+    </span>
+
+    <button
+      [ngClass]="bingeWatchingToggle ? 'bg-green-500' : 'bg-gray-200'"
+      (click)="toggleBingeWatching()"
+      type="button"
+      class="group bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent !transition-all !duration-300 !ease-in-out disabled:bg-gray-200 hover:scale-110 disabled:cursor-not-allowed"
+      role="switch"
+      aria-checked="false"
+      aria-labelledby="availability-label"
+      aria-describedby="availability-description"
+    >
+      <span
+        [ngClass]="bingeWatchingToggle ? 'translate-x-5' : 'translate-x-0'"
         aria-hidden="true"
         class="bg-white pointer-events-none inline-block h-5 w-5 translate-x-0 !transform rounded-full shadow !transition-all !duration-200 !ease-in-out group-disabled:bg-gray-400"
       ></span>
