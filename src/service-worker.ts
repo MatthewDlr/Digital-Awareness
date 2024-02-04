@@ -61,37 +61,6 @@ chrome.action.onClicked.addListener(function () {
   });
 });
 
-chrome.runtime.onMessage.addListener(function (request) {
-  if (request.type == "doomScrolling") {
-    chrome.storage.sync.get("doomScrollingNotification", result => {
-      if (result["doomScrollingNotification"] == true) {
-        chrome.notifications.create("doomScrollingNotification", {
-          type: "basic",
-          iconUrl: "/assets/logo-512.png",
-          title: "Doom Scrolling Detected",
-          message: "Seems that you've been scrolling for a while, let's take a break!",
-          priority: 2,
-          buttons: [
-            {
-              title: "incorrect detection?",
-            },
-          ],
-        });
-        chrome.notifications.onButtonClicked.addListener(function (notificationId) {
-          if (notificationId === "doomScrollingNotification") {
-            chrome.storage.sync.get("doomScrollingTreshold", result => {
-              chrome.storage.sync.set({
-                doomScrollingTreshold: result["doomScrollingTreshold"] + 5,
-              });
-            });
-            chrome.notifications.clear(notificationId);
-          }
-        });
-      }
-    });
-  }
-});
-
 function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean {
   const blockedWebsite = blockedWebsites.find(website => {
     return website.host === commitedHost;

@@ -3,13 +3,13 @@ import { CommonModule } from "@angular/common";
 import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
 @Component({
-  selector: "app-notifications",
+  selector: "app-disconnect",
   standalone: true,
   imports: [CommonModule],
-  templateUrl: "./notifications.component.html",
-  styleUrls: ["./notifications.component.css"],
+  templateUrl: "./disconnect.component.html",
+  styleUrls: ["./disconnect.component.css"],
 })
-export class NotificationsComponent {
+export class DisconnectComponent {
   doomScrollingToggle: boolean = false;
   bindWatchingToggle: boolean = false;
 

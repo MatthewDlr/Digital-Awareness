@@ -12,7 +12,7 @@
     "default_popup": ""
   },
   "host_permissions": ["*://*/*"],
-  "permissions": ["storage", "tabs", "webNavigation", "notifications"],
+  "permissions": ["storage", "tabs", "webNavigation"],
   "options_page": "index.html#/options",
   "background": {
     "service_worker": "serviceWorker.js",
