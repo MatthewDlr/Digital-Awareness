@@ -1,10 +1,10 @@
 {
   "name": "digital-wellbeing",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "ng": "ng",
     "build": "ng build --configuration production --base-href",
-    "watch": "ng build --watch --configuration development --base-href",
+    "dev": "ng build --watch --configuration development --base-href",
     "test": "ng test",
     "lint": "eslint . --fix && prettier --write .",
     "prepare": "husky install"

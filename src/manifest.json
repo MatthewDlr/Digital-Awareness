@@ -22,6 +22,7 @@
     {
       "matches": ["<all_urls>"],
       "js": ["doomScrolling.js"],
+      "css": ["styles.css"],
       "run_at": "document_end"
     }
   ],
