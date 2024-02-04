@@ -13,19 +13,8 @@ export class DisconnectComponent {
   doomScrollingToggle: boolean = false;
   bindWatchingToggle: boolean = false;
 
-  hasNotificationPermission: boolean = true;
-  isNotificationPermissionRequested: boolean = false;
-
   constructor(private soundsEngine: SoundsEngineService) {
-    this.loadNotificationsSettings();
-    chrome.notifications.getPermissionLevel(level => {
-      isDevMode() ? console.log("hasNotificationPermission: ", level) : null;
-      if (level != "granted") {
-        this.hasNotificationPermission = false;
-        this.bindWatchingToggle = false;
-        this.doomScrollingToggle = false;
-      }
-    });
+    this.loadSettings();
   }
 
   toggleDoomScrolling() {
@@ -42,30 +31,14 @@ export class DisconnectComponent {
     });
   }
 
-  requestNotificationPermission() {
-    chrome.permissions
-      .request({
-        permissions: ["notifications"],
-      })
-      .then(granted => {
-        if (granted) {
-          this.soundsEngine.success();
-          this.hasNotificationPermission = true;
-          this.loadNotificationsSettings();
-        } else {
-          this.soundsEngine.error();
-          this.hasNotificationPermission = false;
-          this.bindWatchingToggle = false;
-          this.doomScrollingToggle = false;
-        }
-      });
-    this.isNotificationPermissionRequested = true;
-  }
-
-  async loadNotificationsSettings() {
+  async loadSettings() {
     await chrome.storage.sync.get(["doomScrollingNotification", "bindWatchingNotification"]).then(result => {
       this.doomScrollingToggle = result["doomScrollingNotification"];
       this.bindWatchingToggle = result["bindWatchingNotification"];
     });
+    if (isDevMode()) {
+      console.log("doomScrollingNotification: ", this.doomScrollingToggle);
+      console.log("bindWatchingNotification: ", this.bindWatchingToggle);
+    }
   }
 }
