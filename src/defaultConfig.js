@@ -145,7 +145,7 @@ export function updateConfig() {
 
   chrome.storage.sync.get(["doomScrollingNotification"]).then(result => {
     if (result.doomScrollingNotification) {
-      chrome.storage.sync.set({ doomScrollingToggle: result["doomScrollingNotification"] });
+      chrome.storage.sync.set({ doomScrollingToggle: result.doomScrollingNotification });
       chrome.storage.sync.remove(["doomScrollingNotification"]);
       chrome.storage.sync.remove(["bindWatchingNotification"]);
     }
