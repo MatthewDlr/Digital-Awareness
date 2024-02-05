@@ -6,10 +6,10 @@ const depthBottomMeters = 15; //Depth in meters
 const depthBottomPixel: number = meterToPixel(depthBottomMeters);
 const depthStart: number = depthBottomPixel - meterToPixel(depthBottomMeters * 0.4);
 
-chrome.storage.sync.get("doomScrollingNotification", result => {
-  isDevMode() && console.log("doomScrollingNotification: ", result["doomScrollingNotification"]);
+chrome.storage.sync.get("doomScrollingToggle", result => {
+  isDevMode() && console.log("doomScrollingToggle: ", result["doomScrollingToggle"]);
 
-  if (result["doomScrollingNotification"] == true) {
+  if (result["doomScrollingToggle"] == true) {
     isDoomScrollingEnabled = true;
 
     const anchor = document.createElement("div");

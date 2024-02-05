@@ -144,17 +144,13 @@ export function updateConfig() {
   });
 
   chrome.storage.sync.get(["doomScrollingNotification"]).then(result => {
-    if (result.doomScrollingNotification) {
+    if (result.doomScrollingNotification == true || result.doomScrollingNotification == false) {
       chrome.storage.sync.set({ doomScrollingToggle: result.doomScrollingNotification });
       chrome.storage.sync.remove(["doomScrollingNotification"]);
-      chrome.storage.sync.remove(["bindWatchingNotification"]);
-    }
-  });
-
-  chrome.storage.sync.get(["doomScrollingToggle"]).then(result => {
-    if (result.doomScrollingNotification === undefined) {
+    } else {
       chrome.storage.sync.set({ doomScrollingToggle: true });
     }
+    chrome.storage.sync.remove(["bindWatchingNotification"]);
   });
 
   console.info("Configuration successfully updated !");
