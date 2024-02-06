@@ -27,6 +27,8 @@ chrome.storage.sync.get("bingeWatchingToggle").then(result => {
 });
 
 function getVideoTimer() {
+  if (isYoutubeVideoPaused()) return;
+
   let value = 0;
   switch (website) {
     case "youtube":
@@ -35,16 +37,23 @@ function getVideoTimer() {
     default:
       value = 0;
   }
-  if (value > 0) {
-    videoTimer = value;
-  } else {
+  console.log("Value: " + value);
+  console.log("Video timer: " + videoTimer);
+
+  if (value <= videoTimer) {
     videoTimer += 1;
+  } else if (value > videoTimer) {
+    videoTimer = value;
   }
   console.log("Video timer: " + videoTimer);
   if (videoTimer >= videoDuration) {
     console.log("You have been watching for " + videoTimer + " seconds");
     clearInterval(timerInterval);
   }
+}
+
+function isYoutubeVideoPaused(): boolean {
+  return document.getElementsByClassName("ytp-play-button")?.item(0)?.getAttribute("data-title-no-tooltip") == "Play";
 }
 
 function getYoutubeVideoTimer(): number {
