@@ -6,8 +6,6 @@ let timerInterval: any;
 let videoTimer: number = 0;
 let videoDuration: number = 0;
 
-console.log("Website: " + website);
-
 chrome.storage.sync.get("bingeWatchingToggle").then(result => {
   isBingeWatchingEnabled = result["bingeWatchingToggle"] || false;
   isDevMode() && console.log("Binge Watching state: " + isBingeWatchingEnabled);
@@ -37,15 +35,13 @@ function getVideoTimer() {
     default:
       value = 0;
   }
-  console.log("Value: " + value);
-  console.log("Video timer: " + videoTimer);
 
   if (value <= videoTimer) {
     videoTimer += 1;
   } else if (value > videoTimer) {
     videoTimer = value;
   }
-  console.log("Video timer: " + videoTimer);
+  isDevMode() && console.log("Video timer: " + videoTimer);
   if (videoTimer >= videoDuration) {
     console.log("You have been watching for " + videoTimer + " seconds");
     clearInterval(timerInterval);
