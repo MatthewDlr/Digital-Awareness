@@ -1,63 +1,102 @@
 import { isDevMode } from "@angular/core";
 
-const website: string = determineWebsite();
+interface SupportedWebsite {
+  getVideoFullDuration: () => number;
+  getVideoCurrentTime: () => number;
+  isVideoPaused: () => boolean;
+}
+
+class Youtube implements SupportedWebsite {
+  getVideoFullDuration(): number {
+    return stringToSeconds(document.getElementsByClassName("ytp-time-duration")?.item(0)?.textContent || "0:00");
+  }
+
+  getVideoCurrentTime(): number {
+    return stringToSeconds(document.getElementsByClassName("ytp-time-current")?.item(0)?.textContent || "0:00");
+  }
+
+  isVideoPaused(): boolean {
+    return (
+      document.getElementsByClassName("ytp-play-button")?.item(0)?.getAttribute("data-title-no-tooltip") == "Play" ||
+      document.getElementsByClassName("ytp-play-button")?.item(0)?.getAttribute("data-title-no-tooltip") == "Replay"
+    );
+  }
+}
+
 let isBingeWatchingEnabled: boolean = false;
-let timerInterval: any;
-let videoTimer: number = 0;
+let localCurrentTime: number = 0;
 let videoDuration: number = 0;
+let timerInterval: any;
+const website: SupportedWebsite = websiteFactory(new URL(window.location.href).host);
+console.log("Website: " + website);
 
 chrome.storage.sync.get("bingeWatchingToggle").then(result => {
   isBingeWatchingEnabled = result["bingeWatchingToggle"] || false;
   isDevMode() && console.log("Binge Watching state: " + isBingeWatchingEnabled);
 
+  getVideoFullDuration();
   if (isBingeWatchingEnabled) {
-    // Get the total duration of the video
-    switch (website) {
-      case "youtube":
-        videoDuration = getYoutubeVideoDuration();
-        break;
-      default:
-        videoDuration = 0;
-    }
-    console.log("Video duration: " + videoDuration);
+    timerInterval = setInterval(getVideoTimer, 1000);
   }
-  timerInterval = setInterval(getVideoTimer, 1000);
 });
 
+let previousURL: string = window.location.href;
+setInterval(() => {
+  const currentURL = window.location.href;
+  if (previousURL != currentURL) {
+    previousURL = currentURL;
+    console.log("URL changed");
+
+    if (currentURL.startsWith("https://www.youtube.com/watch")) {
+      console.log("New video");
+      getVideoFullDuration();
+      timerInterval = setInterval(getVideoTimer, 1000);
+    } else {
+      localCurrentTime = videoDuration = 0;
+      clearInterval(timerInterval);
+
+      console.log("Not a video");
+    }
+  }
+}, 1000);
+
+function getVideoFullDuration() {
+  videoDuration = website.getVideoFullDuration();
+  isDevMode() && console.log("Video duration: " + videoDuration);
+}
+
+// In some websites like youtube, when the video overlay is hidden, the video timer is not updated.
+// So we need to track a local timer to know the real time the user has been watching the video.
 function getVideoTimer() {
-  if (isYoutubeVideoPaused()) return;
+  if (website.isVideoPaused()) return;
 
-  let value = 0;
-  switch (website) {
-    case "youtube":
-      value = getYoutubeVideoTimer();
-      break;
-    default:
-      value = 0;
-  }
+  const currentTime = website.getVideoCurrentTime();
 
-  if (value <= videoTimer) {
-    videoTimer += 1;
-  } else if (value > videoTimer) {
-    videoTimer = value;
+  if (currentTime <= localCurrentTime) {
+    localCurrentTime += 1; // If the video timer is not updated, we add 1 second to the local timer
+  } else if (currentTime > localCurrentTime) {
+    localCurrentTime = currentTime; // If the video timer is updated, we update the local timer to sync with the real time
   }
-  isDevMode() && console.log("Video timer: " + videoTimer);
-  if (videoTimer >= videoDuration) {
-    console.log("You have been watching for " + videoTimer + " seconds");
+  isDevMode() && console.log("Video timer: " + localCurrentTime);
+
+  if (localCurrentTime >= videoDuration) {
+    console.log("Video finished");
     clearInterval(timerInterval);
+  } else if (localCurrentTime * 1.01 >= videoDuration) {
+    console.log("Video almost finished");
   }
 }
 
-function isYoutubeVideoPaused(): boolean {
-  return document.getElementsByClassName("ytp-play-button")?.item(0)?.getAttribute("data-title-no-tooltip") == "Play";
-}
+function websiteFactory(websiteURL: string): SupportedWebsite {
+  if (websiteURL.substring(0, 3) == "www") websiteURL = websiteURL.substring(4); // Remove www. from the URL
+  websiteURL = websiteURL.split(".")[0].toLowerCase(); // Get just the the website name
 
-function getYoutubeVideoTimer(): number {
-  return stringToSeconds(document.getElementsByClassName("ytp-time-current")?.item(0)?.textContent || "0:00");
-}
-
-function getYoutubeVideoDuration(): number {
-  return stringToSeconds(document.getElementsByClassName("ytp-time-duration")?.item(0)?.textContent || "0:00");
+  switch (websiteURL) {
+    case "youtube":
+      return new Youtube();
+    default:
+      throw new Error("Website not recognized");
+  }
 }
 
 function stringToSeconds(time: string): number {
@@ -65,11 +104,4 @@ function stringToSeconds(time: string): number {
   let seconds: number = Number(timeArray[1]);
   seconds += Number(timeArray[0]) * 60;
   return seconds;
-}
-
-function determineWebsite() {
-  let url = new URL(window.location.href).host;
-  if (url.substring(0, 3) == "www") url = url.substring(4);
-  const website = url.split(".")[0];
-  return website.toLocaleLowerCase();
 }
