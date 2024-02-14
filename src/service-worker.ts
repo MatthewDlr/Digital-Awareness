@@ -1,4 +1,4 @@
-import { writeDefaultConfig, updateConfig } from "./defaultConfig.js";
+import { writeDefaultConfig, updateConfig } from "./config.js";
 import { isDevMode } from "@angular/core";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "tailwind.config.js";

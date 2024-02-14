@@ -24,12 +24,6 @@
       "js": ["doomScrolling.js"],
       "css": ["styles.css"],
       "run_at": "document_end"
-    },
-    {
-      "matches": ["https://www.youtube.com/*"],
-      "js": ["bingeWatching.js"],
-      "css": ["styles.css"],
-      "run_at": "document_end"
     }
   ],
   "incognito": "split"

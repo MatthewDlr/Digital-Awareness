@@ -84,7 +84,7 @@ function getVideoTimer() {
   if (localCurrentTime >= videoDuration) {
     console.log("Video finished");
     clearInterval(timerInterval);
-  } else if (localCurrentTime * 1.01 >= videoDuration) {
+  } else if (localCurrentTime * 1.01 >= videoDuration || localCurrentTime >= videoDuration - 5) {
     console.log("Video almost finished");
     createOverlay();
   }

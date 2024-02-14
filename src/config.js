@@ -6,7 +6,7 @@ export function writeDefaultConfig() {
       awarenessPageWidget: "Quotes", // Widget to display on the awareness page
       timerBehavior: "Restart", // What to do when the awareness page is not focused
       doomScrollingToggle: true, // Screen dimming when doom scrolling
-      bingeWatchingToggle: true, // Alert when binge watching on supported websites
+      // bingeWatchingToggle: true, // Alert when binge watching on supported websites
       userWebsites: [], // Website the user will decide to block
       enforcedWebsites: [
         {
@@ -130,28 +130,29 @@ export function writeDefaultConfig() {
       console.error("Failed to write the default configuration: " + error);
     });
 
-  chrome.storage.local.set({ isSetupDismissed: false }, { bingeWatchingSupportedWebsites: ["youtube"] });
+  chrome.storage.local.set({ isSetupDismissed: false });
+  // chrome.storage.local.set({ bingeWatchingSupportedWebsites: ["youtube"] });
 }
 
 // Function use to update the configuration when a new version of the extension is installed
 export function updateConfig() {
+  chrome.storage.local.get(["update"]).then(result => {
+    if (result.update === "1.1.0") {
+      console.info("Configuration already updated !");
+      return;
+    }
+  });
+
   chrome.storage.sync.remove(["doomScrollingTreshold"]);
+  chrome.storage.sync.remove(["doomScrollingNotification"]);
+  chrome.storage.sync.remove(["bindWatchingNotification"]);
+  chrome.storage.sync.set({ doomScrollingToggle: true });
+  chrome.storage.local.set({ update: "1.1.0" });
 
-  chrome.storage.local.get(["bingeWatchingSupportedWebsites"]).then(result => {
-    if (result.bingeWatchingSupportedWebsites === undefined) {
-      chrome.storage.local.set({ bingeWatchingSupportedWebsites: ["youtube"] });
-    }
-  });
-
-  chrome.storage.sync.get(["doomScrollingNotification"]).then(result => {
-    if (result.doomScrollingNotification == true || result.doomScrollingNotification == false) {
-      chrome.storage.sync.set({ doomScrollingToggle: result.doomScrollingNotification });
-      chrome.storage.sync.remove(["doomScrollingNotification"]);
-    } else {
-      chrome.storage.sync.set({ doomScrollingToggle: true });
-    }
-    chrome.storage.sync.remove(["bindWatchingNotification"]);
-  });
-
+  // chrome.storage.local.get(["bingeWatchingSupportedWebsites"]).then(result => {
+  //   if (result.bingeWatchingSupportedWebsites === undefined) {
+  //     chrome.storage.local.set({ bingeWatchingSupportedWebsites: ["youtube"] });
+  //   }
+  // });
   console.info("Configuration successfully updated !");
 }
