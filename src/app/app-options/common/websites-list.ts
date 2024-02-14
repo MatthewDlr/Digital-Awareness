@@ -1,4 +1,4 @@
-import { category } from "../../types";
+import { category } from "../../types/types";
 
 /* 
 If you add new categories, the order in which they appear is set in websites-palette.component.ts > sortCategories()

@@ -1,7 +1,7 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { ScoringService } from "src/app/services/scoring/scoring.service";
-import { watchedWebsite } from "src/app/types";
+import { watchedWebsite } from "src/app/types/types";
 
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website (aka failure), defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
 const DEFAULT_COOLDOWN_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user clicks on "Go back" (aka success), defines the cooldown period before the timer will start be decreased again. (If not set, the user could just spam the button to increase it's score and dwindle the timer).

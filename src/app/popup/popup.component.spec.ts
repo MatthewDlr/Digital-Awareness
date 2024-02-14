@@ -8,7 +8,7 @@ describe("PopupComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PopupComponent],
+      imports: [PopupComponent],
     });
     fixture = TestBed.createComponent(PopupComponent);
     component = fixture.componentInstance;

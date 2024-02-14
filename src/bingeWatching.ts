@@ -1,12 +1,14 @@
 import { isDevMode } from "@angular/core";
 
 interface SupportedWebsite {
+  baseURL: string;
   getVideoFullDuration: () => number;
   getVideoCurrentTime: () => number;
   isVideoPaused: () => boolean;
 }
 
 class Youtube implements SupportedWebsite {
+  baseURL = "https://www.youtube.com/watch";
   getVideoFullDuration(): number {
     return stringToSeconds(document.getElementsByClassName("ytp-time-duration")?.item(0)?.textContent || "0:00");
   }
@@ -47,7 +49,7 @@ setInterval(() => {
     previousURL = currentURL;
     console.log("URL changed");
 
-    if (currentURL.startsWith("https://www.youtube.com/watch")) {
+    if (currentURL.startsWith(website.baseURL)) {
       console.log("New video");
       getVideoFullDuration();
       timerInterval = setInterval(getVideoTimer, 1000);
@@ -84,6 +86,7 @@ function getVideoTimer() {
     clearInterval(timerInterval);
   } else if (localCurrentTime * 1.01 >= videoDuration) {
     console.log("Video almost finished");
+    createOverlay();
   }
 }
 
@@ -104,4 +107,40 @@ function stringToSeconds(time: string): number {
   let seconds: number = Number(timeArray[1]);
   seconds += Number(timeArray[0]) * 60;
   return seconds;
+}
+
+function createOverlay() {
+  console.log("injected createOverlay() function");
+  const overlay = document.createElement("div");
+  overlay.classList.add("fixed", "inset-0", "bg-black", "opacity-25", "z-40");
+
+  // Create the popup container with 50% width and height, centered
+  const popup = document.createElement("div");
+  popup.classList.add(
+    "fixed",
+    "top-1/4",
+    "left-1/4",
+    "w-1/2",
+    "h-1/2",
+    "bg-white",
+    "z-50",
+    "flex",
+    "justify-center",
+    "items-center",
+  );
+
+  // Optional: Add content to the popup,   for example, a message or any HTML elements
+  const popupContent = document.createElement("div");
+  popupContent.textContent = "This is the popup content"; // Example content, can be replaced or expanded
+  popup.appendChild(popupContent);
+
+  // Append the overlay and popup to the body
+  document.body.appendChild(overlay);
+  document.body.appendChild(popup);
+
+  // Optional: Add a way to close the popup, for example, clicking on the overlay
+  overlay.addEventListener("click", function () {
+    document.body.removeChild(overlay);
+    document.body.removeChild(popup);
+  });
 }

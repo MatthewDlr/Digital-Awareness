@@ -8,7 +8,7 @@ describe("DisconnectComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DisconnectComponent],
+      imports: [DisconnectComponent],
     });
     fixture = TestBed.createComponent(DisconnectComponent);
     component = fixture.componentInstance;

@@ -7,7 +7,7 @@ describe("AwarenessPageComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AwarenessPageComponent],
+      imports: [AwarenessPageComponent],
     }).compileComponents();
   });
 

@@ -1,5 +1,5 @@
 import { Component, HostListener, isDevMode } from "@angular/core";
-import { watchedWebsite } from "src/app/types";
+import { watchedWebsite } from "src/app/types/types";
 import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
