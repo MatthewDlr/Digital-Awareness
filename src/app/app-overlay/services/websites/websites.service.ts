@@ -51,8 +51,9 @@ export class WebsitesService {
     }
 
     websiteAllowed.timesAllowed += this.scoringService.getAllowedCoef(websiteAllowed);
+    websiteAllowed.timesAllowed = Math.round(websiteAllowed.timesAllowed * 100) / 100;
     websiteAllowed.allowedUntil = new Date(Date.now() + DEFAULT_ALLOWED_DURATION * 60000).toString();
-    websiteAllowed.timer = this.scoringService.computeNewIncreasedValue(this.currentWebsite);
+    websiteAllowed.timer = this.scoringService.computeNewIncreasedTimer(this.currentWebsite);
 
     // If the user went back (blocked) just before allowing the website, it could means that he's trying to keep a fair score, so we decrement the timesBlocked counter.
     if (new Date(websiteAllowed.blockedAt).getTime() + PREVENT_FRAUD_DURATION * 60000 > Date.now()) {
@@ -84,7 +85,7 @@ export class WebsitesService {
 
     websiteBlocked.timesBlocked++;
     websiteBlocked.blockedAt = new Date().toString();
-    websiteBlocked.timer = this.scoringService.computeNewDecreasedValue(this.currentWebsite);
+    websiteBlocked.timer = this.scoringService.computeNewDecreasedTimer(this.currentWebsite);
 
     this.websiteOrigin == "Enforced"
       ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })

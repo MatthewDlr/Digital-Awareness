@@ -2,7 +2,7 @@ import { isDevMode } from "@angular/core";
 
 let isDoomScrollingEnabled: boolean = false;
 
-const depthBottomMeters = 15; //Depth in meters
+const depthBottomMeters = 12; //Depth in meters
 const depthBottomPixel: number = meterToPixel(depthBottomMeters);
 const depthStart: number = depthBottomPixel - meterToPixel(depthBottomMeters * 0.4);
 
