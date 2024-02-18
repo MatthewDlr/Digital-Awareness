@@ -35,3 +35,36 @@
     }
   }
 }
+
+.anchor * {
+  pointer-events: none;
+}
+
+.anchor {
+  @apply pointer-events-none absolute right-0 top-0 h-fit w-full overflow-hidden;
+}
+
+.anchor .sea {
+  @apply pointer-events-none fixed left-0 top-0 z-50 h-full w-full bg-gray-950/95 opacity-0 mix-blend-darken;
+}
+
+.anchor .depth {
+  @apply fixed right-0 top-0 z-50 box-border h-full w-auto px-5 py-4;
+}
+
+.anchor .depth--line {
+  @apply bg-green-600 relative h-1 w-5;
+  margin-bottom: calc((100vh - 66px) / 4);
+}
+
+.anchor .depth--marker {
+  @apply fixed right-0 top-0 z-50 box-border h-full w-10 p-4;
+}
+
+.anchor .marker {
+  @apply bg-green-600 absolute h-5 w-5 rounded-xl;
+}
+
+.anchor .marker span {
+  @apply absolute right-[150%] top-1/2 min-w-12 translate-y-[-50%] transform;
+}

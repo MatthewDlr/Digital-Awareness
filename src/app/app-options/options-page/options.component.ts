@@ -4,7 +4,7 @@ import { WebsitePaletteService } from "../services/website-palette/website-palet
 import { PendingChangesService } from "../services/pending-changes/pending-changes.service";
 import { AwarenessPageComponent } from "../options-tabs/awareness-page/awareness-page.component";
 import { WebsitesListComponent } from "../options-tabs/websites-list/websites-list.component";
-import { NotificationsComponent } from "../options-tabs/notifications/notifications.component";
+import { DisconnectComponent } from "../options-tabs/disconnect/disconnect.component";
 import { CommonModule } from "@angular/common";
 import { WebsitesPaletteComponent } from "../components/websites-palette/websites-palette.component";
 import { PendingChangesComponent } from "../components/pending-changes/pending-changes.component";
@@ -19,7 +19,7 @@ import { CompleteSetupComponent } from "../components/complete-setup/complete-se
   imports: [
     AwarenessPageComponent,
     WebsitesListComponent,
-    NotificationsComponent,
+    DisconnectComponent,
     WebsitesPaletteComponent,
     PendingChangesComponent,
     CompleteSetupComponent,

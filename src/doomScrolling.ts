@@ -1,72 +1,97 @@
 import { isDevMode } from "@angular/core";
 
 let isDoomScrollingEnabled: boolean = false;
-let totalScrolls: number = 0;
-let previousScrollCount: number = 0;
-let realScrollsCount: number = 0;
-const tabOpenedAt: Date = new Date();
-let intervalId: any;
-let lastScrollTop = 0;
-let scrollTreshold: number = 100;
 
-chrome.storage.sync.get("doomScrollingNotification", result => {
-  if (result["doomScrollingNotification"] == true) {
+const depthBottomMeters = 12; //Depth in meters
+const depthBottomPixel: number = meterToPixel(depthBottomMeters);
+const depthStart: number = depthBottomPixel - meterToPixel(depthBottomMeters * 0.4);
+
+chrome.storage.sync.get("doomScrollingToggle", result => {
+  isDevMode() && console.log("doomScrollingToggle: ", result["doomScrollingToggle"]);
+
+  if (result["doomScrollingToggle"] == true) {
     isDoomScrollingEnabled = true;
-    intervalId = setInterval(checkChanges, 2500);
-  }
-});
 
-chrome.storage.sync.get("doomScrollingTreshold", result => {
-  scrollTreshold = result["doomScrollingTreshold"];
-  isDevMode() ? console.log("scrollTreshold: ", scrollTreshold) : null;
-});
+    const anchor = document.createElement("div");
+    anchor.className = "anchor";
 
-// Watching for scroll down event
-window.addEventListener(
-  "scroll",
-  function () {
-    const st = window.scrollY;
-    if (st > lastScrollTop && isDoomScrollingEnabled) {
-      totalScrolls++;
-    }
-    lastScrollTop = st <= 0 ? 0 : st;
-  },
-  false,
-);
+    const sea = document.createElement("div");
+    sea.className = "sea";
+    anchor.appendChild(sea);
 
-window.addEventListener("keydown", function (e) {
-  if (e.key == "ArrowDown" && isDoomScrollingEnabled) {
-    totalScrolls++;
-  }
-});
+    const depth = document.createElement("div");
+    depth.className = "depth";
+    anchor.appendChild(depth);
 
-function checkChanges() {
-  if (previousScrollCount < totalScrolls) {
-    realScrollsCount++;
-    isDevMode() ? console.log("user scrolled: " + realScrollsCount + " times") : null;
-  }
-  previousScrollCount = totalScrolls;
-
-  if (!isDevMode() && tabOpenedAt > new Date(Date.now() - 10 * 6000)) {
-    isDevMode() ? console.log("Wait 10 min before checking") : null;
-    return;
-  }
-
-  if ((isDevMode() && realScrollsCount > 5) || realScrollsCount > scrollTreshold) {
-    console.log("user is doom scrolling");
-    isDevMode() ? null : window.scrollTo({ top: 0, behavior: "smooth" });
-    clearInterval(intervalId);
-    window.removeEventListener("scroll", function () {});
-    sendNotification();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setTimeout(() => {
-      if (window.scrollY > 0) {
-        window.scrollTo({ top: 0 });
+    if (isDevMode()) {
+      for (let i = 0; i < 5; i++) {
+        const line = document.createElement("div");
+        line.className = "depth--line";
+        depth.appendChild(line);
       }
-    }, 1000);
-  }
-}
+      const span = document.createElement("span");
+      span.textContent = "0m";
+      const depthMarker = document.createElement("div");
+      depthMarker.className = "depth--marker";
+      const marker = document.createElement("div");
+      marker.className = "marker";
 
-function sendNotification() {
-  chrome.runtime.sendMessage({ type: "doomScrolling" });
+      marker.appendChild(span);
+      depthMarker.appendChild(marker);
+      anchor.appendChild(depthMarker);
+    }
+
+    document.body.appendChild(anchor);
+  }
+});
+
+window.addEventListener("scroll", function (e) {
+  if (!isDoomScrollingEnabled) return;
+
+  const s = document.documentElement.scrollTop || document.body.scrollTop;
+  const docHeight = document.body.scrollHeight;
+
+  const anchors: HTMLElement[] = Array.from(document.querySelectorAll(".anchor"));
+  anchors.forEach(function (anchor) {
+    if (anchor.offsetHeight != docHeight) {
+      anchor.style.height = docHeight + "px";
+    }
+  });
+
+  const seas: HTMLElement[] = Array.from(document.querySelectorAll(".sea"));
+  const progress = (s - depthStart) / (depthBottomPixel - depthStart);
+  if (progress <= 0) {
+    seas.forEach(sea => (sea.style.opacity = "0"));
+  } else if (progress <= 1) {
+    seas.forEach(sea => (sea.style.opacity = progress.toString()));
+  } else {
+    // Prevent further scrolling
+    e.preventDefault();
+    window.scrollTo(0, depthBottomPixel);
+    seas.forEach(sea => (sea.style.opacity = "1"));
+  }
+
+  // set marker position
+  let markerProgress = s / depthBottomPixel;
+  if (markerProgress < 0) {
+    markerProgress = 0;
+  }
+  if (markerProgress > 1) {
+    markerProgress = 1;
+  }
+  const pos = markerProgress * (window.innerHeight - 60);
+  document.querySelectorAll(".marker").forEach(marker => {
+    (marker as HTMLElement).style.transform = "translate(0, " + pos + "px)";
+  });
+
+  // Using 96DPI
+  const m = Math.round((s / 96) * 2.54) / 100;
+  document.querySelectorAll(".marker span").forEach(span => {
+    span.textContent = m + "m";
+  });
+});
+
+function meterToPixel(meter: number) {
+  const pixel = ((meter * 100) / 2.54) * 96; // Using 96DPI
+  return pixel;
 }

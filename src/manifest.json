@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Digital Awareness",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Unlearn bad browsing habits and become more aware of your digital life.",
   "icons": {
     "128": "./assets/logo-128.png",
@@ -12,7 +12,7 @@
     "default_popup": ""
   },
   "host_permissions": ["*://*/*"],
-  "permissions": ["storage", "tabs", "webNavigation", "notifications"],
+  "permissions": ["storage", "tabs", "webNavigation"],
   "options_page": "index.html#/options",
   "background": {
     "service_worker": "serviceWorker.js",
@@ -22,6 +22,7 @@
     {
       "matches": ["<all_urls>"],
       "js": ["doomScrolling.js"],
+      "css": ["styles.css"],
       "run_at": "document_end"
     }
   ],

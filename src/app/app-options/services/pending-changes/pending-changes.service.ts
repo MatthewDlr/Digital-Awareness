@@ -1,5 +1,5 @@
 import { Injectable, isDevMode } from "@angular/core";
-import { watchedWebsite } from "src/app/types";
+import { watchedWebsite } from "src/app/types/types";
 import { BehaviorSubject } from "rxjs";
 import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
 
@@ -40,7 +40,7 @@ export class PendingChangesService {
     if (this.websitesToDelete.has(host)) {
       return true;
     }
-    // @ts-ignore: Not all code paths return a value.
+    // @ts-expect-error: Not all code paths return a value.
     this.websitesToEdit.forEach(website => {
       if (website.oldHost === host || website.newHost === host) {
         return true;

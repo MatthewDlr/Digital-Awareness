@@ -8,7 +8,7 @@ describe("OptionsComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OptionsComponent],
+      imports: [OptionsComponent],
     });
     fixture = TestBed.createComponent(OptionsComponent);
     component = fixture.componentInstance;

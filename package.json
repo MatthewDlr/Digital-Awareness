@@ -1,10 +1,10 @@
 {
   "name": "digital-wellbeing",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "ng": "ng",
     "build": "ng build --configuration production --base-href",
-    "watch": "ng build --watch --configuration development --base-href",
+    "dev": "ng build --watch --configuration development --base-href",
     "test": "ng test",
     "lint": "eslint . --fix && prettier --write .",
     "prepare": "husky install"
@@ -19,10 +19,8 @@
     "@angular/platform-browser": "^17.0.4",
     "@angular/platform-browser-dynamic": "^17.0.4",
     "@angular/router": "^17.0.4",
-    "@types/Chrome": "npm:@types/chrome@^0.0.248",
     "fuzzy-search": "^3.2.1",
     "rxjs": "~7.8.0",
-    "tailwindcss-animated": "^1.0.1",
     "zone.js": "~0.14.2"
   },
   "devDependencies": {
@@ -34,14 +32,15 @@
     "@types/jasmine": "~4.3.0",
     "@types/jest": "^29.5.7",
     "@types/node": "^20.8.10",
-    "@typescript-eslint/eslint-plugin": "^6.13.1",
-    "@typescript-eslint/parser": "^6.13.1",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.0.1",
     "husky": "^8.0.0",
     "nightwind": "^1.1.13",
-    "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.9",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "tailwindcss-animated": "^1.0.1"
   }
 }

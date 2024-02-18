@@ -1,4 +1,4 @@
-import { defaultConfig } from "./defaultConfig.js";
+import { writeDefaultConfig, updateConfig } from "./config.js";
 import { isDevMode } from "@angular/core";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "tailwind.config.js";
@@ -37,11 +37,11 @@ chrome.runtime.onInstalled.addListener(() => {
     const isActivated = result["isActivated"] || false;
     console.log("isActivated: " + isActivated);
     if (!isActivated) {
-      defaultConfig();
+      writeDefaultConfig();
+      chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
+    } else {
+      updateConfig();
     }
-    isDevMode()
-      ? console.log("Extension version: " + chrome.runtime.getManifest().version)
-      : chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
   });
 });
 
@@ -59,37 +59,6 @@ chrome.action.onClicked.addListener(function () {
       chrome.runtime.reload();
     }
   });
-});
-
-chrome.runtime.onMessage.addListener(function (request) {
-  if (request.type == "doomScrolling") {
-    chrome.storage.sync.get("doomScrollingNotification", result => {
-      if (result["doomScrollingNotification"] == true) {
-        chrome.notifications.create("doomScrollingNotification", {
-          type: "basic",
-          iconUrl: "/assets/logo-512.png",
-          title: "Doom Scrolling Detected",
-          message: "Seems that you've been scrolling for a while, let's take a break!",
-          priority: 2,
-          buttons: [
-            {
-              title: "incorrect detection?",
-            },
-          ],
-        });
-        chrome.notifications.onButtonClicked.addListener(function (notificationId) {
-          if (notificationId === "doomScrollingNotification") {
-            chrome.storage.sync.get("doomScrollingTreshold", result => {
-              chrome.storage.sync.set({
-                doomScrollingTreshold: result["doomScrollingTreshold"] + 5,
-              });
-            });
-            chrome.notifications.clear(notificationId);
-          }
-        });
-      }
-    });
-  }
 });
 
 function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean {

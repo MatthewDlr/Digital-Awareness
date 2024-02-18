@@ -1,7 +1,7 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { ScoringService } from "src/app/services/scoring/scoring.service";
-import { watchedWebsite } from "src/app/types";
+import { watchedWebsite } from "src/app/types/types";
 
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website (aka failure), defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
 const DEFAULT_COOLDOWN_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user clicks on "Go back" (aka success), defines the cooldown period before the timer will start be decreased again. (If not set, the user could just spam the button to increase it's score and dwindle the timer).
@@ -51,8 +51,9 @@ export class WebsitesService {
     }
 
     websiteAllowed.timesAllowed += this.scoringService.getAllowedCoef(websiteAllowed);
+    websiteAllowed.timesAllowed = Math.round(websiteAllowed.timesAllowed * 100) / 100;
     websiteAllowed.allowedUntil = new Date(Date.now() + DEFAULT_ALLOWED_DURATION * 60000).toString();
-    websiteAllowed.timer = this.scoringService.computeNewIncreasedValue(this.currentWebsite);
+    websiteAllowed.timer = this.scoringService.computeNewIncreasedTimer(this.currentWebsite);
 
     // If the user went back (blocked) just before allowing the website, it could means that he's trying to keep a fair score, so we decrement the timesBlocked counter.
     if (new Date(websiteAllowed.blockedAt).getTime() + PREVENT_FRAUD_DURATION * 60000 > Date.now()) {
@@ -84,7 +85,7 @@ export class WebsitesService {
 
     websiteBlocked.timesBlocked++;
     websiteBlocked.blockedAt = new Date().toString();
-    websiteBlocked.timer = this.scoringService.computeNewDecreasedValue(this.currentWebsite);
+    websiteBlocked.timer = this.scoringService.computeNewDecreasedTimer(this.currentWebsite);
 
     this.websiteOrigin == "Enforced"
       ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })

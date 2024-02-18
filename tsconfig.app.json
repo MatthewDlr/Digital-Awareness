@@ -5,6 +5,6 @@
     "outDir": "./out-tsc/app",
     "types": ["chrome"]
   },
-  "files": ["src/main.ts", "src/service-worker.ts", "src/doomScrolling.ts"],
+  "files": ["src/main.ts", "src/service-worker.ts", "src/doomScrolling.ts", "src/bingeWatching.ts"],
   "include": []
 }

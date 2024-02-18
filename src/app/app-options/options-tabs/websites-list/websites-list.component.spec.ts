@@ -8,7 +8,7 @@ describe("WebsitesListComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [WebsitesListComponent],
+      imports: [WebsitesListComponent],
     });
     fixture = TestBed.createComponent(WebsitesListComponent);
     component = fixture.componentInstance;
