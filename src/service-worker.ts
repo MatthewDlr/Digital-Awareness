@@ -38,12 +38,10 @@ chrome.runtime.onInstalled.addListener(() => {
     console.log("isActivated: " + isActivated);
     if (!isActivated) {
       writeDefaultConfig();
+      chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
     } else {
       updateConfig();
     }
-    isDevMode()
-      ? console.log("Extension version: " + chrome.runtime.getManifest().version)
-      : chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
   });
 });
 

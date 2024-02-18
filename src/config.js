@@ -135,8 +135,8 @@ export function writeDefaultConfig() {
 }
 
 // Function use to update the configuration when a new version of the extension is installed
-export function updateConfig() {
-  chrome.storage.local.get(["update"]).then(result => {
+export async function updateConfig() {
+  await chrome.storage.local.get(["update"]).then(result => {
     if (result.update === "1.1.0") {
       console.info("Configuration already updated !");
       return;
@@ -149,10 +149,5 @@ export function updateConfig() {
   chrome.storage.sync.set({ doomScrollingToggle: true });
   chrome.storage.local.set({ update: "1.1.0" });
 
-  // chrome.storage.local.get(["bingeWatchingSupportedWebsites"]).then(result => {
-  //   if (result.bingeWatchingSupportedWebsites === undefined) {
-  //     chrome.storage.local.set({ bingeWatchingSupportedWebsites: ["youtube"] });
-  //   }
-  // });
   console.info("Configuration successfully updated !");
 }
