@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Digital Awareness",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Unlearn bad browsing habits and become more aware of your digital life.",
   "icons": {
     "128": "./assets/logo-128.png",
@@ -22,8 +22,8 @@
     {
       "matches": ["<all_urls>"],
       "js": ["doomScrolling.js"],
-      "css": ["styles.css"],
-      "run_at": "document_end"
+      "css": ["doomScrolling.css"],
+      "run_at": "document_idle"
     }
   ],
   "incognito": "split"

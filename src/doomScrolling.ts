@@ -2,11 +2,11 @@ import { isDevMode } from "@angular/core";
 
 let isDoomScrollingEnabled: boolean = false;
 
-const depthBottomMeters = 12; //Depth in meters
+const depthBottomMeters = 15; //Depth in meters
 const depthBottomPixel: number = meterToPixel(depthBottomMeters);
 const depthStart: number = depthBottomPixel - meterToPixel(depthBottomMeters * 0.4);
 
-chrome.storage.sync.get("doomScrollingToggle", result => {
+chrome.storage.sync.get(["doomScrollingToggle"]).then(result => {
   isDevMode() && console.log("doomScrollingToggle: ", result["doomScrollingToggle"]);
 
   if (result["doomScrollingToggle"] == true) {
