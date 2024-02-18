@@ -34,14 +34,14 @@ jobs:
         run: npm run build
 
       - name: Zip build artifact
-        run: cd dist && zip -r digital-awareness .
+        run: cd dist && zip -r digital-awareness.zip .
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         if: success()
         with:
           name: digital-awareness
-          path: dist/digital-awareness
+          path: dist/digital-awareness.zip
           retention-days: 30
           if-no-files-found: error
 
