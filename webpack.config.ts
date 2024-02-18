@@ -10,9 +10,5 @@ module.exports = {
       import: "src/doomScrolling.ts",
       runtime: false,
     },
-    bingeWatching: {
-      import: "src/bingeWatching.ts",
-      runtime: false,
-    },
   },
 } as Configuration;
