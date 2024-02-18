@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: digital-awareness
+          name: digital-awareness.zip
           path: dist/digital-awareness.zip
           retention-days: 30
           if-no-files-found: error
@@ -52,12 +52,12 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: digital-awareness
+          name: digital-awareness.zip
 
       - name: Publish to Chrome Web Store
         uses: mnao305/chrome-extension-upload@v5.0.0
         with:
-          file-path: "./digital-awareness"
+          file-path: "./digital-awareness.zip"
           extension-id: ${{ vars.EXTENSION_ID}}
           client-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
