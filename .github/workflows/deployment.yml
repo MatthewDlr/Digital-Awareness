@@ -17,7 +17,7 @@ jobs:
           node-version: "18"
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -34,31 +34,32 @@ jobs:
         run: npm run build
 
       - name: Zip build artifact
-        run: cd dist && zip -r digital-awareness.zip .
+        run: cd dist && zip -r digital-awareness .
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: digital-awareness.zip
-          path: dist/digital-awareness.zip
+          name: digital-awareness
+          path: dist/digital-awareness
           retention-days: 30
+          if-no-files-found: error
 
   publish:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: digital-awareness.zip
+          name: digital-awareness
 
-      - name: Upload to Chrome Web Store
-        uses: mobilefirstllc/cws-publish@latest
+      - name: Publish to Chrome Web Store
+        uses: mnao305/chrome-extension-upload@v5.0.0
         with:
-          action: "publish" # one of: upload, publish, testers
-          client_id: ${{ secrets.CLIENT_ID }}
-          client_secret: ${{ secrets.CLIENT_SECRET }}
-          refresh_token: ${{ secrets.REFRESH_TOKEN }}
-          extension_id: ${{ vars.EXTENSION_ID}}
-          zip_file: "./digital-awareness.zip"
+          file-path: "./digital-awareness"
+          extension-id: ${{ vars.EXTENSION_ID}}
+          client-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          refresh-token: ${{ secrets.REFRESH_TOKEN }}
+          publish: true
