@@ -7,7 +7,8 @@
     "dev": "ng build --watch --configuration development --base-href",
     "test": "ng test",
     "lint": "eslint . --fix && prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "preinstall": "npx only-allow pnpm"
   },
   "private": true,
   "dependencies": {
@@ -42,5 +43,10 @@
     "prettier-plugin-tailwindcss": "^0.5.9",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animated": "^1.0.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "undici@>=6.0.0 <=6.6.0": ">=6.6.1"
+    }
   }
 }
