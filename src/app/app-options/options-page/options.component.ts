@@ -10,7 +10,7 @@ import { WebsitesPaletteComponent } from "../components/websites-palette/website
 import { PendingChangesComponent } from "../components/pending-changes/pending-changes.component";
 import { AboutComponent } from "../options-tabs/about/about.component";
 import { ActivatedRoute } from "@angular/router";
-import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
+import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { CompleteSetupComponent } from "../components/complete-setup/complete-setup.component";
 
 @Component({

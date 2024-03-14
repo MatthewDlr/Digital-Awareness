@@ -1,10 +1,10 @@
 import { Component, HostListener, isDevMode } from "@angular/core";
-import { watchedWebsite } from "src/app/types/types";
+import { watchedWebsite } from "app/types/types";
 import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
+import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { WebsitesListRowComponent } from "../../components/websites-list-row/websites-list-row.component";
 
 @Component({

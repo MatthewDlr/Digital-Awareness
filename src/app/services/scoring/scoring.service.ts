@@ -1,5 +1,5 @@
 import { Injectable, isDevMode } from "@angular/core";
-import { watchedWebsite } from "src/app/types/types";
+import { watchedWebsite } from "app/types/types";
 
 const DEFAULT_TIMER_VALUE = isDevMode() ? 3 : 30; // In seconds. This is the default value for the timer when the user has to wait to access the website.
 const MAX_TIMER_VALUE = 3; // In minutes. This specifies the maximum value the timer can be set to, regardless of user actions.

@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, HostListener, Input, ViewChild, ChangeDetectorRef, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { watchedWebsite } from "src/app/types/types";
+import { watchedWebsite } from "app/types/types";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
-import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
-import { ScoringService } from "src/app/services/scoring/scoring.service";
+import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
+import { ScoringService } from "app/services/scoring/scoring.service";
 import { FormsModule } from "@angular/forms";
 
 @Component({

@@ -6,7 +6,7 @@ import { watchedWebsite, category } from "../../../types/types";
 import { SearchAnimationComponent } from "../search-animation/search-animation.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
+import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 
 @Component({
   selector: "app-websites-palette",
