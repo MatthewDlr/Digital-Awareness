@@ -6,9 +6,9 @@
     "build": "ng build --configuration production --base-href",
     "dev": "ng build --watch --configuration development --base-href",
     "test": "ng test",
-    "lint": "eslint . --fix && prettier --write .",
-    "prepare": "husky install",
-    "preinstall": "npx only-allow pnpm"
+    "lint": "eslint . --fix",
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
