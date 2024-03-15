@@ -21,7 +21,7 @@
                 "inlineCritical": false
               }
             },
-            "allowedCommonJsDependencies": ["nightwind"],
+            "allowedCommonJsDependencies": ["nightwind", "long"],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
