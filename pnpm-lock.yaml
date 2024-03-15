@@ -32,6 +32,9 @@ dependencies:
   '@angular/router':
     specifier: ^17.3.0
     version: 17.3.0(@angular/common@17.3.0)(@angular/core@17.3.0)(@angular/platform-browser@17.3.0)(rxjs@7.8.1)
+  dayjs:
+    specifier: ^1.11.10
+    version: 1.11.10
   fuzzy-search:
     specifier: ^3.2.1
     version: 3.2.1
@@ -3921,6 +3924,10 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
     dev: true
+
+  /dayjs@1.11.10:
+    resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
+    dev: false
 
   /debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
