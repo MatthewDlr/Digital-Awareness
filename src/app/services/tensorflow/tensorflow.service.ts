@@ -32,31 +32,52 @@ export class TensorflowService {
     { feature: { minutesSinceLastAccess: 10080 }, answer: 15 }, // 7 days
   ];
 
+  features = this.normalize(tf.tensor1d(this.trainingData.map(data => data.feature.minutesSinceLastAccess)));
+  labels = this.normalize(tf.tensor1d(this.trainingData.map(data => data.answer)));
+
   constructor() {
     this.initialize();
   }
 
-  initialize() {
-    const model = tf.sequential({
-      layers: [tf.layers.dense({ inputShape: [1], units: 32, activation: "relu" }), tf.layers.dense({ units: 1 })],
-    });
+  async initialize() {
+    const model = tf.sequential();
+    model.add(tf.layers.dense({ inputShape: [1], units: 32, activation: "relu" }));
+    model.add(tf.layers.dense({ units: 16, activation: "relu" }));
+    model.add(tf.layers.dense({ units: 8, activation: "relu" }));
+    model.add(tf.layers.dense({ units: 1, activation: "linear" }));
 
-    model.compile({ optimizer: "adam", loss: "meanSquaredError" });
+    model.compile({ loss: "meanSquaredError", optimizer: tf.train.adam(0.06) });
+    await this.trainModel(model);
+    const [unit, bias] = model.getWeights();
+    console.log("unit: " + unit.dataSync()[0] + " bias: " + bias.dataSync()[0]);
 
-    const features = this.normalize(tf.tensor(this.trainingData.map(data => data.feature.minutesSinceLastAccess)));
+    const number = this.normalizeNumber(9531);
+    const prediction = model.predict(tf.tensor1d([number])) as tf.Tensor;
+    const result = this.deNormalizeNumber(prediction.dataSync()[0]);
+    console.log("Prediction: " + result);
+  }
 
-    const labels = tf.tensor(this.trainingData.map(data => data.answer as number));
-
-    model.fit(features, labels, { epochs: 10 }).then(() => {
-      console.log("model is trained");
-      const prediction = model.predict(tf.tensor([10]));
-
-      console.log("Prediction: ", prediction.toString());
+  private async trainModel(model: tf.Sequential) {
+    return await model.fit(this.features, this.labels, {
+      epochs: 200,
+      callbacks: { onEpochEnd: (epoch, logs) => console.log("Gen: " + epoch + " Loss: " + logs?.["loss"]) },
     });
   }
 
+  deNormalizeNumber(value: number): number {
+    const min = 15;
+    const max = 200;
+    return value * (max - min) + min;
+  }
+
+  normalizeNumber(value: number): number {
+    const min = 10;
+    const max = 10080;
+    return (value - min) / (max - min);
+  }
+
   normalize(data: tf.Tensor<tf.Rank>): tf.Tensor<tf.Rank> {
-    const min = tf.min(data); // Find minimum value
+    const min = tf.min(data);
     const max = tf.max(data);
     const range = max.sub(min);
     return data.sub(min).div(range);
