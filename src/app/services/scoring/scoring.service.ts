@@ -1,5 +1,5 @@
 import { Injectable, isDevMode } from "@angular/core";
-import { watchedWebsite } from "app/types/types";
+import { WatchedWebsite } from "app/types/types";
 
 const DEFAULT_TIMER_VALUE = isDevMode() ? 3 : 30; // In seconds. This is the default value for the timer when the user has to wait to access the website.
 const MAX_TIMER_VALUE = 3; // In minutes. This specifies the maximum value the timer can be set to, regardless of user actions.
@@ -13,7 +13,7 @@ export class ScoringService {
   private currentWebsite!: string;
   private currentScore!: number;
 
-  getScoreOf(website: watchedWebsite): number {
+  getScoreOf(website: WatchedWebsite): number {
     if (website.host == this.currentWebsite && this.currentScore) {
       isDevMode() ? console.log("Score has been fetched directly from the service") : null;
       return this.currentScore;
@@ -26,7 +26,7 @@ export class ScoringService {
 
   // Returns a score ranging from 0 to 100 aiming to assess the user's current habit concerning this website.
   // If there is not enough data to compute a reliable score, -1 is returned.
-  private computeWebsiteScore(website: watchedWebsite): number {
+  private computeWebsiteScore(website: WatchedWebsite): number {
     const accuracy = website.timesBlocked + website.timesAllowed;
     if (accuracy < 5) return -1;
 
@@ -39,7 +39,7 @@ export class ScoringService {
   }
 
   // Algorithm to compute the new timer value when the user goes back (success)
-  computeNewDecreasedTimer(website: watchedWebsite): number {
+  computeNewDecreasedTimer(website: WatchedWebsite): number {
     const currentTimer = website.timer;
     const score = this.getScoreOf(website);
     const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
@@ -61,7 +61,7 @@ export class ScoringService {
     return newValue;
   }
 
-  computeNewIncreasedTimer(website: watchedWebsite): number {
+  computeNewIncreasedTimer(website: WatchedWebsite): number {
     const currentTimer = website.timer;
     const score = this.getScoreOf(website);
     let newValue = currentTimer;
@@ -88,7 +88,7 @@ export class ScoringService {
   }
 
   // This function adjust the timer value as an incentive to nudge the user in the good direction.
-  nudgeTimerValue(website: watchedWebsite): number {
+  nudgeTimerValue(website: WatchedWebsite): number {
     let timerValue = website.timer;
     const score = this.getScoreOf(website);
 
@@ -120,7 +120,7 @@ export class ScoringService {
   }
 
   // Return a number between 1 and 0.15 that take in consideration the days since the website has not been opened
-  getAllowedCoef(website: watchedWebsite): number {
+  getAllowedCoef(website: WatchedWebsite): number {
     const daysSinceLastAllowed = this.getDaysSinceLastAllowed(website);
     const coef = 1 - Math.log10(daysSinceLastAllowed);
     isDevMode() ? alert("AllowedCoef is: " + coef) : null;
@@ -132,7 +132,7 @@ export class ScoringService {
     return Math.min(Math.max(value, min), max);
   }
 
-  private getDaysSinceLastAllowed(website: watchedWebsite): number {
+  private getDaysSinceLastAllowed(website: WatchedWebsite): number {
     if (!website.allowedUntil) return 1;
     const daysDifference = (Date.now() - new Date(website.allowedUntil).getTime()) / (1000 * 60 * 60 * 24);
     return this.clamp(daysDifference, 1, 7);

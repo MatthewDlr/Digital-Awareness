@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import FuzzySearch from "fuzzy-search";
 import { mostPopularWebsites, Website, searchSuggestions } from "../../common/websites-list";
-import { watchedWebsite, category } from "../../../types/types";
+import { WatchedWebsite, Category } from "../../../types/types";
 
 const COMMONS_HOSTS_EXTENSIONS = [".com", ".org", ".io", ".co"];
 
@@ -10,8 +10,8 @@ const COMMONS_HOSTS_EXTENSIONS = [".com", ".org", ".io", ".co"];
 })
 export class SearchService {
   private websiteSearch: FuzzySearch<Website>;
-  private enforcedWebsites: watchedWebsite[] = [];
-  userWebsites: watchedWebsite[] = [];
+  private enforcedWebsites: WatchedWebsite[] = [];
+  userWebsites: WatchedWebsite[] = [];
   suggestions: searchSuggestions = {
     Suggestions: [],
     Results: [],
@@ -85,14 +85,14 @@ export class SearchService {
       for (const extension of COMMONS_HOSTS_EXTENSIONS) {
         this.suggestions.Results.push({
           host: searchQuery + extension,
-          category: category.unknown,
+          category: Category.unknown,
           isBlocked: this.isWebsiteBlocked(searchQuery + extension) ? true : false,
         });
       }
     }
     this.suggestions.Results.push({
       host: searchQuery,
-      category: category.unknown,
+      category: Category.unknown,
       isBlocked: this.isWebsiteBlocked(searchQuery) ? true : false,
     });
   }

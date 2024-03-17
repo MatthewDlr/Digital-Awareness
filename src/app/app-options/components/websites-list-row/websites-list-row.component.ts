@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, HostListener, Input, ViewChild, ChangeDetectorRef, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { watchedWebsite } from "app/types/types";
+import { WatchedWebsite } from "app/types/types";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { ScoringService } from "app/services/scoring/scoring.service";
@@ -14,7 +14,7 @@ import { FormsModule } from "@angular/forms";
   styleUrl: "./websites-list-row.component.css",
 })
 export class WebsitesListRowComponent implements AfterViewInit {
-  @Input({ required: true }) website!: watchedWebsite;
+  @Input({ required: true }) website!: WatchedWebsite;
   @Input({ required: true }) isEnforced!: boolean;
   @Input() isPending!: boolean;
 

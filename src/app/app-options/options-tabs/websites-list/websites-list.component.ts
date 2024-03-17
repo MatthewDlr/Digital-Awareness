@@ -1,5 +1,5 @@
 import { Component, HostListener, isDevMode } from "@angular/core";
-import { watchedWebsite } from "app/types/types";
+import { WatchedWebsite } from "app/types/types";
 import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
@@ -15,8 +15,8 @@ import { WebsitesListRowComponent } from "../../components/websites-list-row/web
   styleUrls: ["./websites-list.component.css"],
 })
 export class WebsitesListComponent {
-  enforcedWebsites!: watchedWebsite[];
-  userWebsites!: watchedWebsite[];
+  enforcedWebsites!: WatchedWebsite[];
+  userWebsites!: WatchedWebsite[];
   websitesPendingEdit: Set<string> = new Set();
   isCommandPaletteShown: boolean = false;
   OS: string = this.getOS();

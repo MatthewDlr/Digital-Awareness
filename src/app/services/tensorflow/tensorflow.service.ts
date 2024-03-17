@@ -2,6 +2,7 @@ import { Injectable, isDevMode } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
 import { training, Input } from "./training";
 import { BehaviorSubject } from "rxjs";
+import { Category } from "app/types/types";
 
 @Injectable({
   providedIn: "root",
@@ -11,7 +12,10 @@ export class TensorflowService {
 
   constructor(private training: training) {
     this.initialize().then(() => {
-      this.predict({ minutesSinceLastAccess: 4000 });
+      this.predict({ minutesSinceLastAccess: 2000, category: Category.social });
+      this.predict({ minutesSinceLastAccess: 2000, category: Category.unknown });
+      this.predict({ minutesSinceLastAccess: 2000, category: Category.streaming });
+      this.predict({ minutesSinceLastAccess: 2000, category: Category.shopping });
     });
   }
 
@@ -26,7 +30,8 @@ export class TensorflowService {
     }
 
     const minutesSinceLastAccess = this.training.normalizeInput(input.minutesSinceLastAccess);
-    const prediction = this.model.predict(tf.tensor1d([minutesSinceLastAccess])) as tf.Tensor;
+    const categoryIndex = this.training.normalizeInput(Object.values(Category).indexOf(input.category));
+    const prediction = this.model.predict(tf.tensor2d([[minutesSinceLastAccess, categoryIndex]])) as tf.Tensor;
     const result = Math.round(this.training.deNormalizeOutput(prediction.dataSync()[0]));
     isDevMode() && console.log("Input: " + JSON.stringify(input) + " Prediction: " + result);
     return result;
@@ -41,18 +46,34 @@ export class TensorflowService {
 
   private createModel(): tf.Sequential {
     const model = tf.sequential();
-    model.add(tf.layers.dense({ inputShape: [1], units: 32, activation: "relu" }));
-    model.add(tf.layers.dense({ units: 16, activation: "relu" }));
-    model.add(tf.layers.dense({ units: 8, activation: "relu" }));
+    model.add(tf.layers.dense({ inputShape: [2], units: 128, activation: "relu" }));
+    model.add(tf.layers.dense({ units: 64, activation: "relu" }));
+    model.add(tf.layers.dense({ units: 32, activation: "relu" }));
     model.add(tf.layers.dense({ units: 1, activation: "linear" }));
-    model.compile({ loss: "meanSquaredError", optimizer: tf.train.adam(0.06) });
+    model.compile({ loss: "meanSquaredError", optimizer: tf.train.adam(0.1) });
 
     return model;
   }
 
-  private async trainmodel() {
-    return await this.model.fit(this.inputs, this.outputs, {
-      epochs: 100,
+  private async trainmodel(): Promise<tf.History> {
+    const trainingData = this.training.getData();
+
+    const categories = Array.from(new Set(trainingData.map(data => data.category)));
+    const categoryIndices = trainingData.map(data => categories.indexOf(data.category));
+    const categoryTensor = this.normalize(tf.tensor1d(categoryIndices));
+    console.log(categoryTensor.shape);
+
+    const minutesTensor = this.normalize(tf.tensor1d(trainingData.map(data => data.minutes)));
+    console.log(minutesTensor.shape);
+    const outputTensor = this.normalize(tf.tensor1d(trainingData.map(data => data.output)));
+
+    const minutesTensor2D = minutesTensor.expandDims(1);
+    const categoryTensor2D = categoryTensor.expandDims(1);
+
+    const inputTensor = tf.concat([minutesTensor2D, categoryTensor2D], 1);
+
+    return await this.model.fit([inputTensor], outputTensor, {
+      epochs: 50,
       callbacks: {
         onEpochEnd: (epoch, logs) => {
           isDevMode() && console.log("Gen: " + epoch + " Loss: " + logs?.["loss"]);

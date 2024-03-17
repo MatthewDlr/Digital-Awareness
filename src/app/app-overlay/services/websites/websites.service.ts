@@ -1,7 +1,7 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { ScoringService } from "app/services/scoring/scoring.service";
-import { watchedWebsite } from "app/types/types";
+import { WatchedWebsite } from "app/types/types";
 
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website (aka failure), defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
 const DEFAULT_COOLDOWN_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user clicks on "Go back" (aka success), defines the cooldown period before the timer will start be decreased again. (If not set, the user could just spam the button to increase it's score and dwindle the timer).
@@ -12,9 +12,9 @@ const PREVENT_FRAUD_DURATION = isDevMode() ? 1 : 15; // In minutes. If the user 
 })
 export class WebsitesService {
   areWebsitesLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  enforcedWebsites!: watchedWebsite[];
-  userWebsites!: watchedWebsite[];
-  currentWebsite!: watchedWebsite;
+  enforcedWebsites!: WatchedWebsite[];
+  userWebsites!: WatchedWebsite[];
+  currentWebsite!: WatchedWebsite;
   websiteOrigin: string = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
 
   constructor(private scoringService: ScoringService) {
@@ -92,7 +92,7 @@ export class WebsitesService {
       : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 
-  private findCurrentWebsite(host: string): watchedWebsite {
+  private findCurrentWebsite(host: string): WatchedWebsite {
     host = this.removeWWW(host);
 
     const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == host);

@@ -1,14 +1,14 @@
-export type watchedWebsite = {
+export type WatchedWebsite = {
   host: string;
   timer: number;
   allowedUntil: string;
   blockedAt: string;
   timesBlocked: number;
   timesAllowed: number;
-  category: category;
+  category: Category;
 };
 
-export enum category {
+export enum Category {
   social = "Social",
   streaming = "Streaming",
   gambling = "Gambling",
