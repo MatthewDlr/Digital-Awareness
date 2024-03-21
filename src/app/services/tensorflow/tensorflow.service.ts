@@ -8,18 +8,19 @@ import { Category } from "app/types/types";
   providedIn: "root",
 })
 export class TensorflowService {
-  model = this.createModel();
+  model!: tf.Sequential;
 
   constructor(private training: training) {
-    this.initialize().then(() => {
-      this.predict({ minutesSinceLastAccess: 2000, category: Category.social });
-      this.predict({ minutesSinceLastAccess: 2000, category: Category.unknown });
-      this.predict({ minutesSinceLastAccess: 2000, category: Category.streaming });
-      this.predict({ minutesSinceLastAccess: 2000, category: Category.shopping });
+    this.modelFactory().then(model => {
+      this.model = model;
+      this.predict({ minutes: 2000, category: Category.social });
+      this.predict({ minutes: 2000, category: Category.unknown });
+      this.predict({ minutes: 2000, category: Category.streaming });
+      this.predict({ minutes: 2000, category: Category.shopping });
     });
   }
 
-  inputs = this.normalize(tf.tensor1d(this.training.data.map(data => data.input.minutesSinceLastAccess)));
+  inputs = this.normalize(tf.tensor1d(this.training.data.map(data => data.input.minutes)));
   outputs = this.normalize(tf.tensor1d(this.training.data.map(data => data.output)));
   isModelReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -28,52 +29,53 @@ export class TensorflowService {
       isDevMode() && console.error("Model is not ready yet");
       return -1;
     }
+    const inputTensor: tf.Tensor = tf.tensor2d(
+      [this.training.normalizeInput(input.minutes), ...this.training.encodeCategory(input.category)],
+      [1, 9],
+    );
 
-    const minutesSinceLastAccess = this.training.normalizeInput(input.minutesSinceLastAccess);
-    const categoryIndex = this.training.normalizeInput(Object.values(Category).indexOf(input.category));
-    const prediction = this.model.predict(tf.tensor2d([[minutesSinceLastAccess, categoryIndex]])) as tf.Tensor;
+    const prediction = this.model.predict(inputTensor) as tf.Tensor;
     const result = Math.round(this.training.deNormalizeOutput(prediction.dataSync()[0]));
     isDevMode() && console.log("Input: " + JSON.stringify(input) + " Prediction: " + result);
     return result;
   }
 
-  async initialize() {
-    await this.trainmodel();
-    const [unit, bias] = this.model.getWeights();
-    console.log("unit: " + unit.dataSync()[0] + " bias: " + bias.dataSync()[0]);
+  private async modelFactory(): Promise<tf.Sequential> {
+    const localModel = (await this.loadModel()) as tf.Sequential;
+
+    if (!localModel) {
+      const localModel = this.createModel();
+      await this.trainModel(localModel);
+      const [unit, bias] = localModel.getWeights();
+      this.saveModel(localModel);
+      isDevMode() && console.log("New model created! \n unit: " + unit.dataSync()[0] + " bias: " + bias.dataSync()[0]);
+    } else {
+      console.log("Model loaded from localstorage");
+    }
     this.isModelReady.next(true);
+    return localModel;
   }
 
   private createModel(): tf.Sequential {
     const model = tf.sequential();
-    model.add(tf.layers.dense({ inputShape: [2], units: 128, activation: "relu" }));
-    model.add(tf.layers.dense({ units: 64, activation: "relu" }));
+    model.add(tf.layers.dense({ inputShape: [9], units: 64, activation: "relu" }));
     model.add(tf.layers.dense({ units: 32, activation: "relu" }));
+    model.add(tf.layers.dense({ units: 16, activation: "relu" }));
     model.add(tf.layers.dense({ units: 1, activation: "linear" }));
-    model.compile({ loss: "meanSquaredError", optimizer: tf.train.adam(0.1) });
+    model.compile({ loss: "meanSquaredError", optimizer: "adam" });
 
     return model;
   }
 
-  private async trainmodel(): Promise<tf.History> {
-    const trainingData = this.training.getData();
+  private async trainModel(model: tf.Sequential): Promise<tf.History> {
+    const featuresTensor = tf.tensor2d(this.training.getFeatures());
+    const labelsTensor = this.normalize(tf.tensor1d(this.training.getLabels()));
 
-    const categories = Array.from(new Set(trainingData.map(data => data.category)));
-    const categoryIndices = trainingData.map(data => categories.indexOf(data.category));
-    const categoryTensor = this.normalize(tf.tensor1d(categoryIndices));
-    console.log(categoryTensor.shape);
+    console.log(featuresTensor.shape);
+    console.log(labelsTensor.shape);
 
-    const minutesTensor = this.normalize(tf.tensor1d(trainingData.map(data => data.minutes)));
-    console.log(minutesTensor.shape);
-    const outputTensor = this.normalize(tf.tensor1d(trainingData.map(data => data.output)));
-
-    const minutesTensor2D = minutesTensor.expandDims(1);
-    const categoryTensor2D = categoryTensor.expandDims(1);
-
-    const inputTensor = tf.concat([minutesTensor2D, categoryTensor2D], 1);
-
-    return await this.model.fit([inputTensor], outputTensor, {
-      epochs: 50,
+    return await model.fit(featuresTensor, labelsTensor, {
+      epochs: 100,
       callbacks: {
         onEpochEnd: (epoch, logs) => {
           isDevMode() && console.log("Gen: " + epoch + " Loss: " + logs?.["loss"]);
@@ -87,5 +89,15 @@ export class TensorflowService {
     const max = tf.max(data);
     const range = max.sub(min);
     return data.sub(min).div(range);
+  }
+
+  private async saveModel(model: tf.Sequential) {
+    await model.save("localstorage://tensorflow-aware").then(() => {
+      isDevMode() && console.log("Model");
+    });
+  }
+
+  private async loadModel(): Promise<tf.LayersModel | null> {
+    return (await tf.loadLayersModel("localstorage://tensorflow-aware")) || null;
   }
 }
