@@ -1,4 +1,4 @@
-import { Category } from "../../types/types";
+import { Category } from "../../types/watchedWebsite";
 
 /* 
 If you add new categories, the order in which they appear is set in websites-palette.component.ts > sortCategories()

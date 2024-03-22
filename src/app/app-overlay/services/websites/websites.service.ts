@@ -1,7 +1,10 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { ScoringService } from "app/services/scoring/scoring.service";
-import { WatchedWebsite } from "app/types/types";
+import { WatchedWebsite } from "app/types/watchedWebsite";
+import { TensorflowService } from "app/services/tensorflow/tensorflow.service";
+import dayjs from "dayjs";
+import { TfInput } from "app/types/tensorflow";
 
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website (aka failure), defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
 const DEFAULT_COOLDOWN_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user clicks on "Go back" (aka success), defines the cooldown period before the timer will start be decreased again. (If not set, the user could just spam the button to increase it's score and dwindle the timer).
@@ -17,7 +20,10 @@ export class WebsitesService {
   currentWebsite!: WatchedWebsite;
   websiteOrigin: string = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
 
-  constructor(private scoringService: ScoringService) {
+  constructor(
+    private scoringService: ScoringService,
+    private tfService: TensorflowService,
+  ) {
     chrome.storage.sync
       .get(["enforcedWebsites", "userWebsites"])
       .then(result => {
@@ -32,10 +38,21 @@ export class WebsitesService {
 
   getTimerValue(host: string): number {
     this.currentWebsite = this.findCurrentWebsite(host);
-    const nudgedValue = this.scoringService.nudgeTimerValue(this.currentWebsite);
-    isDevMode() ? console.log("Timer has been nudged from " + this.currentWebsite.timer + "s to " + nudgedValue + "s") : null;
+    const minutesDiff = this.getMinutesSinceLastAccess(this.currentWebsite);
+    const tfInput: TfInput = {
+      minutes: minutesDiff,
+      category: this.currentWebsite.category,
+    };
+    const timer = this.tfService.predict(tfInput);
 
-    return isDevMode() ? 3 : nudgedValue;
+    return isDevMode() ? 3 : timer;
+  }
+
+  private getMinutesSinceLastAccess(website: WatchedWebsite): number {
+    const lastAccess = this.getLastAccess(website);
+    const minutesDiff = dayjs().diff(lastAccess, "minutes");
+    isDevMode() && console.log("There is " + minutesDiff + " between now and the ladt access");
+    return minutesDiff;
   }
 
   // This is called when the user chooses to visit the website, it counts as a 'failure.'
@@ -50,15 +67,14 @@ export class WebsitesService {
       return;
     }
 
-    websiteAllowed.timesAllowed += this.scoringService.getAllowedCoef(websiteAllowed);
-    websiteAllowed.timesAllowed = Math.round(websiteAllowed.timesAllowed * 100) / 100;
     websiteAllowed.allowedUntil = new Date(Date.now() + DEFAULT_ALLOWED_DURATION * 60000).toString();
-    websiteAllowed.timer = this.scoringService.computeNewIncreasedTimer(this.currentWebsite);
 
     // If the user went back (blocked) just before allowing the website, it could means that he's trying to keep a fair score, so we decrement the timesBlocked counter.
-    if (new Date(websiteAllowed.blockedAt).getTime() + PREVENT_FRAUD_DURATION * 60000 > Date.now()) {
+    if (
+      new Date(websiteAllowed.blockedAt[websiteAllowed.blockedAt.length - 1]).getTime() + PREVENT_FRAUD_DURATION * 60000 >
+      Date.now()
+    ) {
       isDevMode() ? alert("Website was already blocked less than " + PREVENT_FRAUD_DURATION + " minutes ago") : null;
-      websiteAllowed.timesBlocked--;
     }
 
     this.websiteOrigin == "Enforced"
@@ -113,5 +129,9 @@ export class WebsitesService {
   private removeWWW(website: string): string {
     if (website.substring(0, 3) == "www") return website.substring(4);
     return website;
+  }
+
+  private getLastAccess(website: WatchedWebsite) {
+    return website.blockedAt[website.blockedAt.length - 1];
   }
 }

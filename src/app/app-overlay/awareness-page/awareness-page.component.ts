@@ -45,12 +45,10 @@ export class AwarenessPageComponent {
       document.hidden ? (this.isWindowFocused = false) : (this.isWindowFocused = true);
     });
 
-    websitesService.areWebsitesLoaded.subscribe(areWebsitesLoaded => {
-      if (areWebsitesLoaded) {
-        this.originalTimerValue = websitesService.getTimerValue(this.outputUrl.host);
-        this.timerValue.set(this.originalTimerValue);
-        this.countdown();
-      }
+    websitesService.areWebsitesLoaded.subscribe(() => {
+      this.originalTimerValue = websitesService.getTimerValue(this.outputUrl.host);
+      this.timerValue.set(this.originalTimerValue);
+      this.countdown();
     });
   }
 

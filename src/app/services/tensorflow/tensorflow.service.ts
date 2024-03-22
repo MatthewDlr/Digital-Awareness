@@ -1,30 +1,28 @@
 import { Injectable, isDevMode } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
-import { training, Input } from "./training";
+import { training } from "./training";
 import { BehaviorSubject } from "rxjs";
-import { Category } from "app/types/types";
+import { Category } from "app/types/category";
+import { TfInput } from "app/types/tensorflow";
 
 @Injectable({
   providedIn: "root",
 })
 export class TensorflowService {
   model!: tf.Sequential;
+  isModelReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(private training: training) {
     this.modelFactory().then(model => {
       this.model = model;
-      this.predict({ minutes: 2000, category: Category.social });
       this.predict({ minutes: 2000, category: Category.unknown });
       this.predict({ minutes: 2000, category: Category.streaming });
+      this.predict({ minutes: 2000, category: Category.social });
       this.predict({ minutes: 2000, category: Category.shopping });
     });
   }
 
-  inputs = this.normalize(tf.tensor1d(this.training.data.map(data => data.input.minutes)));
-  outputs = this.normalize(tf.tensor1d(this.training.data.map(data => data.output)));
-  isModelReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
-  predict(input: Input): number {
+  predict(input: TfInput): number {
     if (!this.isModelReady.value) {
       isDevMode() && console.error("Model is not ready yet");
       return -1;
@@ -35,15 +33,15 @@ export class TensorflowService {
     );
 
     const prediction = this.model.predict(inputTensor) as tf.Tensor;
-    const result = Math.round(this.training.deNormalizeOutput(prediction.dataSync()[0]));
+    const result = Math.round(this.deNormalizeOutput(prediction.dataSync()[0]));
     isDevMode() && console.log("Input: " + JSON.stringify(input) + " Prediction: " + result);
     return result;
   }
 
   private async modelFactory(): Promise<tf.Sequential> {
-    const localModel = (await this.loadModel()) as tf.Sequential;
+    const model = (await this.loadModel()) as tf.Sequential;
 
-    if (!localModel) {
+    if (!model) {
       const localModel = this.createModel();
       await this.trainModel(localModel);
       const [unit, bias] = localModel.getWeights();
@@ -53,7 +51,7 @@ export class TensorflowService {
       console.log("Model loaded from localstorage");
     }
     this.isModelReady.next(true);
-    return localModel;
+    return model;
   }
 
   private createModel(): tf.Sequential {
@@ -93,11 +91,15 @@ export class TensorflowService {
 
   private async saveModel(model: tf.Sequential) {
     await model.save("localstorage://tensorflow-aware").then(() => {
-      isDevMode() && console.log("Model");
+      isDevMode() && console.log("Model saved in local storage ✅");
     });
   }
 
-  private async loadModel(): Promise<tf.LayersModel | null> {
-    return (await tf.loadLayersModel("localstorage://tensorflow-aware")) || null;
+  private async loadModel(): Promise<tf.LayersModel | undefined> {
+    return (await tf.loadLayersModel("localstorage://tensorflow-aware")) || undefined;
+  }
+
+  private deNormalizeOutput(value: number): number {
+    return value * (this.training.maxOutput - this.training.minOutput) + this.training.minMinutes;
   }
 }

@@ -1,14 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Category } from "app/types/types";
-
-export interface Input {
-  minutes: number; // Minutes since last access
-  category: Category; // Category of the website
-}
-interface TrainingData {
-  input: Input;
-  output: number;
-}
+import { Category } from "app/types/category";
+import { TfTrainingData } from "app/types/tensorflow";
 
 const categoryIndex = {
   [Category.unknown]: 0,
@@ -25,7 +17,7 @@ const categoryIndex = {
   providedIn: "root",
 })
 export class training {
-  data: TrainingData[] = [
+  data: TfTrainingData[] = [
     // Category unknown - Default timing function
     { input: { minutes: 10, category: Category.unknown }, output: 200 },
     { input: { minutes: 20, category: Category.unknown }, output: 195 },
@@ -104,8 +96,10 @@ export class training {
     { input: { minutes: 10080, category: Category.shopping }, output: 30 }, // 7 days
   ];
 
-  minMinutes = this.getInputMin();
-  maxMinutes = this.getInputMax();
+  minMinutes = Math.min(...this.data.map(data => data.input.minutes));
+  maxMinutes = Math.max(...this.data.map(data => data.input.minutes));
+  minOutput = Math.min(...this.data.map(data => data.output));
+  maxOutput = Math.max(...this.data.map(data => data.output));
 
   getFeatures(): number[][] {
     const features: number[][] = [];
@@ -129,27 +123,5 @@ export class training {
 
   normalizeInput(value: number): number {
     return (value - this.minMinutes) / (this.maxMinutes - this.minMinutes);
-  }
-
-  deNormalizeOutput(value: number): number {
-    const min = this.getOutputMin();
-    const max = this.getOutputMax();
-    return value * (max - min) + min;
-  }
-
-  private getOutputMax(): number {
-    return Math.max(...this.data.map(data => data.output));
-  }
-
-  private getOutputMin(): number {
-    return Math.min(...this.data.map(data => data.output));
-  }
-
-  private getInputMax(): number {
-    return Math.max(...this.data.map(data => data.input.minutes));
-  }
-
-  private getInputMin(): number {
-    return Math.min(...this.data.map(data => data.input.minutes));
   }
 }

@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, AfterViewInit, HostListener, isDevMod
 import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { SearchService } from "../../services/search-suggestions/search-suggestions.service";
 import { Website } from "../../common/websites-list";
-import { WatchedWebsite, Category } from "../../../types/types";
+import { WatchedWebsite, Category } from "../../../types/watchedWebsite";
 import { SearchAnimationComponent } from "../search-animation/search-animation.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";

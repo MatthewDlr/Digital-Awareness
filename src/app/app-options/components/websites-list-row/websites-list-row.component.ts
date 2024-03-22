@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, HostListener, Input, ViewChild, ChangeDetectorRef, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { WatchedWebsite } from "app/types/types";
+import { WatchedWebsite } from "app/types/watchedWebsite";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { ScoringService } from "app/services/scoring/scoring.service";
