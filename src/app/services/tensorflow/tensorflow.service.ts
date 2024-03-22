@@ -22,6 +22,22 @@ export class TensorflowService {
     });
   }
 
+  private async modelFactory(): Promise<tf.Sequential> {
+    const model = (await this.loadModel()) as tf.Sequential;
+
+    if (!model) {
+      const localModel = this.createModel();
+      await this.trainModel(localModel);
+      const [unit, bias] = localModel.getWeights();
+      this.saveModel(localModel);
+      isDevMode() && console.log("New model created! \n unit: " + unit.dataSync()[0] + " bias: " + bias.dataSync()[0]);
+    } else {
+      isDevMode() && console.log("Model loaded from localstorage");
+    }
+    this.isModelReady.next(true);
+    return model;
+  }
+
   predict(input: TfInput): number {
     if (!this.isModelReady.value) {
       isDevMode() && console.error("Model is not ready yet");
@@ -38,22 +54,6 @@ export class TensorflowService {
     const result = this.deNormalizeOutput(prediction.dataSync()[0]);
     isDevMode() && console.log("Input: " + JSON.stringify(input) + " Prediction: " + result);
     return Math.round(result);
-  }
-
-  private async modelFactory(): Promise<tf.Sequential> {
-    const model = (await this.loadModel()) as tf.Sequential;
-
-    if (!model) {
-      const localModel = this.createModel();
-      await this.trainModel(localModel);
-      const [unit, bias] = localModel.getWeights();
-      this.saveModel(localModel);
-      isDevMode() && console.log("New model created! \n unit: " + unit.dataSync()[0] + " bias: " + bias.dataSync()[0]);
-    } else {
-      console.log("Model loaded from localstorage");
-    }
-    this.isModelReady.next(true);
-    return model;
   }
 
   private createModel(): tf.Sequential {

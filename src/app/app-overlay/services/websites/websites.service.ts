@@ -5,7 +5,7 @@ import { TensorflowService } from "app/services/tensorflow/tensorflow.service";
 import { TfInput } from "app/types/tensorflow";
 import dayjs, { Dayjs } from "dayjs";
 
-const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website (aka failure), defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
+const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website, defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
 
 @Injectable({
   providedIn: "root",
@@ -55,20 +55,14 @@ export class WebsitesService {
     if (website.allowedAt) {
       return dayjs(website.allowedAt);
     }
+    // If the variable is not defined, it's means that the website has never been allowed
+    // We substract 7 days so the timer has the minimum value the first visit
     return dayjs().subtract(7, "day");
   }
 
-  // This is called when the user chooses to visit the website, it counts as a 'failure.'
+  // This is called when the user choose to visit the website
   allowWebsiteTemporary(): void {
-    const websiteAllowed =
-      this.websiteOrigin == "Enforced"
-        ? this.enforcedWebsites.find(enforcedSite => enforcedSite.host == this.currentWebsite.host)
-        : this.userWebsites.find(userWebsite => userWebsite.host == this.currentWebsite.host);
-
-    if (!websiteAllowed) {
-      isDevMode() ? console.error("Failed to retrieve the website from chrome storage: ", this.currentWebsite) : null;
-      return;
-    }
+    const websiteAllowed: WatchedWebsite = this.getWebsiteFrom(this.currentWebsite.host);
 
     websiteAllowed.allowedUntil = dayjs().add(DEFAULT_ALLOWED_DURATION, "minute").toString();
     websiteAllowed.allowedAt = dayjs().toString();
@@ -78,24 +72,16 @@ export class WebsitesService {
       : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 
-  // This is called when the user chooses to click on "Go back", it counts as a 'success'
-  incrementTimesBlocked() {
-    const websiteBlocked =
-      this.websiteOrigin == "Enforced"
-        ? this.enforcedWebsites.find(enforcedSite => enforcedSite.host == this.currentWebsite.host)
-        : this.userWebsites.find(userWebsite => userWebsite.host == this.currentWebsite.host);
+  private getWebsiteFrom(host: string): WatchedWebsite {
+    const website =
+      this.websiteOrigin === "Enforced"
+        ? this.enforcedWebsites.find(enforcedSite => enforcedSite.host == host)
+        : this.userWebsites.find(userWebsite => userWebsite.host == host);
 
-    if (!websiteBlocked) {
-      isDevMode() ? console.error("Failed to retrieve the website from chrome storage: ", this.currentWebsite) : null;
-      return;
+    if (!website) {
+      throw new Error("Impossible to retrieve the following website from the local storage: " + host);
     }
-
-    websiteBlocked.allowedAt = dayjs().toString();
-    console.log("Allowed at: " + websiteBlocked.allowedAt);
-
-    this.websiteOrigin == "Enforced"
-      ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })
-      : chrome.storage.sync.set({ userWebsites: this.userWebsites });
+    return website;
   }
 
   private getStoredWebsite(host: string): WatchedWebsite {

@@ -4,7 +4,6 @@ export function writeDefaultConfig() {
     .set({
       isActivated: true, // Extension activation
       awarenessPageWidget: "Quotes", // Widget to display on the awareness page
-      timerBehavior: "Restart", // What to do when the awareness page is not focused
       doomScrollingToggle: true, // Screen dimming when doom scrolling
       userWebsites: [], // Website the user will decide to block
       enforcedWebsites: [
@@ -108,8 +107,33 @@ export function writeDefaultConfig() {
 // Function use to update the configuration when a new version of the extension is installed
 export async function updateConfig() {
   await chrome.storage.local.get(["update"]).then(result => {
-    if (result.update === "1.1.0") {
-      console.info("Configuration already updated !");
+    if (!result.update || result.update === "1.1.0") {
+      chrome.storage.sync.remove(["timerBehavior"]);
+      chrome.storage.local.get("enforcedWebsites").then(result => {
+        const savedWebsite = result.enforcedWebsites;
+        for (let website of savedWebsite) {
+          website.remove(timer);
+          website.remove(timesBlocked);
+          website.remove(timesAllowed);
+          website.allowedAt = [];
+        }
+        chrome.storage.local.set({ enforcedWebsites: savedWebsite });
+      });
+      chrome.storage.sync.get("userWebsites").then(websites => {
+        const savedWebsite = websites;
+        console.log(savedWebsite);
+        if (savedWebsite.length < 1) return;
+        for (let website of savedWebsite) {
+          website.remove(timer);
+          website.remove(timesBlocked);
+          website.remove(timesAllowed);
+          website.allowedAt = [];
+        }
+        chrome.storage.local.set({ userWebsites: savedWebsite });
+      });
+      console.info("Updated to V2");
+      chrome.storage.local.set({ update: "2.0.0" });
+
       return;
     }
   });

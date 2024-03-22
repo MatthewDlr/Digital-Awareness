@@ -64,7 +64,7 @@ export class WebsitesListRowComponent implements AfterViewInit {
     this.website.host = this.website.host.trim();
     this.isEditEnabled = false;
 
-    if (this.website.host != "" && this.oldHost !== this.website.host) {
+    if (this.website.host !== "" && this.oldHost !== this.website.host) {
       this.pendingChangesService.addWebsiteToEdit(this.oldHost, this.website.host);
     }
   }

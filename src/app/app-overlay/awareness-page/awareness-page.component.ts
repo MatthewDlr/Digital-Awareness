@@ -58,10 +58,7 @@ export class AwarenessPageComponent {
         if ((document.hasFocus() && this.isWindowFocused) || isDevMode()) {
           this.timerValue.update(value => value - 1);
         } else {
-          // If the user is not on the tab, and the timer behavior is "Restart", restart the timer; otherwise, don't dwindle the timer.
-          if (this.timerBehavior == "Restart") {
-            this.timerValue.set(this.originalTimerValue);
-          }
+          this.timerValue.set(this.originalTimerValue); // If the user is not on the tab, we restart the timer
         }
         this.countdown();
       }, 1100); // Yes, it's more than 1s
@@ -92,10 +89,9 @@ export class AwarenessPageComponent {
 
   // This means success as the user left the page before the timer expired
   closeBlockPage() {
-    this.websitesService.incrementTimesBlocked();
     setTimeout(() => {
       window.close();
-    }, 500);
+    }, 250);
   }
 
   private getRandomWidget() {
