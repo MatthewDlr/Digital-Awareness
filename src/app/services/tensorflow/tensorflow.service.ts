@@ -25,7 +25,9 @@ export class TensorflowService {
   predict(input: TfInput): number {
     if (!this.isModelReady.value) {
       isDevMode() && console.error("Model is not ready yet");
-      return -1;
+      setTimeout(() => {
+        return this.predict(input);
+      }, 200);
     }
     const inputTensor: tf.Tensor = tf.tensor2d(
       [this.training.normalizeInput(input.minutes), ...this.training.encodeCategory(input.category)],
@@ -33,9 +35,9 @@ export class TensorflowService {
     );
 
     const prediction = this.model.predict(inputTensor) as tf.Tensor;
-    const result = Math.round(this.deNormalizeOutput(prediction.dataSync()[0]));
+    const result = this.deNormalizeOutput(prediction.dataSync()[0]);
     isDevMode() && console.log("Input: " + JSON.stringify(input) + " Prediction: " + result);
-    return result;
+    return Math.round(result);
   }
 
   private async modelFactory(): Promise<tf.Sequential> {

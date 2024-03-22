@@ -1,14 +1,11 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { ScoringService } from "app/services/scoring/scoring.service";
 import { WatchedWebsite } from "app/types/watchedWebsite";
 import { TensorflowService } from "app/services/tensorflow/tensorflow.service";
-import dayjs from "dayjs";
 import { TfInput } from "app/types/tensorflow";
+import dayjs, { Dayjs } from "dayjs";
 
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website (aka failure), defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
-const DEFAULT_COOLDOWN_DURATION = isDevMode() ? 1 : 30; // In minutes. When the user clicks on "Go back" (aka success), defines the cooldown period before the timer will start be decreased again. (If not set, the user could just spam the button to increase it's score and dwindle the timer).
-const PREVENT_FRAUD_DURATION = isDevMode() ? 1 : 15; // In minutes. If the user clicks on "Go back" but then wait reopen the same website and wait the cooldown, this value measure the time between these two events. If it's too short, it means that the user can keep a fair score by clicking on "Go back" just before reopen and accessing the website.
 
 @Injectable({
   providedIn: "root",
@@ -20,10 +17,7 @@ export class WebsitesService {
   currentWebsite!: WatchedWebsite;
   websiteOrigin: string = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
 
-  constructor(
-    private scoringService: ScoringService,
-    private tfService: TensorflowService,
-  ) {
+  constructor(private tfService: TensorflowService) {
     chrome.storage.sync
       .get(["enforcedWebsites", "userWebsites"])
       .then(result => {
@@ -37,12 +31,13 @@ export class WebsitesService {
   }
 
   getTimerValue(host: string): number {
-    this.currentWebsite = this.findCurrentWebsite(host);
+    this.currentWebsite = this.getStoredWebsite(host);
     const minutesDiff = this.getMinutesSinceLastAccess(this.currentWebsite);
     const tfInput: TfInput = {
       minutes: minutesDiff,
       category: this.currentWebsite.category,
     };
+
     const timer = this.tfService.predict(tfInput);
 
     return isDevMode() ? 3 : timer;
@@ -51,8 +46,16 @@ export class WebsitesService {
   private getMinutesSinceLastAccess(website: WatchedWebsite): number {
     const lastAccess = this.getLastAccess(website);
     const minutesDiff = dayjs().diff(lastAccess, "minutes");
-    isDevMode() && console.log("There is " + minutesDiff + " between now and the ladt access");
+    isDevMode() && console.log("There is " + minutesDiff + " between now and the last access");
     return minutesDiff;
+  }
+
+  private getLastAccess(website: WatchedWebsite): Dayjs {
+    console.log(website.allowedAt);
+    if (website.allowedAt) {
+      return dayjs(website.allowedAt);
+    }
+    return dayjs().subtract(7, "day");
   }
 
   // This is called when the user chooses to visit the website, it counts as a 'failure.'
@@ -67,15 +70,8 @@ export class WebsitesService {
       return;
     }
 
-    websiteAllowed.allowedUntil = new Date(Date.now() + DEFAULT_ALLOWED_DURATION * 60000).toString();
-
-    // If the user went back (blocked) just before allowing the website, it could means that he's trying to keep a fair score, so we decrement the timesBlocked counter.
-    if (
-      new Date(websiteAllowed.blockedAt[websiteAllowed.blockedAt.length - 1]).getTime() + PREVENT_FRAUD_DURATION * 60000 >
-      Date.now()
-    ) {
-      isDevMode() ? alert("Website was already blocked less than " + PREVENT_FRAUD_DURATION + " minutes ago") : null;
-    }
+    websiteAllowed.allowedUntil = dayjs().add(DEFAULT_ALLOWED_DURATION, "minute").toString();
+    websiteAllowed.allowedAt = dayjs().toString();
 
     this.websiteOrigin == "Enforced"
       ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })
@@ -94,21 +90,15 @@ export class WebsitesService {
       return;
     }
 
-    if (new Date(websiteBlocked.blockedAt).getTime() + DEFAULT_COOLDOWN_DURATION * 60000 > Date.now()) {
-      isDevMode() ? alert("Website was blocked less than " + DEFAULT_COOLDOWN_DURATION + " minutes ago") : null;
-      return;
-    }
-
-    websiteBlocked.timesBlocked++;
-    websiteBlocked.blockedAt = new Date().toString();
-    websiteBlocked.timer = this.scoringService.computeNewDecreasedTimer(this.currentWebsite);
+    websiteBlocked.allowedAt = dayjs().toString();
+    console.log("Allowed at: " + websiteBlocked.allowedAt);
 
     this.websiteOrigin == "Enforced"
       ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })
       : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 
-  private findCurrentWebsite(host: string): WatchedWebsite {
+  private getStoredWebsite(host: string): WatchedWebsite {
     host = this.removeWWW(host);
 
     const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == host);
@@ -129,9 +119,5 @@ export class WebsitesService {
   private removeWWW(website: string): string {
     if (website.substring(0, 3) == "www") return website.substring(4);
     return website;
-  }
-
-  private getLastAccess(website: WatchedWebsite) {
-    return website.blockedAt[website.blockedAt.length - 1];
   }
 }

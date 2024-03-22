@@ -2,7 +2,8 @@ import { Component, ViewChild, ElementRef, AfterViewInit, HostListener, isDevMod
 import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { SearchService } from "../../services/search-suggestions/search-suggestions.service";
 import { Website } from "../../common/websites-list";
-import { WatchedWebsite, Category } from "../../../types/watchedWebsite";
+import { WatchedWebsite } from "app/types/watchedWebsite";
+import { Category } from "app/types/category";
 import { SearchAnimationComponent } from "../search-animation/search-animation.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -118,11 +119,8 @@ export class WebsitesPaletteComponent implements AfterViewInit {
   private createWatchedWebsite(website: Website): WatchedWebsite {
     return {
       host: website.host,
-      timer: 30,
       allowedUntil: "",
-      blockedAt: "",
-      timesBlocked: 0,
-      timesAllowed: 0,
+      allowedAt: "",
       category: website.category || Category.unknown,
     };
   }

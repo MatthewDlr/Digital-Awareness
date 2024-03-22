@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { WatchedWebsite } from "app/types/watchedWebsite";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
-import { ScoringService } from "app/services/scoring/scoring.service";
 import { FormsModule } from "@angular/forms";
 
 @Component({
@@ -27,11 +26,9 @@ export class WebsitesListRowComponent implements AfterViewInit {
     private cdRef: ChangeDetectorRef,
     private pendingChangesService: PendingChangesService,
     private soundsEngine: SoundsEngineService,
-    private scoringService: ScoringService,
   ) {}
 
   ngAfterViewInit(): void {
-    this.awarenessRatio = this.scoringService.getScoreOf(this.website);
     this.cdRef.detectChanges();
   }
 

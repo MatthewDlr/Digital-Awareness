@@ -19,6 +19,7 @@ const categoryIndex = {
 export class training {
   data: TfTrainingData[] = [
     // Category unknown - Default timing function
+    { input: { minutes: 0, category: Category.unknown }, output: 200 },
     { input: { minutes: 10, category: Category.unknown }, output: 200 },
     { input: { minutes: 20, category: Category.unknown }, output: 195 },
     { input: { minutes: 40, category: Category.unknown }, output: 190 },
@@ -33,9 +34,10 @@ export class training {
     { input: { minutes: 5760, category: Category.unknown }, output: 50 }, // 4 days
     { input: { minutes: 7200, category: Category.unknown }, output: 40 }, // 5 days
     { input: { minutes: 8640, category: Category.unknown }, output: 30 }, // 6 days
-    { input: { minutes: 10080, category: Category.unknown }, output: 15 }, // 7 days
+    { input: { minutes: 10080, category: Category.unknown }, output: 10 }, // 7 days
 
     // Category streaming - More aggressive for shorter times
+    { input: { minutes: 0, category: Category.streaming }, output: 200 },
     { input: { minutes: 10, category: Category.streaming }, output: 200 },
     { input: { minutes: 30, category: Category.streaming }, output: 195 },
     { input: { minutes: 60, category: Category.streaming }, output: 190 },
@@ -48,9 +50,10 @@ export class training {
     { input: { minutes: 5760, category: Category.streaming }, output: 45 }, // 4 days
     { input: { minutes: 7200, category: Category.streaming }, output: 40 }, // 5 days
     { input: { minutes: 8640, category: Category.streaming }, output: 30 }, // 6 days
-    { input: { minutes: 10080, category: Category.streaming }, output: 15 }, // 7 days
+    { input: { minutes: 10080, category: Category.streaming }, output: 10 }, // 7 days
 
     // Category news - Less aggressive for shorter times
+    { input: { minutes: 0, category: Category.news }, output: 200 },
     { input: { minutes: 10, category: Category.news }, output: 200 },
     { input: { minutes: 30, category: Category.news }, output: 190 },
     { input: { minutes: 60, category: Category.news }, output: 180 },
@@ -58,7 +61,7 @@ export class training {
     { input: { minutes: 240, category: Category.news }, output: 140 }, // 4 hours
     { input: { minutes: 360, category: Category.news }, output: 120 }, // 6 hours
     { input: { minutes: 1440, category: Category.news }, output: 60 }, // 1 day
-    { input: { minutes: 2880, category: Category.news }, output: 60 }, // 2 days
+    { input: { minutes: 2880, category: Category.news }, output: 55 }, // 2 days
     { input: { minutes: 4320, category: Category.news }, output: 50 }, // 3 days
     { input: { minutes: 5760, category: Category.news }, output: 40 }, // 4 days
     { input: { minutes: 7200, category: Category.news }, output: 30 }, // 5 days
@@ -66,21 +69,23 @@ export class training {
     { input: { minutes: 10080, category: Category.news }, output: 15 }, // 7 days
 
     // Category social - More aggressive for shorter times
+    { input: { minutes: 0, category: Category.social }, output: 200 },
     { input: { minutes: 10, category: Category.social }, output: 200 },
     { input: { minutes: 30, category: Category.social }, output: 195 },
     { input: { minutes: 60, category: Category.social }, output: 190 },
     { input: { minutes: 120, category: Category.social }, output: 180 },
     { input: { minutes: 240, category: Category.social }, output: 130 }, // 4 hours
-    { input: { minutes: 360, category: Category.social }, output: 80 }, // 6 hours
+    { input: { minutes: 360, category: Category.social }, output: 90 }, // 6 hours
     { input: { minutes: 1440, category: Category.social }, output: 60 }, // 1 day
-    { input: { minutes: 2880, category: Category.social }, output: 60 }, // 2 days
+    { input: { minutes: 2880, category: Category.social }, output: 55 }, // 2 days
     { input: { minutes: 4320, category: Category.social }, output: 50 }, // 3 days
     { input: { minutes: 5760, category: Category.social }, output: 40 }, // 4 days
     { input: { minutes: 7200, category: Category.social }, output: 30 }, // 5 days
     { input: { minutes: 8640, category: Category.social }, output: 25 }, // 6 days
-    { input: { minutes: 10080, category: Category.social }, output: 20 }, // 7 days
+    { input: { minutes: 10080, category: Category.social }, output: 15 }, // 7 days
 
     // Category shopping - More aggressive for shorter times
+    { input: { minutes: 0, category: Category.shopping }, output: 200 },
     { input: { minutes: 10, category: Category.shopping }, output: 200 },
     { input: { minutes: 30, category: Category.shopping }, output: 190 },
     { input: { minutes: 60, category: Category.shopping }, output: 180 },

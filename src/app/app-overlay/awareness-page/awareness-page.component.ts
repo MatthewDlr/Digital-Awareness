@@ -77,6 +77,8 @@ export class AwarenessPageComponent {
   }
 
   waitBeforeClose() {
+    if (isDevMode()) return;
+
     setTimeout(() => {
       window.close();
     }, 10000);
