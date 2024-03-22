@@ -10,5 +10,5 @@ import { TensorflowService } from "./services/tensorflow/tensorflow.service";
   providers: [TensorflowService],
 })
 export class AppComponent {
-  constructor(private tensorflowService: TensorflowService) {}
+  constructor() {}
 }

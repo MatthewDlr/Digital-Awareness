@@ -33,12 +33,7 @@ export class AwarenessPageComponent {
     chrome.storage.sync.get("awarenessPageWidget").then(result => {
       this.widget = result["awarenessPageWidget"] || "Quotes";
       isDevMode() ? console.log("widget: ", this.widget) : null;
-      if (this.widget == "Random") this.widget = this.getRandomWidget();
-    });
-
-    chrome.storage.sync.get(["timerBehavior"]).then(result => {
-      this.timerBehavior = result["timerBehavior"] || "None";
-      isDevMode() ? console.log("Timer behavior loaded: ", this.timerBehavior) : null;
+      if (this.widget === "Random") this.widget = this.getRandomWidget();
     });
 
     document.addEventListener("visibilitychange", () => {
@@ -65,12 +60,6 @@ export class AwarenessPageComponent {
     } else {
       this.waitBeforeClose();
     }
-  }
-
-  async getCurrentTab() {
-    const queryOptions = { active: true, lastFocusedWindow: true };
-    const [tab] = await chrome.tabs.query(queryOptions);
-    return tab.id;
   }
 
   waitBeforeClose() {

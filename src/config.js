@@ -109,8 +109,8 @@ export async function updateConfig() {
   await chrome.storage.local.get(["update"]).then(result => {
     if (!result.update || result.update === "1.1.0") {
       chrome.storage.sync.remove(["timerBehavior"]);
-      chrome.storage.local.get("enforcedWebsites").then(result => {
-        const savedWebsite = result.enforcedWebsites;
+      chrome.storage.local.get(["enforcedWebsites"]).then(result => {
+        const savedWebsite = result[enforcedWebsites];
         for (let website of savedWebsite) {
           website.remove(timer);
           website.remove(timesBlocked);
