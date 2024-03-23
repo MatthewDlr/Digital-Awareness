@@ -5,6 +5,7 @@ import { QuotesWidgetComponent } from "../quotes-widget/quotes-widget.component"
 import { WebsitesService } from "../services/websites/websites.service";
 import { BreathingWidgetComponent } from "../breathing-widget/breathing-widget.component";
 import { TasksWidgetComponent } from "../tasks-widget/tasks-widget.component";
+import { filter } from "rxjs/operators";
 
 @Component({
   selector: "app-awareness-page",
@@ -40,7 +41,7 @@ export class AwarenessPageComponent {
       document.hidden ? (this.isWindowFocused = false) : (this.isWindowFocused = true);
     });
 
-    websitesService.areWebsitesLoaded.subscribe(() => {
+    websitesService.areWebsitesLoaded.pipe(filter(isLoaded => isLoaded === true)).subscribe(() => {
       this.originalTimerValue = websitesService.getTimerValue(this.outputUrl.host);
       this.timerValue.set(this.originalTimerValue);
       this.countdown();

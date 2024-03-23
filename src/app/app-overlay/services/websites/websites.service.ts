@@ -87,6 +87,10 @@ export class WebsitesService {
   private getStoredWebsite(host: string): WatchedWebsite {
     host = this.removeWWW(host);
 
+    if (!this.enforcedWebsites || !this.userWebsites) {
+      throw new Error("Websites not initialized");
+    }
+
     const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == host);
     if (enforcedWebsite) {
       this.websiteOrigin = "Enforced";
