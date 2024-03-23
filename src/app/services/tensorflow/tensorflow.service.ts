@@ -2,7 +2,6 @@ import { Injectable, isDevMode } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
 import { training } from "./training";
 import { BehaviorSubject } from "rxjs";
-import { Category } from "app/types/category";
 import { TfInput } from "app/types/tensorflow";
 
 @Injectable({
@@ -15,10 +14,6 @@ export class TensorflowService {
   constructor(private training: training) {
     this.modelFactory().then(model => {
       this.model = model;
-      this.predict({ minutes: 2000, category: Category.unknown });
-      this.predict({ minutes: 2000, category: Category.streaming });
-      this.predict({ minutes: 2000, category: Category.social });
-      this.predict({ minutes: 2000, category: Category.shopping });
     });
   }
 

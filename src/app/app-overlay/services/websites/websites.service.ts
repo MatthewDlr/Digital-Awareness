@@ -51,7 +51,6 @@ export class WebsitesService {
   }
 
   private getLastAccess(website: WatchedWebsite): Dayjs {
-    console.log(website.allowedAt);
     if (website.allowedAt) {
       return dayjs(website.allowedAt);
     }
