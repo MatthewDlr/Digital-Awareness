@@ -68,7 +68,7 @@ export class AwarenessPageComponent {
 
     setTimeout(() => {
       window.close();
-    }, 10000);
+    }, 5 * 1000);
   }
 
   // This means failure as the user has waited for the timer to expire
