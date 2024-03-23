@@ -1,5 +1,5 @@
 import { Injectable, isDevMode } from "@angular/core";
-import { watchedWebsite } from "app/types/types";
+import { WatchedWebsite } from "app/types/watchedWebsite";
 import { BehaviorSubject } from "rxjs";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 
@@ -78,7 +78,7 @@ export class PendingChangesService {
       return;
     }
 
-    let userWebsites: watchedWebsite[] = [];
+    let userWebsites: WatchedWebsite[] = [];
     await chrome.storage.sync
       .get(["userWebsites"])
       .catch(error => {

@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, HostListener, Input, ViewChild, ChangeDetectorRef, isDevMode } from "@angular/core";
+import { AfterViewInit, Component, HostListener, Input, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { watchedWebsite } from "app/types/types";
+import { WatchedWebsite } from "app/types/watchedWebsite";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
-import { ScoringService } from "app/services/scoring/scoring.service";
 import { FormsModule } from "@angular/forms";
+import dayjs from "dayjs";
 
 @Component({
   selector: "tr[websites-list-row]",
@@ -14,25 +14,37 @@ import { FormsModule } from "@angular/forms";
   styleUrl: "./websites-list-row.component.css",
 })
 export class WebsitesListRowComponent implements AfterViewInit {
-  @Input({ required: true }) website!: watchedWebsite;
+  @Input({ required: true }) website!: WatchedWebsite;
   @Input({ required: true }) isEnforced!: boolean;
   @Input() isPending!: boolean;
 
   isEditEnabled: boolean = false;
   oldHost: string = "";
-  awarenessRatio = -1;
-  isDevMode = isDevMode();
+  awarenessScoreClass!: string;
 
   constructor(
     private cdRef: ChangeDetectorRef,
     private pendingChangesService: PendingChangesService,
     private soundsEngine: SoundsEngineService,
-    private scoringService: ScoringService,
   ) {}
 
   ngAfterViewInit(): void {
-    this.awarenessRatio = this.scoringService.getScoreOf(this.website);
+    const lastOpen = dayjs(this.website.allowedAt);
+    const minutesDiff = dayjs().diff(lastOpen, "minute");
+    this.awarenessScoreClass = this.determineAwarenessColor(minutesDiff);
     this.cdRef.detectChanges();
+  }
+
+  private determineAwarenessColor(minutesDiff: number): string {
+    if (minutesDiff === 0) return "bg-green-500";
+    if (minutesDiff < 360) return "bg-red-700"; // < 6 hours
+    if (minutesDiff < 1440) return "bg-red-400"; // < 1 day
+    if (minutesDiff < 2880) return "bg-orange-500"; // < 2 days
+    if (minutesDiff < 4320) return "bg-blue-300"; // < 3 days
+    if (minutesDiff < 5760) return "bg-blue-500"; // < 4 days
+    if (minutesDiff < 7200) return "bg-green-300"; // < 5 days
+    if (minutesDiff < 8640) return "bg-green-400"; // < 6 days
+    return "bg-green-500";
   }
 
   @HostListener("document:keydown.enter", ["$event"])
@@ -67,7 +79,7 @@ export class WebsitesListRowComponent implements AfterViewInit {
     this.website.host = this.website.host.trim();
     this.isEditEnabled = false;
 
-    if (this.website.host != "" && this.oldHost !== this.website.host) {
+    if (this.website.host !== "" && this.oldHost !== this.website.host) {
       this.pendingChangesService.addWebsiteToEdit(this.oldHost, this.website.host);
     }
   }

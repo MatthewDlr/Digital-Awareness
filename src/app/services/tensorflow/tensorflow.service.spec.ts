@@ -1,13 +1,13 @@
 import { TestBed } from "@angular/core/testing";
 
-import { ScoringService } from "./scoring.service";
+import { TensorflowService } from "./tensorflow.service";
 
-describe("ScoringService", () => {
-  let service: ScoringService;
+describe("TensorflowService", () => {
+  let service: TensorflowService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ScoringService);
+    service = TestBed.inject(TensorflowService);
   });
 
   it("should be created", () => {
