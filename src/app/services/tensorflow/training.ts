@@ -11,6 +11,7 @@ const categoryIndex = {
   [Category.music]: 5,
   [Category.games]: 6,
   [Category.gambling]: 7,
+  [Category.services]: 8,
 };
 
 @Injectable({

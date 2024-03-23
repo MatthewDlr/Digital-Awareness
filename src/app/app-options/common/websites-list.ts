@@ -19,6 +19,18 @@ export type Website = {
 
 // Thank you Copilot for generating this list
 export const mostPopularWebsites: Website[] = [
+  { host: "chat.openai.com", category: Category.services },
+  { host: "claude.ai", category: Category.services },
+  { host: "chat.mistral.ai", category: Category.services },
+  { host: "copilot.microsoft.com", category: Category.services },
+  { host: "gemini.google.com", category: Category.services },
+  { host: "aichat.com", category: Category.services },
+  { host: "www.midjourney.com", category: Category.services },
+
+  { host: "mail.google.com", category: Category.news },
+  { host: "mail.yahoo.com", category: Category.news },
+  { host: "mail.live.com", category: Category.news },
+  { host: "mail.icloud.com", category: Category.news },
   { host: "edition.cnn.com", category: Category.news },
   { host: "bbc.com", category: Category.news },
   { host: "reuters.com", category: Category.news },

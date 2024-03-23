@@ -1,4 +1,6 @@
 export enum Category {
+  unknown = "Unknown",
+  services = "Services",
   social = "Social",
   streaming = "Streaming",
   gambling = "Gambling",
@@ -6,5 +8,4 @@ export enum Category {
   shopping = "Shopping",
   news = "News",
   music = "Music",
-  unknown = "Unknown",
 }
