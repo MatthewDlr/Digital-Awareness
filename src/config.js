@@ -107,42 +107,40 @@ export function writeDefaultConfig() {
 // Function use to update the configuration when a new version of the extension is installed
 export async function updateConfig() {
   await chrome.storage.local.get(["update"]).then(result => {
+    if (!result.update) {
+      chrome.storage.sync.remove(["doomScrollingTreshold"]);
+      chrome.storage.sync.remove(["doomScrollingNotification"]);
+      chrome.storage.sync.remove(["bindWatchingNotification"]);
+      chrome.storage.sync.set({ doomScrollingToggle: true });
+      chrome.storage.local.set({ update: "1.1.0" });
+    }
+
     if (!result.update || result.update === "1.1.0") {
       chrome.storage.sync.remove(["timerBehavior"]);
-      chrome.storage.local.get(["enforcedWebsites"]).then(result => {
-        const savedWebsite = result[enforcedWebsites];
-        for (let website of savedWebsite) {
-          website.remove(timer);
-          website.remove(timesBlocked);
-          website.remove(timesAllowed);
-          website.allowedAt = [];
+      chrome.storage.sync.get(["enforcedWebsites"]).then(result => {
+        const savedWebsites = result["enforcedWebsites"];
+        for (let website of savedWebsites) {
+          delete website.timer;
+          delete website.timesBlocked;
+          delete website.timesAllowed;
+          website.allowedAt = "";
         }
-        chrome.storage.local.set({ enforcedWebsites: savedWebsite });
+        chrome.storage.sync.set({ enforcedWebsites: savedWebsites });
       });
-      chrome.storage.sync.get("userWebsites").then(websites => {
-        const savedWebsite = websites;
-        console.log(savedWebsite);
-        if (savedWebsite.length < 1) return;
-        for (let website of savedWebsite) {
-          website.remove(timer);
-          website.remove(timesBlocked);
-          website.remove(timesAllowed);
-          website.allowedAt = [];
+      chrome.storage.sync.get(["userWebsites"]).then(result => {
+        const savedWebsites = result["userWebsites"];
+        for (let website of savedWebsites) {
+          delete website.timer;
+          delete website.timesBlocked;
+          delete website.timesAllowed;
+          website.allowedAt = "";
         }
-        chrome.storage.local.set({ userWebsites: savedWebsite });
+        chrome.storage.sync.set({ userWebsites: savedWebsites });
       });
-      console.info("Updated to V2");
-      chrome.storage.local.set({ update: "2.0.0" });
+      chrome.storage.local.set({ update: "1.2.0" });
+      console.info("Updated to 1.2.0");
 
       return;
     }
   });
-
-  chrome.storage.sync.remove(["doomScrollingTreshold"]);
-  chrome.storage.sync.remove(["doomScrollingNotification"]);
-  chrome.storage.sync.remove(["bindWatchingNotification"]);
-  chrome.storage.sync.set({ doomScrollingToggle: true });
-  chrome.storage.local.set({ update: "1.1.0" });
-
-  console.info("Configuration successfully updated !");
 }
