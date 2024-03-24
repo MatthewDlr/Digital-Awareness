@@ -45,12 +45,13 @@ jobs:
         with:
           name: digital-awareness.zip
           path: dist/digital-awareness.zip
-          retention-days: 30
           if-no-files-found: error
 
   publish:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -66,3 +67,24 @@ jobs:
           client-secret: ${{ secrets.CLIENT_SECRET }}
           refresh-token: ${{ secrets.REFRESH_TOKEN }}
           publish: true
+
+      - name: Extract extension version
+        run: |
+          unzip digital-awareness.zip manifest.json
+          VERSION=$(jq -r .version manifest.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create Release 
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          artifacts: "./digital-awareness.zip"
+          generateReleaseNotes: true
+          tag: v${{ env.VERSION }}
+          allowUpdates: true
+
+          
+
+
+            
+      
+            
