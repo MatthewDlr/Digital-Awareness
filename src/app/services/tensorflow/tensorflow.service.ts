@@ -14,32 +14,35 @@ export class TensorflowService {
   constructor(private training: training) {
     this.modelFactory().then(model => {
       this.model = model;
+      this.isModelReady.next(true);
     });
   }
 
   private async modelFactory(): Promise<tf.Sequential> {
-    const model = (await this.loadModel()) as tf.Sequential;
+    let model = (await this.loadModel()) as tf.Sequential;
 
     if (!model) {
-      const localModel = this.createModel();
-      await this.trainModel(localModel);
-      const [unit, bias] = localModel.getWeights();
-      this.saveModel(localModel);
-      isDevMode() && console.log("New model created! \n unit: " + unit.dataSync()[0] + " bias: " + bias.dataSync()[0]);
+      console.info("Now training on-device model, please hold on a bit ...");
+
+      model = this.createModel();
+      await this.trainModel(model);
+      const [unit, bias] = model.getWeights();
+      this.saveModel(model);
+
+      isDevMode() && console.info("Model stats: " + unit.dataSync()[0] + " bias: " + bias.dataSync()[0]);
+      console.info("Model training successful");
     } else {
       isDevMode() && console.log("Model loaded from localstorage");
     }
-    this.isModelReady.next(true);
     return model;
   }
 
   predict(input: TfInput): number {
     if (!this.isModelReady.value) {
       isDevMode() && console.error("Model is not ready yet");
-      setTimeout(() => {
-        return this.predict(input);
-      }, 200);
+      return -1;
     }
+
     const inputTensor: tf.Tensor = tf.tensor2d(
       [this.training.normalizeInput(input.minutes), ...this.training.encodeCategory(input.category)],
       [1, 9],
@@ -66,9 +69,6 @@ export class TensorflowService {
     const featuresTensor = tf.tensor2d(this.training.getFeatures());
     const labelsTensor = this.normalize(tf.tensor1d(this.training.getLabels()));
 
-    console.log(featuresTensor.shape);
-    console.log(labelsTensor.shape);
-
     return await model.fit(featuresTensor, labelsTensor, {
       epochs: 100,
       callbacks: {
@@ -93,7 +93,12 @@ export class TensorflowService {
   }
 
   private async loadModel(): Promise<tf.LayersModel | undefined> {
-    return (await tf.loadLayersModel("localstorage://tensorflow-aware")) || undefined;
+    try {
+      return await tf.loadLayersModel("localstorage://tensorflow-aware");
+    } catch (error) {
+      isDevMode() && console.log(error);
+      return undefined;
+    }
   }
 
   private deNormalizeOutput(value: number): number {
