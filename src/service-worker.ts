@@ -1,8 +1,9 @@
 import { writeDefaultConfig, updateConfig } from "./config.js";
 import { isDevMode } from "@angular/core";
 import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "tailwind.config.js";
+import tailwindConfig from "../tailwind.config.js";
 const fullConfig = resolveConfig(tailwindConfig);
+import dayjs, { Dayjs } from "dayjs";
 
 chrome.webNavigation.onCommitted.addListener(function (details) {
   // Avoid showing blockpage if the request is made in background or isn't http/https
@@ -71,9 +72,9 @@ function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean
     return false;
   }
 
-  const allowedUntil: Date = new Date(blockedWebsite.allowedUntil);
-  if (allowedUntil > new Date()) {
-    isDevMode() ? console.log("Website is temporary allowed until: ", allowedUntil) : null;
+  const allowedUntil: Dayjs = dayjs(blockedWebsite.allowedUntil);
+  if (allowedUntil > dayjs()) {
+    isDevMode() ? console.log("Website is temporary allowed until: ", allowedUntil.toString()) : null;
     return false;
   }
 

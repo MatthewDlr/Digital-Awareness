@@ -1,6 +1,6 @@
 import { Component, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
+import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 
 @Component({
   selector: "app-disconnect",

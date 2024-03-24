@@ -1,10 +1,11 @@
 import { Component, isDevMode, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
-import { QuotesWidgetComponent } from "../quotes-widget/quotes-widget.component";
+import { QuotesWidgetComponent } from "../overlay-widgets/quotes-widget/quotes-widget.component";
 import { WebsitesService } from "../services/websites/websites.service";
-import { BreathingWidgetComponent } from "../breathing-widget/breathing-widget.component";
-import { TasksWidgetComponent } from "../tasks-widget/tasks-widget.component";
+import { BreathingWidgetComponent } from "../overlay-widgets/breathing-widget/breathing-widget.component";
+import { TasksWidgetComponent } from "../overlay-widgets/tasks-widget/tasks-widget.component";
+import { filter } from "rxjs/operators";
 
 @Component({
   selector: "app-awareness-page",
@@ -33,24 +34,17 @@ export class AwarenessPageComponent {
     chrome.storage.sync.get("awarenessPageWidget").then(result => {
       this.widget = result["awarenessPageWidget"] || "Quotes";
       isDevMode() ? console.log("widget: ", this.widget) : null;
-      if (this.widget == "Random") this.widget = this.getRandomWidget();
-    });
-
-    chrome.storage.sync.get(["timerBehavior"]).then(result => {
-      this.timerBehavior = result["timerBehavior"] || "None";
-      isDevMode() ? console.log("Timer behavior loaded: ", this.timerBehavior) : null;
+      if (this.widget === "Random") this.widget = this.getRandomWidget();
     });
 
     document.addEventListener("visibilitychange", () => {
       document.hidden ? (this.isWindowFocused = false) : (this.isWindowFocused = true);
     });
 
-    websitesService.areWebsitesLoaded.subscribe(areWebsitesLoaded => {
-      if (areWebsitesLoaded) {
-        this.originalTimerValue = websitesService.getTimerValue(this.outputUrl.host);
-        this.timerValue.set(this.originalTimerValue);
-        this.countdown();
-      }
+    websitesService.areWebsitesLoaded.pipe(filter(isLoaded => isLoaded === true)).subscribe(() => {
+      this.originalTimerValue = websitesService.getTimerValue(this.outputUrl.host);
+      this.timerValue.set(this.originalTimerValue);
+      this.countdown();
     });
   }
 
@@ -60,10 +54,7 @@ export class AwarenessPageComponent {
         if ((document.hasFocus() && this.isWindowFocused) || isDevMode()) {
           this.timerValue.update(value => value - 1);
         } else {
-          // If the user is not on the tab, and the timer behavior is "Restart", restart the timer; otherwise, don't dwindle the timer.
-          if (this.timerBehavior == "Restart") {
-            this.timerValue.set(this.originalTimerValue);
-          }
+          this.timerValue.set(this.originalTimerValue); // If the user is not on the tab, we restart the timer
         }
         this.countdown();
       }, 1100); // Yes, it's more than 1s
@@ -72,16 +63,12 @@ export class AwarenessPageComponent {
     }
   }
 
-  async getCurrentTab() {
-    const queryOptions = { active: true, lastFocusedWindow: true };
-    const [tab] = await chrome.tabs.query(queryOptions);
-    return tab.id;
-  }
-
   waitBeforeClose() {
+    if (isDevMode()) return;
+
     setTimeout(() => {
       window.close();
-    }, 10000);
+    }, 5 * 1000);
   }
 
   // This means failure as the user has waited for the timer to expire
@@ -92,10 +79,9 @@ export class AwarenessPageComponent {
 
   // This means success as the user left the page before the timer expired
   closeBlockPage() {
-    this.websitesService.incrementTimesBlocked();
     setTimeout(() => {
       window.close();
-    }, 500);
+    }, 250);
   }
 
   private getRandomWidget() {

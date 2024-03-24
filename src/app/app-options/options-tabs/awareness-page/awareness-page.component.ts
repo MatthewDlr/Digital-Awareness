@@ -1,7 +1,7 @@
 import { Component, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { SoundsEngineService } from "src/app/services/soundsEngine/sounds-engine.service";
+import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 
 @Component({
   selector: "app-awareness-page",
@@ -14,7 +14,6 @@ export class AwarenessPageComponent {
   selectedWidget: string = "Quotes";
   tasks!: string[];
   areTasksValid: boolean = true;
-  timerBehavior!: string;
 
   constructor(private soundsEngine: SoundsEngineService) {
     chrome.storage.sync.get(["awarenessPageWidget"]).then(result => {
@@ -24,11 +23,6 @@ export class AwarenessPageComponent {
     chrome.storage.sync.get(["awarenessPageTasks"]).then(result => {
       this.tasks = result["awarenessPageTasks"] || ["", "", ""];
       isDevMode() ? console.log("Tasks loaded: ", this.tasks) : null;
-    });
-
-    chrome.storage.sync.get(["timerBehavior"]).then(result => {
-      this.timerBehavior = result["timerBehavior"] || "None";
-      isDevMode() ? console.log("Timer behavior loaded: ", this.timerBehavior) : null;
     });
   }
 
@@ -40,13 +34,6 @@ export class AwarenessPageComponent {
     if (widget == "Tasks" || widget == "Random") {
       this.checkIfTasksValid();
     }
-  }
-
-  updateTimerBehavior(timerBehavior: string) {
-    this.timerBehavior = timerBehavior;
-    chrome.storage.sync.set({ timerBehavior: timerBehavior });
-    this.soundsEngine.select();
-    isDevMode() ? console.log("Timer behavior saved: ", this.timerBehavior) : null;
   }
 
   checkIfTasksValid() {

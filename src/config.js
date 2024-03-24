@@ -4,121 +4,91 @@ export function writeDefaultConfig() {
     .set({
       isActivated: true, // Extension activation
       awarenessPageWidget: "Quotes", // Widget to display on the awareness page
-      timerBehavior: "Restart", // What to do when the awareness page is not focused
       doomScrollingToggle: true, // Screen dimming when doom scrolling
-      // bingeWatchingToggle: true, // Alert when binge watching on supported websites
       userWebsites: [], // Website the user will decide to block
       enforcedWebsites: [
         {
           host: "youtube.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Streaming",
         },
         {
           host: "netflix.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Streaming",
         },
         {
           host: "twitch.tv",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Streaming",
         },
         {
           host: "primevideo.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Streaming",
         },
         {
           host: "disneyplus.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Streaming",
         },
         {
           host: "instagram.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Social",
         },
         {
           host: "facebook.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Social",
         },
         {
           host: "twitter.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Social",
         },
         {
           host: "x.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Social",
         },
         {
           host: "tiktok.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Social",
         },
         {
           host: "snapchat.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Social",
         },
         {
           host: "threads.net",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Social",
         },
         {
           host: "aliexpress.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Shopping",
         },
         {
           host: "temu.com",
           allowedUntil: "",
-          timer: 30,
-          timesBlocked: 0,
-          timesAllowed: 0,
+          allowedAt: "",
           category: "Shopping",
         },
       ],
@@ -137,17 +107,40 @@ export function writeDefaultConfig() {
 // Function use to update the configuration when a new version of the extension is installed
 export async function updateConfig() {
   await chrome.storage.local.get(["update"]).then(result => {
-    if (result.update === "1.1.0") {
-      console.info("Configuration already updated !");
+    if (!result.update) {
+      chrome.storage.sync.remove(["doomScrollingTreshold"]);
+      chrome.storage.sync.remove(["doomScrollingNotification"]);
+      chrome.storage.sync.remove(["bindWatchingNotification"]);
+      chrome.storage.sync.set({ doomScrollingToggle: true });
+      chrome.storage.local.set({ update: "1.1.0" });
+    }
+
+    if (!result.update || result.update === "1.1.0") {
+      chrome.storage.sync.remove(["timerBehavior"]);
+      chrome.storage.sync.get(["enforcedWebsites"]).then(result => {
+        const savedWebsites = result["enforcedWebsites"];
+        for (let website of savedWebsites) {
+          delete website.timer;
+          delete website.timesBlocked;
+          delete website.timesAllowed;
+          website.allowedAt = "";
+        }
+        chrome.storage.sync.set({ enforcedWebsites: savedWebsites });
+      });
+      chrome.storage.sync.get(["userWebsites"]).then(result => {
+        const savedWebsites = result["userWebsites"];
+        for (let website of savedWebsites) {
+          delete website.timer;
+          delete website.timesBlocked;
+          delete website.timesAllowed;
+          website.allowedAt = "";
+        }
+        chrome.storage.sync.set({ userWebsites: savedWebsites });
+      });
+      chrome.storage.local.set({ update: "1.2.0" });
+      console.info("Updated to 1.2.0");
+
       return;
     }
   });
-
-  chrome.storage.sync.remove(["doomScrollingTreshold"]);
-  chrome.storage.sync.remove(["doomScrollingNotification"]);
-  chrome.storage.sync.remove(["bindWatchingNotification"]);
-  chrome.storage.sync.set({ doomScrollingToggle: true });
-  chrome.storage.local.set({ update: "1.1.0" });
-
-  console.info("Configuration successfully updated !");
 }

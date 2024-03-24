@@ -16,7 +16,7 @@
 ## Features
 
 ✅ Prevent yourself from opening distracting websites mindlessly <br>
-✅ Automatically adapts based on your usage <br>
+✅ Automatically adapts based on your usage with machine learning <br>
 ✅ Get insights on your digital habits <br>
 ✅ Add your own websites <br>
 ✅ Customize with quotes, breathing exercises or your own goals <br>
@@ -36,18 +36,20 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=Webpack&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
 
 ### Installation
 
-Run `npm install` to get started and install all dependencies.
+Run `pnpm install` to get started and install all dependencies.
+If you do not have pnpm installed, run `npm install -g pnpm`.
 
 ### Develop
 
-Run `npm run watch` to start the development server.
+Run `pnpm dev` to start the development server.
 To test the extension, go to `chrome://extensions/` and enable developer mode.
 Then click on `Load unpacked` and select the output folder
 
-Please do not use angular commands like `ng serve`and `ng build` since it doesn't run the custom webpack configuration and custom flags, it results in missing files from the compilation output and unexpected behaviors across the extension. <br>
+Please do not use angular cli commands like `ng serve`and `ng build` since it doesn't run the custom webpack configuration and custom flags, it results in missing files from the compilation output and unexpected behaviors across the extension. <br>
 
 Be aware that when the extension in running in development mode, it behaves differently ; all timers are much faster and won't adapt to your usage and, you'll also get much more logs in the page console. To avoid affecting the user experience, please limit your own logging to development mode using the `isDevMode()` function of Angular.
 
@@ -56,11 +58,11 @@ For everything related to the angular app, you can simply reload the page.
 
 ### Dependencies
 
-![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white) <br>
+![PNPM](https://img.shields.io/badge/pnpm-%234a4a4a.svg?style=for-the-badge&logo=pnpm&logoColor=f69220) <br>
 Please, be cautious when adding new dependencies to the project. <br>
 If you need to add a new dependency, make sure it is really necessary and that it is well maintained.
 
-If a dependency is creating conflicts, never, ever, use `--force` to add it anyway<br>
+If a dependency is creating conflicts, never use `--force` to add it anyway<br>
 
 ### Lint
 
@@ -68,7 +70,7 @@ If a dependency is creating conflicts, never, ever, use `--force` to add it anyw
 ![Prettier](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E) <br>
 This project relies on eslint and prettier to enforce a unified and clean code style.
 
-Run `npm run lint` to lint the project ; also a hook is setup to run the linter before each commit. <br>
+Run `pnpm lint` to lint the project ; also a hook is setup to run the linter before each commit. <br>
 Please **do not** commit if the linter fails and **do not** disable the linter.
 
 ### Tests
@@ -77,12 +79,12 @@ Currently, tests are not implemented.
 
 ### Build
 
-Run `npm run build` to build the project for production.
+Run `pnpm build` to build the project for production.
 The build artifacts will be stored in the `dist/` directory.
 
 ## Contributing
 
-⭐ Star us, it motivates us a lot!
+⭐ Star us, it motivates a lot!
 
 ### Issues
 
