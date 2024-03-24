@@ -61,34 +61,18 @@ export class WebsitesService {
 
   // This is called when the user choose to visit the website
   allowWebsiteTemporary(): void {
-    const websiteAllowed: WatchedWebsite = this.getWebsiteFrom(this.currentWebsite.host);
+    const websiteAllowed: WatchedWebsite = this.currentWebsite;
 
     websiteAllowed.allowedUntil = dayjs().add(DEFAULT_ALLOWED_DURATION, "minute").toString();
     websiteAllowed.allowedAt = dayjs().toString();
 
-    this.websiteOrigin == "Enforced"
+    this.websiteOrigin === "Enforced"
       ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })
       : chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 
-  private getWebsiteFrom(host: string): WatchedWebsite {
-    const website =
-      this.websiteOrigin === "Enforced"
-        ? this.enforcedWebsites.find(enforcedSite => enforcedSite.host == host)
-        : this.userWebsites.find(userWebsite => userWebsite.host == host);
-
-    if (!website) {
-      throw new Error("Impossible to retrieve the following website from the local storage: " + host);
-    }
-    return website;
-  }
-
   private getStoredWebsite(host: string): WatchedWebsite {
     host = this.removeWWW(host);
-
-    if (!this.enforcedWebsites || !this.userWebsites) {
-      throw new Error("Websites not initialized");
-    }
 
     const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == host);
     if (enforcedWebsite) {

@@ -20,7 +20,7 @@ export class WebsitesListRowComponent implements AfterViewInit {
 
   isEditEnabled: boolean = false;
   oldHost: string = "";
-  awarenessScoreClass!: string;
+  awarenessColor: string = "";
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -30,12 +30,12 @@ export class WebsitesListRowComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const lastOpen = dayjs(this.website.allowedAt);
-    const minutesDiff = dayjs().diff(lastOpen, "minute");
-    this.awarenessScoreClass = this.determineAwarenessColor(minutesDiff);
+    const minutesDiff = dayjs().diff(lastOpen, "minute") || 0;
+    this.awarenessColor = this.determineAwarenessBadgeColor(minutesDiff);
     this.cdRef.detectChanges();
   }
 
-  private determineAwarenessColor(minutesDiff: number): string {
+  private determineAwarenessBadgeColor(minutesDiff: number): string {
     if (minutesDiff === 0) return "bg-green-500";
     if (minutesDiff < 360) return "bg-red-700"; // < 6 hours
     if (minutesDiff < 1440) return "bg-red-400"; // < 1 day

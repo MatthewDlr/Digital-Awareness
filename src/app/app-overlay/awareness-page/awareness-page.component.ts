@@ -1,10 +1,10 @@
 import { Component, isDevMode, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
-import { QuotesWidgetComponent } from "../quotes-widget/quotes-widget.component";
+import { QuotesWidgetComponent } from "../overlay-widgets/quotes-widget/quotes-widget.component";
 import { WebsitesService } from "../services/websites/websites.service";
-import { BreathingWidgetComponent } from "../breathing-widget/breathing-widget.component";
-import { TasksWidgetComponent } from "../tasks-widget/tasks-widget.component";
+import { BreathingWidgetComponent } from "../overlay-widgets/breathing-widget/breathing-widget.component";
+import { TasksWidgetComponent } from "../overlay-widgets/tasks-widget/tasks-widget.component";
 import { filter } from "rxjs/operators";
 
 @Component({

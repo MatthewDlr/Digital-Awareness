@@ -1,6 +1,6 @@
 import { Component, effect } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { AwarenessPageComponent } from "../awareness-page/awareness-page.component";
+import { AwarenessPageComponent } from "../../awareness-page/awareness-page.component";
 
 @Component({
   selector: "app-breathing-widget",
