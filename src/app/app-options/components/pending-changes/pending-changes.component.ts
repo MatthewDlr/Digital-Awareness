@@ -2,6 +2,7 @@ import { Component, isDevMode } from "@angular/core";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
+import dayjs from "dayjs";
 
 @Component({
   selector: "app-pending-changes",
@@ -15,7 +16,7 @@ export class PendingChangesComponent {
   expirationDate: string = "";
   stage: string = "NoChanges";
 
-  timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
+  timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60; // Time required to wait in order to validate the changes
 
   constructor(
     private soundsEngine: SoundsEngineService,
