@@ -1,59 +1,67 @@
 <div
   class="flex h-[100vh] w-full flex-col items-center justify-center gap-16 bg-gradient-to-br from-green-100 from-10% via-green-200 via-70% to-green-300 !transition-all dark:from-green-800 dark:via-green-900 dark:to-green-950"
 >
-  <!-- Timer -->
-  <div
-    class="bg-white flex min-h-[5rem] min-w-[5rem] animate-fade-up items-center justify-center rounded-lg bg-opacity-40 animate-duration-500"
-  >
-    @defer (when originalTimerValue > 0) {
-      <label class="text-gray-900 text-3xl" [ngClass]="timerValue() < 6 ? 'animate-bounce' : ''">{{ timerValue() }}</label>
-    }
-  </div>
-
-  <!-- Widget -->
-  <div class="animate-fade-up animate-delay-200 animate-duration-500">
-    @switch (widget) {
-      @case ("Quotes") {
-        <app-quotes-widget></app-quotes-widget>
+  @if (tfService.isModelReady.getValue() === true) {
+    <!-- Timer -->
+    <div
+      class="bg-white flex min-h-[5rem] min-w-[5rem] animate-fade-up items-center justify-center rounded-lg bg-opacity-40 animate-duration-500"
+    >
+      @defer (when originalTimerValue > 0) {
+        <label class="text-gray-900 text-3xl" [ngClass]="timerValue() < 6 ? 'animate-bounce' : ''">{{ timerValue() }}</label>
       }
-      @case ("Breathing") {
-        <app-breathing-widget></app-breathing-widget>
-      }
-      @case ("Tasks") {
-        <app-tasks-widget></app-tasks-widget>
-      }
-    }
-  </div>
-
-  <div class="flex flex-col items-center justify-center gap-5">
-    <!-- Go Back Button -->
-    <div class="animate-fade-up animate-delay-[400ms] animate-duration-500" (click)="closeBlockPage()">
-      <button
-        class="bg-white text-gray-800 border-purple-500 inline-flex items-center rounded-md border-b-2 bg-opacity-40 px-6 py-2 font-bold shadow-md !transition-all delay-100 animate-duration-300 animate-ease-in-out hover:text-white hover:bg-purple-500 hover:border-purple-600 active:scale-95"
-      >
-        <span class="mr-2 text-sm font-medium">Go Back</span>
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M21 4a1 1 0 0 1 .993.883L22 5v6.5a3.5 3.5 0 0 1-3.308 3.495L18.5 15H5.415l3.292 3.293a1 1 0 0 1 .083 1.32l-.083.094a1 1 0 0 1-1.32.083l-.094-.083-5-5a1.011 1.011 0 0 1-.097-.112l-.071-.11-.054-.114-.035-.105-.025-.117-.007-.06L2 14l.003-.075.017-.126.03-.111.044-.111.052-.098.064-.092.083-.094 5-5a1 1 0 0 1 1.497 1.32l-.083.094L5.415 13H18.5a1.5 1.5 0 0 0 1.493-1.355L20 11.5V5a1 1 0 0 1 1-1Z"
-            fill="currentcolor"
-          />
-        </svg>
-      </button>
     </div>
 
-    <!-- Skip Timer Button -->
-    <div [ngClass]="timerValue() == 0 ? 'visible' : 'invisible'" class="flex flex-col items-center gap-2">
-      <div class="text-gray-500 text-sm opacity-50" [ngClass]="timerValue() == 0 ? 'animate-fade-up animate-duration-500' : ''">
-        Continue to
-        <button class="underline decoration-wavy" (click)="skipTimer()">
-          {{ outputUrl.hostname }}
+    <!-- Widget -->
+    <div class="animate-fade-up animate-delay-200 animate-duration-500">
+      @switch (widget) {
+        @case ("Quotes") {
+          <app-quotes-widget></app-quotes-widget>
+        }
+        @case ("Breathing") {
+          <app-breathing-widget></app-breathing-widget>
+        }
+        @case ("Tasks") {
+          <app-tasks-widget></app-tasks-widget>
+        }
+      }
+    </div>
+
+    <div class="flex flex-col items-center justify-center gap-5">
+      <!-- Go Back Button -->
+      <div class="animate-fade-up animate-delay-[400ms] animate-duration-500" (click)="closeBlockPage()">
+        <button
+          class="bg-white text-gray-800 border-purple-500 inline-flex items-center rounded-md border-b-2 bg-opacity-40 px-6 py-2 font-bold shadow-md !transition-all delay-100 animate-duration-300 animate-ease-in-out hover:text-white hover:bg-purple-500 hover:border-purple-600 active:scale-95"
+        >
+          <span class="mr-2 text-sm font-medium">Go Back</span>
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M21 4a1 1 0 0 1 .993.883L22 5v6.5a3.5 3.5 0 0 1-3.308 3.495L18.5 15H5.415l3.292 3.293a1 1 0 0 1 .083 1.32l-.083.094a1 1 0 0 1-1.32.083l-.094-.083-5-5a1.011 1.011 0 0 1-.097-.112l-.071-.11-.054-.114-.035-.105-.025-.117-.007-.06L2 14l.003-.075.017-.126.03-.111.044-.111.052-.098.064-.092.083-.094 5-5a1 1 0 0 1 1.497 1.32l-.083.094L5.415 13H18.5a1.5 1.5 0 0 0 1.493-1.355L20 11.5V5a1 1 0 0 1 1-1Z"
+              fill="currentcolor"
+            />
+          </svg>
         </button>
       </div>
-      <label
-        class="text-gray-500 text-sm opacity-50"
-        [ngClass]="timerValue() == 0 ? 'animate-fade-up animate-delay-300 animate-duration-500' : ''"
-        >Otherwise, tab will close on its own
-      </label>
+
+      <!-- Skip Timer Button -->
+      <div [ngClass]="timerValue() == 0 ? 'visible' : 'invisible'" class="flex flex-col items-center gap-2">
+        <div class="text-gray-500 text-sm opacity-50" [ngClass]="timerValue() == 0 ? 'animate-fade-up animate-duration-500' : ''">
+          Continue to
+          <button class="underline decoration-wavy" (click)="skipTimer()">
+            {{ outputUrl.hostname }}
+          </button>
+        </div>
+        <label
+          class="text-gray-500 text-sm opacity-50"
+          [ngClass]="timerValue() == 0 ? 'animate-fade-up animate-delay-300 animate-duration-500' : ''"
+          >Otherwise, tab will close on its own
+        </label>
+      </div>
     </div>
-  </div>
+  } @else {
+    <span class="loader"></span>
+    <div class="text-black flex max-w-4xl justify-center text-balance text-center text-lg font-extralight">
+      We're currently training an on-device model that will predict your score. <br/>
+      This will be done only once and should not take more than 30 seconds.
+    </div>
+  }
 </div>

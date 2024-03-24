@@ -1,5 +1,5 @@
 import { Injectable, isDevMode } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, filter, firstValueFrom } from "rxjs";
 import { WatchedWebsite } from "app/types/watchedWebsite";
 import { TensorflowService } from "app/services/tensorflow/tensorflow.service";
 import { TfInput } from "app/types/tensorflow";
@@ -11,7 +11,7 @@ const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the
   providedIn: "root",
 })
 export class WebsitesService {
-  areWebsitesLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isReady: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   enforcedWebsites!: WatchedWebsite[];
   userWebsites!: WatchedWebsite[];
   currentWebsite!: WatchedWebsite;
@@ -23,14 +23,14 @@ export class WebsitesService {
       .then(result => {
         this.enforcedWebsites = result["enforcedWebsites"] || [];
         this.userWebsites = result["userWebsites"] || [];
-        this.areWebsitesLoaded.next(true);
+        this.isReady.next(true);
       })
       .catch(error => {
         isDevMode() ? console.error(error) : null;
       });
   }
 
-  getTimerValue(host: string): number {
+  async getTimerValue(host: string): Promise<number> {
     this.currentWebsite = this.getStoredWebsite(host);
     const minutesDiff = this.getMinutesSinceLastAccess(this.currentWebsite);
     const tfInput: TfInput = {
@@ -38,6 +38,7 @@ export class WebsitesService {
       category: this.currentWebsite.category,
     };
 
+    await firstValueFrom(this.tfService.isModelReady.pipe(filter(value => value === true))); // Wait that the model is ready
     const timer = this.tfService.predict(tfInput);
 
     return isDevMode() ? 3 : timer;

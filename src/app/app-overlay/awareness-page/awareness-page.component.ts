@@ -6,6 +6,7 @@ import { WebsitesService } from "../services/websites/websites.service";
 import { BreathingWidgetComponent } from "../overlay-widgets/breathing-widget/breathing-widget.component";
 import { TasksWidgetComponent } from "../overlay-widgets/tasks-widget/tasks-widget.component";
 import { filter } from "rxjs/operators";
+import { TensorflowService } from "app/services/tensorflow/tensorflow.service";
 
 @Component({
   selector: "app-awareness-page",
@@ -25,6 +26,7 @@ export class AwarenessPageComponent {
   constructor(
     private route: ActivatedRoute,
     private websitesService: WebsitesService,
+    public tfService: TensorflowService,
   ) {
     // Getting url parameters
     this.route.params.subscribe(params => {
@@ -41,10 +43,12 @@ export class AwarenessPageComponent {
       document.hidden ? (this.isWindowFocused = false) : (this.isWindowFocused = true);
     });
 
-    websitesService.areWebsitesLoaded.pipe(filter(isLoaded => isLoaded === true)).subscribe(() => {
-      this.originalTimerValue = websitesService.getTimerValue(this.outputUrl.host);
-      this.timerValue.set(this.originalTimerValue);
-      this.countdown();
+    websitesService.isReady.pipe(filter(isLoaded => isLoaded === true)).subscribe(() => {
+      websitesService.getTimerValue(this.outputUrl.host).then(timer => {
+        this.originalTimerValue = timer;
+        this.timerValue.set(this.originalTimerValue);
+        this.countdown();
+      });
     });
   }
 
@@ -59,13 +63,11 @@ export class AwarenessPageComponent {
         this.countdown();
       }, 1100); // Yes, it's more than 1s
     } else {
-      this.waitBeforeClose();
+      !isDevMode() && this.waitBeforeClose();
     }
   }
 
   waitBeforeClose() {
-    if (isDevMode()) return;
-
     setTimeout(() => {
       window.close();
     }, 5 * 1000);
