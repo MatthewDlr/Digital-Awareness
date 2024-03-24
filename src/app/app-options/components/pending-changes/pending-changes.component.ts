@@ -2,7 +2,6 @@ import { Component, isDevMode } from "@angular/core";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
-import dayjs from "dayjs";
 
 @Component({
   selector: "app-pending-changes",
