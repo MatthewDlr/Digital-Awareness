@@ -1,6 +1,6 @@
 {
   "name": "digital-awareness",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "scripts": {
     "ng": "ng",
     "build": "ng build --configuration production --base-href",
@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "eslint . --fix",
     "format": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "preinstall": "npx only-allow pnpm"
   },
   "private": true,
   "dependencies": {
@@ -44,13 +45,8 @@
     "nightwind": "^1.1.13",
     "prettier-plugin-tailwindcss": "^0.5.12",
     "tailwindcss": "^3.4.1",
-    "tailwindcss-animated": "^1.0.1"
-  },
-  "packageManager": "pnpm@8.15.4",
-  "pnpm": {
-    "overrides": {
-      "undici@>=6.0.0 <=6.6.0": ">=6.6.1",
-      "webpack-dev-middleware@>=6.0.0 <6.1.2": ">=6.1.2"
-    }
+    "tailwindcss-animated": "^1.0.1",
+    "tslib": "^2.6.2",
+    "webpack": "^5.91.0"
   }
 }
