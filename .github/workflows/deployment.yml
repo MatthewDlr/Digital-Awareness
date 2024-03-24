@@ -28,13 +28,13 @@ jobs:
         run: npm install -g pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --silent
 
       - name: Lint codebase
         run: pnpm lint
 
       - name: Build project
-        run: npm build
+        run: pnpm build
 
       - name: Zip build artifact
         run: cd dist && zip -r digital-awareness.zip .
