@@ -2,7 +2,7 @@
 module.exports = {
   darkMode: "class",
   plugins: [require("nightwind"), require("@tailwindcss/forms"), require("tailwindcss-animated")],
-  content: ["./src/**/*.{html,js}", "./src/app/app-options/components/websites-list-row/websites-list-row.component.ts"],
+  content: ["./src/**/*.{html,css,ts}"],
   theme: {
     extend: {
       fontFamily: {
