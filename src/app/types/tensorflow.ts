@@ -9,4 +9,3 @@ export interface TfTrainingData {
   input: TfInput;
   output: number;
 }
-
