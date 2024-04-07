@@ -1,13 +1,13 @@
 import { TestBed } from "@angular/core/testing";
 
-import { TensorflowService } from "./tensorflow.service";
+import { InferenceService } from "../tf-inference/tf-inference.service";
 
-describe("TensorflowService", () => {
-  let service: TensorflowService;
+describe("InferenceService", () => {
+  let service: InferenceService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(TensorflowService);
+    service = TestBed.inject(InferenceService);
   });
 
   it("should be created", () => {

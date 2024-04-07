@@ -122,7 +122,7 @@ export class training {
   }
 
   encodeCategory(category: Category): number[] {
-    const result = new Array(8).fill(0);
+    const result = new Array(9).fill(0);
     result[categoryIndex[category]] = 1;
     return result;
   }

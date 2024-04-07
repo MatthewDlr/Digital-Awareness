@@ -9,3 +9,5 @@ export enum Category {
   news = "News",
   music = "Music",
 }
+
+export const CategoryLength = Object.keys(Category).length;

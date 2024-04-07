@@ -1,13 +1,13 @@
 import { Injectable, isDevMode } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
-import { training } from "./training";
+import { training } from "../training/training";
 import { BehaviorSubject } from "rxjs";
 import { TfInput } from "app/types/tensorflow";
 
 @Injectable({
   providedIn: "root",
 })
-export class TensorflowService {
+export class InferenceService {
   model!: tf.Sequential;
   isModelReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
