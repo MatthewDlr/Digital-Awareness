@@ -56,8 +56,8 @@ const tfTrainingData = [
   { input: { minutes: 0, category: Category.social }, output: 200 },
   { input: { minutes: 10, category: Category.social }, output: 200 },
   { input: { minutes: 30, category: Category.social }, output: 195 },
-  { input: { minutes: 60, category: Category.social }, output: 190 },
-  { input: { minutes: 120, category: Category.social }, output: 180 },
+  { input: { minutes: 60, category: Category.social }, output: 190 }, // 1 hour
+  { input: { minutes: 120, category: Category.social }, output: 180 }, // 2 hours
   { input: { minutes: 240, category: Category.social }, output: 130 }, // 4 hours
   { input: { minutes: 360, category: Category.social }, output: 90 }, // 6 hours
   { input: { minutes: 1440, category: Category.social }, output: 60 }, // 1 day
@@ -102,7 +102,7 @@ export function getModel(): tf.Sequential {
   return model;
 }
 
-export function getInputShape() {
+function getInputShape() {
   return Object.values(Category).length + 1;
 }
 

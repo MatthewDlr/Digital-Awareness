@@ -1,11 +1,10 @@
-import { Category } from "./category";
+import * as tf from "@tensorflow/tfjs";
 
-export interface TfInput {
-  minutes: number; // Minutes since last access
-  category: Category; // Category of the website
-}
-
-export interface TfTrainingData {
-  input: TfInput;
-  output: number;
+export interface TfModel {
+  name: string;
+  trainingData: { input: any; output: number }[];
+  epoch: number;
+  getLayers(): tf.Sequential;
+  getFeaturesTensor(): tf.Tensor;
+  getLabelsTensor(): tf.Tensor1D;
 }
