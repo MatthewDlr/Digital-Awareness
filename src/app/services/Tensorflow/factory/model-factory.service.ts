@@ -1,4 +1,4 @@
-import { Injectable, WritableSignal, isDevMode, signal } from "@angular/core";
+import { Injectable, WritableSignal, effect, isDevMode, signal } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
 import { SequentialModel } from "app/types/tensorflow";
 
@@ -7,16 +7,20 @@ import { SequentialModel } from "app/types/tensorflow";
 })
 export class ModelFactoryService {
   factoryProgress: WritableSignal<number> = signal(0);
+  private bypasslocalstorage = true;
 
-  constructor() {}
+  constructor() {
+    effect(() => {
+      console.log(this.factoryProgress + "%");
+    });
+  }
 
-  async getInstanceOf(name: string): Promise<tf.Sequential> {
+  async getModelInstanceOf(name: string): Promise<tf.Sequential> {
     return (await this.loadModel(name)) || this.trainModel(name);
   }
 
-  async getInferenceParams(name: string): Promise<any> {
-    const modelClass: SequentialModel = await this.importModelClass(name);
-    return modelClass.getInferenceParams();
+  async getClassInstanceOf(name: string): Promise<SequentialModel> {
+    return await this.importModelClass(name);
   }
 
   private async trainModel(name: string): Promise<tf.Sequential> {
@@ -33,14 +37,18 @@ export class ModelFactoryService {
       const ModelClass = module[name];
       return new ModelClass() as SequentialModel;
     } catch (error) {
-      throw new Error(`No model found with the name: ${name}`);
+      isDevMode() && console.error(error);
+      throw new Error(`Impossible to instanciate the following class: ${name}`);
     }
   }
 
   private async loadModel(name: string): Promise<tf.Sequential | undefined> {
+    if (isDevMode() && this.bypasslocalstorage) return undefined;
+
     try {
       const model = (await tf.loadLayersModel("localstorage://" + name)) as tf.Sequential;
       this.factoryProgress.set(100);
+      isDevMode() && console.log("Model found in local storage ✅");
       return model;
     } catch (error) {
       isDevMode() && console.log(error);

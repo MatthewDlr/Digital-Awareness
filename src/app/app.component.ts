@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
+import { WebsiteAccessService } from "./services/Tensorflow/Website Access/website-access.service";
 
 @Component({
   selector: "app-root",
@@ -8,5 +9,5 @@ import { RouterOutlet } from "@angular/router";
   imports: [RouterOutlet],
 })
 export class AppComponent {
-  constructor() {}
+  constructor(private websiteAccess: WebsiteAccessService) {}
 }

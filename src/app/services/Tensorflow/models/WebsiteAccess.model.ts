@@ -2,6 +2,11 @@ import { Category } from "app/types/category";
 import { SequentialModel } from "app/types/tensorflow";
 import * as tf from "@tensorflow/tfjs";
 
+export type WebsiteAccessInput = {
+  minutes: number;
+  category: Category;
+};
+
 export class WebsiteAccess extends SequentialModel {
   epoch: number = 100;
   trainingData = [
@@ -105,11 +110,15 @@ export class WebsiteAccess extends SequentialModel {
     return model;
   }
 
-  getInferenceParams() {
-    return {
-      min: this.minOutput,
-      max: this.maxOutput,
-    };
+  createInputTensor(input: WebsiteAccessInput): tf.Tensor {
+    return tf.tensor2d(
+      [this.normalizeNumber(input.minutes, this.minMinutes, this.maxMinutes), ...this.encodeCategory(input.category)],
+      [1, Object.values(Category).length],
+    );
+  }
+
+  deNormalizePrediction(value: number): number {
+    return value * (this.maxOutput - this.minOutput) + this.minOutput;
   }
 
   protected getFeaturesTensor(): tf.Tensor2D {
@@ -143,7 +152,6 @@ export class WebsiteAccess extends SequentialModel {
         break;
       }
     }
-    console.log(categoryVector);
     return categoryVector;
   }
 }

@@ -1,8 +1,6 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { BehaviorSubject, filter, firstValueFrom } from "rxjs";
 import { WatchedWebsite } from "app/types/watchedWebsite";
-import { TensorflowService } from "app/services/tensorflow/tensorflow.service";
-import { TfInput } from "app/types/tensorflow";
 import dayjs, { Dayjs } from "dayjs";
 
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website, defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
@@ -17,7 +15,7 @@ export class WebsitesService {
   currentWebsite!: WatchedWebsite;
   websiteOrigin: string = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
 
-  constructor(private tfService: TensorflowService) {
+  constructor() {
     chrome.storage.sync
       .get(["enforcedWebsites", "userWebsites"])
       .then(result => {
@@ -31,17 +29,18 @@ export class WebsitesService {
   }
 
   async getTimerValue(host: string): Promise<number> {
-    this.currentWebsite = this.getStoredWebsite(host);
-    const minutesDiff = this.getMinutesSinceLastAccess(this.currentWebsite);
-    const tfInput: TfInput = {
-      minutes: minutesDiff,
-      category: this.currentWebsite.category,
-    };
+    return 1
+    // this.currentWebsite = this.getStoredWebsite(host);
+    // const minutesDiff = this.getMinutesSinceLastAccess(this.currentWebsite);
+    // const tfInput: TfInput = {
+    //   minutes: minutesDiff,
+    //   category: this.currentWebsite.category,
+    // };
 
-    await firstValueFrom(this.tfService.isModelReady.pipe(filter(value => value === true))); // Wait that the model is ready
-    const timer = this.tfService.predict(tfInput);
+    // await firstValueFrom(this.tfService.isModelReady.pipe(filter(value => value === true))); // Wait that the model is ready
+    // const timer = this.tfService.predict(tfInput);
 
-    return isDevMode() ? 3 : timer;
+    // return isDevMode() ? 3 : timer;
   }
 
   private getMinutesSinceLastAccess(website: WatchedWebsite): number {

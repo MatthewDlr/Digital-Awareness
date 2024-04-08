@@ -1,44 +1,23 @@
 import * as tf from "@tensorflow/tfjs";
 import { Signal, WritableSignal, isDevMode, signal } from "@angular/core";
-
-export type Inference {
-  model: tf.Sequential
-  predcit(): any
-}
+import { ModelFactoryService } from "app/services/Tensorflow/factory/model-factory.service";
 
 export abstract class ModelInference {
   protected abstract name: string;
-  protected abstract model: tf.Sequential;
+  protected model!: tf.Sequential;
+  protected modelFactory: ModelFactoryService = new ModelFactoryService();
   trainingProgress: Signal<number> = signal(0);
+  protected inputType: any;
 
-  predict(input: TfInput): number {
-    if (!this.isModelReady) {
-      isDevMode() && console.error("Model is not ready yet");
-      return -1;
-    }
-
-    const inputTensor: tf.Tensor = tf.tensor2d(
-      [this.model.normalizeInput(input.minutes), ...this.training.encodeCategory(input.category)],
-      [1, 9],
-    );
-
-    const prediction = this.model.predict(inputTensor) as tf.Tensor;
-    const result = this.deNormalizeOutput(prediction.dataSync()[0]);
-    isDevMode() && console.log("Input: " + JSON.stringify(input) + " Prediction: " + result);
-    return Math.round(result);
-  }
+  abstract predict(input: any): any;
 
   isModelReady() {
     return this.trainingProgress() === 100 ? true : false;
   }
-
-  deNormalizeNumber(value: number, min: number, max: number): number {
-    return value * (max - min) + min;
-  }
 }
 
 export abstract class SequentialModel {
-  public trainingProgress: WritableSignal<number> = signal(0);
+  public trainingProgress = signal(0);
   protected model: tf.Sequential;
 
   protected abstract trainingData: { input: any; output: number }[];
@@ -46,7 +25,8 @@ export abstract class SequentialModel {
   protected abstract createModel(): tf.Sequential;
   protected abstract getFeaturesTensor(): tf.Tensor;
   protected abstract getLabelsTensor(): tf.Tensor;
-  abstract getInferenceParams() : any
+  abstract createInputTensor(input: any): any;
+  abstract deNormalizePrediction(input: any): any;
 
   constructor() {
     this.model = this.createModel();
@@ -65,11 +45,10 @@ export abstract class SequentialModel {
           this.trainingProgress.update(value => value + step);
           isDevMode() && console.log("Gen: " + epoch + " Loss: " + logs?.["loss"]);
         },
-        onTrainEnd: logs => {
+        onTrainEnd: () => {
           console.info("Model trained successfuly ✅");
 
           if (isDevMode()) {
-            console.info(logs);
             const [unit, bias] = this.model.getWeights();
             console.info("Model stats: " + unit.dataSync()[0] + " bias: " + bias.dataSync()[0]);
           }

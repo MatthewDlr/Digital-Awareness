@@ -6,7 +6,7 @@ import { WebsitesService } from "../services/websites/websites.service";
 import { BreathingWidgetComponent } from "../overlay-widgets/breathing-widget/breathing-widget.component";
 import { TasksWidgetComponent } from "../overlay-widgets/tasks-widget/tasks-widget.component";
 import { filter } from "rxjs/operators";
-import { TensorflowService } from "app/services/tensorflow/tensorflow.service";
+import { WebsiteAccessService } from "app/services/Tensorflow/Website Access/website-access.service";
 
 @Component({
   selector: "app-awareness-page",
@@ -26,7 +26,7 @@ export class AwarenessPageComponent {
   constructor(
     private route: ActivatedRoute,
     private websitesService: WebsitesService,
-    public tfService: TensorflowService,
+    public websiteAccess: WebsiteAccessService,
   ) {
     // Getting url parameters
     this.route.params.subscribe(params => {
