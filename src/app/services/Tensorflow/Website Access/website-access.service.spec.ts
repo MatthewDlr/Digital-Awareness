@@ -1,13 +1,13 @@
 import { TestBed } from "@angular/core/testing";
 
-import { InferenceService } from "../tf-inference/tf-inference.service";
+import { WebsiteAccessService } from "./website-access.service";
 
-describe("InferenceService", () => {
-  let service: InferenceService;
+describe("WebsiteAccessService", () => {
+  let service: WebsiteAccessService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(InferenceService);
+    service = TestBed.inject(WebsiteAccessService);
   });
 
   it("should be created", () => {
