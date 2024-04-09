@@ -1,44 +1,4 @@
 <ul role="list" class="mt-6 flex flex-col gap-10">
-  <!-- Doom scrolling toggle -->
-  <li
-    class="flex w-full animate-fade-up items-center justify-between rounded-xl border px-6 py-4 animate-duration-500"
-    [ngClass]="doomScrollingToggle ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
-  >
-    <span class="flex flex-grow flex-col gap-1">
-      <div class="flex gap-2">
-        <span class="text-gray-900 text-base font-medium leading-6" id="availability-label">Prevent Doom Scrolling</span>
-        <span class="text-green-700 bg-green-100 inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold">2.0</span>
-      </div>
-      <div class="gap-1">
-        <span class="text-gray-500 text-sm" id="availability-description">
-          Gently dim the screen based on the distance you scrolled.
-        </span>
-        <span class="text-gray-500 text-sm font-light italic"> Powered by </span>
-        <a
-          href="https://github.com/benjchan/Anchor"
-          target="_blank"
-          class="hover:purple-gradient text-gray-500 text-sm font-light italic hover:cursor-pointer hover:bg-clip-text hover:text-transparent"
-          >Anchor</a
-        >
-        <span>.</span>
-      </div>
-    </span>
-
-    <button
-      [ngClass]="doomScrollingToggle ? 'bg-green-500' : 'bg-gray-200'"
-      (click)="toggleDoomScrolling()"
-      type="button"
-      class="group bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent !transition-all !duration-300 !ease-in-out disabled:bg-gray-200 hover:scale-110 disabled:cursor-not-allowed"
-      role="switch"
-      aria-checked="false"
-      aria-labelledby="availability-label"
-      aria-describedby="availability-description"
-    >
-      <span
-        [ngClass]="doomScrollingToggle ? 'translate-x-5' : 'translate-x-0'"
-        aria-hidden="true"
-        class="bg-white pointer-events-none inline-block h-5 w-5 translate-x-0 !transform rounded-full shadow !transition-all !duration-200 !ease-in-out group-disabled:bg-gray-400"
-      ></span>
-    </button>
-  </li>
+  <app-doom-scrolling></app-doom-scrolling>
+  <app-bedtime-mode></app-bedtime-mode>
 </ul>
