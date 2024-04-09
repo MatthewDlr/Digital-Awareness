@@ -113,7 +113,7 @@ export class WebsiteAccess extends SequentialModel {
   createInputTensor(input: WebsiteAccessInput): tf.Tensor {
     return tf.tensor2d(
       [this.normalizeNumber(input.minutes, this.minMinutes, this.maxMinutes), ...this.encodeCategory(input.category)],
-      [1, Object.values(Category).length],
+      [1, Object.values(Category).length + 1],
     );
   }
 

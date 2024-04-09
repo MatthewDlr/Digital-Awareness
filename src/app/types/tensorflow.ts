@@ -1,23 +1,20 @@
 import * as tf from "@tensorflow/tfjs";
-import { Signal, WritableSignal, isDevMode, signal } from "@angular/core";
+import { isDevMode } from "@angular/core";
 import { ModelFactoryService } from "app/services/Tensorflow/factory/model-factory.service";
+import { BehaviorSubject } from "rxjs";
 
 export abstract class ModelInference {
   protected abstract name: string;
   protected model!: tf.Sequential;
   protected modelFactory: ModelFactoryService = new ModelFactoryService();
-  trainingProgress: Signal<number> = signal(0);
+  trainingProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   protected inputType: any;
 
   abstract predict(input: any): any;
-
-  isModelReady() {
-    return this.trainingProgress() === 100 ? true : false;
-  }
 }
 
 export abstract class SequentialModel {
-  public trainingProgress = signal(0);
+  public trainingProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   protected model: tf.Sequential;
 
   protected abstract trainingData: { input: any; output: number }[];
@@ -36,13 +33,13 @@ export abstract class SequentialModel {
     console.info("Now training on-device model, please wait ...");
     const featuresTensor = this.getFeaturesTensor();
     const labelsTensor = this.getLabelsTensor();
-    const step = 100 / this.epoch;
+    const step = 95 / this.epoch;
 
     await this.model.fit(featuresTensor, labelsTensor, {
       epochs: this.epoch,
       callbacks: {
         onEpochEnd: (epoch, logs) => {
-          this.trainingProgress.update(value => value + step);
+          this.trainingProgress.next(this.trainingProgress.getValue() + step);
           isDevMode() && console.log("Gen: " + epoch + " Loss: " + logs?.["loss"]);
         },
         onTrainEnd: () => {

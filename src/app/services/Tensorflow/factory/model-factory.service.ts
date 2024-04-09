@@ -1,22 +1,21 @@
-import { Injectable, WritableSignal, effect, isDevMode, signal } from "@angular/core";
+import { Injectable, isDevMode } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
 import { SequentialModel } from "app/types/tensorflow";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class ModelFactoryService {
-  factoryProgress: WritableSignal<number> = signal(0);
-  private bypasslocalstorage = true;
+  factoryProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  private bypasslocalstorage = false;
 
-  constructor() {
-    effect(() => {
-      console.log(this.factoryProgress + "%");
-    });
-  }
+  constructor() {}
 
   async getModelInstanceOf(name: string): Promise<tf.Sequential> {
-    return (await this.loadModel(name)) || this.trainModel(name);
+    const model = (await this.loadModel(name)) || (await this.trainModel(name));
+    this.factoryProgress.next(100);
+    return model;
   }
 
   async getClassInstanceOf(name: string): Promise<SequentialModel> {
@@ -25,7 +24,7 @@ export class ModelFactoryService {
 
   private async trainModel(name: string): Promise<tf.Sequential> {
     const modelClass: SequentialModel = await this.importModelClass(name);
-    this.factoryProgress = modelClass.trainingProgress;
+    modelClass.trainingProgress.subscribe(value => this.factoryProgress.next(value));
     const model: tf.Sequential = await modelClass.train();
     this.saveModel(model, name);
     return model;
@@ -47,7 +46,6 @@ export class ModelFactoryService {
 
     try {
       const model = (await tf.loadLayersModel("localstorage://" + name)) as tf.Sequential;
-      this.factoryProgress.set(100);
       isDevMode() && console.log("Model found in local storage ✅");
       return model;
     } catch (error) {
@@ -57,8 +55,7 @@ export class ModelFactoryService {
   }
 
   private async saveModel(model: tf.Sequential, name: string) {
-    await model.save("localstorage://" + name).then(() => {
-      isDevMode() && console.log("Model saved in local storage ✅");
-    });
+    await model.save("localstorage://" + name);
+    isDevMode() && console.log("Model saved in local storage ✅");
   }
 }
