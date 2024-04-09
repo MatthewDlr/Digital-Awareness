@@ -45,7 +45,7 @@ export class WebsitesService {
   private getMinutesSinceLastAccess(website: WatchedWebsite): number {
     const lastAccess = this.getLastAccess(website);
     const minutesDiff = dayjs().diff(lastAccess, "minutes");
-    isDevMode() && console.log("There is " + minutesDiff + " between now and the last access");
+    isDevMode() && console.log("There is " + minutesDiff + " min between now and the last access");
     return minutesDiff;
   }
 

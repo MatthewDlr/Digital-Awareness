@@ -12,10 +12,10 @@ export class WebsiteAccessService extends ModelInference {
   constructor() {
     super();
 
-    this.modelFactory.factoryProgress.subscribe(value => {
+    this.modelFactory.factoryProgress.subscribe((value: number) => {
       this.trainingProgress.next(value);
     });
-    this.modelFactory.getModelInstanceOf(this.name).then(model => {
+    this.modelFactory.getModelInstanceOf(this.name).then((model: tf.Sequential) => {
       this.model = model;
     });
   }
