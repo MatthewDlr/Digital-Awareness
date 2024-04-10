@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component } from "@angular/core";
+import { ChangeDetectorRef, Component, isDevMode } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { animate, query, style, transition, trigger } from "@angular/animations";
 import { ChangeDetectionStrategy } from "@angular/core";
+import { BedtimeMode, convertTime } from "app/types/bedtimeMode";
 
 export const smoothHeight = trigger("HeightChange", [
   transition(
@@ -25,9 +26,7 @@ export const smoothHeight = trigger("HeightChange", [
   animations: [smoothHeight],
 })
 export class BedtimeModeComponent {
-  bedtimeMode!: boolean;
-  bedtimeStart!: string;
-  bedtimeEnd!: string;
+  bedtimeMode: BedtimeMode = this.getDefaultConfig();
   isBedtimeStartCorrect: boolean = true;
   isBedtimeEndCorrect: boolean = true;
 
@@ -35,27 +34,77 @@ export class BedtimeModeComponent {
     private soundsEngine: SoundsEngineService,
     private cdr: ChangeDetectorRef,
   ) {
-    chrome.storage.sync.get("bedtimeMode").then(result => {
-      this.bedtimeMode = result["bedtimeMode"];
-      this.cdr.detectChanges();
-    });
+    chrome.storage.sync
+      .get("bedtimeMode")
+      .then(result => {
+        if (result["bedtimeMode"]) {
+          this.bedtimeMode = result["bedtimeMode"];
+          this.cdr.detectChanges();
+          isDevMode() && console.log(this.bedtimeMode);
+        }
+      })
+      .catch(error => {
+        isDevMode() && console.error(error);
+      });
   }
 
-  toggleBedtimeMode() {
-    if (this.bedtimeMode) {
+  toggleMode() {
+    if (this.bedtimeMode.isEnabled) {
       this.soundsEngine.switchOFF();
-      this.bedtimeMode = false;
+      this.bedtimeMode.isEnabled = false;
     } else {
       this.soundsEngine.switchON();
-      this.bedtimeMode = true;
+      this.bedtimeMode.isEnabled = true;
     }
 
-    chrome.storage.sync.set({
-      bedtimeMode: this.bedtimeMode,
-    });
+    this.saveToStorage();
   }
 
-  setBedtimeStartDate() {
-    throw new Error("Method not implemented.");
+  setStartDate(value: string) {
+    const time: { hours: number; minutes: number } = convertTime(value);
+
+    if (time.hours > 1 && time.hours < 20) {
+      this.isBedtimeStartCorrect = false;
+    } else {
+      this.isBedtimeStartCorrect = true;
+      this.bedtimeMode.startAt.hours = time.hours;
+      this.bedtimeMode.startAt.minutes = time.minutes;
+      this.saveToStorage();
+    }
+  }
+
+  setEndDate(value: string) {
+    const time: { hours: number; minutes: number } = convertTime(value);
+
+    if (time.hours >= 5 && time.hours <= 10) {
+      this.isBedtimeEndCorrect = true;
+      this.bedtimeMode.endAt.hours = time.hours;
+      this.bedtimeMode.endAt.minutes = time.minutes;
+      this.saveToStorage();
+    } else {
+      this.isBedtimeEndCorrect = false;
+    }
+  }
+
+  timeToString(time: { hours: number; minutes: number }): string {
+    return String(time.hours).padStart(2, "0") + ":" + String(time.minutes).padStart(2, "0");
+  }
+
+  private async saveToStorage() {
+    await chrome.storage.sync
+      .set({
+        bedtimeMode: this.bedtimeMode,
+      })
+      .then(() => {
+        isDevMode() && console.info("Bedtime mode preferences successfully saved ✅");
+      });
+  }
+
+  private getDefaultConfig(): BedtimeMode {
+    return {
+      isEnabled: false,
+      startAt: { hours: 23, minutes: 0 },
+      endAt: { hours: 7, minutes: 0 },
+    };
   }
 }

@@ -1,8 +1,8 @@
 <!-- Bedtime Mode -->
 <li
   class="flex w-full animate-fade-up flex-col rounded-xl border px-6 py-4 animate-delay-300 animate-duration-500"
-  [ngClass]="bedtimeMode ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
-  [@HeightChange]="{ value: bedtimeMode, params: { startHeight: container.clientHeight } }"
+  [ngClass]="bedtimeMode.isEnabled ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
+  [@HeightChange]="{ value: bedtimeMode.isEnabled, params: { startHeight: container.clientHeight } }"
   #container
 >
   <!-- Title & Switch -->
@@ -16,8 +16,8 @@
     </span>
 
     <button
-      [ngClass]="bedtimeMode ? 'bg-green-500' : 'bg-gray-200'"
-      (click)="toggleBedtimeMode()"
+      [ngClass]="bedtimeMode.isEnabled ? 'bg-green-500' : 'bg-gray-200'"
+      (click)="toggleMode()"
       type="button"
       class="group bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent !transition-all !duration-300 !ease-in-out disabled:bg-gray-200 hover:scale-110 disabled:cursor-not-allowed"
       role="switch"
@@ -26,7 +26,7 @@
       aria-describedby="availability-description"
     >
       <span
-        [ngClass]="bedtimeMode ? 'translate-x-5' : 'translate-x-0'"
+        [ngClass]="bedtimeMode.isEnabled ? 'translate-x-5' : 'translate-x-0'"
         aria-hidden="true"
         class="bg-white pointer-events-none inline-block h-5 w-5 translate-x-0 !transform rounded-full shadow !transition-all !duration-200 !ease-in-out group-disabled:bg-gray-400"
       ></span>
@@ -34,9 +34,9 @@
   </div>
 
   <!-- Hours Selection-->
-  @if (bedtimeMode) {
+  @if (bedtimeMode.isEnabled) {
     <div class="flex w-full animate-fade-up pt-5 animate-delay-200 animate-duration-200">
-      <form class="grid w-fit grid-cols-2 gap-10">
+      <form class="flex w-fit gap-10">
         <!-- Start Time -->
         <div class="w-32">
           <label for="start-time" class="text-gray-900 mb-2 block text-sm font-medium">Start time:</label>
@@ -45,13 +45,15 @@
             <input
               type="time"
               id="start-time"
-              class="text-gray-900 border-gray-300 block w-full rounded-lg border bg-transparent p-2.5 text-sm leading-none focus:border-purple-500 focus:ring-purple-500"
-              [ngClass]=""
+              class="text-gray-900 block w-full rounded-lg border bg-transparent p-2.5 text-sm leading-none"
+              [ngClass]="
+                isBedtimeStartCorrect ? 'border-gray-300 focus:border-purple-500' : 'border-red-500 focus:border-red-500'
+              "
               min="20:00"
               max="01:00"
-              value="{{ bedtimeStart }}"
+              value="{{ timeToString(bedtimeMode.startAt) }}"
               required
-              (blur)="setBedtimeStartDate()"
+              (input)="setStartDate($any($event).target.value)"
             />
           </div>
         </div>
@@ -64,14 +66,20 @@
             <input
               type="time"
               id="end-time"
-              class="text-gray-900 border-gray-300 block w-full rounded-lg border bg-transparent p-2.5 text-sm leading-none focus:border-purple-500 focus:ring-purple-500"
+              class="text-gray-900 block w-full rounded-lg border bg-transparent p-2.5 text-sm leading-none"
+              [ngClass]="isBedtimeEndCorrect ? 'border-gray-300 focus:border-purple-500' : 'border-red-500 focus:border-red-500'"
               min="05:00"
               max="10:00"
-              value="{{ bedtimeEnd }}"
+              value="{{ timeToString(bedtimeMode.endAt) }}"
               required
+              (input)="setEndDate($any($event).target.value)"
             />
           </div>
         </div>
+
+        @if (!isBedtimeEndCorrect || !isBedtimeStartCorrect) {
+          <label class="flex text-red-500 font-medium items-end animate-fade animate-duration-150">Don't be ridiculous</label>
+        }
       </form>
     </div>
   }
