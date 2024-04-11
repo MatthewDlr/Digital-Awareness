@@ -63,7 +63,7 @@ export class BedtimeModeComponent {
   setStartDate(value: string) {
     const time: { hours: number; minutes: number } = convertTime(value);
 
-    if (time.hours > 1 && time.hours < 20) {
+    if (time.hours > 2 && time.hours < 20) {
       this.isBedtimeStartCorrect = false;
     } else {
       this.isBedtimeStartCorrect = true;
@@ -76,7 +76,7 @@ export class BedtimeModeComponent {
   setEndDate(value: string) {
     const time: { hours: number; minutes: number } = convertTime(value);
 
-    if (time.hours >= 5 && time.hours <= 10) {
+    if (time.hours >= 2 && time.hours <= 10) {
       this.isBedtimeEndCorrect = true;
       this.bedtimeMode.endAt.hours = time.hours;
       this.bedtimeMode.endAt.minutes = time.minutes;
