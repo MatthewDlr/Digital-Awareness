@@ -14,6 +14,7 @@
   "host_permissions": ["*://*/*"],
   "permissions": ["storage", "tabs", "webNavigation"],
   "options_page": "index.html#/options",
+  "incognito": "split",
   "background": {
     "service_worker": "serviceWorker.js",
     "type": "module"
@@ -24,7 +25,11 @@
       "js": ["doomScrolling.js"],
       "css": ["doomScrolling.css"],
       "run_at": "document_end"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["bedtimeMode.js"],
+      "run_at": "document_end"
     }
-  ],
-  "incognito": "split"
+  ]
 }

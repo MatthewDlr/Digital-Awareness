@@ -10,5 +10,9 @@ module.exports = {
       import: "./src/features/doomScrolling/doomScrolling.ts",
       runtime: false,
     },
+    bedtimeMode: {
+      import: "./src/features/bedtimeMode/bedtimeMode.ts",
+      runtime: false,
+    },
   },
 } as Configuration;
