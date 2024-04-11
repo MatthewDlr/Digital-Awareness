@@ -7,7 +7,7 @@ module.exports = {
       runtime: false,
     },
     doomScrolling: {
-      import: "./src/doomScrolling.ts",
+      import: "./src/features/doomScrolling/doomScrolling.ts",
       runtime: false,
     },
   },
