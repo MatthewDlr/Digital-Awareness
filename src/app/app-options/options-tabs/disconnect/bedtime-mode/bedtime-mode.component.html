@@ -35,86 +35,106 @@
 
   <!-- Hours Selection-->
   @if (bedtimeMode.isEnabled) {
-    <div class="flex w-full animate-fade-up pt-5 animate-delay-200 animate-duration-200">
-      <form class="flex w-fit gap-10">
-        <!-- Start Time -->
-        <div class="w-32">
-          <label for="start-time" class="text-gray-900 mb-2 block text-sm font-medium">Start time:</label>
-          <div class="relative mb-1">
-            <div class="pointer-events-none absolute inset-y-0 end-0 top-0 flex items-center pe-3.5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.25"
-                stroke="currentColor"
-                class="h-6 w-6"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-            </div>
-            <input
-              type="time"
-              id="start-time"
-              class="text-gray-900 block w-full rounded-lg border bg-transparent p-2.5 text-sm leading-none"
-              [ngClass]="
-                isBedtimeStartCorrect
-                  ? 'border-gray-300 focus:border-purple-500 focus:ring-purple-500'
-                  : 'border-red-500 focus:border-red-500'
-              "
-              min="20:00"
-              max="01:00"
-              value="{{ timeToString(bedtimeMode.startAt) }}"
-              required
-              (input)="setStartDate($any($event).target.value)"
-            />
+    <div class="flex w-full animate-fade-up gap-5 pt-5 animate-delay-200 animate-duration-200">
+      <!-- Start Time -->
+      <div class="w-32">
+        <label for="start-time" class="text-gray-900 mb-1 block text-sm font-medium">Start time:</label>
+        <div class="relative mb-1">
+          <div class="pointer-events-none absolute inset-y-0 end-0 top-0 flex items-center pe-3.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.25"
+              stroke="currentColor"
+              class="h-6 w-6"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
           </div>
-          <label
-            class="text-red-500 flex animate-fade items-end font-medium animate-duration-150"
-            [ngClass]="isBedtimeStartCorrect ? 'hidden' : 'block'"
-            >Don't be ridiculous</label
-          >
+          <input
+            type="time"
+            id="start-time"
+             class="text-gray-900 block w-full rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl cursor-pointer"
+            [ngClass]="
+              isBedtimeStartCorrect
+                ? 'border-gray-300 bg-transparent hover:bg-gray-50 focus:bg-purple-50 focus:border-purple-500 focus:ring-purple-500'
+                : 'bg-red-50 border-red-500 focus:border-red-500'
+            "
+            min="20:00"
+            max="02:00"
+            value="{{ timeToString(bedtimeMode.startAt) }}"
+            required
+            (input)="setStartDate($any($event).target.value)"
+          />
         </div>
+        <label
+          class="text-red-500 flex animate-fade items-end font-medium animate-duration-150"
+          [ngClass]="isBedtimeStartCorrect ? 'hidden' : 'block'"
+          >Don't be ridiculous</label
+        >
+      </div>
 
-        <!-- End Time -->
-        <div class="w-32">
-          <label for="end-time" class="text-gray-900 mb-2 block text-sm font-medium">End time:</label>
-          <div class="relative mb-1">
-            <div class="pointer-events-none absolute inset-y-0 end-0 top-0 flex items-center pe-3.5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.25"
-                stroke="currentColor"
-                class="h-6 w-6"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-            </div>
-            <input
-              type="time"
-              id="end-time"
-              class="text-gray-900 block w-full rounded-lg border bg-transparent p-2.5 text-sm leading-none"
-              [ngClass]="
-                isBedtimeEndCorrect
-                  ? 'border-gray-300 focus:border-purple-500 focus:ring-purple-500'
-                  : 'border-red-500 focus:border-red-500'
-              "
-              min="05:00"
-              max="10:00"
-              value="{{ timeToString(bedtimeMode.endAt) }}"
-              required
-              (input)="setEndDate($any($event).target.value)"
-            />
+      <!-- Bed timeline -->
+      <div class="flex items-center gap-3 pt-5">
+        <div class="bg-green-500 h-[2px] w-10 flex-1 rounded-full"></div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="stroke-green-500"
+        >
+          <path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8" />
+          <path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4" />
+          <path d="M12 4v6" />
+          <path d="M2 18h20" />
+        </svg>
+        <div class="bg-green-500 h-[2px] w-10 flex-1 rounded-full"></div>
+      </div>
+
+      <!-- End Time -->
+      <div class="w-32">
+        <label for="end-time" class="text-gray-900 mb-1 block text-sm font-medium">End time:</label>
+        <div class="relative mb-1">
+          <div class="pointer-events-none absolute inset-y-0 end-0 top-0 flex items-center pe-3.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.25"
+              stroke="currentColor"
+              class="h-6 w-6"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
           </div>
-          <label
-            class="text-red-500 mt-1 flex animate-fade items-end font-medium animate-duration-150"
-            [ngClass]="isBedtimeEndCorrect ? 'hidden' : 'block'"
-            >Don't be ridiculous</label
-          >
+          <input
+            type="time"
+            id="end-time"
+            class="text-gray-900 block w-full rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl cursor-pointer"
+            [ngClass]="
+              isBedtimeEndCorrect
+                ? 'border-gray-300 bg-transparent hover:bg-gray-50 focus:bg-purple-50 focus:border-purple-500 focus:ring-purple-500'
+                : 'bg-red-50 border-red-500 focus:border-red-500'
+            "
+            min="02:00"
+            max="10:00"
+            value="{{ timeToString(bedtimeMode.endAt) }}"
+            required
+            (input)="setEndDate($any($event).target.value)"
+          />
         </div>
-      </form>
+        <label
+          class="text-red-500 mt-1 flex animate-fade items-end font-medium animate-duration-150"
+          [ngClass]="isBedtimeEndCorrect ? 'hidden' : 'block'"
+          >Don't be ridiculous</label
+        >
+      </div>
     </div>
   }
 </li>
