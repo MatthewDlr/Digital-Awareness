@@ -7,11 +7,11 @@ module.exports = {
       runtime: false,
     },
     doomScrolling: {
-      import: "./src/scripts/doomScrolling/doomScrolling.ts",
+      import: "./src/scripts/doomScrolling/doomScrolling.script.ts",
       runtime: false,
     },
     bedtimeMode: {
-      import: "./src/scripts/bedtimeMode/bedtimeMode.ts",
+      import: "./src/scripts/bedtimeMode/bedtimeMode.script.ts",
       runtime: false,
     },
   },
