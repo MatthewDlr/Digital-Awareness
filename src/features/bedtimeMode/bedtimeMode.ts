@@ -2,70 +2,86 @@ import { isDevMode } from "@angular/core";
 import { BedtimeMode } from "app/types/bedtimeMode";
 import dayjs, { Dayjs } from "dayjs";
 
-let config: BedtimeMode;
+const TIME_INTERVAL: number = 5; // In seconds, how often to check the time and update the filter
+const WIND_DOWN_DURATION: number = 15; // In minutes, how long the transition from normal to grayscale takes
+const WIND_UP_DURATION: number = 3; // In minutes, how long the transition from grayscale to normal takes
+
 let body: HTMLElement;
+let config: BedtimeMode;
+let startAt: Dayjs;
+let endAt: Dayjs;
+let windDownAt: Dayjs;
+let windUpAt: Dayjs;
 
 chrome.storage.sync.get("bedtimeMode").then(result => {
   config = result["bedtimeMode"];
+  isDevMode() && console.log(config);
+
   if (config && config.isEnabled) {
-    isDevMode() && console.log(config);
+    startAt = configToTime(config.startAt);
+    endAt = configToTime(config.endAt);
+    windDownAt = startAt.subtract(WIND_DOWN_DURATION, "minute");
+    windUpAt = endAt.add(WIND_UP_DURATION, "minute");
+
     runDetection();
     setInterval(() => {
       runDetection();
-    }, 3000);
+    }, TIME_INTERVAL * 1000);
   } else {
-    isDevMode() && console.warn("No config found for bedtime mode :/");
+    isDevMode() && console.info("Bedtime mode disabled or not configured");
   }
 });
 
-function runDetection() {
-  const filterAmount = Math.round(getPercentageOfGray());
-  isDevMode() && console.info("Grayscale coef: " + filterAmount);
-  if (filterAmount > 0) {
-    applyGrayScaleFilter(filterAmount);
-  }
+function configToTime(config: { hours: number; minutes: number }): Dayjs {
+  return dayjs().hour(config.hours).minute(config.minutes).second(0);
 }
 
-function getPercentageOfGray(now: Dayjs = dayjs()): number {
-  const startAt = configToTime(config.startAt);
-  const windDownAt = startAt.subtract(15, "minute");
-  const endAt = configToTime(config.endAt);
-  const windUpAt = endAt.add(3, "minute");
+let previousCoef = 0;
+function runDetection() {
+  const filterCoef = Math.round(getFilterCoef());
+  if (filterCoef === previousCoef) {
+    return;
+  } else if (filterCoef === 0) {
+    body.style.filter = "none";
+    return;
+  } else {
+    applyGrayScaleFilter(filterCoef);
+  }
+  previousCoef = filterCoef;
+}
+
+function getFilterCoef(): number {
+  const now = dayjs();
 
   if (now.isBefore(windDownAt) && now.isAfter(endAt.add(1, "minute"))) {
-    console.log("daytime");
+    isDevMode() && console.log("Before wind down: 0%");
     return 0;
   } else if (now.isAfter(windDownAt) && now.isBefore(startAt)) {
-    console.log("wind down");
     const secondsFromStart = windDownAt.diff(now, "second");
     const totalSeconds = windDownAt.diff(startAt, "second");
-    return (secondsFromStart / totalSeconds) * 100;
+    const coef = (secondsFromStart / totalSeconds) * 100;
+    isDevMode() && console.log("Winding down: ", coef + "%");
+    return coef;
   } else if (now.isAfter(startAt.subtract(1, "day")) && now.isBefore(endAt)) {
-    console.log("bedtime (after midnight)");
+    isDevMode() && console.log("Bedtime (after midnight): 100%");
     return 100;
   } else if (now.isAfter(startAt) && now.isBefore(endAt.add(1, "day"))) {
-    console.log("bedtime (before midnight)");
+    isDevMode() && console.log("Bedtime (before midnight): 100%");
     return 100;
   } else if (now.isAfter(endAt) && now.isBefore(windUpAt)) {
-    console.log("wind up");
     const secondsFromEnd = windUpAt.diff(now, "second");
     const totalSeconds = windUpAt.diff(endAt, "second");
-    return (secondsFromEnd / totalSeconds) * 100;
+    const result = (secondsFromEnd / totalSeconds) * 100;
+    isDevMode() && console.log("Winding up: ", result + "%");
+    return result;
   } else {
-    console.log("daytime");
+    console.log("Daytime: 0%");
     return 0;
   }
 }
 
 async function applyGrayScaleFilter(intensity: number) {
-  if (intensity < 0 || intensity > 100) {
-    isDevMode() && console.warn("Intensity must be between 0 and 100");
-    return;
-  }
-
-  if (!body) {
-    body = await getDocumentBody();
-  }
+  if (!body) body = await getDocumentBody();
   body.style.filter = `grayscale(${intensity / 100})`;
 }
 
@@ -85,8 +101,4 @@ function getDocumentBody(): Promise<HTMLElement> {
       attempts++;
     }, 1);
   });
-}
-
-function configToTime(config: { hours: number; minutes: number }): Dayjs {
-  return dayjs().hour(config.hours).minute(config.minutes).second(0);
 }
