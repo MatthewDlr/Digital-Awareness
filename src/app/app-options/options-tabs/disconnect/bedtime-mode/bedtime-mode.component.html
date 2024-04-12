@@ -1,6 +1,6 @@
 <!-- Bedtime Mode -->
 <li
-  class="flex w-full animate-fade-up flex-col rounded-xl border px-6 py-4 animate-delay-300 animate-duration-500"
+  class="flex w-full animate-fade-up flex-col rounded-xl border px-6 py-4 animate-delay-200 animate-duration-500"
   [ngClass]="bedtimeMode.isEnabled ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
   [@HeightChange]="{ value: bedtimeMode.isEnabled, params: { startHeight: container.clientHeight } }"
   #container
