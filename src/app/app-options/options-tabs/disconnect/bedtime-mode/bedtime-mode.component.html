@@ -47,8 +47,7 @@
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.25"
-              stroke="currentColor"
-              class="h-6 w-6"
+              class="size-6 stroke-black dark:stroke-white"
             >
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
@@ -56,7 +55,7 @@
           <input
             type="time"
             id="start-time"
-             class="text-gray-900 block w-full rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl cursor-pointer"
+             class="text-gray-900 block w-full rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl cursor-pointer dark:bg-opacity-50"
             [ngClass]="
               isBedtimeStartCorrect
                 ? 'border-gray-300 bg-transparent hover:bg-gray-50 focus:bg-purple-50 focus:border-purple-500 focus:ring-purple-500'
@@ -108,8 +107,7 @@
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.25"
-              stroke="currentColor"
-              class="h-6 w-6"
+              class="size-6 stroke-black dark:stroke-white"
             >
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
@@ -120,7 +118,7 @@
             class="text-gray-900 block w-full rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl cursor-pointer"
             [ngClass]="
               isBedtimeEndCorrect
-                ? 'border-gray-300 bg-transparent hover:bg-gray-50 focus:bg-purple-50 focus:border-purple-500 focus:ring-purple-500'
+                ? 'border-gray-300 bg-transparent hover:bg-gray-50 focus:bg-purple-50 focus:border-purple-500 focus:ring-purple-500 dark:bg-opacity-50'
                 : 'bg-red-50 border-red-500 focus:border-red-500'
             "
             min="02:00"

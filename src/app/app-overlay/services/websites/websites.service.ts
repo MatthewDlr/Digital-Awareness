@@ -39,7 +39,7 @@ export class WebsitesService {
     };
     await firstValueFrom(this.websiteAccess.trainingProgress.pipe(filter(value => value === 100)));
     const timer = await this.websiteAccess.predict(input);
-    return isDevMode() ? 3 : timer;
+    return timer;
   }
 
   private getMinutesSinceLastAccess(website: WatchedWebsite): number {
