@@ -3,74 +3,88 @@ import { BedtimeMode } from "app/types/bedtimeMode";
 import dayjs, { Dayjs } from "dayjs";
 
 let config: BedtimeMode;
+let body: HTMLElement;
 
 chrome.storage.sync.get("bedtimeMode").then(result => {
   config = result["bedtimeMode"];
   if (config && config.isEnabled) {
     isDevMode() && console.log(config);
-    init();
+    runDetection();
+    setInterval(() => {
+      runDetection();
+    }, 3000);
   } else {
     isDevMode() && console.warn("No config found for bedtime mode :/");
   }
 });
 
-function init() {
-  const result = getPercentageOfGray();
-  console.log(result);
-  applyGrayScaleFilter(75);
+function runDetection() {
+  const filterAmount = Math.round(getPercentageOfGray());
+  isDevMode() && console.info("Grayscale coef: " + filterAmount);
+  if (filterAmount > 0) {
+    applyGrayScaleFilter(filterAmount);
+  }
 }
 
 function getPercentageOfGray(now: Dayjs = dayjs()): number {
   const startAt = configToTime(config.startAt);
-  let endAt = configToTime(config.endAt);
-  if (now.hour() >= 12 && now.hour() <= 23) {
-    console.log("added 1 day");
-    endAt = endAt.add(1, "day");
-  }
-  console.log(now.toString());
-  console.log(startAt.toString());
-  console.log(endAt.toString());
+  const windDownAt = startAt.subtract(15, "minute");
+  const endAt = configToTime(config.endAt);
+  const windUpAt = endAt.add(3, "minute");
 
-  const windDownStart = startAt.subtract(20, "minute");
-  const windUpEnd = endAt.add(20, "minute");
-
-  if (now.isBefore(windDownStart) && now.isAfter(windUpEnd)) {
-    console.log("Window not started");
+  if (now.isBefore(windDownAt) && now.isAfter(endAt.add(1, "minute"))) {
+    console.log("daytime");
     return 0;
-  } else if (isBetween(now, windDownStart, startAt)) {
-    console.log("Winding down window");
-    const totalSeconds = startAt.diff(windDownStart, "second");
-    const remainingSeconds = startAt.diff(now, "second");
-    return ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
-  } else if (isBetween(now, startAt, endAt)) {
-    console.log("Full grayscale");
+  } else if (now.isAfter(windDownAt) && now.isBefore(startAt)) {
+    console.log("wind down");
+    const secondsFromStart = windDownAt.diff(now, "second");
+    const totalSeconds = windDownAt.diff(startAt, "second");
+    return (secondsFromStart / totalSeconds) * 100;
+  } else if (now.isAfter(startAt.subtract(1, "day")) && now.isBefore(endAt)) {
+    console.log("bedtime (after midnight)");
     return 100;
-  } else if (isBetween(now, endAt, windUpEnd)) {
-    console.log("winding up");
-    const totalSeconds = windUpEnd.diff(endAt, "second");
-    console.log(totalSeconds);
-    const elapsedSeconds = endAt.diff(now, "second");
-    return (totalSeconds - elapsedSeconds / totalSeconds) * 100;
+  } else if (now.isAfter(startAt) && now.isBefore(endAt.add(1, "day"))) {
+    console.log("bedtime (before midnight)");
+    return 100;
+  } else if (now.isAfter(endAt) && now.isBefore(windUpAt)) {
+    console.log("wind up");
+    const secondsFromEnd = windUpAt.diff(now, "second");
+    const totalSeconds = windUpAt.diff(endAt, "second");
+    return (secondsFromEnd / totalSeconds) * 100;
   } else {
-    console.log("day time");
+    console.log("daytime");
     return 0;
   }
 }
 
-function applyGrayScaleFilter(intensity: number): void {
+async function applyGrayScaleFilter(intensity: number) {
   if (intensity < 0 || intensity > 100) {
-    console.error("Intensity must be between 0 and 100");
+    isDevMode() && console.warn("Intensity must be between 0 and 100");
     return;
   }
 
-  const grayscaleValue = intensity / 100;
-  const body = document.body;
-
-  body.style.filter = `grayscale(${grayscaleValue})`;
+  if (!body) {
+    body = await getDocumentBody();
+  }
+  body.style.filter = `grayscale(${intensity / 100})`;
 }
 
-function isBetween(date: Dayjs, dateStart: Dayjs, dateEnd: Dayjs) {
-  return date.isAfter(dateStart) && date.isBefore(dateEnd);
+function getDocumentBody(): Promise<HTMLElement> {
+  let attempts = 0;
+  const maxAttempts = 1000;
+
+  return new Promise((resolve, reject) => {
+    const checkBody = setInterval(() => {
+      if (document.body) {
+        clearInterval(checkBody);
+        resolve(document.body);
+      } else if (attempts >= maxAttempts) {
+        clearInterval(checkBody);
+        reject(new Error("Could not find body element"));
+      }
+      attempts++;
+    }, 1);
+  });
 }
 
 function configToTime(config: { hours: number; minutes: number }): Dayjs {
