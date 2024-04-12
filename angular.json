@@ -32,7 +32,7 @@
               "src/manifest.json",
               {
                 "glob": "doomScrolling.css",
-                "input": "src/features/doomScrolling/",
+                "input": "src/scripts/doomScrolling/",
                 "output": "./"
               }
             ],
@@ -93,7 +93,7 @@
               "src/assets",
               {
                 "glob": "doomScrolling.css",
-                "input": "src/features/doomScrolling/",
+                "input": "src/scripts/doomScrolling/",
                 "output": "./"
               }
             ],
