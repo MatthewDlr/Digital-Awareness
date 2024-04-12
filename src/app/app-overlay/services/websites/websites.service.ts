@@ -1,6 +1,6 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { BehaviorSubject, filter, firstValueFrom } from "rxjs";
-import { WatchedWebsite } from "app/types/watchedWebsite";
+import { WatchedWebsite } from "app/types/watchedWebsite.type";
 import dayjs, { Dayjs } from "dayjs";
 import { WebsiteAccessService } from "app/services/Tensorflow/Website Access/website-access.service";
 import { WebsiteAccessInput } from "app/services/Tensorflow/models/WebsiteAccess.model";

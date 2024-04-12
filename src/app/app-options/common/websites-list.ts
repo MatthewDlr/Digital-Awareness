@@ -1,4 +1,4 @@
-import { Category } from "app/types/category";
+import { Category } from "app/types/category.type";
 
 /* 
 If you add new categories, the order in which they appear is set in websites-palette.component.ts > sortCategories()

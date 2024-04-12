@@ -1,5 +1,5 @@
 import { Injectable, isDevMode } from "@angular/core";
-import { WatchedWebsite } from "app/types/watchedWebsite";
+import { WatchedWebsite } from "app/types/watchedWebsite.type";
 import { BehaviorSubject } from "rxjs";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 

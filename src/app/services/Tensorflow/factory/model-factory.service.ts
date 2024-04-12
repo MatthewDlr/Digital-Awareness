@@ -1,6 +1,6 @@
 import { Injectable, isDevMode } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
-import { SequentialModel } from "app/types/tensorflow";
+import { SequentialModel } from "app/types/tensorflow.type";
 import { BehaviorSubject } from "rxjs";
 
 @Injectable({
@@ -8,7 +8,7 @@ import { BehaviorSubject } from "rxjs";
 })
 export class ModelFactoryService {
   factoryProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  private bypasslocalstorage = false;
+  private bypasslocalstorage = true;
 
   constructor() {}
 
@@ -23,7 +23,7 @@ export class ModelFactoryService {
   }
 
   private async trainModel(name: string): Promise<tf.Sequential> {
-    const modelClass: SequentialModel = await this.importModelClass(name);
+    const modelClass: SequentialModel = await this.getClassInstanceOf(name);
     modelClass.trainingProgress.subscribe(value => this.factoryProgress.next(value));
     const model: tf.Sequential = await modelClass.train();
     this.saveModel(model, name);

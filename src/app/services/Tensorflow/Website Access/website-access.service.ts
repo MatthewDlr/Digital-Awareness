@@ -1,6 +1,6 @@
 import { Injectable, isDevMode } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
-import { ModelInference } from "app/types/tensorflow";
+import { ModelInference } from "app/types/tensorflow.type";
 import { WebsiteAccessInput } from "../models/WebsiteAccess.model";
 
 @Injectable({
