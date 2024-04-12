@@ -19,6 +19,7 @@ chrome.storage.sync.get("bedtimeMode").then(result => {
 
   if (config && config.isEnabled) {
     startAt = configToTime(config.startAt);
+    if (startAt.hour() >= 0 && startAt.hour() < 3) startAt = startAt.add(1, "day");
     endAt = configToTime(config.endAt);
     windDownAt = startAt.subtract(WIND_DOWN_DURATION, "minute");
     windUpAt = endAt.add(WIND_UP_DURATION, "minute");
