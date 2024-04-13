@@ -65,6 +65,7 @@ export class BedtimeModeComponent {
 
     if (time.hours > 2 && time.hours < 20) {
       this.isBedtimeStartCorrect = false;
+      this.soundsEngine.error();
     } else {
       this.isBedtimeStartCorrect = true;
       this.bedtimeMode.startAt.hours = time.hours;
@@ -82,6 +83,7 @@ export class BedtimeModeComponent {
       this.bedtimeMode.endAt.minutes = time.minutes;
       this.saveToStorage();
     } else {
+      this.soundsEngine.error();
       this.isBedtimeEndCorrect = false;
     }
   }

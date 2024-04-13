@@ -8,7 +8,7 @@ import { BehaviorSubject } from "rxjs";
 })
 export class ModelFactoryService {
   factoryProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  private bypasslocalstorage = true;
+  private bypasslocalstorage = false; // Force the factory to rebuild the model every time. Value is ignored in production.
 
   constructor() {}
 
