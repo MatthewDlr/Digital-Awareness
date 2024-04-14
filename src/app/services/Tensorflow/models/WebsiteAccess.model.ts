@@ -1,24 +1,15 @@
-import { Injectable } from "@angular/core";
-import { Category } from "app/types/category";
-import { TfTrainingData } from "app/types/tensorflow";
+import { Category } from "app/types/category.type";
+import { SequentialModel } from "app/types/tensorflow.type";
+import * as tf from "@tensorflow/tfjs";
 
-const categoryIndex = {
-  [Category.unknown]: 0,
-  [Category.streaming]: 1,
-  [Category.news]: 2,
-  [Category.social]: 3,
-  [Category.shopping]: 4,
-  [Category.music]: 5,
-  [Category.games]: 6,
-  [Category.gambling]: 7,
-  [Category.services]: 8,
+export type WebsiteAccessInput = {
+  minutes: number;
+  category: Category;
 };
 
-@Injectable({
-  providedIn: "root",
-})
-export class training {
-  data: TfTrainingData[] = [
+export class WebsiteAccess extends SequentialModel {
+  epoch: number = 100;
+  trainingData = [
     // Category unknown - Default timing function
     { input: { minutes: 0, category: Category.unknown }, output: 200 },
     { input: { minutes: 10, category: Category.unknown }, output: 200 },
@@ -73,8 +64,8 @@ export class training {
     { input: { minutes: 0, category: Category.social }, output: 200 },
     { input: { minutes: 10, category: Category.social }, output: 200 },
     { input: { minutes: 30, category: Category.social }, output: 195 },
-    { input: { minutes: 60, category: Category.social }, output: 190 },
-    { input: { minutes: 120, category: Category.social }, output: 180 },
+    { input: { minutes: 60, category: Category.social }, output: 190 }, // 1 hour
+    { input: { minutes: 120, category: Category.social }, output: 180 }, // 2 hours
     { input: { minutes: 240, category: Category.social }, output: 130 }, // 4 hours
     { input: { minutes: 360, category: Category.social }, output: 90 }, // 6 hours
     { input: { minutes: 1440, category: Category.social }, output: 60 }, // 1 day
@@ -102,32 +93,65 @@ export class training {
     { input: { minutes: 10080, category: Category.shopping }, output: 30 }, // 7 days
   ];
 
-  minMinutes = Math.min(...this.data.map(data => data.input.minutes));
-  maxMinutes = Math.max(...this.data.map(data => data.input.minutes));
-  minOutput = Math.min(...this.data.map(data => data.output));
-  maxOutput = Math.max(...this.data.map(data => data.output));
+  private minMinutes = Math.min(...this.trainingData.map(data => data.input.minutes));
+  private maxMinutes = Math.max(...this.trainingData.map(data => data.input.minutes));
+  private minOutput = Math.min(...this.trainingData.map(data => data.output));
+  private maxOutput = Math.max(...this.trainingData.map(data => data.output));
 
-  getFeatures(): number[][] {
+  createModel(): tf.Sequential {
+    const model = tf.sequential();
+
+    model.add(tf.layers.dense({ inputShape: [10], units: 64, activation: "relu" }));
+    model.add(tf.layers.dense({ units: 32, activation: "relu" }));
+    model.add(tf.layers.dense({ units: 16, activation: "relu" }));
+    model.add(tf.layers.dense({ units: 1, activation: "linear" }));
+    model.compile({ loss: "meanSquaredError", optimizer: "adam" });
+
+    return model;
+  }
+
+  createInputTensor(input: WebsiteAccessInput): tf.Tensor {
+    return tf.tensor2d(
+      [this.normalizeNumber(input.minutes, this.minMinutes, this.maxMinutes), ...this.encodeCategory(input.category)],
+      [1, Object.values(Category).length + 1],
+    );
+  }
+
+  deNormalizePrediction(value: number): number {
+    return value * (this.maxOutput - this.minOutput) + this.minOutput;
+  }
+
+  protected getFeaturesTensor(): tf.Tensor2D {
     const features: number[][] = [];
-    this.data.forEach(data => {
-      features.push([this.normalizeInput(data.input.minutes), ...this.encodeCategory(data.input.category)]);
+    this.trainingData.forEach(data => {
+      features.push([
+        this.normalizeNumber(data.input.minutes, this.minMinutes, this.maxMinutes),
+        ...this.encodeCategory(data.input.category),
+      ]);
     });
-    return features;
+    return tf.tensor2d(features);
   }
 
-  getLabels(): number[] {
-    return this.data.map(data => {
-      return data.output;
-    });
+  protected getLabelsTensor(): tf.Tensor {
+    return this.normalizeTensor(
+      tf.tensor1d(
+        this.trainingData.map(data => {
+          return data.output;
+        }),
+      ),
+    );
   }
 
-  encodeCategory(category: Category): number[] {
-    const result = new Array(8).fill(0);
-    result[categoryIndex[category]] = 1;
-    return result;
-  }
+  private encodeCategory(category: Category): number[] {
+    const categories = Object.values(Category);
+    const categoryVector = new Array(categories.length).fill(0);
 
-  normalizeInput(value: number): number {
-    return (value - this.minMinutes) / (this.maxMinutes - this.minMinutes);
+    for (let i = 0; i < categories.length; i++) {
+      if (categories[i] === category) {
+        categoryVector[i] = 1;
+        break;
+      }
+    }
+    return categoryVector;
   }
 }

@@ -17,7 +17,7 @@ jobs:
           node-version: "20"
 
       - name: Cache dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v4.0.2
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -74,11 +74,13 @@ jobs:
           VERSION=$(jq -r .version manifest.json)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+      - uses: actions/checkout@v4.1.1
       - name: Create Release 
         uses: ncipollo/release-action@v1.14.0
         with:
           artifacts: "./digital-awareness.zip"
           generateReleaseNotes: true
+          makeLatest: true
           tag: v${{ env.VERSION }}
           allowUpdates: true
 

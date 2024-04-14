@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import FuzzySearch from "fuzzy-search";
 import { mostPopularWebsites, Website, searchSuggestions } from "../../common/websites-list";
-import { WatchedWebsite } from "app/types/watchedWebsite";
-import { Category } from "app/types/category";
+import { WatchedWebsite } from "app/types/watchedWebsite.type";
+import { Category } from "app/types/category.type";
 
 const COMMONS_HOSTS_EXTENSIONS = [".com", ".org", ".io", ".co"];
 

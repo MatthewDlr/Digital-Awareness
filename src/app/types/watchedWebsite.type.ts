@@ -1,4 +1,4 @@
-import { Category } from "./category";
+import { Category } from "./category.type";
 
 export type WatchedWebsite = {
   host: string;

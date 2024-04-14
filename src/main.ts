@@ -3,13 +3,14 @@ import { AppComponent } from "./app/app.component";
 import { AppRoutingModule } from "./app/app-routing.module";
 import { BrowserModule, bootstrapApplication } from "@angular/platform-browser";
 import { LocationStrategy, HashLocationStrategy, CommonModule } from "@angular/common";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 // @ts-expect-error
 import nightwind from "nightwind/helper";
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(BrowserModule, AppRoutingModule, CommonModule),
+    importProvidersFrom(BrowserModule, AppRoutingModule, CommonModule, BrowserAnimationsModule),
     { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
 }).catch(err => console.error(err));

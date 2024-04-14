@@ -101,7 +101,6 @@ export function writeDefaultConfig() {
     });
 
   chrome.storage.local.set({ isSetupDismissed: false });
-  // chrome.storage.local.set({ bingeWatchingSupportedWebsites: ["youtube"] });
 }
 
 // Function use to update the configuration when a new version of the extension is installed
