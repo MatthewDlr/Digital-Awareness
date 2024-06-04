@@ -2,13 +2,13 @@ import { Component, isDevMode } from "@angular/core";
 import { Location } from "@angular/common";
 import { WebsitePaletteService } from "../websites-palette/services/website-palette/website-palette.service";
 import { PendingChangesService } from "../pending-changes/services/pending-changes/pending-changes.service";
-import { AwarenessPageComponent } from "../options-tabs/awareness-page/awareness-page.component";
-import { WebsitesListComponent } from "../options-tabs/websites-list/components/websites-list/websites-list.component";
-import { DisconnectComponent } from "../options-tabs/disconnect/disconnect-tab/disconnect.component";
+import { AwarenessTabComponent } from "../options-tabs/awareness-tab/awareness-tab.component";
+import { WebsitesTabComponent } from "../options-tabs/websites-list/websites-tab/websites-tab.component";
+import { DisconnectTabComponent } from "../options-tabs/disconnect/disconnect-tab/disconnect-tab.component";
 import { CommonModule } from "@angular/common";
 import { WebsitesPaletteComponent } from "../websites-palette/components/website-palette/websites-palette.component";
 import { PendingChangesComponent } from "../pending-changes/components/pending-changes/pending-changes.component";
-import { AboutComponent } from "../options-tabs/about/about.component";
+import { AboutTabComponent } from "../options-tabs/about-tab/about-tab.component";
 import { ActivatedRoute } from "@angular/router";
 import { SoundsEngineService } from "app/core/shared/services/soundsEngine/sounds-engine.service";
 import { CompleteSetupComponent } from "../complete-setup/complete-setup.component";
@@ -17,13 +17,13 @@ import { CompleteSetupComponent } from "../complete-setup/complete-setup.compone
   selector: "app-options",
   standalone: true,
   imports: [
-    AwarenessPageComponent,
-    WebsitesListComponent,
-    DisconnectComponent,
+    AwarenessTabComponent,
+    WebsitesTabComponent,
+    DisconnectTabComponent,
     WebsitesPaletteComponent,
     PendingChangesComponent,
     CompleteSetupComponent,
-    AboutComponent,
+    AboutTabComponent,
     CommonModule,
   ],
   templateUrl: "./options.component.html",

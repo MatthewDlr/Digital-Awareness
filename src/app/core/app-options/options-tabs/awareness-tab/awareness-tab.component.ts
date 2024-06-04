@@ -4,13 +4,13 @@ import { FormsModule } from "@angular/forms";
 import { SoundsEngineService } from "app/core/shared/services/soundsEngine/sounds-engine.service";
 
 @Component({
-  selector: "app-awareness-page",
+  selector: 'app-awareness-tab',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: "./awareness-page.component.html",
-  styleUrls: ["./awareness-page.component.css"],
+  templateUrl: './awareness-tab.component.html',
+  styleUrls: ['./awareness-tab.component.css'],
 })
-export class AwarenessPageComponent {
+export class AwarenessTabComponent {
   selectedWidget: string = "Quotes";
   tasks!: string[];
   areTasksValid: boolean = true;

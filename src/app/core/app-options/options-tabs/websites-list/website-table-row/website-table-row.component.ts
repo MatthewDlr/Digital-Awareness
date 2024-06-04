@@ -7,13 +7,13 @@ import { FormsModule } from "@angular/forms";
 import dayjs from "dayjs";
 
 @Component({
-  selector: "tr[websites-list-row]",
+  selector: "tr[website-table-row]",
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: "./websites-list-row.component.html",
-  styleUrl: "./websites-list-row.component.css",
+  templateUrl: "./website-table-row.component.html",
+  styleUrl: "./website-table-row.component.css",
 })
-export class WebsitesListRowComponent implements AfterViewInit {
+export class WebsiteTableRowComponent implements AfterViewInit {
   @Input({ required: true }) website!: WatchedWebsite;
   @Input({ required: true }) isEnforced!: boolean;
   @Input() isPending!: boolean;

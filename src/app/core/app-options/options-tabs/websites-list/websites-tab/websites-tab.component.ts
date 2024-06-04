@@ -5,16 +5,15 @@ import { PendingChangesService } from "app/core/app-options/pending-changes/serv
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SoundsEngineService } from "app/core/shared/services/soundsEngine/sounds-engine.service";
-import { WebsitesListRowComponent } from "../websites-list-row/websites-list-row.component";
 
 @Component({
-  selector: "app-websites-list",
+  selector: "app-websites-tab",
   standalone: true,
-  imports: [CommonModule, FormsModule, WebsitesListRowComponent],
-  templateUrl: "./websites-list.component.html",
-  styleUrls: ["./websites-list.component.css"],
+  imports: [CommonModule, FormsModule, WebsiteTableRowComponent, CommonModule],
+  templateUrl: "./websites-tab.component.html",
+  styleUrls: ["./websites-tab.component.css"],
 })
-export class WebsitesListComponent {
+export class WebsitesTabComponent {
   enforcedWebsites!: WatchedWebsite[];
   userWebsites!: WatchedWebsite[];
   websitesPendingEdit: Set<string> = new Set();
@@ -85,3 +84,4 @@ export class WebsitesListComponent {
     return "Other";
   }
 }
+import { WebsiteTableRowComponent } from "../website-table-row/website-table-row.component";

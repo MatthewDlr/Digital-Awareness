@@ -9,7 +9,7 @@ import { filter } from "rxjs/operators";
 import { WebsiteAccessService } from "app/core/shared/services/Tensorflow/Website Access/website-access.service";
 
 @Component({
-  selector: "app-awareness-page",
+  selector: "app-awareness-tab",
   standalone: true,
   imports: [CommonModule, QuotesWidgetComponent, BreathingWidgetComponent, TasksWidgetComponent],
   templateUrl: "./awareness-page.component.html",
