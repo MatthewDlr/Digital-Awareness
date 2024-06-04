@@ -1,5 +1,5 @@
 import { isDevMode } from "@angular/core";
-import { BedtimeMode } from "app/core/shared/types/bedtimeMode.type";
+import { BedtimeMode } from "app/core/app-options/options-tabs/disconnect/bedtime-mode/types/bedtimeMode.type";
 import dayjs, { Dayjs } from "dayjs";
 
 const TIME_INTERVAL: number = 5; // In seconds, how often to check the time and update the filter

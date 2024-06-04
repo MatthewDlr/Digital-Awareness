@@ -6,7 +6,7 @@ import { WebsitesService } from "../services/websites/websites.service";
 import { BreathingWidgetComponent } from "../overlay-widgets/breathing-widget/breathing-widget.component";
 import { TasksWidgetComponent } from "../overlay-widgets/tasks-widget/tasks-widget.component";
 import { filter } from "rxjs/operators";
-import { WebsiteAccessService } from "app/core/shared/services/Tensorflow/Website Access/website-access.service";
+import { WebsiteAccessService } from "app/core/shared/Tensorflow/Website Access/website-access.service";
 
 @Component({
   selector: "app-awareness-tab",

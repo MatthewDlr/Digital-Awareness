@@ -1,6 +1,6 @@
 import * as tf from "@tensorflow/tfjs";
 import { isDevMode } from "@angular/core";
-import { ModelFactoryService } from "app/core/shared/services/Tensorflow/factory/model-factory.service";
+import { ModelFactoryService } from "app/core/shared/Tensorflow/factory/model-factory.service";
 import { BehaviorSubject } from "rxjs";
 
 export abstract class ModelInference {

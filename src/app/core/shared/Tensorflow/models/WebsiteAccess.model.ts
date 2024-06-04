@@ -1,5 +1,5 @@
 import { Category } from "app/core/shared/types/category.type";
-import { SequentialModel } from "app/core/shared/types/tensorflow.type";
+import { SequentialModel } from "app/core/shared/Tensorflow/types/tensorflow.type";
 import * as tf from "@tensorflow/tfjs";
 
 export type WebsiteAccessInput = {

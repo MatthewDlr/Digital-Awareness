@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { SoundsEngineService } from "app/core/shared/services/soundsEngine/sounds-engine.service";
 import { animate, query, style, transition, trigger } from "@angular/animations";
 import { ChangeDetectionStrategy } from "@angular/core";
-import { BedtimeMode, convertTime } from "app/core/shared/types/bedtimeMode.type";
+import { BedtimeMode, convertTime } from "app/core/app-options/options-tabs/disconnect/bedtime-mode/types/bedtimeMode.type";
 
 export const smoothHeight = trigger("HeightChange", [
   transition(

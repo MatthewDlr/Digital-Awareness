@@ -1,6 +1,6 @@
 import { Injectable, isDevMode } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
-import { SequentialModel } from "app/core/shared/types/tensorflow.type";
+import { SequentialModel } from "app/core/shared/Tensorflow/types/tensorflow.type";
 import { BehaviorSubject } from "rxjs";
 
 @Injectable({

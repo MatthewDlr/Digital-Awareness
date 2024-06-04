@@ -2,8 +2,8 @@ import { Injectable, isDevMode } from "@angular/core";
 import { BehaviorSubject, filter, firstValueFrom } from "rxjs";
 import { WatchedWebsite } from "app/core/shared/types/watchedWebsite.type";
 import dayjs, { Dayjs } from "dayjs";
-import { WebsiteAccessService } from "app/core/shared/services/Tensorflow/Website Access/website-access.service";
-import { WebsiteAccessInput } from "app/core/shared/services/Tensorflow/models/WebsiteAccess.model";
+import { WebsiteAccessService } from "app/core/shared/Tensorflow/Website Access/website-access.service";
+import { WebsiteAccessInput } from "app/core/shared/Tensorflow/models/WebsiteAccess.model";
 
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website, defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
 
