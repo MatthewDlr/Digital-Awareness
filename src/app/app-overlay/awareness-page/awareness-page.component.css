@@ -21,5 +21,8 @@
   animation: l3 2s infinite ease-in-out;
 }
 @keyframes l3 {
-    50% {left:100%;transform: translateX(calc(-100% - 4px))}
+  50% {
+    left: 100%;
+    transform: translateX(calc(-100% - 4px));
+  }
 }

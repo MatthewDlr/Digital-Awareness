@@ -5,6 +5,11 @@
     "outDir": "./out-tsc/app",
     "types": ["chrome"]
   },
-  "files": ["src/main.ts", "src/service-worker.ts", "src/scripts/doomScrolling/doomScrolling.script.ts", "src/scripts/bedtimeMode/bedtimeMode.script.ts"],
+  "files": [
+    "src/main.ts",
+    "src/service-worker.ts",
+    "src/scripts/doomScrolling/doomScrolling.script.ts",
+    "src/scripts/bedtimeMode/bedtimeMode.script.ts"
+  ],
   "include": []
 }
