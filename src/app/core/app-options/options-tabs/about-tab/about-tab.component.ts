@@ -2,11 +2,11 @@ import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-about-tab',
+  selector: "app-about-tab",
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './about-tab.component.html',
-  styleUrl: './about-tab.component.css',
+  templateUrl: "./about-tab.component.html",
+  styleUrl: "./about-tab.component.css",
 })
 export class AboutTabComponent {
   version: string = chrome.runtime.getManifest().version;
