@@ -83,7 +83,9 @@ function getFilterCoef(): number {
 
 async function applyGrayScaleFilter(intensity: number) {
   if (!body) body = await getDocumentBody();
-  body.style.filter = `grayscale(${intensity / 100})`;
+  body.style.filter = `grayscale(${intensity}%)`;
+  body.style.width = "100vw";
+  body.style.height = "100vh";
 }
 
 function getDocumentBody(): Promise<HTMLElement> {
