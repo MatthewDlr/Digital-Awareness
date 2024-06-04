@@ -6,13 +6,13 @@
     "outDir": "./dist/out-tsc",
     "types": ["Chrome", "jest", "node"],
     "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
@@ -21,7 +21,6 @@
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
     "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true
   },
   "angularCompilerOptions": {
