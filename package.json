@@ -47,6 +47,6 @@
     "tailwindcss": "^3.4.1",
     "tailwindcss-animated": "^1.0.1",
     "tslib": "^2.6.2",
-    "webpack": "^5.91.0"
+    "webpack": "^5.94.0"
   }
 }
