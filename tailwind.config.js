@@ -23,11 +23,10 @@ module.exports = {
         900: 100,
         950: 50,
       },
-      colorClasses: ["gradient", "ring", "ring-offset", "divide", "placeholder"],
       transitionClasses: "full", // default ['text, 'bg', 'border']
-      variants: {
-        nightwind: ["focus"], // Add any Tailwind variant
-      },
+    },
+    variants: {
+      nightwind: ["focus"], // Add any Tailwind variant
     },
     colors: {
       transparent: "transparent",

@@ -8,4 +8,5 @@ export const routes: Routes = [
   { path: "options", component: OptionsComponent },
   { path: "options/:tab", component: OptionsComponent },
   { path: "blocked/:outputURL", component: AwarenessPageComponent },
+  { path: "**", redirectTo: "options" },
 ];

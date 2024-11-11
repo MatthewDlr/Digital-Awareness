@@ -11,20 +11,20 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "outputPath": {
-              "base": "dist",
-              "browser": ""
+            "customWebpackConfig": {
+              "path": "./webpack.config.ts"
             },
+            "outputPath": "dist",
             "optimization": {
               "styles": {
-                "inlineCritical": false
+                "inlineCritical": true
               }
             },
             "allowedCommonJsDependencies": ["nightwind", "long", "dayjs"],
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -53,6 +53,14 @@
                   "maximumError": "4kb"
                 }
               ],
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": false
+              },
               "outputHashing": "none"
             },
             "development": {

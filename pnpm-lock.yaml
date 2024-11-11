@@ -54,9 +54,9 @@ importers:
         specifier: ~0.14.10
         version: 0.14.10
     devDependencies:
-      '@angular-devkit/build-angular':
-        specifier: ^18.2.11
-        version: 18.2.11(@angular/compiler-cli@18.2.11(@angular/compiler@18.2.11(@angular/core@18.2.11(rxjs@7.8.1)(zone.js@0.14.10)))(typescript@5.4.3))(@types/node@20.17.6)(chokidar@3.6.0)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.4.3)))(typescript@5.4.3)
+      '@angular-builders/custom-webpack':
+        specifier: ^18.0.0
+        version: 18.0.0(@angular/compiler-cli@18.2.11(@angular/compiler@18.2.11(@angular/core@18.2.11(rxjs@7.8.1)(zone.js@0.14.10)))(typescript@5.4.3))(@types/node@20.17.6)(chokidar@3.6.0)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.4.3)))(typescript@5.4.3)
       '@angular/cli':
         specifier: ^18.2.11
         version: 18.2.11(chokidar@3.6.0)
@@ -124,6 +124,16 @@ packages:
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
+
+  '@angular-builders/common@2.0.0':
+    resolution: {integrity: sha512-O5YJc++DtJVJhqA/OomRKN2jGYzvU/YXtfrPAqcA9Is3Ob5jvV0L0JHSAjSw/KaLvk/FjBIqoRVcYdLp5LKddA==}
+    engines: {node: ^14.20.0 || ^16.13.0 || >=18.10.0}
+
+  '@angular-builders/custom-webpack@18.0.0':
+    resolution: {integrity: sha512-XSynPSXHq5+nrh7J2snfrcbvm6YGwUGQRzr7OuO3wURJ6CHOD9C+xEAmvEUWW8c1YjEslVNG7aLtCGz7LA4ymw==}
+    engines: {node: ^14.20.0 || ^16.13.0 || >=18.10.0}
+    peerDependencies:
+      '@angular/compiler-cli': ^18.0.0
 
   '@angular-devkit/architect@0.1802.11':
     resolution: {integrity: sha512-p+XIc/j51aI83ExNdeZwvkm1F4wkuKMGUUoj0MVUUi5E6NoiMlXYm6uU8+HbRvPBzGy5+3KOiGp3Fks0UmDSAA==}
@@ -3381,6 +3391,9 @@ packages:
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
+  lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+
   log-symbols@4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
     engines: {node: '>=10'}
@@ -3482,6 +3495,9 @@ packages:
   minimatch@9.0.5:
     resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
     engines: {node: '>=16 || 14 >=14.17'}
+
+  minimist@1.2.8:
+    resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
 
   minipass-collect@2.0.1:
     resolution: {integrity: sha512-D7V8PO9oaz7PWGLbCACuI1qEOsq7UKfLotx/C0Aet43fCUB/wfQ7DYeq2oR/svFJGYDHPr38SHATeaj/ZoKHKw==}
@@ -4400,6 +4416,10 @@ packages:
     resolution: {integrity: sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==}
     engines: {node: '>=12'}
 
+  strip-bom@3.0.0:
+    resolution: {integrity: sha512-vavAMRXOgBVNF6nyEEmL3DBK19iRpDcoIwW+swQ+CbGiu7lju6t+JklA1MHweoWtadgt4ISVUsXLyDq34ddcwA==}
+    engines: {node: '>=4'}
+
   strip-final-newline@2.0.0:
     resolution: {integrity: sha512-BrpvfNAE3dcvq7ll3xVumzjKjZQ5tI1sEUIKr3Uoks0XUl45St3FlatVqef9prk4jRDzhW6WZg+3bk93y6pLjA==}
     engines: {node: '>=6'}
@@ -4539,6 +4559,10 @@ packages:
         optional: true
       '@swc/wasm':
         optional: true
+
+  tsconfig-paths@4.2.0:
+    resolution: {integrity: sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==}
+    engines: {node: '>=6'}
 
   tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
@@ -4721,6 +4745,10 @@ packages:
       webpack-cli:
         optional: true
 
+  webpack-merge@5.10.0:
+    resolution: {integrity: sha512-+4zXKdx7UnO+1jaN4l2lHVD+mFvnlZQP/6ljaJVb4SZiwIKeUnrT5l0gkT8z+n4hKpC+jpOv6O9R+gLtag7pSA==}
+    engines: {node: '>=10.0.0'}
+
   webpack-merge@6.0.1:
     resolution: {integrity: sha512-hXXvrjtx2PLYx4qruKl+kyRSLc52V+cCvMxRjmKwoA+CBbbF5GfIBtR6kCvl0fYGqTUPKB+1ktVmTHqMOzgCBg==}
     engines: {node: '>=18.0.0'}
@@ -4873,6 +4901,58 @@ snapshots:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
+
+  '@angular-builders/common@2.0.0(@types/node@20.17.6)(chokidar@3.6.0)(typescript@5.4.3)':
+    dependencies:
+      '@angular-devkit/core': 18.2.11(chokidar@3.6.0)
+      ts-node: 10.9.2(@types/node@20.17.6)(typescript@5.4.3)
+      tsconfig-paths: 4.2.0
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - chokidar
+      - typescript
+
+  '@angular-builders/custom-webpack@18.0.0(@angular/compiler-cli@18.2.11(@angular/compiler@18.2.11(@angular/core@18.2.11(rxjs@7.8.1)(zone.js@0.14.10)))(typescript@5.4.3))(@types/node@20.17.6)(chokidar@3.6.0)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.4.3)))(typescript@5.4.3)':
+    dependencies:
+      '@angular-builders/common': 2.0.0(@types/node@20.17.6)(chokidar@3.6.0)(typescript@5.4.3)
+      '@angular-devkit/architect': 0.1802.11(chokidar@3.6.0)
+      '@angular-devkit/build-angular': 18.2.11(@angular/compiler-cli@18.2.11(@angular/compiler@18.2.11(@angular/core@18.2.11(rxjs@7.8.1)(zone.js@0.14.10)))(typescript@5.4.3))(@types/node@20.17.6)(chokidar@3.6.0)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.4.3)))(typescript@5.4.3)
+      '@angular-devkit/core': 18.2.11(chokidar@3.6.0)
+      '@angular/compiler-cli': 18.2.11(@angular/compiler@18.2.11(@angular/core@18.2.11(rxjs@7.8.1)(zone.js@0.14.10)))(typescript@5.4.3)
+      lodash: 4.17.21
+      webpack-merge: 5.10.0
+    transitivePeerDependencies:
+      - '@angular/localize'
+      - '@angular/platform-server'
+      - '@angular/service-worker'
+      - '@rspack/core'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - '@web/test-runner'
+      - browser-sync
+      - bufferutil
+      - chokidar
+      - debug
+      - html-webpack-plugin
+      - jest
+      - jest-environment-jsdom
+      - karma
+      - lightningcss
+      - ng-packagr
+      - node-sass
+      - protractor
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - tailwindcss
+      - typescript
+      - uglify-js
+      - utf-8-validate
+      - webpack-cli
 
   '@angular-devkit/architect@0.1802.11(chokidar@3.6.0)':
     dependencies:
@@ -5966,7 +6046,6 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
-    optional: true
 
   '@discoveryjs/json-ext@0.6.1': {}
 
@@ -6322,7 +6401,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
-    optional: true
 
   '@jsonjoy.com/base64@1.1.2(tslib@2.8.1)':
     dependencies:
@@ -6681,17 +6759,13 @@ snapshots:
       - encoding
       - seedrandom
 
-  '@tsconfig/node10@1.0.11':
-    optional: true
+  '@tsconfig/node10@1.0.11': {}
 
-  '@tsconfig/node12@1.0.11':
-    optional: true
+  '@tsconfig/node12@1.0.11': {}
 
-  '@tsconfig/node14@1.0.3':
-    optional: true
+  '@tsconfig/node14@1.0.3': {}
 
-  '@tsconfig/node16@1.0.4':
-    optional: true
+  '@tsconfig/node16@1.0.4': {}
 
   '@tufjs/canonical-json@2.0.0': {}
 
@@ -7058,7 +7132,6 @@ snapshots:
   acorn-walk@8.3.4:
     dependencies:
       acorn: 8.14.0
-    optional: true
 
   acorn@8.14.0: {}
 
@@ -7156,8 +7229,7 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  arg@4.1.3:
-    optional: true
+  arg@4.1.3: {}
 
   arg@5.0.2: {}
 
@@ -7469,8 +7541,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.4.3
 
-  create-require@1.1.1:
-    optional: true
+  create-require@1.1.1: {}
 
   critters@0.0.24:
     dependencies:
@@ -7564,8 +7635,7 @@ snapshots:
 
   diff-sequences@29.6.3: {}
 
-  diff@4.0.2:
-    optional: true
+  diff@4.0.2: {}
 
   dlv@1.1.3: {}
 
@@ -8431,6 +8501,8 @@ snapshots:
 
   lodash.merge@4.6.2: {}
 
+  lodash@4.17.21: {}
+
   log-symbols@4.1.0:
     dependencies:
       chalk: 4.1.2
@@ -8462,8 +8534,7 @@ snapshots:
       semver: 5.7.2
     optional: true
 
-  make-error@1.3.6:
-    optional: true
+  make-error@1.3.6: {}
 
   make-fetch-happen@13.0.1:
     dependencies:
@@ -8535,6 +8606,8 @@ snapshots:
   minimatch@9.0.5:
     dependencies:
       brace-expansion: 2.0.1
+
+  minimist@1.2.8: {}
 
   minipass-collect@2.0.1:
     dependencies:
@@ -9479,6 +9552,8 @@ snapshots:
     dependencies:
       ansi-regex: 6.1.0
 
+  strip-bom@3.0.0: {}
+
   strip-final-newline@2.0.0: {}
 
   strip-json-comments@3.1.1: {}
@@ -9638,7 +9713,12 @@ snapshots:
       typescript: 5.4.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    optional: true
+
+  tsconfig-paths@4.2.0:
+    dependencies:
+      json5: 2.2.3
+      minimist: 1.2.8
+      strip-bom: 3.0.0
 
   tslib@2.6.3: {}
 
@@ -9719,8 +9799,7 @@ snapshots:
 
   uuid@8.3.2: {}
 
-  v8-compile-cache-lib@3.0.1:
-    optional: true
+  v8-compile-cache-lib@3.0.1: {}
 
   validate-npm-package-license@3.0.4:
     dependencies:
@@ -9815,6 +9894,12 @@ snapshots:
       - debug
       - supports-color
       - utf-8-validate
+
+  webpack-merge@5.10.0:
+    dependencies:
+      clone-deep: 4.0.1
+      flat: 5.0.2
+      wildcard: 2.0.1
 
   webpack-merge@6.0.1:
     dependencies:
@@ -9972,8 +10057,7 @@ snapshots:
       y18n: 5.0.8
       yargs-parser: 21.1.1
 
-  yn@3.1.1:
-    optional: true
+  yn@3.1.1: {}
 
   yocto-queue@0.1.0: {}
 
