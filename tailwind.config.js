@@ -9,6 +9,26 @@ module.exports = {
         jakarta: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
       },
     },
+    nightwind: {
+      colorScale: {
+        50: 950,
+        100: 900,
+        200: 800,
+        300: 700,
+        400: 600,
+        500: 500,
+        600: 400,
+        700: 300,
+        800: 200,
+        900: 100,
+        950: 50,
+      },
+      colorClasses: ["gradient", "ring", "ring-offset", "divide", "placeholder"],
+      transitionClasses: "full", // default ['text, 'bg', 'border']
+      variants: {
+        nightwind: ["focus"], // Add any Tailwind variant
+      },
+    },
     colors: {
       transparent: "transparent",
       white: "#ffffff",

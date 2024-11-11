@@ -38,6 +38,9 @@ importers:
       '@tensorflow/tfjs':
         specifier: ^4.22.0
         version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
+      '@types/nightwind':
+        specifier: ^1.0.0
+        version: 1.0.0(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.4.3))
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
@@ -1813,6 +1816,9 @@ packages:
 
   '@types/mute-stream@0.0.4':
     resolution: {integrity: sha512-CPM9nzrCPPJHQNA9keH9CVkVI+WR5kMa+7XEs5jcGQ0VoAGnLv242w8lIVgwAEfmE4oufJRaTc9PNLQl0ioAow==}
+
+  '@types/nightwind@1.0.0':
+    resolution: {integrity: sha512-+ps5oWemzNNJ8KvprdXomxVKwDggmxJAH/Id5FCT+PGOdETKl8sLl279gUdZtiVHLY9W8rvtkmQ6VlsYMfZSkg==}
 
   '@types/node-fetch@2.6.11':
     resolution: {integrity: sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==}
@@ -6725,6 +6731,12 @@ snapshots:
   '@types/mute-stream@0.0.4':
     dependencies:
       '@types/node': 20.17.6
+
+  '@types/nightwind@1.0.0(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.4.3))':
+    dependencies:
+      tailwindcss: 3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.4.3))
+    transitivePeerDependencies:
+      - ts-node
 
   '@types/node-fetch@2.6.11':
     dependencies:

@@ -32,12 +32,14 @@ export class ModelFactoryService {
 
   private async importModelClass(name: string): Promise<SequentialModel> {
     try {
-      const module = await import(`../models/${name}.model`);
+      const modulePath = `../models/${name}.model`;
+      isDevMode() && console.log(`Attempting to import module: ${modulePath}`);
+      const module = await import(modulePath);
       const ModelClass = module[name];
       return new ModelClass() as SequentialModel;
     } catch (error) {
-      isDevMode() && console.error(error);
-      throw new Error(`Impossible to instanciate the following class: ${name}`);
+      isDevMode() && console.error(`Error importing module: ${error}`);
+      throw new Error(`Impossible to instantiate the following class: ${name}`);
     }
   }
 
