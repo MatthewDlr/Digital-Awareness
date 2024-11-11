@@ -20,7 +20,10 @@ export class PendingChangesService {
     chrome.storage.sync.get(["pendingChanges"]).then(result => {
       if (result["pendingChanges"]) {
         this.stage.next(result["pendingChanges"].stage || stages.NoChanges);
-        this.validationDate.next(new Date(result["pendingChanges"].validationDate) || null);
+        const validationDate = result["pendingChanges"].validationDate ? new Date(result["pendingChanges"].validationDate) : null;
+        if (!validationDate) return;
+        
+        this.validationDate.next(validationDate);
         this.websitesToDelete = new Set(result["pendingChanges"].websitesToDelete);
         this.websitesToEdit = new Set(result["pendingChanges"].websitesToEdit);
 

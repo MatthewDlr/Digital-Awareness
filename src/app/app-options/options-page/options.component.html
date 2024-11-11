@@ -22,7 +22,7 @@
       />
     </svg>
     <div class="mt-[0.10rem] flex items-baseline gap-2">
-      <label class="text-base font-medium">DevMode is ON</label>
+      <p class="text-base font-medium">DevMode is ON</p>
     </div>
   </div>
 }
@@ -40,7 +40,7 @@
   </div>
 
   <!-- Complete Setup -->
-  <complete-setup class="animate-fade-up animate-delay-100 animate-duration-500"></complete-setup>
+  <app-complete-setup class="animate-fade-up animate-delay-100 animate-duration-500"></app-complete-setup>
 
   <!-- Pending Changes -->
   <app-pending-changes class="animate-fade-up animate-delay-100 animate-duration-500"></app-pending-changes>
@@ -53,6 +53,8 @@
         <div class="flex w-full items-center justify-start gap-5">
           <div
             (click)="setCurrentTab('websites-list')"
+            (keypress)="setCurrentTab('websites-list')"
+            tabindex="0"
             [ngClass]="
               currentTab === 'websites-list' || currentTab === 'default-tab'
                 ? 'text-green-500 !border-green-500'
@@ -81,6 +83,8 @@
           <!-- Awareness Page Tab -->
           <div
             (click)="setCurrentTab('awareness-page')"
+            (keypress)="setCurrentTab('awareness-page')"
+            tabindex="1"
             [ngClass]="
               currentTab === 'awareness-page' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
             "
@@ -107,6 +111,8 @@
           <!-- Disconnect Tab -->
           <div
             (click)="setCurrentTab('disconnect')"
+            (keypress)="setCurrentTab('disconnect')"
+            tabindex="2"
             [ngClass]="currentTab === 'disconnect' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'"
             class="group text-gray-500 flex w-fit cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
           >
@@ -128,7 +134,7 @@
           </div>
         </div>
 
-        <div class="group" (click)="setCurrentTab('about')">
+        <div class="group" (click)="setCurrentTab('about')" (keypress)="setCurrentTab('about')" tabindex="3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

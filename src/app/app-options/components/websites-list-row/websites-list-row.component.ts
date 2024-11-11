@@ -7,6 +7,7 @@ import { FormsModule } from "@angular/forms";
 import dayjs from "dayjs";
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: "tr[websites-list-row]",
   standalone: true,
   imports: [CommonModule, FormsModule],

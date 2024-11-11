@@ -10,7 +10,6 @@ export class ModelFactoryService {
   factoryProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private bypasslocalstorage = false; // Force the factory to rebuild the model every time. Value is ignored in production.
 
-  constructor() {}
 
   async getModelInstanceOf(name: string): Promise<tf.Sequential> {
     const model = (await this.loadModel(name)) || (await this.trainModel(name));

@@ -3,7 +3,7 @@
     <span>{{ website.host }}</span>
   } @else {
     <div
-      class="focus-within:ring-indigo-600 flex items-center rounded-md px-2 shadow-sm ring-1 ring-inset ring-gray-400 focus-within:ring-purple-500 sm:max-w-md"
+      class="focus-within:ring-indigo-600 ring-gray-400 flex items-center rounded-md px-2 shadow-sm ring-1 ring-inset focus-within:ring-purple-500 sm:max-w-md"
     >
       <span class="text-gray-400 flex select-none items-center sm:text-sm">https://</span>
       <input
@@ -44,6 +44,8 @@
         : 'text-purple-500 cursor-pointer underline hover:text-purple-600'
     "
     (click)="enableEdit()"
+    (keypress)="enableEdit()"
+    tabindex="0"
   >
     Edit
   </a>
@@ -54,6 +56,8 @@
         : 'text-purple-500 cursor-pointer underline hover:text-purple-600'
     "
     (click)="removeWebsite()"
+    (keypress)="removeWebsite()"
+    tabindex="1"
   >
     Remove
   </a>

@@ -12,8 +12,9 @@
         <span class="text-gray-900 text-base font-medium leading-6" id="availability-label">Bedtime Mode</span>
         <span class="text-green-700 bg-green-100 inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold">New</span>
       </div>
-      <span class="text-gray-500 text-sm" id="availability-description"> Smoothly change screen colors to black & white during the selected hours.
-         </span>
+      <span class="text-gray-500 text-sm" id="availability-description">
+        Smoothly change screen colors to black & white during the selected hours.
+      </span>
     </span>
 
     <button
@@ -55,7 +56,7 @@
           <input
             type="time"
             id="start-time"
-             class="text-gray-900 block w-full rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl cursor-pointer dark:bg-opacity-50"
+            class="text-gray-900 block w-full cursor-pointer rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl dark:bg-opacity-50"
             [ngClass]="
               isBedtimeStartCorrect
                 ? 'border-gray-300 bg-transparent hover:bg-gray-50 focus:bg-purple-50 focus:border-purple-500 focus:ring-purple-500'
@@ -68,11 +69,12 @@
             (input)="setStartDate($any($event).target.value)"
           />
         </div>
-        <label
+        <p
           class="text-red-500 flex animate-fade items-end font-medium animate-duration-150"
           [ngClass]="isBedtimeStartCorrect ? 'hidden' : 'block'"
-          >Don't be ridiculous</label
         >
+          Don't be ridiculous
+        </p>
       </div>
 
       <!-- Bed timeline -->
@@ -115,7 +117,7 @@
           <input
             type="time"
             id="end-time"
-            class="text-gray-900 block w-full rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl cursor-pointer"
+            class="text-gray-900 block w-full cursor-pointer rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl"
             [ngClass]="
               isBedtimeEndCorrect
                 ? 'border-gray-300 bg-transparent hover:bg-gray-50 focus:bg-purple-50 focus:border-purple-500 focus:ring-purple-500 dark:bg-opacity-50'
@@ -128,11 +130,12 @@
             (input)="setEndDate($any($event).target.value)"
           />
         </div>
-        <label
+        <p
           class="text-red-500 mt-1 flex animate-fade items-end font-medium animate-duration-150"
           [ngClass]="isBedtimeEndCorrect ? 'hidden' : 'block'"
-          >Don't be ridiculous</label
         >
+          Don't be ridiculous
+        </p>
       </div>
     </div>
   }

@@ -1,5 +1,5 @@
 <div
-  class="flex h-[100vh] w-full flex-col items-center justify-center gap-16 bg-gradient-to-br from-green-100 from-10% via-green-200 via-70% to-green-300 !transition-all dark:from-green-800 dark:via-green-900 dark:to-green-950"
+  class="from-green-100 via-green-200 to-green-300 flex h-[100vh] w-full flex-col items-center justify-center gap-16 bg-gradient-to-br from-10% via-70% !transition-all dark:from-green-800 dark:via-green-900 dark:to-green-950"
 >
   @if (websiteAccess.trainingProgress.getValue() === 100) {
     <!-- Timer -->
@@ -7,7 +7,7 @@
       class="bg-white flex min-h-[5rem] min-w-[5rem] animate-fade-up items-center justify-center rounded-lg bg-opacity-40 animate-duration-500"
     >
       @defer (when originalTimerValue > 0) {
-        <label class="text-gray-900 text-3xl" [ngClass]="timerValue() < 6 ? 'animate-bounce' : ''">{{ timerValue() }}</label>
+        <p class="text-gray-900 text-3xl" [ngClass]="timerValue() < 6 ? 'animate-bounce' : ''">{{ timerValue() }}</p>
       }
     </div>
 
@@ -28,7 +28,12 @@
 
     <div class="flex flex-col items-center justify-center gap-5">
       <!-- Go Back Button -->
-      <div class="animate-fade-up animate-delay-[400ms] animate-duration-500" (click)="closeBlockPage()">
+      <div
+        class="animate-fade-up animate-delay-[400ms] animate-duration-500"
+        (click)="closeBlockPage()"
+        (keypress)="closeBlockPage()"
+        tabindex="0"
+      >
         <button
           class="bg-white text-gray-800 border-purple-500 inline-flex items-center rounded-md border-b-2 bg-opacity-40 px-6 py-2 font-bold shadow-md !transition-all delay-100 animate-duration-300 animate-ease-in-out hover:text-white hover:bg-purple-500 hover:border-purple-600 active:scale-95"
         >
@@ -43,18 +48,22 @@
       </div>
 
       <!-- Skip Timer Button -->
-      <div [ngClass]="timerValue() == 0 ? 'visible' : 'invisible'" class="flex flex-col items-center gap-2">
-        <div class="text-gray-500 text-sm opacity-50" [ngClass]="timerValue() == 0 ? 'animate-fade-up animate-duration-500' : ''">
+      <div [ngClass]="timerValue() === 0 ? 'visible' : 'invisible'" class="flex flex-col items-center gap-2">
+        <div
+          class="text-gray-500 text-sm opacity-50"
+          [ngClass]="timerValue() === 0 ? 'animate-fade-up animate-duration-500' : ''"
+        >
           Continue to
           <button class="underline decoration-wavy" (click)="skipTimer()">
             {{ outputUrl.hostname }}
           </button>
         </div>
-        <label
+        <p
           class="text-gray-500 text-sm opacity-50"
-          [ngClass]="timerValue() == 0 ? 'animate-fade-up animate-delay-300 animate-duration-500' : ''"
-          >Otherwise, tab will close on its own
-        </label>
+          [ngClass]="timerValue() === 0 ? 'animate-fade-up animate-delay-300 animate-duration-500' : ''"
+        >
+          Otherwise, tab will close on its own
+        </p>
       </div>
     </div>
   } @else {

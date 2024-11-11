@@ -1,7 +1,7 @@
 import { Component, isDevMode } from "@angular/core";
 
 @Component({
-  selector: "complete-setup",
+  selector: "app-complete-setup",
   standalone: true,
   imports: [],
   templateUrl: "./complete-setup.component.html",
