@@ -27,8 +27,8 @@ export const smoothHeight = trigger("HeightChange", [
 })
 export class BedtimeModeComponent {
   bedtimeMode: BedtimeMode = this.getDefaultConfig();
-  isBedtimeStartCorrect: boolean = true;
-  isBedtimeEndCorrect: boolean = true;
+  isBedtimeStartCorrect = true;
+  isBedtimeEndCorrect = true;
 
   constructor(
     private soundsEngine: SoundsEngineService,

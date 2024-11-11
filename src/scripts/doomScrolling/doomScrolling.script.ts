@@ -1,6 +1,6 @@
 import { isDevMode } from "@angular/core";
 
-let isDoomScrollingEnabled: boolean = false;
+let isDoomScrollingEnabled = false;
 
 const depthBottomMeters = 15; //Depth in meters
 const depthBottomPixel: number = meterToPixel(depthBottomMeters);

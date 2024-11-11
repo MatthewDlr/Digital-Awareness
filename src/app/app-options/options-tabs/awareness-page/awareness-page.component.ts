@@ -11,9 +11,9 @@ import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.ser
   styleUrls: ["./awareness-page.component.css"],
 })
 export class AwarenessPageComponent {
-  selectedWidget: string = "Quotes";
+  selectedWidget = "Quotes";
   tasks!: string[];
-  areTasksValid: boolean = true;
+  areTasksValid = true;
 
   constructor(private soundsEngine: SoundsEngineService) {
     chrome.storage.sync.get(["awarenessPageWidget"]).then(result => {

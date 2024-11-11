@@ -7,7 +7,7 @@
   <label
     class="bg-white relative mt-5 flex !transform cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
     [ngClass]="
-      selectedWidget == 'Random'
+      selectedWidget === 'Random'
         ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
         : 'border-gray-300 hover:border-green-500 hover:scale-[1.02]'
     "
@@ -26,7 +26,7 @@
       viewBox="0 0 20 20"
       fill="currentColor"
       aria-hidden="true"
-      [ngClass]="selectedWidget == 'Random' ? 'visible' : 'invisible'"
+      [ngClass]="selectedWidget === 'Random' ? 'visible' : 'invisible'"
     >
       <path
         fill-rule="evenodd"
@@ -41,7 +41,7 @@
     <label
       class="bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       [ngClass]="
-        selectedWidget == 'Quotes'
+        selectedWidget === 'Quotes'
           ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
           : 'border-gray-300 hover:border-green-500 hover:scale-[1.02]'
       "
@@ -60,7 +60,7 @@
         viewBox="0 0 20 20"
         fill="currentColor"
         aria-hidden="true"
-        [ngClass]="selectedWidget == 'Quotes' ? 'visible' : 'invisible'"
+        [ngClass]="selectedWidget === 'Quotes' ? 'visible' : 'invisible'"
       >
         <path
           fill-rule="evenodd"
@@ -75,7 +75,7 @@
       class="bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       (click)="updateSelectedWidget('Breathing')"
       [ngClass]="
-        selectedWidget == 'Breathing'
+        selectedWidget === 'Breathing'
           ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
           : 'border-gray-300 hover:border-green-500 hover:scale-[1.02]'
       "
@@ -93,7 +93,7 @@
         viewBox="0 0 20 20"
         fill="currentColor"
         aria-hidden="true"
-        [ngClass]="selectedWidget == 'Breathing' ? 'visible' : 'invisible'"
+        [ngClass]="selectedWidget === 'Breathing' ? 'visible' : 'invisible'"
       >
         <path
           fill-rule="evenodd"
@@ -108,7 +108,7 @@
       class="bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       (click)="updateSelectedWidget('Tasks')"
       [ngClass]="
-        selectedWidget == 'Tasks'
+        selectedWidget === 'Tasks'
           ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50'
           : 'border-gray-300 hover:border-green-500 hover:scale-[1.02]'
       "
@@ -127,7 +127,7 @@
           viewBox="0 0 20 20"
           fill="currentColor"
           aria-hidden="true"
-          [ngClass]="selectedWidget == 'Tasks' ? 'visible' : 'invisible'"
+          [ngClass]="selectedWidget === 'Tasks' ? 'visible' : 'invisible'"
         >
           <path
             fill-rule="evenodd"
@@ -140,14 +140,14 @@
       <span
         class="pointer-events-none absolute -inset-px rounded-lg border-2 hover:border"
         aria-hidden="true"
-        [ngClass]="selectedWidget == 'Tasks' ? 'border-green-500' : 'border-transparent'"
+        [ngClass]="selectedWidget === 'Tasks' ? 'border-green-500' : 'border-transparent'"
       ></span>
     </label>
   </div>
 </fieldset>
 
 <!-- Tasks Details -->
-@if (selectedWidget == "Tasks" || selectedWidget == "Random") {
+@if (selectedWidget === "Tasks" || selectedWidget === "Random") {
   <div class="mt-4 flex animate-fade-up flex-col gap-2 animate-delay-100 animate-duration-500">
     <legend class="text-gray-900 text-sm font-medium">Specify your tasks and the goals you want to achieve</legend>
     @defer {

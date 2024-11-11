@@ -17,8 +17,8 @@ import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.ser
   styleUrls: ["./websites-palette.component.css"],
 })
 export class WebsitesPaletteComponent implements AfterViewInit {
-  saveError: boolean = false;
-  searchQuery: string = "";
+  saveError = false;
+  searchQuery = "";
 
   constructor(
     private soundsEngine: SoundsEngineService,
@@ -112,7 +112,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
   }
 
   sortCategories = (a: any, b: any) => {
-    const order: { [key: string]: number } = { Suggestions: 1, Results: 2, Selected: 3 };
+    const order: Record<string, number> = { Suggestions: 1, Results: 2, Selected: 3 };
     return (order[a.key] || 0) - (order[b.key] || 0);
   };
 

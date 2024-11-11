@@ -10,8 +10,8 @@ import { Quotes } from "./quotes";
   styleUrl: "./quotes-widget.component.css",
 })
 export class QuotesWidgetComponent {
-  quoteText: string = "";
-  quoteAuthor: string = "";
+  quoteText = "";
+  quoteAuthor = "";
 
   constructor(private quote: Quotes) {
     const randomQuote = this.quote.getRandomQuote();

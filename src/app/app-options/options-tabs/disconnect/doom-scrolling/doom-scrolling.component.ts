@@ -10,7 +10,7 @@ import { CommonModule } from "@angular/common";
   styleUrl: "./doom-scrolling.component.css",
 })
 export class DoomScrollingComponent {
-  doomScrollingToggle: boolean = false;
+  doomScrollingToggle = false;
 
   constructor(private soundsEngine: SoundsEngineService) {
     chrome.storage.sync.get("doomScrollingToggle").then(result => {

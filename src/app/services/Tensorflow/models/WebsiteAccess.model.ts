@@ -2,13 +2,13 @@ import { Category } from "app/types/category.type";
 import { SequentialModel } from "app/types/tensorflow.type";
 import * as tf from "@tensorflow/tfjs";
 
-export type WebsiteAccessInput = {
+export interface WebsiteAccessInput {
   minutes: number;
   category: Category;
-};
+}
 
 export class WebsiteAccess extends SequentialModel {
-  epoch: number = 100;
+  epoch = 100;
   trainingData = [
     // Category unknown - Default timing function
     { input: { minutes: 0, category: Category.unknown }, output: 200 },

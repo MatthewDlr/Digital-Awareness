@@ -1,8 +1,8 @@
-export type BedtimeMode = {
+export interface BedtimeMode {
   isEnabled: boolean;
   startAt: { hours: number; minutes: number };
   endAt: { hours: number; minutes: number };
-};
+}
 
 export function convertTime(time: string): { hours: number; minutes: number } {
   const timeStr = time.split(":");

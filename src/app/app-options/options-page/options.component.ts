@@ -31,7 +31,7 @@ import { CompleteSetupComponent } from "../components/complete-setup/complete-se
 })
 export class OptionsComponent {
   currentTab!: string;
-  isCommandPaletteShown: boolean = false;
+  isCommandPaletteShown = false;
 
   constructor(
     private route: ActivatedRoute,

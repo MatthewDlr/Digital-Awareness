@@ -18,9 +18,9 @@ export class WebsitesListRowComponent implements AfterViewInit {
   @Input({ required: true }) isEnforced!: boolean;
   @Input() isPending!: boolean;
 
-  isEditEnabled: boolean = false;
-  oldHost: string = "";
-  awarenessColor: string = "";
+  isEditEnabled = false;
+  oldHost = "";
+  awarenessColor = "";
 
   constructor(
     private cdRef: ChangeDetectorRef,

@@ -2,9 +2,9 @@ import { isDevMode } from "@angular/core";
 import { BedtimeMode } from "app/types/bedtimeMode.type";
 import dayjs, { Dayjs } from "dayjs";
 
-const TIME_INTERVAL: number = 5; // In seconds, how often to check the time and update the filter
-const WIND_DOWN_DURATION: number = 15; // In minutes, how long the transition from normal to grayscale takes
-const WIND_UP_DURATION: number = 3; // In minutes, how long the transition from grayscale to normal takes
+const TIME_INTERVAL = 5; // In seconds, how often to check the time and update the filter
+const WIND_DOWN_DURATION = 15; // In minutes, how long the transition from normal to grayscale takes
+const WIND_UP_DURATION = 3; // In minutes, how long the transition from grayscale to normal takes
 
 let body: HTMLElement;
 let config: BedtimeMode;

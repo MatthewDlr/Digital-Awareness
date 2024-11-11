@@ -19,9 +19,9 @@ export class AwarenessPageComponent {
   originalTimerValue!: number;
   timerValue = signal(30);
   outputUrl!: URL;
-  widget: string = "Quotes";
+  widget = "Quotes";
   timerBehavior!: string;
-  isWindowFocused: boolean = true;
+  isWindowFocused = true;
 
   constructor(
     private route: ActivatedRoute,

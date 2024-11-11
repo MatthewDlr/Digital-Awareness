@@ -7,7 +7,7 @@ import { WebsiteAccessInput } from "../models/WebsiteAccess.model";
   providedIn: "root",
 })
 export class WebsiteAccessService extends ModelInference {
-  name: string = "WebsiteAccess";
+  name = "WebsiteAccess";
 
   constructor() {
     super();

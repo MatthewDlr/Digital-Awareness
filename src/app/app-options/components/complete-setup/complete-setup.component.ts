@@ -8,7 +8,7 @@ import { Component, isDevMode } from "@angular/core";
   styleUrl: "./complete-setup.component.css",
 })
 export class CompleteSetupComponent {
-  isSetupCompleted: boolean = true;
+  isSetupCompleted = true;
 
   constructor() {
     this.checkIfSetupCompleted();

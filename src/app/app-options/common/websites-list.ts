@@ -4,18 +4,18 @@ import { Category } from "app/types/category.type";
 If you add new categories, the order in which they appear is set in websites-palette.component.ts > sortCategories()
 They will automatically be displayed in the html with their contents
 */
-export type searchSuggestions = {
+export interface searchSuggestions {
   Suggestions: Website[];
   Results: Website[];
   Selected: Website[];
-};
+}
 
-export type Website = {
+export interface Website {
   host: string;
   category: Category;
   isBlocked?: boolean;
   isSelected?: boolean;
-};
+}
 
 // Thank you Copilot for generating this list
 export const mostPopularWebsites: Website[] = [

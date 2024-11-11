@@ -17,8 +17,8 @@ import { WebsitesListRowComponent } from "../../components/websites-list-row/web
 export class WebsitesListComponent {
   enforcedWebsites!: WatchedWebsite[];
   userWebsites!: WatchedWebsite[];
-  websitesPendingEdit: Set<string> = new Set();
-  isCommandPaletteShown: boolean = false;
+  websitesPendingEdit = new Set<string>();
+  isCommandPaletteShown = false;
   OS: string = this.getOS();
 
   constructor(

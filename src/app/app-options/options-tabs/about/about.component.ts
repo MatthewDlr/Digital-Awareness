@@ -10,5 +10,5 @@ import { CommonModule } from "@angular/common";
 })
 export class AboutComponent {
   version: string = chrome.runtime.getManifest().version;
-  submit_feedback_url: string = "https://github.com/MatthewDlr/Digital-Awareness/issues";
+  submit_feedback_url = "https://github.com/MatthewDlr/Digital-Awareness/issues";
 }

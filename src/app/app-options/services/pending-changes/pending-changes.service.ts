@@ -10,8 +10,8 @@ export class PendingChangesService {
   stage: BehaviorSubject<stages> = new BehaviorSubject<stages>(stages.NoChanges);
   validationDate: BehaviorSubject<Date> = new BehaviorSubject<Date>(new Date());
 
-  websitesToDelete: Set<string> = new Set();
-  websitesToEdit: Set<{ oldHost: string; newHost: string }> = new Set();
+  websitesToDelete = new Set<string>();
+  websitesToEdit = new Set<{ oldHost: string; newHost: string }>();
 
   timeout = isDevMode() ? 1000 * 5 : 1000 * 60;
   waitDuration = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;

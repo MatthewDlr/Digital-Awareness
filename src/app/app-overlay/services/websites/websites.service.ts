@@ -15,7 +15,7 @@ export class WebsitesService {
   enforcedWebsites!: WatchedWebsite[];
   userWebsites!: WatchedWebsite[];
   currentWebsite!: WatchedWebsite;
-  websiteOrigin: string = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
+  websiteOrigin = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
 
   constructor(private websiteAccess: WebsiteAccessService) {
     chrome.storage.sync

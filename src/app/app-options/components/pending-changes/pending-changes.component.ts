@@ -11,9 +11,9 @@ import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.ser
   styleUrls: ["./pending-changes.component.css"],
 })
 export class PendingChangesComponent {
-  validationDate: string = "";
-  expirationDate: string = "";
-  stage: string = "NoChanges";
+  validationDate = "";
+  expirationDate = "";
+  stage = "NoChanges";
 
   timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60; // Time required to wait in order to validate the changes
 

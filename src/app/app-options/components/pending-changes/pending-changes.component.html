@@ -1,7 +1,7 @@
-@if (stage != "NoChanges") {
+@if (stage !== "NoChanges") {
   <div class="bg-purple-50 flex h-fit animate-fade-up flex-row items-center gap-4 rounded-xl px-4 py-3 animate-duration-500">
     <!-- SVG Timer Animation -->
-    @if (stage == "ChangesPending") {
+    @if (stage === "ChangesPending") {
       <svg
         class="size-10"
         id="20032"
@@ -124,7 +124,7 @@
     }
 
     <!-- Validation Animation -->
-    @if (stage == "ChangesCanBeValidated") {
+    @if (stage === "ChangesCanBeValidated") {
       <svg
         class="size-10"
         id="20185"
@@ -265,15 +265,15 @@
 
     <div class="mr-[0.15rem] flex w-full items-center justify-between gap-3">
       <div class="w-3/4">
-        @if (stage == "ChangesPending") {
+        @if (stage === "ChangesPending") {
           <h3 class="text-purple-600 text-sm font-semibold">Your changes are pending</h3>
-        } @else if (stage == "ChangesCanBeValidated") {
+        } @else if (stage === "ChangesCanBeValidated") {
           <h3 class="text-purple-600 text-sm font-semibold">You can validate your changes</h3>
         }
         <div class="text-purple-600 mt-1 text-sm">
-          @if (stage == "ChangesCanBeValidated") {
+          @if (stage === "ChangesCanBeValidated") {
             <span> You can confirm your modifications until {{ expirationDate }} </span>
-          } @else if (stage == "ChangesPending") {
+          } @else if (stage === "ChangesPending") {
             <span> To confirm your modifications, come back at {{ validationDate }} </span>
           }
         </div>
@@ -283,7 +283,7 @@
           <button
             (click)="confirmChanges()"
             [ngClass]="
-              stage == 'ChangesCanBeValidated'
+              stage === 'ChangesCanBeValidated'
                 ? 'text-purple-600 cursor-pointer hover:bg-purple-100'
                 : 'text-gray-500 cursor-not-allowed'
             "

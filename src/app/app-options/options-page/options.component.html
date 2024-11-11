@@ -54,7 +54,7 @@
           <div
             (click)="setCurrentTab('websites-list')"
             [ngClass]="
-              currentTab == 'websites-list' || currentTab == 'default-tab'
+              currentTab === 'websites-list' || currentTab === 'default-tab'
                 ? 'text-green-500 !border-green-500'
                 : 'text-gray-500 hover:border-green-500'
             "
@@ -82,7 +82,7 @@
           <div
             (click)="setCurrentTab('awareness-page')"
             [ngClass]="
-              currentTab == 'awareness-page' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
+              currentTab === 'awareness-page' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
             "
             class="group text-gray-500 flex w-fit cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
           >
@@ -107,7 +107,7 @@
           <!-- Disconnect Tab -->
           <div
             (click)="setCurrentTab('disconnect')"
-            [ngClass]="currentTab == 'disconnect' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'"
+            [ngClass]="currentTab === 'disconnect' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'"
             class="group text-gray-500 flex w-fit cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
           >
             <svg
@@ -136,7 +136,7 @@
             stroke-width="1.75"
             aria-hidden="true"
             class="mt-2 size-6"
-            [ngClass]="currentTab == 'about' ? 'stroke-green-500' : 'stroke-gray-500 group-hover:animate-bounce'"
+            [ngClass]="currentTab === 'about' ? 'stroke-green-500' : 'stroke-gray-500 group-hover:animate-bounce'"
           >
             <path
               stroke-linecap="round"
@@ -151,13 +151,13 @@
 
   <!-- Options Content -->
   <div class="animate-fade-up animate-delay-300 animate-duration-500">
-    @if (currentTab == "websites-list" || currentTab == "default-tab") {
+    @if (currentTab === "websites-list" || currentTab === "default-tab") {
       <app-websites-list></app-websites-list>
-    } @else if (currentTab == "awareness-page") {
+    } @else if (currentTab === "awareness-page") {
       <app-awareness-page></app-awareness-page>
-    } @else if (currentTab == "disconnect") {
+    } @else if (currentTab === "disconnect") {
       <app-disconnect></app-disconnect>
-    } @else if (currentTab == "about") {
+    } @else if (currentTab === "about") {
       <app-about></app-about>
     }
   </div>
