@@ -3,7 +3,7 @@ import type { Configuration } from "webpack";
 module.exports = {
   entry: {
     serviceWorker: {
-      import: "./src/service-worker.ts",
+      import: "./src/scripts/service-worker.ts",
       runtime: false,
     },
     doomScrolling: {

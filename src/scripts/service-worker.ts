@@ -1,7 +1,7 @@
-import { writeDefaultConfig, updateConfig } from "./config.js";
+import { writeDefaultConfig, updateConfig } from "../config.js";
 import { isDevMode } from "@angular/core";
 import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../tailwind.config.js";
+import tailwindConfig from "../../tailwind.config.js";
 const fullConfig = resolveConfig(tailwindConfig);
 import dayjs, { Dayjs } from "dayjs";
 

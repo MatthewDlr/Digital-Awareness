@@ -7,7 +7,7 @@
   },
   "files": [
     "src/main.ts",
-    "src/service-worker.ts",
+    "src/scripts/service-worker.ts",
     "src/scripts/doomScrolling/doomScrolling.script.ts",
     "src/scripts/bedtimeMode/bedtimeMode.script.ts"
   ],
