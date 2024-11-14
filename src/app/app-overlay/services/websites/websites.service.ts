@@ -12,16 +12,13 @@ const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the
 })
 export class WebsitesService {
   isReady: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  enforcedWebsites!: WatchedWebsite[];
   userWebsites!: WatchedWebsite[];
   currentWebsite!: WatchedWebsite;
-  websiteOrigin = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
 
   constructor(private websiteAccess: WebsiteAccessService) {
     chrome.storage.sync
-      .get(["enforcedWebsites", "userWebsites"])
+      .get("userWebsites")
       .then(result => {
-        this.enforcedWebsites = result["enforcedWebsites"] || [];
         this.userWebsites = result["userWebsites"] || [];
         this.isReady.next(true);
       })
@@ -65,23 +62,14 @@ export class WebsitesService {
     websiteAllowed.allowedUntil = dayjs().add(DEFAULT_ALLOWED_DURATION, "minute").toString();
     websiteAllowed.allowedAt = dayjs().toString();
 
-    this.websiteOrigin === "Enforced"
-      ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })
-      : chrome.storage.sync.set({ userWebsites: this.userWebsites });
+  chrome.storage.sync.set({ userWebsites: this.userWebsites });
   }
 
   private getStoredWebsite(host: string): WatchedWebsite {
     host = this.removeWWW(host);
 
-    const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == host);
-    if (enforcedWebsite) {
-      this.websiteOrigin = "Enforced";
-      return enforcedWebsite;
-    }
-
     const userWebsite = this.userWebsites.find(userWebsite => userWebsite.host == host);
     if (userWebsite) {
-      this.websiteOrigin = "User";
       return userWebsite;
     }
 

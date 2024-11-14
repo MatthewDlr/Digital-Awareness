@@ -9,26 +9,16 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
   // Avoid showing blockpage if the request is made in background or isn't http/https
   if (details.frameId != 0 || !details.url.startsWith("http")) return;
 
-  let commitedWebsite = new URL(details.url).host;
-  if (commitedWebsite.substring(0, 4) == "www.") commitedWebsite = commitedWebsite.substring(4);
+  let committedWebsite = new URL(details.url).host;
+  if (committedWebsite.substring(0, 4) == "www.") committedWebsite = committedWebsite.substring(4);
 
-  chrome.storage.sync.get(["enforcedWebsites"]).then(result => {
-    // Check if the website blocked by the list of mandatory blocked websites
-    const enforcedWebsites = result["enforcedWebsites"];
-    const isEnforced = isWebsiteBlocked(commitedWebsite, enforcedWebsites);
+  // Check if the website is in the list of user blocked websites
+  chrome.storage.sync.get(["userWebsites"]).then(result => {
+    const userWebsites = result["userWebsites"];
+    const isBlocked = isWebsiteBlocked(committedWebsite, userWebsites);
 
-    if (isEnforced) {
+    if (isBlocked) {
       redirectToWaitPage(details);
-    } else {
-      // Check if the website is in the list of user blocked websites
-      chrome.storage.sync.get(["userWebsites"]).then(result => {
-        const userWebsites = result["userWebsites"];
-        const isBlocked = isWebsiteBlocked(commitedWebsite, userWebsites);
-
-        if (isBlocked) {
-          redirectToWaitPage(details);
-        }
-      });
     }
   });
 });
@@ -74,7 +64,9 @@ function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean
 
   const allowedUntil: Dayjs = dayjs(blockedWebsite.allowedUntil);
   if (allowedUntil > dayjs()) {
-    isDevMode() ? console.log("Website is temporary allowed until: ", allowedUntil.toString()) : null;
+    isDevMode()
+      ? console.log("Website is temporary allowed until: ", allowedUntil.toString())
+      : null;
     return false;
   }
 
@@ -83,6 +75,8 @@ function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean
 }
 
 function redirectToWaitPage(details: any) {
-  const redirectUrl = chrome.runtime.getURL("index.html#blocked/" + encodeURIComponent(btoa(details.url)));
+  const redirectUrl = chrome.runtime.getURL(
+    "index.html#blocked/" + encodeURIComponent(btoa(details.url)),
+  );
   chrome.tabs.update(details.tabId, { url: redirectUrl });
 }

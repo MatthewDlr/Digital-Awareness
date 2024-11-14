@@ -15,7 +15,6 @@ import { WebsitesListRowComponent } from "../../components/websites-list-row/web
   styleUrls: ["./websites-list.component.css"],
 })
 export class WebsitesListComponent {
-  enforcedWebsites!: WatchedWebsite[];
   userWebsites!: WatchedWebsite[];
   websitesPendingEdit = new Set<string>();
   isCommandPaletteShown = false;
@@ -58,11 +57,6 @@ export class WebsitesListComponent {
   }
 
   getWebsites() {
-    chrome.storage.sync.get("enforcedWebsites").then(result => {
-      this.enforcedWebsites = result["enforcedWebsites"] || [];
-      isDevMode() ? console.log("Enforced Websites successfully fetched") : null;
-    });
-
     chrome.storage.sync.get("userWebsites").then(result => {
       this.userWebsites = result["userWebsites"] || [];
       isDevMode() ? console.log("User Websites successfully fetched") : null;

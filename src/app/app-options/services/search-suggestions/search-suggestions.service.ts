@@ -11,7 +11,6 @@ const COMMONS_HOSTS_EXTENSIONS = [".com", ".org", ".io", ".co"];
 })
 export class SearchService {
   private websiteSearch: FuzzySearch<Website>;
-  private enforcedWebsites: WatchedWebsite[] = [];
   userWebsites: WatchedWebsite[] = [];
   suggestions: searchSuggestions = {
     Suggestions: [],
@@ -64,9 +63,6 @@ export class SearchService {
     chrome.storage.sync.get("userWebsites").then(result => {
       this.userWebsites = result["userWebsites"] || [];
     });
-    chrome.storage.sync.get("enforcedWebsites").then(result => {
-      this.enforcedWebsites = result["enforcedWebsites"] || [];
-    });
   }
 
   private searchInWebsites(searchQuery: string) {
@@ -99,9 +95,6 @@ export class SearchService {
   }
 
   private isWebsiteBlocked(host: string): boolean {
-    if (this.enforcedWebsites.find(watchedWebsite => watchedWebsite.host == host)) {
-      return true;
-    }
     if (this.userWebsites.find(watchedWebsite => watchedWebsite.host == host)) {
       return true;
     }

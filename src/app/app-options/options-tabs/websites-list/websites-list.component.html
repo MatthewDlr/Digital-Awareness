@@ -63,16 +63,6 @@
                   ]"
                 ></tr>
               }
-
-              <!-- Enforced Websites -->
-              @for (website of enforcedWebsites; track $index) {
-                <tr
-                  websites-list-row
-                  [website]="website"
-                  [isEnforced]="true"
-                  class="bg-gray-50 animate-fade-up animate-delay-[400ms] animate-duration-500"
-                ></tr>
-              }
             </tbody>
           </table>
         </div>
