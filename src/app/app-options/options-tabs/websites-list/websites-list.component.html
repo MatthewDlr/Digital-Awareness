@@ -54,7 +54,6 @@
                 <tr
                   websites-list-row
                   [website]="website"
-                  [isEnforced]="false"
                   [isPending]="websitesPendingEdit.has(website.host) || pendingChangesService.websitesToDelete.has(website.host)"
                   class="animate-fade-up animate-delay-[400ms] animate-duration-500"
                   [ngClass]="[

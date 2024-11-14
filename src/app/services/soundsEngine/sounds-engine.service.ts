@@ -52,10 +52,6 @@ export class SoundsEngineService {
     this.playAudio("alert");
   }
 
-  notAllowed() {
-    this.playAudio("not-allowed");
-  }
-
   appear() {
     this.playAudio("appear");
   }

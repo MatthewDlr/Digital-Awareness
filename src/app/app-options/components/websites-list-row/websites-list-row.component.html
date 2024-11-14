@@ -1,5 +1,5 @@
 <td class="text-gray-900 whitespace-nowrap pl-4 pr-3 text-sm font-medium sm:pl-6" [ngClass]="isEditEnabled ? 'py-2' : 'py-4'">
-  @if (!isEditEnabled || isEnforced) {
+  @if (!isEditEnabled) {
     <span>{{ website.host }}</span>
   } @else {
     <div
@@ -39,7 +39,7 @@
 <td class="relative flex items-center gap-5 whitespace-nowrap py-4 pr-3 text-right text-sm font-medium sm:pr-6">
   <a
     [ngClass]="
-      isEnforced || isPending
+      isPending
         ? 'text-gray-600 cursor-not-allowed'
         : 'text-purple-500 cursor-pointer underline hover:text-purple-600'
     "
@@ -51,7 +51,7 @@
   </a>
   <a
     [ngClass]="
-      isEnforced || isPending
+      isPending
         ? 'text-gray-600 cursor-not-allowed'
         : 'text-purple-500 cursor-pointer underline hover:text-purple-600'
     "
