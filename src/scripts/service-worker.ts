@@ -6,7 +6,7 @@ const fullConfig = resolveConfig(tailwindConfig);
 import dayjs, { Dayjs } from "dayjs";
 
 chrome.webNavigation.onCommitted.addListener(function (details) {
-  // Avoid showing blockpage if the request is made in background or isn't http/https
+  // Avoid showing block page if the request is made in background or isn't http/https
   if (details.frameId != 0 || !details.url.startsWith("http")) return;
 
   let committedWebsite = new URL(details.url).host;
@@ -52,13 +52,13 @@ chrome.action.onClicked.addListener(function () {
   });
 });
 
-function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean {
+function isWebsiteBlocked(committedHost: string, blockedWebsites: any[]): boolean {
   const blockedWebsite = blockedWebsites.find(website => {
-    return website.host === commitedHost;
+    return website.host === committedHost;
   });
 
   if (!blockedWebsite) {
-    isDevMode() ? console.log("Website not blocked: ", commitedHost) : null;
+    isDevMode() ? console.log("Website not blocked: ", committedHost) : null;
     return false;
   }
 
@@ -70,7 +70,7 @@ function isWebsiteBlocked(commitedHost: string, blockedWebsites: any[]): boolean
     return false;
   }
 
-  isDevMode() ? console.log("Website blocked: ", commitedHost) : null;
+  isDevMode() ? console.log("Website blocked: ", committedHost) : null;
   return true;
 }
 
