@@ -1,4 +1,4 @@
-import { Component, isDevMode } from "@angular/core";
+import { Component, effect, isDevMode } from "@angular/core";
 import { Location } from "@angular/common";
 import { WebsitePaletteService } from "../services/website-palette/website-palette.service";
 import { PendingChangesService } from "../services/pending-changes/pending-changes.service";
@@ -30,7 +30,7 @@ import { CompleteSetupComponent } from "../components/complete-setup/complete-se
   styleUrls: ["./options.component.css"],
 })
 export class OptionsComponent {
-  currentTab!: string;
+  currentTab = "default-tab";
   isCommandPaletteShown = false;
 
   constructor(
@@ -44,10 +44,8 @@ export class OptionsComponent {
       this.currentTab = params["tab"] ? params["tab"] : "default-tab";
     });
 
-    this.commandPaletteService.isCommandPaletteShown.subscribe({
-      next: state => {
-        this.isCommandPaletteShown = state;
-      },
+    effect(() => {
+      this.isCommandPaletteShown = this.commandPaletteService.isCommandPaletteShown();
     });
   }
 

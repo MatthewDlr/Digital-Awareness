@@ -25,7 +25,6 @@ import { setRestrictedWebsites } from "app/shared/chrome-storage-api";
   styleUrls: ["./websites-palette.component.css"],
 })
 export class WebsitesPaletteComponent implements AfterViewInit {
-  saveError = false;
   searchQuery = "";
 
   constructor(
@@ -33,12 +32,10 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     private commandPaletteService: WebsitePaletteService,
     public searchService: SearchService,
   ) {
-    this.searchService.loadStoredWebsites();
     this.searchService.clearSuggestions();
   }
 
   @ViewChild("search") searchInput!: ElementRef;
-  @ViewChild("saveError") saveErrorElement!: ElementRef;
 
   // Focus on the search input when the component is loaded
   ngAfterViewInit(): void {
@@ -63,33 +60,26 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     const restrictedWebsites = this.searchService.restrictedWebsites;
     const selectedWebsites = this.searchService.suggestions.Selected;
 
-    if (selectedWebsites.length == 0) {
+    if (selectedWebsites.length === 0) {
       this.toggleCommandPalette(false);
-      isDevMode() ? console.log("No websites selected, nothing to save") : null;
+      isDevMode() && console.log("No websites selected, nothing to save");
       return;
     }
 
     for (const selectedWebsite of selectedWebsites) {
-      restrictedWebsites.set(selectedWebsite.host, this.createWatchedWebsite(selectedWebsite));
+      restrictedWebsites.set(selectedWebsite.host, this.constructRestrictedWebsite(selectedWebsite));
     }
 
     try {
       await setRestrictedWebsites(restrictedWebsites);
       this.soundsEngine.appear();
       this.searchService.clearSuggestions();
-      this.toggleCommandPalette(false);
     } catch (error) {
       this.soundsEngine.error();
-      this.saveError = true;
       this.searchService.loadStoredWebsites();
       console.error("Error while blocking websites:", error);
-      setTimeout(() => {
-        this.saveErrorElement.nativeElement.classList.remove("animate-shake");
-        setTimeout(() => {
-          this.saveErrorElement.nativeElement.classList.add("animate-shake");
-        }, 25);
-      }, 50);
     }
+    this.toggleCommandPalette(false);
   }
 
   toggleCommandPalette(state: boolean) {
@@ -107,9 +97,8 @@ export class WebsitesPaletteComponent implements AfterViewInit {
   }
 
   toggleWebsiteSelection(website: Website) {
-    if (website.isBlocked) {
-      return;
-    }
+    if (website.isBlocked) return;
+
     this.soundsEngine.select();
     website.isSelected = !website.isSelected;
     website.isSelected
@@ -122,7 +111,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     return (order[a.key] || 0) - (order[b.key] || 0);
   };
 
-  private createWatchedWebsite(website: Website): RestrictedWebsite {
+  private constructRestrictedWebsite(website: Website): RestrictedWebsite {
     return {
       host: website.host,
       allowedUntil: "",

@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, isDevMode } from "@angular/core";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { animate, query, style, transition, trigger } from "@angular/animations";
 import { ChangeDetectionStrategy } from "@angular/core";
 import { BedtimeMode, convertTime } from "app/types/bedtimeMode.type";
+import { getBedtimeMode, setBedtimeMode } from "app/shared/chrome-storage-api";
 
 export const smoothHeight = trigger("HeightChange", [
   transition(
@@ -34,18 +35,10 @@ export class BedtimeModeComponent {
     private soundsEngine: SoundsEngineService,
     private cdr: ChangeDetectorRef,
   ) {
-    chrome.storage.sync
-      .get("bedtimeMode")
-      .then(result => {
-        if (result["bedtimeMode"]) {
-          this.bedtimeMode = result["bedtimeMode"];
-          this.cdr.detectChanges();
-          isDevMode() && console.log(this.bedtimeMode);
-        }
-      })
-      .catch(error => {
-        isDevMode() && console.error(error);
-      });
+    getBedtimeMode().then(bedtimeMode => {
+      this.bedtimeMode = bedtimeMode;
+      this.cdr.detectChanges();
+    });
   }
 
   toggleMode() {
@@ -57,7 +50,7 @@ export class BedtimeModeComponent {
       this.bedtimeMode.isEnabled = true;
     }
 
-    this.saveToStorage();
+    this.updateBedtimePreferences();
   }
 
   setStartDate(value: string) {
@@ -65,12 +58,11 @@ export class BedtimeModeComponent {
 
     if (time.hours > 2 && time.hours < 20) {
       this.isBedtimeStartCorrect = false;
-      this.soundsEngine.error();
     } else {
       this.isBedtimeStartCorrect = true;
       this.bedtimeMode.startAt.hours = time.hours;
       this.bedtimeMode.startAt.minutes = time.minutes;
-      this.saveToStorage();
+      this.updateBedtimePreferences();
     }
   }
 
@@ -81,9 +73,8 @@ export class BedtimeModeComponent {
       this.isBedtimeEndCorrect = true;
       this.bedtimeMode.endAt.hours = time.hours;
       this.bedtimeMode.endAt.minutes = time.minutes;
-      this.saveToStorage();
+      this.updateBedtimePreferences();
     } else {
-      this.soundsEngine.error();
       this.isBedtimeEndCorrect = false;
     }
   }
@@ -92,14 +83,8 @@ export class BedtimeModeComponent {
     return String(time.hours).padStart(2, "0") + ":" + String(time.minutes).padStart(2, "0");
   }
 
-  private async saveToStorage() {
-    await chrome.storage.sync
-      .set({
-        bedtimeMode: this.bedtimeMode,
-      })
-      .then(() => {
-        isDevMode() && console.info("Bedtime mode preferences successfully saved ✅");
-      });
+  private async updateBedtimePreferences() {
+    await setBedtimeMode(this.bedtimeMode);
   }
 
   private getDefaultConfig(): BedtimeMode {

@@ -1,4 +1,4 @@
-import { Component, HostListener } from "@angular/core";
+import { Component, effect, HostListener } from "@angular/core";
 import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
 import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
@@ -26,16 +26,14 @@ export class WebsitesListComponent {
     private commandPaletteService: WebsitePaletteService,
     public pendingChangesService: PendingChangesService,
   ) {
-    this.commandPaletteService.isCommandPaletteShown.subscribe({
-      next: state => {
-        this.isCommandPaletteShown = state;
-        if (!state) {
-          setTimeout(() => {
-            this.getWebsites();
-            this.getWebsitesPendingEdit();
-          }, 100);
-        }
-      },
+    effect(() => {
+      this.isCommandPaletteShown = this.commandPaletteService.isCommandPaletteShown();
+      if (!this.isCommandPaletteShown) {
+        setTimeout(() => {
+          this.getWebsites();
+          this.getWebsitesPendingEdit();
+        }, 100);
+      }
     });
     this.pendingChangesService.stage.subscribe({
       next: () => {
@@ -59,6 +57,7 @@ export class WebsitesListComponent {
 
   private async getWebsites() {
     this.restrictedWebsites = await getRestrictedWebsites();
+    console.log(this.restrictedWebsites);
   }
 
   getWebsitesPendingEdit() {

@@ -1,8 +1,10 @@
+import { isDevMode } from "@angular/core";
 import { BedtimeMode } from "app/types/bedtimeMode.type";
 import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
 
 export async function getExtensionVersion(): Promise<string> {
   const result = await chrome.storage.sync.get("extensionVersion");
+  isDevMode() && console.log("Extension version:", result["extensionVersion"]);
   return result["extensionVersion"];
 }
 
@@ -12,6 +14,7 @@ export async function setExtensionVersion(extensionVersion: string) {
 
 export async function getAwarenessPageWidget(): Promise<string> {
   const result = await chrome.storage.sync.get("awarenessPageWidget");
+  isDevMode() && console.log("Page widget:", result["awarenessPageWidget"]);
   return result["awarenessPageWidget"];
 }
 
@@ -25,12 +28,14 @@ export async function getRestrictedWebsites(): Promise<Map<string, RestrictedWeb
   }
 }
 
-export async function setRestrictedWebsites(restrictedWebsites: Map<string, RestrictedWebsite>) {
+export async function setRestrictedWebsites(restrictedWebsitesMap: Map<string, RestrictedWebsite>) {
+  const restrictedWebsites = Object.fromEntries(restrictedWebsitesMap);
   await chrome.storage.sync.set({ restrictedWebsites });
 }
 
-export async function doomScrollingToggle(): Promise<boolean> {
+export async function getDoomScrollingToggle(): Promise<boolean> {
   const result = await chrome.storage.sync.get("doomScrollingToggle");
+  isDevMode() && console.log("Doom scrolling toggle:", result["doomScrollingToggle"]);
   return result["doomScrollingToggle"];
 }
 
@@ -40,5 +45,10 @@ export async function setDoomScrollingToggle(doomScrollingToggle: boolean) {
 
 export async function getBedtimeMode(): Promise<BedtimeMode> {
   const result = await chrome.storage.sync.get("bedtimeMode");
+  isDevMode() && console.log("Bedtime mode:", result["bedtimeMode"]);
   return result["bedtimeMode"];
+}
+
+export async function setBedtimeMode(bedtimeMode: BedtimeMode) {
+  await chrome.storage.sync.set({ bedtimeMode });
 }

@@ -1,11 +1,13 @@
 <!-- Page Widget -->
-<fieldset class="mt-3 animate-fade-up animate-delay-0 animate-duration-500">
+<fieldset class="mt-3">
   <legend class="text-gray-900 text-lg font-semibold leading-6">Page widget</legend>
-  <legend class="font-base text-gray-800 text-sm">Choose the widget you want to display on the page</legend>
+  <legend class="font-base text-gray-800 text-sm">
+    Choose the widget you want to display on the page
+  </legend>
 
   <!-- Random -->
   <p
-    class="bg-white relative mt-5 flex !transform cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+    class="fade-up bg-white relative mt-5 flex !transform cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
     [ngClass]="
       selectedWidget === 'Random'
         ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
@@ -17,8 +19,12 @@
   >
     <span class="flex flex-1">
       <span class="flex w-full items-center justify-center gap-3">
-        <span id="project-type-0-label" class="text-gray-900 block text-base font-medium">Random</span>
-        <span id="project-type-0-description-0" class="text-gray-500 mt-[0.15rem] flex items-center text-sm"
+        <span id="project-type-0-label" class="text-gray-900 block text-base font-medium"
+          >Random</span
+        >
+        <span
+          id="project-type-0-description-0"
+          class="text-gray-500 mt-[0.15rem] flex items-center text-sm"
           >Display a random widget every time</span
         >
       </span>
@@ -41,7 +47,7 @@
   <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
     <!-- Quotes -->
     <p
-      class="bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+      class="fade-up fade-up-delay-200 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       [ngClass]="
         selectedWidget === 'Quotes'
           ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
@@ -53,8 +59,12 @@
     >
       <span class="flex flex-1">
         <span class="flex flex-col">
-          <span id="project-type-0-label" class="text-gray-900 block text-base font-medium">Quotes</span>
-          <span id="project-type-0-description-0" class="text-gray-500 mt-1 flex items-center text-sm"
+          <span id="project-type-0-label" class="text-gray-900 block text-base font-medium"
+            >Quotes</span
+          >
+          <span
+            id="project-type-0-description-0"
+            class="text-gray-500 mt-1 flex items-center text-sm"
             >Display motivational quotes</span
           >
         </span>
@@ -76,7 +86,7 @@
 
     <!-- Breathing -->
     <p
-      class="bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+      class="fade-up fade-up-delay-300 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       (click)="updateSelectedWidget('Breathing')"
       (keypress)="updateSelectedWidget('Breathing')"
       tabindex="2"
@@ -88,8 +98,12 @@
     >
       <span class="flex flex-1">
         <span class="flex flex-col">
-          <span id="project-type-1-label" class="text-gray-900 block text-base font-medium">Breathing</span>
-          <span id="project-type-1-description-0" class="text-gray-500 mt-1 flex items-center text-sm"
+          <span id="project-type-1-label" class="text-gray-900 block text-base font-medium"
+            >Breathing</span
+          >
+          <span
+            id="project-type-1-description-0"
+            class="text-gray-500 mt-1 flex items-center text-sm"
             >Display breathing exercises</span
           >
         </span>
@@ -111,7 +125,7 @@
 
     <!-- Tasks -->
     <p
-      class="bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+      class="fade-up fade-up-delay-400 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
       (click)="updateSelectedWidget('Tasks')"
       (keypress)="updateSelectedWidget('Tasks')"
       tabindex="3"
@@ -123,8 +137,12 @@
     >
       <span class="flex flex-1">
         <span class="flex flex-col">
-          <span id="project-type-2-label" class="text-gray-900 block text-base font-medium">Tasks</span>
-          <span id="project-type-2-description-0" class="text-gray-500 mt-1 flex items-center text-sm"
+          <span id="project-type-2-label" class="text-gray-900 block text-base font-medium"
+            >Tasks</span
+          >
+          <span
+            id="project-type-2-description-0"
+            class="text-gray-500 mt-1 flex items-center text-sm"
             >Display what you could be doing instead</span
           >
         </span>
@@ -156,8 +174,10 @@
 
 <!-- Tasks Details -->
 @if (selectedWidget === "Tasks" || selectedWidget === "Random") {
-  <div class="mt-4 flex animate-fade-up flex-col gap-2 animate-delay-100 animate-duration-500">
-    <legend class="text-gray-900 text-sm font-medium">Specify your tasks and the goals you want to achieve</legend>
+  <div class="mt-4 flex fade-up flex-col gap-2 ">
+    <legend class="text-gray-900 text-sm font-medium">
+      Specify your tasks and the goals you want to achieve
+    </legend>
     @defer {
       @if (!areTasksValid) {
         <p class="text-red-500 mt-2 text-sm">Fill out at least one task</p>

@@ -47,15 +47,14 @@ export class SearchService {
   }
 
   addSelectedWebsite(website: Website) {
-    if (this.suggestions.Selected.find(selectedWebsite => selectedWebsite.host == website.host)) {
-      return;
-    }
     this.suggestions.Selected.push(website);
   }
 
   removeSelectedWebsite(website: Website) {
     const index = this.suggestions.Selected.indexOf(website);
-    this.suggestions.Selected.splice(index, 1);
+    if (index > -1) {
+      this.suggestions.Selected.splice(index, 1);
+    }
   }
 
   clearSuggestions() {
@@ -106,13 +105,18 @@ export class SearchService {
   private cleanURL(url: string): string {
     url = url.trim();
 
-    if (url.substring(0, 4) == "www.") {
-      url = url.substring(4);
-    }
+    try {
+      new URL(url);
+      return new URL(url).hostname.replace("www.", "");
+    } catch {
+      if (url.substring(0, 4) == "www.") {
+        url = url.substring(4);
+      }
 
-    if (url.includes("/")) {
-      url = url.substring(0, url.indexOf("/"));
+      if (url.includes("/")) {
+        url = url.substring(0, url.indexOf("/"));
+      }
+      return url;
     }
-    return url;
   }
 }

@@ -3,7 +3,7 @@
 >
   <!-- Timer -->
   <div
-    class="bg-white flex size-20 animate-fade-up items-center justify-center rounded-lg bg-opacity-40 animate-duration-500"
+    class="bg-white flex size-20 fade-up items-center justify-center rounded-lg bg-opacity-"
   >
     @defer (when originalTimerValue) {
       <p class="text-gray-900 text-3xl" [ngClass]="timerValue() < 6 ? 'animate-bounce' : ''">
@@ -13,7 +13,7 @@
   </div>
 
   <!-- Widget -->
-  <div class="animate-fade-up animate-delay-200 animate-duration-500">
+  <div class="fade-up fade-up-delay-200">
     @switch (widget) {
       @case ("Quotes") {
         <app-quotes-widget></app-quotes-widget>
@@ -30,7 +30,7 @@
   <div class="flex flex-col items-center justify-center gap-5">
     <!-- Go Back Button -->
     <div
-      class="animate-fade-up animate-delay-[400ms] animate-duration-500"
+      class="fade-up fade-up-delay-400"
       (click)="closeBlockPage()"
       (keypress)="closeBlockPage()"
       tabindex="0"
@@ -56,7 +56,7 @@
 
     <!-- Continue Button -->
     <div
-      [ngClass]="timerValue() === 0 ? 'visible *:animate-fade-up *:animate-duration-500' : 'invisible'"
+      [ngClass]="timerValue() === 0 ? 'visible *:fade-up' : 'invisible'"
       class="flex flex-col items-center gap-2"
     >
       <div
@@ -70,7 +70,7 @@
       <p
         class="text-gray-500 text-sm opacity-50"
         [ngClass]="
-          timerValue() === 0 ? 'animate-delay-300' : ''
+          timerValue() === 0 ? 'fade-up-delay-200' : ''
         "
       >
         Otherwise, tab will close on its own

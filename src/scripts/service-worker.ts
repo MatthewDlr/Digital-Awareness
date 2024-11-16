@@ -15,8 +15,9 @@ chrome.webNavigation.onCommitted.addListener(async function (details) {
     navigatedWebsiteHost = navigatedWebsiteHost.substring(4);
 
   const restrictedWebsites = await getRestrictedWebsites();
-  const restrictedWebsite = restrictedWebsites.get(navigatedWebsiteHost);
+  if (restrictedWebsites.size === 0) return;
 
+  const restrictedWebsite = restrictedWebsites.get(navigatedWebsiteHost);
   if (!restrictedWebsite) {
     isDevMode() && console.log("Website not blocked: ", restrictedWebsite);
     return;

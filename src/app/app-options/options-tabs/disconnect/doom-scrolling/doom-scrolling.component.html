@@ -1,11 +1,15 @@
 <!-- Doom scrolling toggle -->
 <li
-  class="flex w-full animate-fade-up items-center justify-between rounded-xl border px-6 py-4 animate-duration-500"
-  [ngClass]="doomScrollingToggle ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
+  class="flex w-full items-center justify-between rounded-xl border px-6 py-4"
+  [ngClass]="
+    doomScrollingToggle ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'
+  "
 >
   <span class="flex flex-grow flex-col gap-1">
     <div class="flex gap-2">
-      <span class="text-gray-900 text-base font-medium leading-6" id="availability-label">Prevent Doom Scrolling</span>
+      <span class="text-gray-900 text-base font-medium leading-6" id="availability-label"
+        >Prevent Doom Scrolling</span
+      >
     </div>
     <div class="gap-1">
       <span class="text-gray-500 text-sm" id="availability-description">
@@ -35,7 +39,7 @@
     <span
       [ngClass]="doomScrollingToggle ? 'translate-x-5' : 'translate-x-0'"
       aria-hidden="true"
-      class="bg-white pointer-events-none inline-block h-5 w-5 translate-x-0 !transform rounded-full shadow !transition-all !duration-200 !ease-in-out group-disabled:bg-gray-400"
+      class="bg-white pointer-events-none inline-block h-5 w-5 translate-x-0 !transform rounded-full shadow !transition-all !duration-300 !ease-in-out group-disabled:bg-gray-400"
     ></span>
   </button>
 </li>

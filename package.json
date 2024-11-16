@@ -46,7 +46,6 @@
     "nightwind": "^1.1.13",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.14",
-    "tailwindcss-animated": "^1.1.2",
     "tslib": "^2.8.1",
     "typescript-eslint": "8.10.0",
     "webpack": "^5.96.1"
