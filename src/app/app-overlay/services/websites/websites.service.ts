@@ -1,9 +1,10 @@
-import { Injectable, isDevMode } from "@angular/core";
-import { BehaviorSubject, filter, firstValueFrom } from "rxjs";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
-import dayjs, { Dayjs } from "dayjs";
+import { computed, effect, Injectable, isDevMode, Signal, signal } from "@angular/core";
+import { filter, firstValueFrom } from "rxjs";
+import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
+import dayjs from "dayjs";
 import { WebsiteAccessService } from "app/services/Tensorflow/Website Access/website-access.service";
 import { WebsiteAccessInput } from "app/services/Tensorflow/models/WebsiteAccess.model";
+import { getRestrictedWebsites, setRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website, defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
 
@@ -11,25 +12,25 @@ const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the
   providedIn: "root",
 })
 export class WebsitesService {
-  isReady: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  userWebsites!: WatchedWebsite[];
-  currentWebsite!: WatchedWebsite;
+  private currentWebsite!: RestrictedWebsite;
+  private restrictedWebsites = signal(new Map<string, RestrictedWebsite>());
+  isReady: Signal<boolean> = computed(() => this.restrictedWebsites().size > 0);
 
   constructor(private websiteAccess: WebsiteAccessService) {
-    chrome.storage.sync
-      .get("userWebsites")
-      .then(result => {
-        this.userWebsites = result["userWebsites"] || [];
-        this.isReady.next(true);
-      })
-      .catch(error => {
-        isDevMode() ? console.error(error) : null;
-      });
+    getRestrictedWebsites().then(restrictedWebsites => {
+      this.restrictedWebsites.set(restrictedWebsites);
+    });
+
+    effect(() => {
+      console.log(this.restrictedWebsites());
+    });
   }
 
   async getTimerValue(host: string): Promise<number> {
     this.currentWebsite = this.getStoredWebsite(host);
     const minutesDiff = this.getMinutesSinceLastAccess(this.currentWebsite);
+    if (minutesDiff > 7 * 24 * 60) return 0;
+
     const input: WebsiteAccessInput = {
       minutes: minutesDiff,
       category: this.currentWebsite.category,
@@ -39,39 +40,37 @@ export class WebsitesService {
     return timer;
   }
 
-  private getMinutesSinceLastAccess(website: WatchedWebsite): number {
-    const lastAccess = this.getLastAccess(website);
-    const minutesDiff = dayjs().diff(lastAccess, "minutes");
-    isDevMode() && console.log("There is " + minutesDiff + " min between now and the last access");
-    return minutesDiff;
-  }
+  private getMinutesSinceLastAccess(website: RestrictedWebsite): number {
+    if (!website.allowedAt) return Infinity;
 
-  private getLastAccess(website: WatchedWebsite): Dayjs {
-    if (website.allowedAt) {
-      return dayjs(website.allowedAt);
-    }
-    // If the variable is not defined, it's means that the website has never been allowed
-    // We substract 7 days so the timer has the minimum value the first visit
-    return dayjs().subtract(7, "day");
+    const lastAccess = dayjs(website.allowedAt);
+    const minutesDiff = dayjs().diff(lastAccess, "minutes");
+    return minutesDiff;
   }
 
   // This is called when the user choose to visit the website
   allowWebsiteTemporary(): void {
-    const websiteAllowed: WatchedWebsite = this.currentWebsite;
+    const websiteAllowed: RestrictedWebsite = this.currentWebsite;
 
     websiteAllowed.allowedUntil = dayjs().add(DEFAULT_ALLOWED_DURATION, "minute").toString();
     websiteAllowed.allowedAt = dayjs().toString();
 
-  chrome.storage.sync.set({ userWebsites: this.userWebsites });
+    this.updateWebsites(websiteAllowed);
   }
 
-  private getStoredWebsite(host: string): WatchedWebsite {
+  private updateWebsites(websiteAllowed: RestrictedWebsite) {
+    this.restrictedWebsites.update(restrictedWebsiteMap => {
+      restrictedWebsiteMap.set(websiteAllowed.host, websiteAllowed);
+      return restrictedWebsiteMap;
+    });
+    setRestrictedWebsites(this.restrictedWebsites());
+  }
+
+  private getStoredWebsite(host: string): RestrictedWebsite {
     host = this.removeWWW(host);
 
-    const userWebsite = this.userWebsites.find(userWebsite => userWebsite.host == host);
-    if (userWebsite) {
-      return userWebsite;
-    }
+    const userWebsite = this.restrictedWebsites().get(host);
+    if (userWebsite) return userWebsite;
 
     throw new Error("Website not found in chrome storage: " + host);
   }

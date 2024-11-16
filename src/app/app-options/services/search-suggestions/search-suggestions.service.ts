@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import FuzzySearch from "fuzzy-search";
 import { mostPopularWebsites, Website, searchSuggestions } from "../../common/websites-list";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
+import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
 import { Category } from "app/types/category.type";
+import { getRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 const COMMONS_HOSTS_EXTENSIONS = [".com", ".org", ".io", ".co"];
 
@@ -11,7 +12,7 @@ const COMMONS_HOSTS_EXTENSIONS = [".com", ".org", ".io", ".co"];
 })
 export class SearchService {
   private websiteSearch: FuzzySearch<Website>;
-  userWebsites: WatchedWebsite[] = [];
+  restrictedWebsites = new Map<string, RestrictedWebsite>();
   suggestions: searchSuggestions = {
     Suggestions: [],
     Results: [],
@@ -20,9 +21,16 @@ export class SearchService {
 
   constructor() {
     this.loadStoredWebsites();
+
     this.websiteSearch = new FuzzySearch(mostPopularWebsites, ["host", "category"], {
       caseSensitive: false,
       sort: true,
+    });
+  }
+
+  loadStoredWebsites() {
+    getRestrictedWebsites().then(restrictedWebsites => {
+      this.restrictedWebsites = restrictedWebsites;
     });
   }
 
@@ -59,12 +67,6 @@ export class SearchService {
     this.suggestions.Results = [];
   }
 
-  loadStoredWebsites() {
-    chrome.storage.sync.get("userWebsites").then(result => {
-      this.userWebsites = result["userWebsites"] || [];
-    });
-  }
-
   private searchInWebsites(searchQuery: string) {
     const searchResults = this.websiteSearch.search(searchQuery).slice(0, 5);
     searchResults.forEach(website => {
@@ -95,7 +97,7 @@ export class SearchService {
   }
 
   private isWebsiteBlocked(host: string): boolean {
-    if (this.userWebsites.find(watchedWebsite => watchedWebsite.host == host)) {
+    if (this.restrictedWebsites.has(host)) {
       return true;
     }
     return false;

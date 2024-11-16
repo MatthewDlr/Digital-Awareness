@@ -7,7 +7,7 @@ import {
   ChangeDetectorRef,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
+import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { FormsModule } from "@angular/forms";
@@ -22,7 +22,7 @@ import dayjs from "dayjs";
   styleUrl: "./websites-list-row.component.css",
 })
 export class WebsitesListRowComponent implements AfterViewInit {
-  @Input({ required: true }) website!: WatchedWebsite;
+  @Input({ required: true }) website!: RestrictedWebsite;
   @Input() isPending!: boolean;
 
   isEditEnabled = false;

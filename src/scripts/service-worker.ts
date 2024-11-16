@@ -1,37 +1,44 @@
-import { writeDefaultConfig, updateConfig } from "../config.js";
+import { writeDefaultConfig } from "../config";
 import { isDevMode } from "@angular/core";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../../tailwind.config.js";
 const fullConfig = resolveConfig(tailwindConfig);
 import dayjs, { Dayjs } from "dayjs";
+import { getRestrictedWebsites } from "app/shared/chrome-storage-api";
 
-chrome.webNavigation.onCommitted.addListener(function (details) {
+chrome.webNavigation.onCommitted.addListener(async function (details) {
   // Avoid showing block page if the request is made in background or isn't http/https
   if (details.frameId != 0 || !details.url.startsWith("http")) return;
 
-  let committedWebsite = new URL(details.url).host;
-  if (committedWebsite.substring(0, 4) == "www.") committedWebsite = committedWebsite.substring(4);
+  let navigatedWebsiteHost = new URL(details.url).host;
+  if (navigatedWebsiteHost.substring(0, 4) == "www.")
+    navigatedWebsiteHost = navigatedWebsiteHost.substring(4);
 
-  // Check if the website is in the list of user blocked websites
-  chrome.storage.sync.get(["userWebsites"]).then(result => {
-    const userWebsites = result["userWebsites"];
-    const isBlocked = isWebsiteBlocked(committedWebsite, userWebsites);
+  const restrictedWebsites = await getRestrictedWebsites();
+  const restrictedWebsite = restrictedWebsites.get(navigatedWebsiteHost);
 
-    if (isBlocked) {
-      redirectToWaitPage(details);
-    }
-  });
+  if (!restrictedWebsite) {
+    isDevMode() && console.log("Website not blocked: ", restrictedWebsite);
+    return;
+  }
+
+  const allowedUntil: Dayjs = dayjs(restrictedWebsite.allowedUntil);
+  if (allowedUntil > dayjs()) {
+    isDevMode() && console.log("Website temporary allowed until:", allowedUntil.toString());
+    return;
+  }
+
+  isDevMode() && console.log("Website blocked:", restrictedWebsite);
+  redirectToWaitPage(details);
 });
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.get(["isActivated"]).then(result => {
-    const isActivated = result["isActivated"] || false;
-    console.log("isActivated: " + isActivated);
-    if (!isActivated) {
+    const activatedVersion = result["isActivated"] || undefined;
+    console.log("activatedVersion: " + activatedVersion);
+    if (!activatedVersion) {
       writeDefaultConfig();
       chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
-    } else {
-      updateConfig();
     }
   });
 });
@@ -51,28 +58,6 @@ chrome.action.onClicked.addListener(function () {
     }
   });
 });
-
-function isWebsiteBlocked(committedHost: string, blockedWebsites: any[]): boolean {
-  const blockedWebsite = blockedWebsites.find(website => {
-    return website.host === committedHost;
-  });
-
-  if (!blockedWebsite) {
-    isDevMode() ? console.log("Website not blocked: ", committedHost) : null;
-    return false;
-  }
-
-  const allowedUntil: Dayjs = dayjs(blockedWebsite.allowedUntil);
-  if (allowedUntil > dayjs()) {
-    isDevMode()
-      ? console.log("Website is temporary allowed until: ", allowedUntil.toString())
-      : null;
-    return false;
-  }
-
-  isDevMode() ? console.log("Website blocked: ", committedHost) : null;
-  return true;
-}
 
 function redirectToWaitPage(details: any) {
   const redirectUrl = chrome.runtime.getURL(

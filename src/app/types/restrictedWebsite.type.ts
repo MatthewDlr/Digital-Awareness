@@ -1,6 +1,6 @@
 import { Category } from "./category.type";
 
-export interface WatchedWebsite {
+export interface RestrictedWebsite {
   host: string;
   allowedUntil: string;
   allowedAt: string;

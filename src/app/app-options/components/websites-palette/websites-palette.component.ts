@@ -1,13 +1,21 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, HostListener, isDevMode } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  HostListener,
+  isDevMode,
+} from "@angular/core";
 import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { SearchService } from "../../services/search-suggestions/search-suggestions.service";
 import { Website } from "../../common/websites-list";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
+import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
 import { Category } from "app/types/category.type";
 import { SearchAnimationComponent } from "../search-animation/search-animation.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
+import { setRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 @Component({
   selector: "app-websites-palette",
@@ -51,8 +59,8 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     this.toggleCommandPalette(false);
   }
 
-  blockSelectedWebsites() {
-    const userWebsites = this.searchService.userWebsites;
+  async blockSelectedWebsites() {
+    const restrictedWebsites = this.searchService.restrictedWebsites;
     const selectedWebsites = this.searchService.suggestions.Selected;
 
     if (selectedWebsites.length == 0) {
@@ -62,30 +70,26 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     }
 
     for (const selectedWebsite of selectedWebsites) {
-      userWebsites.push(this.createWatchedWebsite(selectedWebsite));
+      restrictedWebsites.set(selectedWebsite.host, this.createWatchedWebsite(selectedWebsite));
     }
-    chrome.storage.sync
-      .set({ userWebsites: userWebsites })
-      .then(() => {
-        this.soundsEngine.appear();
-        this.searchService.clearSuggestions();
-        this.toggleCommandPalette(false);
-        chrome.storage.sync.get("userWebsites").then(result => {
-          console.log("Saved websites:", result["userWebsites"]);
-        });
-      })
-      .catch(error => {
-        this.soundsEngine.error();
-        this.saveError = true;
-        this.searchService.loadStoredWebsites();
-        console.error("Error while blocking websites:", error);
+
+    try {
+      await setRestrictedWebsites(restrictedWebsites);
+      this.soundsEngine.appear();
+      this.searchService.clearSuggestions();
+      this.toggleCommandPalette(false);
+    } catch (error) {
+      this.soundsEngine.error();
+      this.saveError = true;
+      this.searchService.loadStoredWebsites();
+      console.error("Error while blocking websites:", error);
+      setTimeout(() => {
+        this.saveErrorElement.nativeElement.classList.remove("animate-shake");
         setTimeout(() => {
-          this.saveErrorElement.nativeElement.classList.remove("animate-shake");
-          setTimeout(() => {
-            this.saveErrorElement.nativeElement.classList.add("animate-shake");
-          }, 25);
-        }, 50);
-      });
+          this.saveErrorElement.nativeElement.classList.add("animate-shake");
+        }, 25);
+      }, 50);
+    }
   }
 
   toggleCommandPalette(state: boolean) {
@@ -108,7 +112,9 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     }
     this.soundsEngine.select();
     website.isSelected = !website.isSelected;
-    website.isSelected ? this.searchService.addSelectedWebsite(website) : this.searchService.removeSelectedWebsite(website);
+    website.isSelected
+      ? this.searchService.addSelectedWebsite(website)
+      : this.searchService.removeSelectedWebsite(website);
   }
 
   sortCategories = (a: any, b: any) => {
@@ -116,7 +122,7 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     return (order[a.key] || 0) - (order[b.key] || 0);
   };
 
-  private createWatchedWebsite(website: Website): WatchedWebsite {
+  private createWatchedWebsite(website: Website): RestrictedWebsite {
     return {
       host: website.host,
       allowedUntil: "",

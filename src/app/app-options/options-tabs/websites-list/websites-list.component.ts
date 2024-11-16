@@ -1,11 +1,12 @@
-import { Component, HostListener, isDevMode } from "@angular/core";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
+import { Component, HostListener } from "@angular/core";
+import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
 import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { WebsitesListRowComponent } from "../../components/websites-list-row/websites-list-row.component";
+import { getRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 @Component({
   selector: "app-websites-list",
@@ -15,7 +16,7 @@ import { WebsitesListRowComponent } from "../../components/websites-list-row/web
   styleUrls: ["./websites-list.component.css"],
 })
 export class WebsitesListComponent {
-  userWebsites!: WatchedWebsite[];
+  restrictedWebsites = new Map<string, RestrictedWebsite>();
   websitesPendingEdit = new Set<string>();
   isCommandPaletteShown = false;
   OS: string = this.getOS();
@@ -56,11 +57,8 @@ export class WebsitesListComponent {
     this.soundsEngine.selectHard();
   }
 
-  getWebsites() {
-    chrome.storage.sync.get("userWebsites").then(result => {
-      this.userWebsites = result["userWebsites"] || [];
-      isDevMode() ? console.log("User Websites successfully fetched") : null;
-    });
+  private async getWebsites() {
+    this.restrictedWebsites = await getRestrictedWebsites();
   }
 
   getWebsitesPendingEdit() {

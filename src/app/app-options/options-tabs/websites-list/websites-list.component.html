@@ -50,15 +50,15 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-300 overflow-scroll dark:divide-gray-700">
               <!-- User Websites -->
-              @for (website of userWebsites; track $index) {
+              @for (website of restrictedWebsites; track $index) {
                 <tr
                   websites-list-row
-                  [website]="website"
-                  [isPending]="websitesPendingEdit.has(website.host) || pendingChangesService.websitesToDelete.has(website.host)"
+                  [website]="website[1]"
+                  [isPending]="websitesPendingEdit.has(website[1].host) || pendingChangesService.websitesToDelete.has(website[1].host)"
                   class="animate-fade-up animate-delay-[400ms] animate-duration-500"
                   [ngClass]="[
-                    pendingChangesService.websitesToDelete.has(website.host) ? 'bg-red-50 saturate-[0.8] dark:bg-opacity-50' : '',
-                    websitesPendingEdit.has(website.host) ? 'bg-purple-50 saturate-[0.8] dark:bg-opacity-50' : ''
+                    pendingChangesService.websitesToDelete.has(website[1].host) ? 'bg-red-50 saturate-[0.8] dark:bg-opacity-50' : '',
+                    websitesPendingEdit.has(website[1].host) ? 'bg-purple-50 saturate-[0.8] dark:bg-opacity-50' : ''
                   ]"
                 ></tr>
               }
