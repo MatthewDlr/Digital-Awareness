@@ -58,9 +58,9 @@
             [ngClass]="
               currentTab === 'websites-list' || currentTab === 'default-tab'
                 ? 'text-green-500 !border-green-500'
-                : 'text-gray-500 hover:border-green-500'
+                : 'text-gray-500 hover:border-green-500/50 !cursor-pointer'
             "
-            class="group text-gray-500 flex w-fit cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
+            class="group text-gray-500 flex w-fit items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium transition-all"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -86,9 +86,9 @@
             (keypress)="setCurrentTab('awareness-page')"
             tabindex="1"
             [ngClass]="
-              currentTab === 'awareness-page' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
+              currentTab === 'awareness-page' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500/50 !cursor-pointer'
             "
-            class="group text-gray-500 flex w-fit cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
+            class="group text-gray-500 flex w-fit items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium transition-all"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -113,8 +113,8 @@
             (click)="setCurrentTab('disconnect')"
             (keypress)="setCurrentTab('disconnect')"
             tabindex="2"
-            [ngClass]="currentTab === 'disconnect' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'"
-            class="group text-gray-500 flex w-fit cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
+            [ngClass]="currentTab === 'disconnect' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500/50 !cursor-pointer'"
+            class="group text-gray-500 flex w-fit items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium transition-all"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -142,7 +142,7 @@
             stroke-width="1.75"
             aria-hidden="true"
             class="mt-2 size-6"
-            [ngClass]="currentTab === 'about' ? 'stroke-green-500' : 'stroke-gray-500 group-hover:animate-bounce'"
+            [ngClass]="currentTab === 'about' ? 'stroke-green-500' : 'stroke-gray-500 group-hover:animate-bounce !cursor-pointer'"
           >
             <path
               stroke-linecap="round"

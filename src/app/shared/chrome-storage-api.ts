@@ -18,6 +18,20 @@ export async function getAwarenessPageWidget(): Promise<string> {
   return result["awarenessPageWidget"];
 }
 
+export async function setAwarenessPageWidget(awarenessPageWidget: string) {
+  await chrome.storage.sync.set({ awarenessPageWidget });
+}
+
+export async function getAwarenessPageTasks(): Promise<string[]> {
+  const result = await chrome.storage.sync.get("awarenessPageTasks");
+  isDevMode() && console.log("Page tasks:", result["awarenessPageTasks"]);
+  return result["awarenessPageTasks"];
+}
+
+export async function setAwarenessPageTasks(awarenessPageTasks: string[]) {
+  await chrome.storage.sync.set({ awarenessPageTasks });
+}
+
 export async function getRestrictedWebsites(): Promise<Map<string, RestrictedWebsite>> {
   try {
     const result = await chrome.storage.sync.get("restrictedWebsites");

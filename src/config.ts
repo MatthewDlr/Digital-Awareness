@@ -4,19 +4,21 @@ import { UserConfig } from "./app/types/userConfig.type";
 export function writeDefaultConfig() {
   const UserConfig: UserConfig = {
     extensionVersion: chrome.runtime.getManifest().version,
-    awarenessPageWidget: "Quotes",
-    doomScrollingToggle: true,
+    isSetupDismissed: false,
     restrictedWebsites: Object.fromEntries(new Map()),
+    awarenessPageWidget: "Quotes",
+    awarenessPageTasks: ["", "", ""],
+    doomScrollingToggle: true,
     bedtimeMode: {
       isEnabled: true,
       startAt: {
         hours: 23,
-        minutes: 0
+        minutes: 0,
       },
       endAt: {
         hours: 7,
-        minutes: 0
-      }
+        minutes: 0,
+      },
     },
   };
 
@@ -28,6 +30,4 @@ export function writeDefaultConfig() {
     .catch(error => {
       console.error("Failed to write the default configuration: " + error);
     });
-
-  chrome.storage.local.set({ isSetupDismissed: false });
 }

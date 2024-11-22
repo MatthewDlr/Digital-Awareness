@@ -187,7 +187,7 @@
         class="bg-white text-gray-900 block w-full rounded-md border bg-opacity-50 py-1.5 shadow-sm placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6"
         placeholder="Task 1"
         (blur)="updateTasks()"
-        (input)="checkIfTasksValid()"
+        (input)="areAllTasksEmpty()"
         [ngClass]="!areTasksValid ? 'border-red-500' : 'border-gray-300 focus:border-purple-500'"
         [(ngModel)]="tasks[0]"
       />
@@ -196,7 +196,7 @@
         class="bg-white text-gray-900 block w-full rounded-md border bg-opacity-50 py-1.5 shadow-sm placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6"
         placeholder="Task 2"
         (blur)="updateTasks()"
-        (input)="checkIfTasksValid()"
+        (input)="areAllTasksEmpty()"
         [ngClass]="!areTasksValid ? 'border-red-500' : 'border-gray-300 focus:border-purple-500'"
         [(ngModel)]="tasks[1]"
       />
@@ -205,7 +205,7 @@
         class="bg-white text-gray-900 block w-full rounded-md border bg-opacity-50 py-1.5 shadow-sm placeholder:text-gray-400 focus:ring-transparent sm:text-sm sm:leading-6"
         placeholder="Task 3"
         (blur)="updateTasks()"
-        (input)="checkIfTasksValid()"
+        (input)="areAllTasksEmpty()"
         [ngClass]="!areTasksValid ? 'border-red-500' : 'border-gray-300 focus:border-purple-500'"
         [(ngModel)]="tasks[2]"
       />
