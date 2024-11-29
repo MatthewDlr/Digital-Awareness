@@ -16,7 +16,7 @@
 ## Features
 
 ✅ Prevent yourself from opening distracting websites mindlessly <br>
-✅ Automatically adapts based on your usage with machine learning <br>
+✅ Automatically adapts based on your usage <br>
 ✅ Get insights on your digital habits <br>
 ✅ Add your own websites <br>
 ✅ Customize with quotes, breathing exercises or your own goals <br>
@@ -33,10 +33,9 @@
 ### Tech Stack
 
 ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=Webpack&logoColor=white)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
 
 ### Installation
 

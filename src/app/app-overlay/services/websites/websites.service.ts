@@ -34,16 +34,18 @@ export class WebsitesService {
   }
 
   private computeTimer(minutesSinceLastAccess: number): number {
-    const maxTimer = 3 * 60; // 3 minutes
-    const minTimer = 30; // 30 seconds
+    const maxTimer = 3 * 60; // 3 minutes in seconds
+    const minTimer = 15; // 15 seconds
 
-    let timer =
-      minTimer +
-      ((Math.log(minutesSinceLastAccess + 1) / Math.log(10)) * (maxTimer - minTimer)) /
-        Math.log(1440 + 1);
+    // Calculate the timer using an inverse relationship
+    let timer = maxTimer / (1 + minutesSinceLastAccess / 300);
 
-    timer = Math.min(timer, maxTimer);
-    return Math.round(timer);
+    timer = Math.round(Math.max(timer, minTimer));
+    if (isDevMode()) {
+      console.log("Timer: ", timer);
+      return 3;
+    }
+    return timer;
   }
 
   private getMinutesSinceLastAccess(allowedAt: string): number {

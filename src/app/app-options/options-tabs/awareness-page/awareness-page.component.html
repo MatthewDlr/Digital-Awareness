@@ -7,7 +7,7 @@
 
   <!-- Random -->
   <p
-    class="fade-up bg-white relative mt-5 flex !transform cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+    class="fade-up bg-white relative mt-5 flex cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all duration-300 ease-in-out focus:outline-none"
     [ngClass]="
       selectedWidget === 'Random'
         ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
@@ -47,7 +47,7 @@
   <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
     <!-- Quotes -->
     <p
-      class="fade-up fade-up-delay-200 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+      class="fade-up fade-up-delay-200 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-300 !ease-in-out focus:outline-none"
       [ngClass]="
         selectedWidget === 'Quotes'
           ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
@@ -86,7 +86,7 @@
 
     <!-- Breathing -->
     <p
-      class="fade-up fade-up-delay-300 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+      class="fade-up fade-up-delay-300 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-300 !ease-in-out focus:outline-none"
       (click)="updateSelectedWidget('Breathing')"
       (keypress)="updateSelectedWidget('Breathing')"
       tabindex="2"
@@ -125,7 +125,7 @@
 
     <!-- Tasks -->
     <p
-      class="fade-up fade-up-delay-400 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-500 !ease-in-out focus:outline-none"
+      class="fade-up fade-up-delay-400 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-300 !ease-in-out focus:outline-none"
       (click)="updateSelectedWidget('Tasks')"
       (keypress)="updateSelectedWidget('Tasks')"
       tabindex="3"
