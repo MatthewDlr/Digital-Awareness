@@ -14,20 +14,19 @@ import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.ser
 import { CompleteSetupComponent } from "../components/complete-setup/complete-setup.component";
 
 @Component({
-  selector: "app-options",
-  standalone: true,
-  imports: [
-    AwarenessPageComponent,
-    WebsitesListComponent,
-    DisconnectComponent,
-    WebsitesPaletteComponent,
-    PendingChangesComponent,
-    CompleteSetupComponent,
-    AboutComponent,
-    CommonModule,
-  ],
-  templateUrl: "./options.component.html",
-  styleUrls: ["./options.component.css"],
+    selector: "app-options",
+    imports: [
+        AwarenessPageComponent,
+        WebsitesListComponent,
+        DisconnectComponent,
+        WebsitesPaletteComponent,
+        PendingChangesComponent,
+        CompleteSetupComponent,
+        AboutComponent,
+        CommonModule,
+    ],
+    templateUrl: "./options.component.html",
+    styleUrls: ["./options.component.css"]
 })
 export class OptionsComponent {
   currentTab = "default-tab";

@@ -3,11 +3,10 @@ import { CommonModule } from "@angular/common";
 import { AwarenessPageComponent } from "../../awareness-page/awareness-page.component";
 
 @Component({
-  selector: "app-breathing-widget",
-  standalone: true,
-  imports: [CommonModule, AwarenessPageComponent],
-  templateUrl: "./breathing-widget.component.html",
-  styleUrl: "./breathing-widget.component.css",
+    selector: "app-breathing-widget",
+    imports: [CommonModule, AwarenessPageComponent],
+    templateUrl: "./breathing-widget.component.html",
+    styleUrl: "./breathing-widget.component.css"
 })
 export class BreathingWidgetComponent {
   text = "Get Ready";

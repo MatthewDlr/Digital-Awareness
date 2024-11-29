@@ -4,10 +4,9 @@ import { DoomScrollingComponent } from "./doom-scrolling/doom-scrolling.componen
 import { BedtimeModeComponent } from "./bedtime-mode/bedtime-mode.component";
 
 @Component({
-  selector: "app-disconnect",
-  standalone: true,
-  imports: [CommonModule, DoomScrollingComponent, BedtimeModeComponent],
-  templateUrl: "./disconnect.component.html",
-  styleUrls: ["./disconnect.component.css"],
+    selector: "app-disconnect",
+    imports: [CommonModule, DoomScrollingComponent, BedtimeModeComponent],
+    templateUrl: "./disconnect.component.html",
+    styleUrls: ["./disconnect.component.css"]
 })
 export class DisconnectComponent {}

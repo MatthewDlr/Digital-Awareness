@@ -9,11 +9,10 @@ import { WebsitesListRowComponent } from "../../components/websites-list-row/web
 import { getRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 @Component({
-  selector: "app-websites-list",
-  standalone: true,
-  imports: [CommonModule, FormsModule, WebsitesListRowComponent],
-  templateUrl: "./websites-list.component.html",
-  styleUrls: ["./websites-list.component.css"],
+    selector: "app-websites-list",
+    imports: [CommonModule, FormsModule, WebsitesListRowComponent],
+    templateUrl: "./websites-list.component.html",
+    styleUrls: ["./websites-list.component.css"]
 })
 export class WebsitesListComponent {
   restrictedWebsites = new Map<string, RestrictedWebsite>();

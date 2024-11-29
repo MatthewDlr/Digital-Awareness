@@ -4,11 +4,10 @@ import { CommonModule } from "@angular/common";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 
 @Component({
-  selector: "app-pending-changes",
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: "./pending-changes.component.html",
-  styleUrls: ["./pending-changes.component.css"],
+    selector: "app-pending-changes",
+    imports: [CommonModule],
+    templateUrl: "./pending-changes.component.html",
+    styleUrls: ["./pending-changes.component.css"]
 })
 export class PendingChangesComponent {
   validationDate = "";

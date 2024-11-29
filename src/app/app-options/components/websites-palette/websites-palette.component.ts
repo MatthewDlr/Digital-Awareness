@@ -18,11 +18,10 @@ import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.ser
 import { setRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 @Component({
-  selector: "app-websites-palette",
-  standalone: true,
-  imports: [CommonModule, SearchAnimationComponent, FormsModule],
-  templateUrl: "./websites-palette.component.html",
-  styleUrls: ["./websites-palette.component.css"],
+    selector: "app-websites-palette",
+    imports: [CommonModule, SearchAnimationComponent, FormsModule],
+    templateUrl: "./websites-palette.component.html",
+    styleUrls: ["./websites-palette.component.css"]
 })
 export class WebsitesPaletteComponent implements AfterViewInit {
   searchQuery = "";

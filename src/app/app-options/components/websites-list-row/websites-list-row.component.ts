@@ -14,12 +14,11 @@ import { FormsModule } from "@angular/forms";
 import dayjs from "dayjs";
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: "tr[websites-list-row]",
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: "./websites-list-row.component.html",
-  styleUrl: "./websites-list-row.component.css",
+    // eslint-disable-next-line @angular-eslint/component-selector
+    selector: "tr[websites-list-row]",
+    imports: [CommonModule, FormsModule],
+    templateUrl: "./websites-list-row.component.html",
+    styleUrl: "./websites-list-row.component.css"
 })
 export class WebsitesListRowComponent implements AfterViewInit {
   @Input({ required: true }) website!: RestrictedWebsite;

@@ -3,11 +3,10 @@ import { CommonModule } from "@angular/common";
 import { Quotes } from "./quotes";
 
 @Component({
-  selector: "app-quotes-widget",
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: "./quotes-widget.component.html",
-  styleUrl: "./quotes-widget.component.css",
+    selector: "app-quotes-widget",
+    imports: [CommonModule],
+    templateUrl: "./quotes-widget.component.html",
+    styleUrl: "./quotes-widget.component.css"
 })
 export class QuotesWidgetComponent {
   quoteText = "";

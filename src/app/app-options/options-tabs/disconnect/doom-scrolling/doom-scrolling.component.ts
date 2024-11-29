@@ -4,11 +4,10 @@ import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.ser
 import { getDoomScrollingState, setDoomScrollingState } from "app/shared/chrome-storage-api";
 
 @Component({
-  selector: "app-doom-scrolling",
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: "./doom-scrolling.component.html",
-  styleUrl: "./doom-scrolling.component.css",
+    selector: "app-doom-scrolling",
+    imports: [CommonModule],
+    templateUrl: "./doom-scrolling.component.html",
+    styleUrl: "./doom-scrolling.component.css"
 })
 export class DoomScrollingComponent {
   doomScrollingToggle = false;
