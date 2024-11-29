@@ -4,7 +4,7 @@ import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../../tailwind.config.js";
 const fullConfig = resolveConfig(tailwindConfig);
 import dayjs, { Dayjs } from "dayjs";
-import { getRestrictedWebsites, getExtensionVersion } from "app/shared/chrome-storage-api";
+import { getRestrictedWebsites, getExtensionVersion, setRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 chrome.webNavigation.onCommitted.addListener(async function (details) {
   // Avoid showing block page if the request is made in background or isn't http/https
@@ -21,23 +21,26 @@ chrome.webNavigation.onCommitted.addListener(async function (details) {
     return;
   }
 
-  // If user has temporary allowed the website, let it pass
-  const allowedUntil: Dayjs = dayjs(restrictedWebsite.allowedUntil);
-  if (allowedUntil > dayjs()) {
-    isDevMode() && console.log("Website temporary allowed until:", allowedUntil.toString());
-    return;
-  }
-
   // If website has never been allowed before, let it pass
   const allowedAt = restrictedWebsite.allowedAt;
   if (!allowedAt || allowedAt === "") {
     isDevMode() && console.log("Website allowed for the first time");
+    restrictedWebsite.allowedAt = dayjs().toString();
+    restrictedWebsite.allowedUntil = dayjs().add(30, "minute").toString();
+    setRestrictedWebsites(restrictedWebsites);
     return;
   }
 
   // If the last visit was more than 4 days ago, let it pass
   if (dayjs(allowedAt) < dayjs().subtract(4, "day")) {
     isDevMode() && console.log("Website allowed more than 4 days ago:", allowedAt.toString());
+    return;
+  }
+
+  // If user has temporary allowed the website, let it pass
+  const allowedUntil: Dayjs = dayjs(restrictedWebsite.allowedUntil);
+  if (allowedUntil > dayjs()) {
+    isDevMode() && console.log("Website temporary allowed until:", allowedUntil.toString());
     return;
   }
 

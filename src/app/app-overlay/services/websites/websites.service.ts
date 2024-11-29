@@ -22,18 +22,28 @@ export class WebsitesService {
   getTimerValue(host: string): number {
     this.currentWebsite = this.getStoredWebsite(host);
     const minutesSinceLastAccess = this.getMinutesSinceLastAccess(this.currentWebsite.allowedAt);
-
-    const timer = minutesSinceLastAccess;
-    return timer;
+    return this.computeTimer(minutesSinceLastAccess);
   }
 
   private getStoredWebsite(host: string): RestrictedWebsite {
     host = host.replace("www.", "");
-
     const userWebsite = this.restrictedWebsites().get(host);
     if (userWebsite) return userWebsite;
 
     throw new Error("Website not found in chrome storage: " + host);
+  }
+
+  private computeTimer(minutesSinceLastAccess: number): number {
+    const maxTimer = 3 * 60; // 3 minutes
+    const minTimer = 30; // 30 seconds
+
+    let timer =
+      minTimer +
+      ((Math.log(minutesSinceLastAccess + 1) / Math.log(10)) * (maxTimer - minTimer)) /
+        Math.log(1440 + 1);
+
+    timer = Math.min(timer, maxTimer);
+    return Math.round(timer);
   }
 
   private getMinutesSinceLastAccess(allowedAt: string): number {

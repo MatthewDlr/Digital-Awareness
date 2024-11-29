@@ -36,7 +36,7 @@ export class BedtimeModeComponent {
     private cdr: ChangeDetectorRef,
   ) {
     getBedtimeMode().then(bedtimeMode => {
-      this.bedtimeMode = bedtimeMode;
+      if (bedtimeMode) this.bedtimeMode = bedtimeMode;
       this.cdr.detectChanges();
     });
   }
