@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Digital Awareness",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "description": "Unlearn bad browsing habits and become more aware of your digital life.",
   "icons": {
     "128": "./assets/logo-128.png",
@@ -21,7 +21,22 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "https://www.reddit.com/*",
+        "https://www.tiktok.com/*",
+        "https://www.instagram.com/*",
+        "https://twitter.com/*",
+        "https://x.com/*",
+        "https://www.facebook.com/*",
+        "https://m.facebook.com/*",
+        "https://www.pinterest.com/*",
+        "https://www.linkedin.com/*",
+        "https://www.quora.com/*",
+        "https://www.tumblr.com/*",
+        "https://medium.com/*",
+        "https://bsky.app/*",
+        "https://www.youtube.com/*"
+      ],
       "js": ["doomScrolling.js"],
       "css": ["doomScrolling.css"],
       "run_at": "document_end"

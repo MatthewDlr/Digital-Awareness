@@ -1,7 +1,6 @@
-import { isDevMode } from "@angular/core";
+import { getBedtimeMode } from "app/shared/chrome-storage-api";
 import { BedtimeMode } from "app/types/bedtimeMode.type";
 import dayjs, { Dayjs } from "dayjs";
-import { getBedtimeMode } from "app/shared/chrome-storage-api";
 
 const TIME_INTERVAL = 5; // In seconds, how often to check the time and update the filter
 const WIND_DOWN_DURATION = 30; // In minutes, how long the transition from normal to grayscale takes
@@ -51,28 +50,22 @@ function getFilterCoef(): number {
   const now = dayjs();
 
   if (now.isBefore(windDownAt) && now.isAfter(endAt.add(1, "minute"))) {
-    isDevMode() && console.log("Before wind down: 0%");
     return 0;
   } else if (now.isAfter(windDownAt) && now.isBefore(startAt)) {
     const secondsFromStart = windDownAt.diff(now, "second");
     const totalSeconds = windDownAt.diff(startAt, "second");
     const coef = (secondsFromStart / totalSeconds) * 100;
-    isDevMode() && console.log("Winding down: ", coef + "%");
     return coef;
   } else if (now.isAfter(startAt.subtract(1, "day")) && now.isBefore(endAt)) {
-    isDevMode() && console.log("Bedtime (after midnight): 100%");
     return 100;
   } else if (now.isAfter(startAt) && now.isBefore(endAt.add(1, "day"))) {
-    isDevMode() && console.log("Bedtime (before midnight): 100%");
     return 100;
   } else if (now.isAfter(endAt) && now.isBefore(windUpAt)) {
     const secondsFromEnd = windUpAt.diff(now, "second");
     const totalSeconds = windUpAt.diff(endAt, "second");
     const result = (secondsFromEnd / totalSeconds) * 100;
-    isDevMode() && console.log("Winding up: ", result + "%");
     return result;
   } else {
-    console.log("Daytime: 0%");
     return 0;
   }
 }
