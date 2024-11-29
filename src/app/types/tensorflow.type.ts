@@ -1,13 +1,11 @@
+import { isDevMode, signal } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
-import { isDevMode } from "@angular/core";
-import { ModelFactoryService } from "app/services/Tensorflow/factory/model-factory.service";
 import { BehaviorSubject } from "rxjs";
 
 export abstract class ModelInference {
   protected abstract name: string;
   protected model!: tf.Sequential;
-  protected modelFactory: ModelFactoryService = new ModelFactoryService();
-  trainingProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  trainingProgress = signal<number>(0);
   protected inputType: any;
 
   abstract predict(input: any): any;

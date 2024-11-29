@@ -1,4 +1,5 @@
 import { UserConfig } from "./app/types/userConfig.type";
+import { setConfig } from "app/shared/chrome-storage-api";
 
 // Function use to write the default configuration just after the extension is installed
 export function writeDefaultConfig() {
@@ -21,13 +22,5 @@ export function writeDefaultConfig() {
       },
     },
   };
-
-  chrome.storage.sync
-    .set(UserConfig)
-    .then(() => {
-      console.info("Default configuration successfully written !");
-    })
-    .catch(error => {
-      console.error("Failed to write the default configuration: " + error);
-    });
+  setConfig(UserConfig);
 }

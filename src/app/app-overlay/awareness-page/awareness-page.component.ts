@@ -1,10 +1,11 @@
-import { Component, isDevMode, signal, OnInit } from "@angular/core";
+import { Component, isDevMode, signal, OnInit, effect, WritableSignal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 import { QuotesWidgetComponent } from "../overlay-widgets/quotes-widget/quotes-widget.component";
 import { WebsitesService } from "../services/websites/websites.service";
 import { BreathingWidgetComponent } from "../overlay-widgets/breathing-widget/breathing-widget.component";
 import { TasksWidgetComponent } from "../overlay-widgets/tasks-widget/tasks-widget.component";
+import { getAwarenessPageWidget } from "app/shared/chrome-storage-api";
 
 @Component({
   selector: "app-awareness-page",
@@ -16,28 +17,32 @@ import { TasksWidgetComponent } from "../overlay-widgets/tasks-widget/tasks-widg
 export class AwarenessPageComponent implements OnInit {
   originalTimerValue!: number;
   timerValue = signal(30);
-  outputUrl!: URL;
+  outputUrl: WritableSignal<URL | undefined> = signal(undefined);
   widget = "Quotes";
 
   constructor(
     private route: ActivatedRoute,
     private websitesService: WebsitesService,
   ) {
-    this.getPageWidget().then(widget => {
+    getAwarenessPageWidget().then(widget => {
       this.widget = widget;
     });
 
-    websitesService.getTimerValue(this.outputUrl.host).then(timer => {
-      this.originalTimerValue = timer;
-      this.timerValue.set(timer);
-      this.countdown();
+    effect(() => {
+      if (websitesService.isReady() && this.outputUrl()) {
+        const timerValue = websitesService.getTimerValue(this.outputUrl()!.host);
+        this.originalTimerValue = timerValue;
+        this.timerValue.set(timerValue);
+        this.countdown();
+      }
     });
   }
 
   ngOnInit(): void {
     const urlParam = this.route.snapshot.paramMap.get("outputURL");
-    if (urlParam) this.outputUrl = new URL(atob(decodeURIComponent(urlParam)));
+    if (!urlParam) return;
 
+    this.outputUrl.set(new URL(atob(decodeURIComponent(urlParam))));
     isDevMode() && console.log("Output url:", this.outputUrl);
   }
 
@@ -73,17 +78,5 @@ export class AwarenessPageComponent implements OnInit {
     setTimeout(() => {
       window.close();
     }, 250);
-  }
-
-  private async getPageWidget() {
-    const result = await chrome.storage.sync.get("awarenessPageWidget");
-    const widget: string = result["awarenessPageWidget"] || "Quotes";
-    return widget === "Random" ? this.getRandomWidget() : widget;
-  }
-
-  private getRandomWidget() {
-    const widgets = ["Quotes", "Breathing", "Tasks"];
-    const randomIndex = Math.floor(Math.random() * widgets.length);
-    return widgets[randomIndex];
   }
 }

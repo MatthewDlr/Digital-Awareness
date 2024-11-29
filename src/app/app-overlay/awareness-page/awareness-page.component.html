@@ -2,11 +2,9 @@
   class="flex h-[100vh] w-full flex-col items-center justify-center gap-16 bg-gradient-to-br from-green-100 from-10% via-green-200 via-70% to-green-300 !transition-all dark:from-green-800 dark:via-green-900 dark:to-green-950"
 >
   <!-- Timer -->
-  <div
-    class="bg-white flex size-20 fade-up items-center justify-center rounded-lg bg-opacity-"
-  >
+  <div class="fade-up bg-opacity- bg-white flex size-20 items-center justify-center rounded-lg">
     @defer (when originalTimerValue) {
-      <p class="text-gray-900 text-3xl" [ngClass]="timerValue() < 6 ? 'animate-bounce' : ''">
+      <p class="text-gray-900 text-3xl" [ngClass]="{ 'animate-bounce': timerValue() < 6 }">
         {{ timerValue() }}
       </p>
     }
@@ -24,6 +22,9 @@
       @case ("Tasks") {
         <app-tasks-widget></app-tasks-widget>
       }
+      @default {
+        <app-quotes-widget></app-quotes-widget>
+      }
     }
   </div>
 
@@ -36,7 +37,7 @@
       tabindex="0"
     >
       <button
-        class="bg-white text-gray-800 border-purple-500 inline-flex items-center rounded-md border-b-2 bg-opacity-40 px-6 py-2 font-bold shadow-md !transition-all delay-100 animate-duration-300 animate-ease-in-out hover:text-white hover:bg-purple-500 hover:border-purple-600 active:scale-95"
+        class="animate-duration-300 animate-ease-in-out bg-white text-gray-800 border-purple-500 inline-flex items-center rounded-md border-b-2 bg-opacity-40 px-6 py-2 font-bold shadow-md !transition-all delay-100 hover:text-white hover:bg-purple-500 hover:border-purple-600 active:scale-95"
       >
         <span class="mr-2 text-sm font-medium">Go Back</span>
         <svg
@@ -56,22 +57,18 @@
 
     <!-- Continue Button -->
     <div
-      [ngClass]="timerValue() === 0 ? 'visible *:fade-up' : 'invisible'"
+      [ngClass]="timerValue() === 0 ? '*:fade-up visible' : 'invisible'"
       class="flex flex-col items-center gap-2"
     >
-      <div
-        class="text-gray-500 text-sm opacity-50"
-      >
+      <div class="text-gray-500 text-sm opacity-50">
         Continue to
         <button class="underline decoration-wavy" (click)="skipTimer()">
-          {{ outputUrl.hostname }}
+          {{ outputUrl()!.hostname }}
         </button>
       </div>
       <p
         class="text-gray-500 text-sm opacity-50"
-        [ngClass]="
-          timerValue() === 0 ? 'fade-up-delay-200' : ''
-        "
+        [ngClass]="{ 'fade-up-delay-200': timerValue() === 0 }"
       >
         Otherwise, tab will close on its own
       </p>

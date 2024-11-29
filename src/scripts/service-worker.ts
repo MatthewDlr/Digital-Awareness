@@ -4,40 +4,53 @@ import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../../tailwind.config.js";
 const fullConfig = resolveConfig(tailwindConfig);
 import dayjs, { Dayjs } from "dayjs";
-import { getRestrictedWebsites } from "app/shared/chrome-storage-api";
+import { getRestrictedWebsites, getExtensionVersion } from "app/shared/chrome-storage-api";
 
 chrome.webNavigation.onCommitted.addListener(async function (details) {
   // Avoid showing block page if the request is made in background or isn't http/https
   if (details.frameId != 0 || !details.url.startsWith("http")) return;
 
-  let navigatedWebsiteHost = new URL(details.url).host;
-  if (navigatedWebsiteHost.substring(0, 4) == "www.")
-    navigatedWebsiteHost = navigatedWebsiteHost.substring(4);
+  const navigatedWebsite = new URL(details.url).host.replace("www.", "");
 
   const restrictedWebsites = await getRestrictedWebsites();
   if (restrictedWebsites.size === 0) return;
 
-  const restrictedWebsite = restrictedWebsites.get(navigatedWebsiteHost);
+  const restrictedWebsite = restrictedWebsites.get(navigatedWebsite);
   if (!restrictedWebsite) {
     isDevMode() && console.log("Website not blocked: ", restrictedWebsite);
     return;
   }
 
+  // If user has temporary allowed the website, let it pass
   const allowedUntil: Dayjs = dayjs(restrictedWebsite.allowedUntil);
   if (allowedUntil > dayjs()) {
     isDevMode() && console.log("Website temporary allowed until:", allowedUntil.toString());
     return;
   }
 
+  // If website has never been allowed before, let it pass
+  const allowedAt = restrictedWebsite.allowedAt;
+  if (!allowedAt || allowedAt === "") {
+    isDevMode() && console.log("Website allowed for the first time");
+    return;
+  }
+
+  // If the last visit was more than 4 days ago, let it pass
+  if (dayjs(allowedAt) < dayjs().subtract(4, "day")) {
+    isDevMode() && console.log("Website allowed more than 4 days ago:", allowedAt.toString());
+    return;
+  }
+
   isDevMode() && console.log("Website blocked:", restrictedWebsite);
-  redirectToWaitPage(details);
+  const redirectUrl = chrome.runtime.getURL(
+    "index.html#blocked/" + encodeURIComponent(btoa(details.url)),
+  );
+  chrome.tabs.update(details.tabId, { url: redirectUrl });
 });
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get(["isActivated"]).then(result => {
-    const activatedVersion = result["isActivated"] || undefined;
-    console.log("activatedVersion: " + activatedVersion);
-    if (!activatedVersion) {
+  getExtensionVersion().then(version => {
+    if (!version) {
       writeDefaultConfig();
       chrome.tabs.create({ url: chrome.runtime.getURL("index.html#options/about") });
     }
@@ -59,10 +72,3 @@ chrome.action.onClicked.addListener(function () {
     }
   });
 });
-
-function redirectToWaitPage(details: any) {
-  const redirectUrl = chrome.runtime.getURL(
-    "index.html#blocked/" + encodeURIComponent(btoa(details.url)),
-  );
-  chrome.tabs.update(details.tabId, { url: redirectUrl });
-}

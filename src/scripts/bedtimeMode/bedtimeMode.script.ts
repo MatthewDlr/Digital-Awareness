@@ -1,10 +1,11 @@
 import { isDevMode } from "@angular/core";
 import { BedtimeMode } from "app/types/bedtimeMode.type";
 import dayjs, { Dayjs } from "dayjs";
+import { getBedtimeMode } from "app/shared/chrome-storage-api";
 
 const TIME_INTERVAL = 5; // In seconds, how often to check the time and update the filter
-const WIND_DOWN_DURATION = 15; // In minutes, how long the transition from normal to grayscale takes
-const WIND_UP_DURATION = 3; // In minutes, how long the transition from grayscale to normal takes
+const WIND_DOWN_DURATION = 30; // In minutes, how long the transition from normal to grayscale takes
+const WIND_UP_DURATION = 15; // In minutes, how long the transition from grayscale to normal takes
 
 let body: HTMLElement;
 let config: BedtimeMode;
@@ -13,24 +14,19 @@ let endAt: Dayjs;
 let windDownAt: Dayjs;
 let windUpAt: Dayjs;
 
-chrome.storage.sync.get("bedtimeMode").then(result => {
-  config = result["bedtimeMode"];
-  isDevMode() && console.log(config);
+getBedtimeMode().then(bedtimeModeConfig => {
+  if (!bedtimeModeConfig) return;
+  config = bedtimeModeConfig;
+  startAt = configToTime(config.startAt);
+  if (startAt.hour() >= 0 && startAt.hour() < 3) startAt = startAt.add(1, "day");
+  endAt = configToTime(config.endAt);
+  windDownAt = startAt.subtract(WIND_DOWN_DURATION, "minute");
+  windUpAt = endAt.add(WIND_UP_DURATION, "minute");
 
-  if (config && config.isEnabled) {
-    startAt = configToTime(config.startAt);
-    if (startAt.hour() >= 0 && startAt.hour() < 3) startAt = startAt.add(1, "day");
-    endAt = configToTime(config.endAt);
-    windDownAt = startAt.subtract(WIND_DOWN_DURATION, "minute");
-    windUpAt = endAt.add(WIND_UP_DURATION, "minute");
-
+  runDetection();
+  setInterval(() => {
     runDetection();
-    setInterval(() => {
-      runDetection();
-    }, TIME_INTERVAL * 1000);
-  } else {
-    isDevMode() && console.info("Bedtime mode disabled or not configured");
-  }
+  }, TIME_INTERVAL * 1000);
 });
 
 function configToTime(config: { hours: number; minutes: number }): Dayjs {

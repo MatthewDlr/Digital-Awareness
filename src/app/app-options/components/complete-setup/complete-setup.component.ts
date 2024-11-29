@@ -1,4 +1,5 @@
-import { Component, isDevMode } from "@angular/core";
+import { Component } from "@angular/core";
+import { getFinishSetupState, setFinishSetupState } from "app/shared/chrome-storage-api";
 
 @Component({
   selector: "app-complete-setup",
@@ -11,23 +12,15 @@ export class CompleteSetupComponent {
   isSetupCompleted = true;
 
   constructor() {
-    this.checkIfSetupCompleted();
-  }
-
-  async checkIfSetupCompleted() {
-    chrome.storage.local.get("isSetupDismissed").then(async result => {
-      const isSetupDismissed = result["isSetupDismissed"] || false;
-      const isAllowedIncognitoAccess = await chrome.extension.isAllowedIncognitoAccess();
-      this.isSetupCompleted = isSetupDismissed || isAllowedIncognitoAccess;
-      isDevMode() ? console.info("Setup state: ", this.isSetupCompleted) : null;
+    getFinishSetupState().then(async isSetupDismissed => {
+      const isIncognitoAccessAllowed = await chrome.extension.isAllowedIncognitoAccess();
+      this.isSetupCompleted = isSetupDismissed || isIncognitoAccessAllowed;
     });
   }
 
-  dismissSetup() {
-    chrome.storage.local.set({ isSetupDismissed: true }).then(() => {
-      this.isSetupCompleted = true;
-      isDevMode() ? console.info("Setup dismissed") : null;
-    });
+  async dismissSetup() {
+    await setFinishSetupState(true);
+    this.isSetupCompleted = true;
   }
 
   openExtensionSettings() {
