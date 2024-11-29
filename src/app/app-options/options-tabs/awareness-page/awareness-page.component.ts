@@ -10,10 +10,11 @@ import {
 } from "app/shared/chrome-storage-api";
 
 @Component({
-    selector: "app-awareness-page",
-    imports: [CommonModule, FormsModule],
-    templateUrl: "./awareness-page.component.html",
-    styleUrls: ["./awareness-page.component.css"]
+  selector: "app-awareness-page",
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: "./awareness-page.component.html",
+  styleUrls: ["./awareness-page.component.css"],
 })
 export class AwarenessPageComponent {
   selectedWidget = "Quotes";

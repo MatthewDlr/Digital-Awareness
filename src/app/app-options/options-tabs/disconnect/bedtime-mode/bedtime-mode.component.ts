@@ -18,12 +18,13 @@ export const smoothHeight = trigger("HeightChange", [
 ]);
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: "app-bedtime-mode",
-    imports: [CommonModule],
-    templateUrl: "./bedtime-mode.component.html",
-    styleUrl: "./bedtime-mode.component.css",
-    animations: [smoothHeight]
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "app-bedtime-mode",
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: "./bedtime-mode.component.html",
+  styleUrl: "./bedtime-mode.component.css",
+  animations: [smoothHeight],
 })
 export class BedtimeModeComponent {
   bedtimeMode: BedtimeMode = this.getDefaultConfig();

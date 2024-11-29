@@ -8,10 +8,11 @@ import { TasksWidgetComponent } from "../overlay-widgets/tasks-widget/tasks-widg
 import { WebsitesService } from "../services/websites/websites.service";
 
 @Component({
-    selector: "app-awareness-page",
-    imports: [CommonModule, QuotesWidgetComponent, BreathingWidgetComponent, TasksWidgetComponent],
-    templateUrl: "./awareness-page.component.html",
-    styleUrls: ["./awareness-page.component.css"]
+  selector: "app-awareness-page",
+  standalone: true,
+  imports: [CommonModule, QuotesWidgetComponent, BreathingWidgetComponent, TasksWidgetComponent],
+  templateUrl: "./awareness-page.component.html",
+  styleUrls: ["./awareness-page.component.css"],
 })
 export class AwarenessPageComponent {
   private route = inject(ActivatedRoute);
