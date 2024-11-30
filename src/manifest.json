@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Digital Awareness",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Unlearn bad browsing habits and become more aware of your digital life.",
   "icons": {
     "256": "./assets/logo-256.png"
