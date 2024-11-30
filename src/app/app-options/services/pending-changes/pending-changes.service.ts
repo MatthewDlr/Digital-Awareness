@@ -1,7 +1,7 @@
 import { Injectable, isDevMode } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { getRestrictedWebsites, setRestrictedWebsites } from "app/shared/chrome-storage-api";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -17,7 +17,7 @@ export class PendingChangesService {
   waitDuration = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
 
   constructor(private soundsEngine: SoundsEngineService) {
-    chrome.storage.sync.get(["pendingChanges"]).then(result => {
+    chrome.storage.local.get(["pendingChanges"]).then(result => {
       if (result["pendingChanges"]) {
         this.stage.next(result["pendingChanges"].stage || stages.NoChanges);
         const validationDate = result["pendingChanges"].validationDate
@@ -153,7 +153,7 @@ export class PendingChangesService {
   }
 
   private savePendingChanges() {
-    chrome.storage.sync.set({
+    chrome.storage.local.set({
       pendingChanges: {
         stage: this.stage.getValue(),
         validationDate: this.validationDate.getValue().toString(),
@@ -163,7 +163,7 @@ export class PendingChangesService {
     });
 
     if (isDevMode()) {
-      chrome.storage.sync.get(["pendingChanges"], result => {
+      chrome.storage.local.get(["pendingChanges"], result => {
         isDevMode() ? console.log("Pending changes saved: ", result["pendingChanges"]) : null;
       });
     }
