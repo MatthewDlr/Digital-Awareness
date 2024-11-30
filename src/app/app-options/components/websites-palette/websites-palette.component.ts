@@ -75,7 +75,6 @@ export class WebsitesPaletteComponent implements AfterViewInit {
 
     try {
       await setRestrictedWebsites(restrictedWebsites);
-      this.soundsEngine.appear();
       this.searchService.clearSuggestions();
     } catch (error) {
       this.soundsEngine.error();

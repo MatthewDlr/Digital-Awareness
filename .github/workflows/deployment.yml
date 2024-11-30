@@ -82,4 +82,5 @@ jobs:
           generateReleaseNotes: true
           makeLatest: true
           tag: v${{ env.VERSION }}
+          commit: "main"
           allowUpdates: true
