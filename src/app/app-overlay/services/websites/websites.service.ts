@@ -1,9 +1,7 @@
-import { Injectable, isDevMode } from "@angular/core";
-import { BehaviorSubject, filter, firstValueFrom } from "rxjs";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
-import dayjs, { Dayjs } from "dayjs";
-import { WebsiteAccessService } from "app/services/Tensorflow/Website Access/website-access.service";
-import { WebsiteAccessInput } from "app/services/Tensorflow/models/WebsiteAccess.model";
+import { computed, Injectable, isDevMode, Signal, signal } from "@angular/core";
+import { getRestrictedWebsites, setRestrictedWebsites } from "app/shared/chrome-storage-api";
+import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
+import dayjs from "dayjs";
 
 const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the user allow the website, defines the duration for which the website is whitelisted and accessible without having to wait for the timer to expire.
 
@@ -11,85 +9,62 @@ const DEFAULT_ALLOWED_DURATION = isDevMode() ? 0.5 : 30; // In minutes. When the
   providedIn: "root",
 })
 export class WebsitesService {
-  isReady: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  enforcedWebsites!: WatchedWebsite[];
-  userWebsites!: WatchedWebsite[];
-  currentWebsite!: WatchedWebsite;
-  websiteOrigin: string = "Enforced"; // Indicates if the website is blocked by default by the extension ("Enforced") or by the user ("User").
+  private currentWebsite!: RestrictedWebsite;
+  private restrictedWebsites = signal(new Map<string, RestrictedWebsite>());
+  isReady: Signal<boolean> = computed(() => this.restrictedWebsites().size > 0);
 
-  constructor(private websiteAccess: WebsiteAccessService) {
-    chrome.storage.sync
-      .get(["enforcedWebsites", "userWebsites"])
-      .then(result => {
-        this.enforcedWebsites = result["enforcedWebsites"] || [];
-        this.userWebsites = result["userWebsites"] || [];
-        this.isReady.next(true);
-      })
-      .catch(error => {
-        isDevMode() ? console.error(error) : null;
-      });
+  constructor() {
+    getRestrictedWebsites().then(restrictedWebsites => {
+      this.restrictedWebsites.set(restrictedWebsites);
+    });
   }
 
-  async getTimerValue(host: string): Promise<number> {
+  getTimerValue(host: string): number {
     this.currentWebsite = this.getStoredWebsite(host);
-    const minutesDiff = this.getMinutesSinceLastAccess(this.currentWebsite);
-    const input: WebsiteAccessInput = {
-      minutes: minutesDiff,
-      category: this.currentWebsite.category,
-    };
-    await firstValueFrom(this.websiteAccess.trainingProgress.pipe(filter(value => value === 100)));
-    const timer = await this.websiteAccess.predict(input);
-    return timer;
+    const minutesSinceLastAccess = this.getMinutesSinceLastAccess(this.currentWebsite.allowedAt);
+    return this.computeTimer(minutesSinceLastAccess);
   }
 
-  private getMinutesSinceLastAccess(website: WatchedWebsite): number {
-    const lastAccess = this.getLastAccess(website);
-    const minutesDiff = dayjs().diff(lastAccess, "minutes");
-    isDevMode() && console.log("There is " + minutesDiff + " min between now and the last access");
-    return minutesDiff;
-  }
-
-  private getLastAccess(website: WatchedWebsite): Dayjs {
-    if (website.allowedAt) {
-      return dayjs(website.allowedAt);
-    }
-    // If the variable is not defined, it's means that the website has never been allowed
-    // We substract 7 days so the timer has the minimum value the first visit
-    return dayjs().subtract(7, "day");
-  }
-
-  // This is called when the user choose to visit the website
-  allowWebsiteTemporary(): void {
-    const websiteAllowed: WatchedWebsite = this.currentWebsite;
-
-    websiteAllowed.allowedUntil = dayjs().add(DEFAULT_ALLOWED_DURATION, "minute").toString();
-    websiteAllowed.allowedAt = dayjs().toString();
-
-    this.websiteOrigin === "Enforced"
-      ? chrome.storage.sync.set({ enforcedWebsites: this.enforcedWebsites })
-      : chrome.storage.sync.set({ userWebsites: this.userWebsites });
-  }
-
-  private getStoredWebsite(host: string): WatchedWebsite {
-    host = this.removeWWW(host);
-
-    const enforcedWebsite = this.enforcedWebsites.find(enforcedSite => enforcedSite.host == host);
-    if (enforcedWebsite) {
-      this.websiteOrigin = "Enforced";
-      return enforcedWebsite;
-    }
-
-    const userWebsite = this.userWebsites.find(userWebsite => userWebsite.host == host);
-    if (userWebsite) {
-      this.websiteOrigin = "User";
-      return userWebsite;
-    }
+  private getStoredWebsite(host: string): RestrictedWebsite {
+    host = host.replace("www.", "");
+    const userWebsite = this.restrictedWebsites().get(host);
+    if (userWebsite) return userWebsite;
 
     throw new Error("Website not found in chrome storage: " + host);
   }
 
-  private removeWWW(website: string): string {
-    if (website.substring(0, 3) == "www") return website.substring(4);
-    return website;
+  private computeTimer(minutesSinceLastAccess: number): number {
+    const maxTimer = 3 * 60; // 3 minutes in seconds
+    const minTimer = 15; // 15 seconds
+
+    // Calculate the timer using an inverse relationship
+    let timer = maxTimer / (1 + minutesSinceLastAccess / 300);
+
+    timer = Math.round(Math.max(timer, minTimer));
+    if (isDevMode()) {
+      console.log("Timer: ", timer);
+      return 3;
+    }
+    return timer;
+  }
+
+  private getMinutesSinceLastAccess(allowedAt: string): number {
+    return dayjs().diff(dayjs(allowedAt), "minutes");
+  }
+
+  // This is called when the user choose to visit the website
+  public allowWebsiteTemporary(): void {
+    this.currentWebsite.allowedUntil = dayjs().add(DEFAULT_ALLOWED_DURATION, "minute").toString();
+    this.currentWebsite.allowedAt = dayjs().toString();
+
+    this.updateWebsites(this.currentWebsite);
+  }
+
+  private updateWebsites(websiteAllowed: RestrictedWebsite) {
+    this.restrictedWebsites.update(restrictedWebsiteMap => {
+      restrictedWebsiteMap.set(websiteAllowed.host, websiteAllowed);
+      return restrictedWebsiteMap;
+    });
+    setRestrictedWebsites(this.restrictedWebsites());
   }
 }

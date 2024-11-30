@@ -1,5 +1,8 @@
-<td class="text-gray-900 whitespace-nowrap pl-4 pr-3 text-sm font-medium sm:pl-6" [ngClass]="isEditEnabled ? 'py-2' : 'py-4'">
-  @if (!isEditEnabled || isEnforced) {
+<td
+  class="text-gray-900 whitespace-nowrap pl-4 pr-3 text-sm font-medium sm:pl-6"
+  [ngClass]="isEditEnabled ? 'py-2' : 'py-4'"
+>
+  @if (!isEditEnabled) {
     <span>{{ website.host }}</span>
   } @else {
     <div
@@ -25,7 +28,11 @@
         stroke="currentColor"
         class="size-6 transform cursor-pointer stroke-purple-500 transition-all hover:scale-110"
       >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
       </svg>
     </div>
   }
@@ -36,24 +43,30 @@
 <td class="whitespace-nowrap py-4 text-sm">
   <div class="size-3 rounded-full" [ngClass]="awarenessColor"></div>
 </td>
-<td class="relative flex items-center gap-5 whitespace-nowrap py-4 pr-3 text-right text-sm font-medium sm:pr-6">
+<td
+  class="relative flex items-center gap-5 whitespace-nowrap py-4 pr-3 text-right text-sm font-medium sm:pr-6"
+>
   <a
     [ngClass]="
-      isEnforced || isPending
+      isPending
         ? 'text-gray-600 cursor-not-allowed'
         : 'text-purple-500 cursor-pointer underline hover:text-purple-600'
     "
     (click)="enableEdit()"
+    (keypress)="enableEdit()"
+    tabindex="0"
   >
     Edit
   </a>
   <a
     [ngClass]="
-      isEnforced || isPending
+      isPending
         ? 'text-gray-600 cursor-not-allowed'
         : 'text-purple-500 cursor-pointer underline hover:text-purple-600'
     "
     (click)="removeWebsite()"
+    (keypress)="removeWebsite()"
+    tabindex="1"
   >
     Remove
   </a>

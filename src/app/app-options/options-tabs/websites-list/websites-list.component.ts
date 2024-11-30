@@ -1,11 +1,12 @@
-import { Component, HostListener, isDevMode } from "@angular/core";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
+import { Component, effect, HostListener } from "@angular/core";
+import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
 import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { WebsitesListRowComponent } from "../../components/websites-list-row/websites-list-row.component";
+import { getRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 @Component({
   selector: "app-websites-list",
@@ -15,10 +16,9 @@ import { WebsitesListRowComponent } from "../../components/websites-list-row/web
   styleUrls: ["./websites-list.component.css"],
 })
 export class WebsitesListComponent {
-  enforcedWebsites!: WatchedWebsite[];
-  userWebsites!: WatchedWebsite[];
-  websitesPendingEdit: Set<string> = new Set();
-  isCommandPaletteShown: boolean = false;
+  restrictedWebsites = new Map<string, RestrictedWebsite>();
+  websitesPendingEdit = new Set<string>();
+  isCommandPaletteShown = false;
   OS: string = this.getOS();
 
   constructor(
@@ -26,16 +26,14 @@ export class WebsitesListComponent {
     private commandPaletteService: WebsitePaletteService,
     public pendingChangesService: PendingChangesService,
   ) {
-    this.commandPaletteService.isCommandPaletteShown.subscribe({
-      next: state => {
-        this.isCommandPaletteShown = state;
-        if (!state) {
-          setTimeout(() => {
-            this.getWebsites();
-            this.getWebsitesPendingEdit();
-          }, 100);
-        }
-      },
+    effect(() => {
+      this.isCommandPaletteShown = this.commandPaletteService.isCommandPaletteShown();
+      if (!this.isCommandPaletteShown) {
+        setTimeout(() => {
+          this.getWebsites();
+          this.getWebsitesPendingEdit();
+        }, 100);
+      }
     });
     this.pendingChangesService.stage.subscribe({
       next: () => {
@@ -57,16 +55,9 @@ export class WebsitesListComponent {
     this.soundsEngine.selectHard();
   }
 
-  getWebsites() {
-    chrome.storage.sync.get("enforcedWebsites").then(result => {
-      this.enforcedWebsites = result["enforcedWebsites"] || [];
-      isDevMode() ? console.log("Enforced Websites successfully fetched") : null;
-    });
-
-    chrome.storage.sync.get("userWebsites").then(result => {
-      this.userWebsites = result["userWebsites"] || [];
-      isDevMode() ? console.log("User Websites successfully fetched") : null;
-    });
+  private async getWebsites() {
+    this.restrictedWebsites = await getRestrictedWebsites();
+    console.log(this.restrictedWebsites);
   }
 
   getWebsitesPendingEdit() {

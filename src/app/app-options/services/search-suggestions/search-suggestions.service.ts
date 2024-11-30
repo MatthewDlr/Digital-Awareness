@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import FuzzySearch from "fuzzy-search";
 import { mostPopularWebsites, Website, searchSuggestions } from "../../common/websites-list";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
+import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
 import { Category } from "app/types/category.type";
+import { getRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 const COMMONS_HOSTS_EXTENSIONS = [".com", ".org", ".io", ".co"];
 
@@ -11,8 +12,7 @@ const COMMONS_HOSTS_EXTENSIONS = [".com", ".org", ".io", ".co"];
 })
 export class SearchService {
   private websiteSearch: FuzzySearch<Website>;
-  private enforcedWebsites: WatchedWebsite[] = [];
-  userWebsites: WatchedWebsite[] = [];
+  restrictedWebsites = new Map<string, RestrictedWebsite>();
   suggestions: searchSuggestions = {
     Suggestions: [],
     Results: [],
@@ -21,9 +21,16 @@ export class SearchService {
 
   constructor() {
     this.loadStoredWebsites();
+
     this.websiteSearch = new FuzzySearch(mostPopularWebsites, ["host", "category"], {
       caseSensitive: false,
       sort: true,
+    });
+  }
+
+  loadStoredWebsites() {
+    getRestrictedWebsites().then(restrictedWebsites => {
+      this.restrictedWebsites = restrictedWebsites;
     });
   }
 
@@ -40,15 +47,14 @@ export class SearchService {
   }
 
   addSelectedWebsite(website: Website) {
-    if (this.suggestions.Selected.find(selectedWebsite => selectedWebsite.host == website.host)) {
-      return;
-    }
     this.suggestions.Selected.push(website);
   }
 
   removeSelectedWebsite(website: Website) {
     const index = this.suggestions.Selected.indexOf(website);
-    this.suggestions.Selected.splice(index, 1);
+    if (index > -1) {
+      this.suggestions.Selected.splice(index, 1);
+    }
   }
 
   clearSuggestions() {
@@ -58,15 +64,6 @@ export class SearchService {
     this.suggestions.Selected = [];
     this.suggestions.Suggestions = [];
     this.suggestions.Results = [];
-  }
-
-  loadStoredWebsites() {
-    chrome.storage.sync.get("userWebsites").then(result => {
-      this.userWebsites = result["userWebsites"] || [];
-    });
-    chrome.storage.sync.get("enforcedWebsites").then(result => {
-      this.enforcedWebsites = result["enforcedWebsites"] || [];
-    });
   }
 
   private searchInWebsites(searchQuery: string) {
@@ -99,10 +96,7 @@ export class SearchService {
   }
 
   private isWebsiteBlocked(host: string): boolean {
-    if (this.enforcedWebsites.find(watchedWebsite => watchedWebsite.host == host)) {
-      return true;
-    }
-    if (this.userWebsites.find(watchedWebsite => watchedWebsite.host == host)) {
+    if (this.restrictedWebsites.has(host)) {
       return true;
     }
     return false;
@@ -111,13 +105,18 @@ export class SearchService {
   private cleanURL(url: string): string {
     url = url.trim();
 
-    if (url.substring(0, 4) == "www.") {
-      url = url.substring(4);
-    }
+    try {
+      new URL(url);
+      return new URL(url).hostname.replace("www.", "");
+    } catch {
+      if (url.substring(0, 4) == "www.") {
+        url = url.substring(4);
+      }
 
-    if (url.includes("/")) {
-      url = url.substring(0, url.indexOf("/"));
+      if (url.includes("/")) {
+        url = url.substring(0, url.indexOf("/"));
+      }
+      return url;
     }
-    return url;
   }
 }

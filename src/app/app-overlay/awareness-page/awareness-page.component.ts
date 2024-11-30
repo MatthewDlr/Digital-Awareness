@@ -1,12 +1,11 @@
-import { Component, isDevMode, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { Component, inject, isDevMode, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { QuotesWidgetComponent } from "../overlay-widgets/quotes-widget/quotes-widget.component";
-import { WebsitesService } from "../services/websites/websites.service";
+import { getAwarenessPageWidget } from "app/shared/chrome-storage-api";
 import { BreathingWidgetComponent } from "../overlay-widgets/breathing-widget/breathing-widget.component";
+import { QuotesWidgetComponent } from "../overlay-widgets/quotes-widget/quotes-widget.component";
 import { TasksWidgetComponent } from "../overlay-widgets/tasks-widget/tasks-widget.component";
-import { filter } from "rxjs/operators";
-import { WebsiteAccessService } from "app/services/Tensorflow/Website Access/website-access.service";
+import { WebsitesService } from "../services/websites/websites.service";
 
 @Component({
   selector: "app-awareness-page",
@@ -16,46 +15,47 @@ import { WebsiteAccessService } from "app/services/Tensorflow/Website Access/web
   styleUrls: ["./awareness-page.component.css"],
 })
 export class AwarenessPageComponent {
+  private route = inject(ActivatedRoute);
+  private websitesService = inject(WebsitesService);
+
   originalTimerValue!: number;
+  outputUrl: URL | null = null;
   timerValue = signal(30);
-  outputUrl!: URL;
-  widget: string = "Quotes";
-  timerBehavior!: string;
-  isWindowFocused: boolean = true;
+  widget = "Quotes";
 
-  constructor(
-    private route: ActivatedRoute,
-    private websitesService: WebsitesService,
-    public websiteAccess: WebsiteAccessService,
-  ) {
-    // Getting url parameters
-    this.route.params.subscribe(params => {
-      this.outputUrl = new URL(atob(decodeURIComponent(params["outputURL"])));
+  constructor() {
+    getAwarenessPageWidget().then(widget => {
+      this.widget = widget;
     });
 
-    chrome.storage.sync.get("awarenessPageWidget").then(result => {
-      this.widget = result["awarenessPageWidget"] || "Quotes";
-      isDevMode() ? console.log("widget: ", this.widget) : null;
-      if (this.widget === "Random") this.widget = this.getRandomWidget();
-    });
+    const urlParam = this.route.snapshot.paramMap.get("outputURL");
+    this.outputUrl = new URL(atob(decodeURIComponent(urlParam!)));
+    isDevMode() && console.log("Output url:", this.outputUrl);
 
-    document.addEventListener("visibilitychange", () => {
-      document.hidden ? (this.isWindowFocused = false) : (this.isWindowFocused = true);
+    this.getTimerValue().then(timerValue => {
+      this.originalTimerValue = timerValue;
+      this.timerValue.set(timerValue);
+      this.countdown();
     });
+  }
 
-    websitesService.isReady.pipe(filter(isLoaded => isLoaded === true)).subscribe(() => {
-      websitesService.getTimerValue(this.outputUrl.host).then(timer => {
-        this.originalTimerValue = timer;
-        this.timerValue.set(this.originalTimerValue);
-        this.countdown();
-      });
-    });
+  async getTimerValue(): Promise<number> {
+    if (this.websitesService.isReady()) {
+      return this.websitesService.getTimerValue(this.outputUrl!.host);
+    } else {
+      await this.delay(10);
+      return this.getTimerValue();
+    }
+  }
+
+  private async delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   countdown() {
     if (this.timerValue() > 0) {
       setTimeout(() => {
-        if ((document.hasFocus() && this.isWindowFocused) || isDevMode()) {
+        if (document.hasFocus() && !document.hidden) {
           this.timerValue.update(value => value - 1);
         } else {
           this.timerValue.set(this.originalTimerValue); // If the user is not on the tab, we restart the timer
@@ -67,7 +67,7 @@ export class AwarenessPageComponent {
     }
   }
 
-  waitBeforeClose() {
+  private waitBeforeClose() {
     setTimeout(() => {
       window.close();
     }, 5 * 1000);
@@ -76,7 +76,7 @@ export class AwarenessPageComponent {
   // This means failure as the user has waited for the timer to expire
   skipTimer() {
     this.websitesService.allowWebsiteTemporary();
-    window.location.href = this.outputUrl.toString();
+    window.location.href = this.outputUrl!.toString();
   }
 
   // This means success as the user left the page before the timer expired
@@ -84,11 +84,5 @@ export class AwarenessPageComponent {
     setTimeout(() => {
       window.close();
     }, 250);
-  }
-
-  private getRandomWidget() {
-    const widgets = ["Quotes", "Breathing", "Tasks"];
-    const randomIndex = Math.floor(Math.random() * widgets.length);
-    return widgets[randomIndex];
   }
 }

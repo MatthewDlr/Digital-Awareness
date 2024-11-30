@@ -1,18 +1,18 @@
-import { Injectable, isDevMode } from "@angular/core";
-import { Subject } from "rxjs";
+import { effect, Injectable, isDevMode, signal, WritableSignal } from "@angular/core";
 
 @Injectable({
   providedIn: "root",
 })
 export class WebsitePaletteService {
-  isCommandPaletteShown: Subject<boolean> = new Subject<boolean>();
+  isCommandPaletteShown: WritableSignal<boolean> = signal(false);
 
   constructor() {
-    this.toggleCommandPalette(true);
-    this.isCommandPaletteShown.subscribe(state => (isDevMode() ? console.log("Update command palette state: ", state) : null));
+    effect(() => {
+      isDevMode() && console.log("Command palette state changed:", this.isCommandPaletteShown());
+    });
   }
 
   toggleCommandPalette(state: boolean) {
-    this.isCommandPaletteShown.next(state);
+    this.isCommandPaletteShown.set(state);
   }
 }

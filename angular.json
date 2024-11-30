@@ -16,13 +16,13 @@
             "customWebpackConfig": {
               "path": "./webpack.config.ts"
             },
+            "outputPath": "dist",
             "optimization": {
               "styles": {
-                "inlineCritical": false
+                "inlineCritical": true
               }
             },
             "allowedCommonJsDependencies": ["nightwind", "long", "dayjs"],
-            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -53,12 +53,18 @@
                   "maximumError": "4kb"
                 }
               ],
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": false
+              },
               "outputHashing": "none"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -100,11 +106,18 @@
             "styles": ["src/styles.css"],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": "a1ab8d37-e922-4988-bec9-d133cdc79bfe"
+    "analytics": "a1ab8d37-e922-4988-bec9-d133cdc79bfe",
+    "schematicCollections": ["@angular-eslint/schematics"]
   }
 }

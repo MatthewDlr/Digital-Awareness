@@ -6,6 +6,51 @@
   @apply !font-jakarta;
 }
 
+:root {
+  --fade-up-delay: 0ms;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-up 0.4s cubic-bezier(0.65, 0.05, 0.35, 1) var(--fade-up-delay) forwards;
+}
+
+.fade-up-delay-100 {
+  --fade-up-delay: 100ms;
+}
+
+.fade-up-delay-200 {
+  --fade-up-delay: 200ms;
+}
+
+.fade-up-delay-300 {
+  --fade-up-delay: 300ms;
+}
+
+.fade-up-delay-400 {
+  --fade-up-delay: 400ms;
+}
+
+.fade-up-delay-500 {
+  --fade-up-delay: 500ms;
+}
+
+.fade-up-delay-600 {
+  --fade-up-delay: 600ms;
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer components {
   .green-gradient {
     @apply bg-gradient-to-br from-green-400 from-10% via-green-500 via-70% to-green-600 dark:from-green-300 dark:via-green-400 dark:to-green-500;
@@ -27,7 +72,8 @@
     transition: all 0.4s ease-in-out !important;
     --tw-shadow: inset 0 0 6px 0 rgb(0 0 0 / 0.05);
     --tw-shadow-colored: inset 0 0 6px 0 var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow);
 
     @media (prefers-color-scheme: dark) {
       --tw-shadow: inset 0 0 12px 0 rgb(0 0 0 / 0.05);

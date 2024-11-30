@@ -1,13 +1,21 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, HostListener, isDevMode } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  HostListener,
+  isDevMode,
+} from "@angular/core";
 import { WebsitePaletteService } from "../../services/website-palette/website-palette.service";
 import { SearchService } from "../../services/search-suggestions/search-suggestions.service";
 import { Website } from "../../common/websites-list";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
+import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
 import { Category } from "app/types/category.type";
 import { SearchAnimationComponent } from "../search-animation/search-animation.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
+import { setRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 @Component({
   selector: "app-websites-palette",
@@ -17,20 +25,17 @@ import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.ser
   styleUrls: ["./websites-palette.component.css"],
 })
 export class WebsitesPaletteComponent implements AfterViewInit {
-  saveError: boolean = false;
-  searchQuery: string = "";
+  searchQuery = "";
 
   constructor(
     private soundsEngine: SoundsEngineService,
     private commandPaletteService: WebsitePaletteService,
     public searchService: SearchService,
   ) {
-    this.searchService.loadStoredWebsites();
     this.searchService.clearSuggestions();
   }
 
   @ViewChild("search") searchInput!: ElementRef;
-  @ViewChild("saveError") saveErrorElement!: ElementRef;
 
   // Focus on the search input when the component is loaded
   ngAfterViewInit(): void {
@@ -51,41 +56,33 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     this.toggleCommandPalette(false);
   }
 
-  blockSelectedWebsites() {
-    const userWebsites = this.searchService.userWebsites;
+  async blockSelectedWebsites() {
+    const restrictedWebsites = this.searchService.restrictedWebsites;
     const selectedWebsites = this.searchService.suggestions.Selected;
 
-    if (selectedWebsites.length == 0) {
+    if (selectedWebsites.length === 0) {
       this.toggleCommandPalette(false);
-      isDevMode() ? console.log("No websites selected, nothing to save") : null;
+      isDevMode() && console.log("No websites selected, nothing to save");
       return;
     }
 
     for (const selectedWebsite of selectedWebsites) {
-      userWebsites.push(this.createWatchedWebsite(selectedWebsite));
+      restrictedWebsites.set(
+        selectedWebsite.host,
+        this.constructRestrictedWebsite(selectedWebsite),
+      );
     }
-    chrome.storage.sync
-      .set({ userWebsites: userWebsites })
-      .then(() => {
-        this.soundsEngine.appear();
-        this.searchService.clearSuggestions();
-        this.toggleCommandPalette(false);
-        chrome.storage.sync.get("userWebsites").then(result => {
-          console.log("Saved websites:", result["userWebsites"]);
-        });
-      })
-      .catch(error => {
-        this.soundsEngine.error();
-        this.saveError = true;
-        this.searchService.loadStoredWebsites();
-        console.error("Error while blocking websites:", error);
-        setTimeout(() => {
-          this.saveErrorElement.nativeElement.classList.remove("animate-shake");
-          setTimeout(() => {
-            this.saveErrorElement.nativeElement.classList.add("animate-shake");
-          }, 25);
-        }, 50);
-      });
+
+    try {
+      await setRestrictedWebsites(restrictedWebsites);
+      this.soundsEngine.appear();
+      this.searchService.clearSuggestions();
+    } catch (error) {
+      this.soundsEngine.error();
+      this.searchService.loadStoredWebsites();
+      console.error("Error while blocking websites:", error);
+    }
+    this.toggleCommandPalette(false);
   }
 
   toggleCommandPalette(state: boolean) {
@@ -103,20 +100,21 @@ export class WebsitesPaletteComponent implements AfterViewInit {
   }
 
   toggleWebsiteSelection(website: Website) {
-    if (website.isBlocked) {
-      return;
-    }
+    if (website.isBlocked) return;
+
     this.soundsEngine.select();
     website.isSelected = !website.isSelected;
-    website.isSelected ? this.searchService.addSelectedWebsite(website) : this.searchService.removeSelectedWebsite(website);
+    website.isSelected
+      ? this.searchService.addSelectedWebsite(website)
+      : this.searchService.removeSelectedWebsite(website);
   }
 
   sortCategories = (a: any, b: any) => {
-    const order: { [key: string]: number } = { Suggestions: 1, Results: 2, Selected: 3 };
+    const order: Record<string, number> = { Suggestions: 1, Results: 2, Selected: 3 };
     return (order[a.key] || 0) - (order[b.key] || 0);
   };
 
-  private createWatchedWebsite(website: Website): WatchedWebsite {
+  private constructRestrictedWebsite(website: Website): RestrictedWebsite {
     return {
       host: website.host,
       allowedUntil: "",

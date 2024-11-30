@@ -1,6 +1,7 @@
+import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
-import { CommonModule } from "@angular/common";
+import { getDoomScrollingState, setDoomScrollingState } from "app/shared/chrome-storage-api";
 
 @Component({
   selector: "app-doom-scrolling",
@@ -10,11 +11,11 @@ import { CommonModule } from "@angular/common";
   styleUrl: "./doom-scrolling.component.css",
 })
 export class DoomScrollingComponent {
-  doomScrollingToggle: boolean = false;
+  doomScrollingToggle = false;
 
   constructor(private soundsEngine: SoundsEngineService) {
-    chrome.storage.sync.get("doomScrollingToggle").then(result => {
-      this.doomScrollingToggle = result["doomScrollingToggle"];
+    getDoomScrollingState().then(doomScrollingToggle => {
+      this.doomScrollingToggle = doomScrollingToggle;
     });
   }
 
@@ -27,8 +28,6 @@ export class DoomScrollingComponent {
       this.doomScrollingToggle = true;
     }
 
-    chrome.storage.sync.set({
-      doomScrollingToggle: this.doomScrollingToggle,
-    });
+    setDoomScrollingState(this.doomScrollingToggle);
   }
 }

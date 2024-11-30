@@ -38,6 +38,10 @@ export class Quotes {
       author: "James Clear, Atomic Habits",
     },
     {
+      text: '"Peace occurs when you don’t turn your observations into problems."',
+      author: "James Clear, Atomic Habits",
+    },
+    {
       text: '"Incentives can start a habit. Identity sustains it"',
       author: "James Clear, Atomic Habits",
     },
@@ -63,10 +67,6 @@ export class Quotes {
     },
     {
       text: '"With the same habits, you’ll end up with the same results. But with better habits, anything is possible"',
-      author: "James Clear, Atomic Habits",
-    },
-    {
-      text: '"The seed of every habit is a single, tiny decision"',
       author: "James Clear, Atomic Habits",
     },
     {
@@ -98,20 +98,8 @@ export class Quotes {
       author: "Jordan Peterson, 12 Rules For Life",
     },
     {
-      text: '"Always place your becoming above your current being"',
-      author: "Jordan Peterson, 12 Rules For Life",
-    },
-    {
       text: '"It is my firm belief that the best way to fix the world—a handyman’s dream, if ever there was one, is to fix yourself"',
       author: "Jordan Peterson, 12 Rules For Life",
-    },
-    {
-      text: '"Always place your becoming above your current being"',
-      author: "Jordan Peterson, 12 Rules For Life",
-    },
-    {
-      text: '"We cannot become what we want by remaining what we are"',
-      author: "Max Depree",
     },
     {
       text: '"Attention without intention is wasted energy"',
@@ -120,6 +108,38 @@ export class Quotes {
     {
       text: '"We are what we pay attention to, and almost nothing influences our productivity and creativity as much as the information we\'ve consumed in the past"',
       author: "Chris Bailey, Hyperfocus",
+    },
+    {
+      text: '"Wether you think you can - or think you can’t - you’re right."',
+      author: "Henry Ford",
+    },
+    {
+      text: '"Failure is only the opportunity to more intelligently begin again."',
+      author: "Henry Ford",
+    },
+    {
+      text: '"Problems are often life’s way of letting you know that you’re off course and need to take corrective action"',
+      author: "Jeff Keller, Attitude is Everything",
+    },
+    {
+      text: '"You may be disappointed if you fail, but you are doomed if you don’t try."',
+      author: "Beverly Sills",
+    },
+    {
+      text: '"If you only do what you can do you will never be more than you are now"',
+      author: "Master Shifu",
+    },
+    {
+      text: '"There are two kinds of failures: those who thought and never did, and those who did and never thought."',
+      author: "Laurence J. Peter",
+    },
+    {
+      text: '"Science without conscience is only ruin of the soul"',
+      author: "François Rabelais",
+    },
+    {
+      text: '"All sins are attempts to fill voids.',
+      author: "Simone Weil",
     },
   ];
 }

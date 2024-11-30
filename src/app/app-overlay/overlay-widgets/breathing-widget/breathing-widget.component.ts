@@ -10,7 +10,7 @@ import { AwarenessPageComponent } from "../../awareness-page/awareness-page.comp
   styleUrl: "./breathing-widget.component.css",
 })
 export class BreathingWidgetComponent {
-  text: string = "Get Ready";
+  text = "Get Ready";
   timerValue!: number;
 
   constructor(private awarenessPageComponent: AwarenessPageComponent) {

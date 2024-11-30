@@ -1,19 +1,26 @@
 <!-- Bedtime Mode -->
 <li
-  class="flex w-full animate-fade-up flex-col rounded-xl border px-6 py-4 animate-delay-200 animate-duration-500"
-  [ngClass]="bedtimeMode.isEnabled ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
-  [@HeightChange]="{ value: bedtimeMode.isEnabled, params: { startHeight: container.clientHeight } }"
+  class="flex w-full flex-col rounded-xl border px-6 py-4"
+  [ngClass]="
+    bedtimeMode.isEnabled ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'
+  "
+  [@HeightChange]="{
+    value: bedtimeMode.isEnabled,
+    params: { startHeight: container.clientHeight }
+  }"
   #container
 >
   <!-- Title & Switch -->
   <div class="flex w-full items-center justify-between">
     <span class="flex flex-grow flex-col gap-1">
       <div class="flex gap-2">
-        <span class="text-gray-900 text-base font-medium leading-6" id="availability-label">Bedtime Mode</span>
-        <span class="text-green-700 bg-green-100 inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold">New</span>
+        <span class="text-gray-900 text-base font-medium leading-6" id="availability-label"
+          >Bedtime Mode</span
+        >
       </div>
-      <span class="text-gray-500 text-sm" id="availability-description"> Smoothly change screen colors to black & white during the selected hours.
-         </span>
+      <span class="text-gray-500 text-sm" id="availability-description">
+        Smoothly change screen colors to black & white during the selected hours.
+      </span>
     </span>
 
     <button
@@ -29,17 +36,19 @@
       <span
         [ngClass]="bedtimeMode.isEnabled ? 'translate-x-5' : 'translate-x-0'"
         aria-hidden="true"
-        class="bg-white pointer-events-none inline-block h-5 w-5 translate-x-0 !transform rounded-full shadow !transition-all !duration-200 !ease-in-out group-disabled:bg-gray-400"
+        class="bg-white pointer-events-none inline-block h-5 w-5 translate-x-0 !transform rounded-full shadow !transition-all !duration-300 !ease-in-out group-disabled:bg-gray-400"
       ></span>
     </button>
   </div>
 
   <!-- Hours Selection-->
   @if (bedtimeMode.isEnabled) {
-    <div class="flex w-full animate-fade-up gap-5 pt-5 animate-delay-200 animate-duration-200">
+    <div class="fade-up fade-up-delay-200 flex w-full gap-5 pt-5">
       <!-- Start Time -->
       <div class="w-32">
-        <label for="start-time" class="text-gray-900 mb-1 block text-sm font-medium">Start at:</label>
+        <label for="start-time" class="text-gray-900 mb-1 block text-sm font-medium"
+          >Start at:</label
+        >
         <div class="relative mb-1">
           <div class="pointer-events-none absolute inset-y-0 end-0 top-0 flex items-center pe-3.5">
             <svg
@@ -49,13 +58,17 @@
               stroke-width="1.25"
               class="size-6 stroke-black dark:stroke-white"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
             </svg>
           </div>
           <input
             type="time"
             id="start-time"
-             class="text-gray-900 block w-full rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl cursor-pointer dark:bg-opacity-50"
+            class="text-gray-900 block w-full cursor-pointer rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl dark:bg-opacity-50"
             [ngClass]="
               isBedtimeStartCorrect
                 ? 'border-gray-300 bg-transparent hover:bg-gray-50 focus:bg-purple-50 focus:border-purple-500 focus:ring-purple-500'
@@ -68,11 +81,12 @@
             (input)="setStartDate($any($event).target.value)"
           />
         </div>
-        <label
-          class="text-red-500 flex animate-fade items-end font-medium animate-duration-150"
+        <p
+          class="text-red-500 flex items-end font-medium"
           [ngClass]="isBedtimeStartCorrect ? 'hidden' : 'block'"
-          >Don't be ridiculous</label
         >
+          Don't be ridiculous
+        </p>
       </div>
 
       <!-- Bed timeline -->
@@ -109,13 +123,17 @@
               stroke-width="1.25"
               class="size-6 stroke-black dark:stroke-white"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
             </svg>
           </div>
           <input
             type="time"
             id="end-time"
-            class="text-gray-900 block w-full rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl cursor-pointer"
+            class="text-gray-900 block w-full cursor-pointer rounded-lg border p-2.5 text-sm leading-none !transition-all duration-300 focus:rounded-xl"
             [ngClass]="
               isBedtimeEndCorrect
                 ? 'border-gray-300 bg-transparent hover:bg-gray-50 focus:bg-purple-50 focus:border-purple-500 focus:ring-purple-500 dark:bg-opacity-50'
@@ -128,11 +146,12 @@
             (input)="setEndDate($any($event).target.value)"
           />
         </div>
-        <label
-          class="text-red-500 mt-1 flex animate-fade items-end font-medium animate-duration-150"
+        <p
+          class="animate-fade animate-duration-150 text-red-500 mt-1 flex items-end font-medium"
           [ngClass]="isBedtimeEndCorrect ? 'hidden' : 'block'"
-          >Don't be ridiculous</label
         >
+          Don't be ridiculous
+        </p>
       </div>
     </div>
   }

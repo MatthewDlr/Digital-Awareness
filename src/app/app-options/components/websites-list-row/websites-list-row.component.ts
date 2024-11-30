@@ -1,12 +1,20 @@
-import { AfterViewInit, Component, HostListener, Input, ViewChild, ChangeDetectorRef } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  Input,
+  ViewChild,
+  ChangeDetectorRef,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
+import { RestrictedWebsite } from "app/types/restrictedWebsite.type";
 import { PendingChangesService } from "../../services/pending-changes/pending-changes.service";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
 import { FormsModule } from "@angular/forms";
 import dayjs from "dayjs";
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: "tr[websites-list-row]",
   standalone: true,
   imports: [CommonModule, FormsModule],
@@ -14,13 +22,12 @@ import dayjs from "dayjs";
   styleUrl: "./websites-list-row.component.css",
 })
 export class WebsitesListRowComponent implements AfterViewInit {
-  @Input({ required: true }) website!: WatchedWebsite;
-  @Input({ required: true }) isEnforced!: boolean;
+  @Input({ required: true }) website!: RestrictedWebsite;
   @Input() isPending!: boolean;
 
-  isEditEnabled: boolean = false;
-  oldHost: string = "";
-  awarenessColor: string = "";
+  isEditEnabled = false;
+  oldHost = "";
+  awarenessColor = "";
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -53,10 +60,7 @@ export class WebsitesListRowComponent implements AfterViewInit {
 
   @ViewChild("hostInput") input!: { nativeElement: HTMLInputElement };
   enableEdit() {
-    if (this.isEnforced || this.isPending) {
-      this.soundsEngine.notAllowed();
-      return;
-    }
+    if (this.isPending) return;
 
     this.soundsEngine.select();
     this.isEditEnabled = true;
@@ -67,10 +71,7 @@ export class WebsitesListRowComponent implements AfterViewInit {
   }
 
   editWebsite() {
-    if (this.isEnforced || this.isPending) {
-      this.soundsEngine.notAllowed();
-      return;
-    }
+    if (this.isPending) return;
 
     this.website.host = this.website.host.trim();
     this.isEditEnabled = false;
@@ -81,11 +82,9 @@ export class WebsitesListRowComponent implements AfterViewInit {
   }
 
   removeWebsite() {
-    if (this.isEnforced || this.isPending) {
-      this.soundsEngine.notAllowed();
-    } else {
-      this.soundsEngine.erase();
-      this.pendingChangesService.addWebsiteToRemove(this.website.host);
-    }
+    if (this.isPending) return;
+
+    this.soundsEngine.erase();
+    this.pendingChangesService.addWebsiteToRemove(this.website.host);
   }
 }

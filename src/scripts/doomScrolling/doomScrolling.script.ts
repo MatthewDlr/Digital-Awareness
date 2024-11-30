@@ -1,53 +1,48 @@
 import { isDevMode } from "@angular/core";
+import { getDoomScrollingState } from "app/shared/chrome-storage-api";
 
-let isDoomScrollingEnabled: boolean = false;
+const DEPTH_BOTTOM_METERS = 15; //Depth in meters
+const DEPTH_BOTTOM_PIXEL: number = meterToPixel(DEPTH_BOTTOM_METERS);
+const DEPTH_START: number = DEPTH_BOTTOM_PIXEL - meterToPixel(DEPTH_BOTTOM_METERS * 0.4);
 
-const depthBottomMeters = 15; //Depth in meters
-const depthBottomPixel: number = meterToPixel(depthBottomMeters);
-const depthStart: number = depthBottomPixel - meterToPixel(depthBottomMeters * 0.4);
+getDoomScrollingState().then(state => {
+  if (!state) return;
 
-chrome.storage.sync.get(["doomScrollingToggle"]).then(result => {
-  isDevMode() && console.log("doomScrollingToggle: ", result["doomScrollingToggle"]);
+  const anchor = document.createElement("div");
+  anchor.className = "anchor";
 
-  if (result["doomScrollingToggle"] == true) {
-    isDoomScrollingEnabled = true;
+  const sea = document.createElement("div");
+  sea.className = "sea";
+  anchor.appendChild(sea);
 
-    const anchor = document.createElement("div");
-    anchor.className = "anchor";
+  const depth = document.createElement("div");
+  depth.className = "depth";
+  anchor.appendChild(depth);
 
-    const sea = document.createElement("div");
-    sea.className = "sea";
-    anchor.appendChild(sea);
-
-    const depth = document.createElement("div");
-    depth.className = "depth";
-    anchor.appendChild(depth);
-
-    if (isDevMode()) {
-      for (let i = 0; i < 5; i++) {
-        const line = document.createElement("div");
-        line.className = "depth--line";
-        depth.appendChild(line);
-      }
-      const span = document.createElement("span");
-      span.textContent = "0m";
-      const depthMarker = document.createElement("div");
-      depthMarker.className = "depth--marker";
-      const marker = document.createElement("div");
-      marker.className = "marker";
-
-      marker.appendChild(span);
-      depthMarker.appendChild(marker);
-      anchor.appendChild(depthMarker);
+  // If in dev mode, add depth lines and marker on the page
+  if (isDevMode()) {
+    for (let i = 0; i < 5; i++) {
+      const line = document.createElement("div");
+      line.className = "depth--line";
+      depth.appendChild(line);
     }
+    const span = document.createElement("span");
+    span.textContent = "0m";
+    const depthMarker = document.createElement("div");
+    depthMarker.className = "depth--marker";
+    const marker = document.createElement("div");
+    marker.className = "marker";
 
-    document.body.appendChild(anchor);
+    marker.appendChild(span);
+    depthMarker.appendChild(marker);
+    anchor.appendChild(depthMarker);
   }
+
+  document.body.appendChild(anchor);
+  window.addEventListener("scroll", scrollEvent);
 });
 
-window.addEventListener("scroll", function (e) {
-  if (!isDoomScrollingEnabled) return;
-
+function scrollEvent(event: Event) {
   const s = document.documentElement.scrollTop || document.body.scrollTop;
   const docHeight = document.body.scrollHeight;
 
@@ -59,20 +54,20 @@ window.addEventListener("scroll", function (e) {
   });
 
   const seas: HTMLElement[] = Array.from(document.querySelectorAll(".sea"));
-  const progress = (s - depthStart) / (depthBottomPixel - depthStart);
+  const progress = (s - DEPTH_START) / (DEPTH_BOTTOM_PIXEL - DEPTH_START);
   if (progress <= 0) {
     seas.forEach(sea => (sea.style.opacity = "0"));
   } else if (progress <= 1) {
     seas.forEach(sea => (sea.style.opacity = progress.toString()));
   } else {
     // Prevent further scrolling
-    e.preventDefault();
-    window.scrollTo(0, depthBottomPixel);
+    event.preventDefault();
+    window.scrollTo(0, DEPTH_BOTTOM_PIXEL);
     seas.forEach(sea => (sea.style.opacity = "1"));
   }
 
   // set marker position
-  let markerProgress = s / depthBottomPixel;
+  let markerProgress = s / DEPTH_BOTTOM_PIXEL;
   if (markerProgress < 0) {
     markerProgress = 0;
   }
@@ -89,7 +84,7 @@ window.addEventListener("scroll", function (e) {
   document.querySelectorAll(".marker span").forEach(span => {
     span.textContent = m + "m";
   });
-});
+}
 
 function meterToPixel(meter: number) {
   const pixel = ((meter * 100) / 2.54) * 96; // Using 96DPI

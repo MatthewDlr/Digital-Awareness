@@ -1,13 +1,32 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
-  plugins: [require("nightwind"), require("@tailwindcss/forms"), require("tailwindcss-animated")],
+  plugins: [require("nightwind"), require("@tailwindcss/forms")],
   content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {
       fontFamily: {
         jakarta: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
       },
+    },
+    nightwind: {
+      colorScale: {
+        50: 950,
+        100: 900,
+        200: 800,
+        300: 700,
+        400: 600,
+        500: 500,
+        600: 400,
+        700: 300,
+        800: 200,
+        900: 100,
+        950: 50,
+      },
+      transitionClasses: "full", // default ['text, 'bg', 'border']
+    },
+    variants: {
+      nightwind: ["focus"], // Add any Tailwind variant
     },
     colors: {
       transparent: "transparent",

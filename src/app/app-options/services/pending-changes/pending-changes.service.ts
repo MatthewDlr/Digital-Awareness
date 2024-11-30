@@ -1,7 +1,7 @@
 import { Injectable, isDevMode } from "@angular/core";
-import { WatchedWebsite } from "app/types/watchedWebsite.type";
 import { BehaviorSubject } from "rxjs";
 import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.service";
+import { getRestrictedWebsites, setRestrictedWebsites } from "app/shared/chrome-storage-api";
 
 @Injectable({
   providedIn: "root",
@@ -10,8 +10,8 @@ export class PendingChangesService {
   stage: BehaviorSubject<stages> = new BehaviorSubject<stages>(stages.NoChanges);
   validationDate: BehaviorSubject<Date> = new BehaviorSubject<Date>(new Date());
 
-  websitesToDelete: Set<string> = new Set();
-  websitesToEdit: Set<{ oldHost: string; newHost: string }> = new Set();
+  websitesToDelete = new Set<string>();
+  websitesToEdit = new Set<{ oldHost: string; newHost: string }>();
 
   timeout = isDevMode() ? 1000 * 5 : 1000 * 60;
   waitDuration = isDevMode() ? 1000 * 15 : 1000 * 60 * 60;
@@ -20,7 +20,12 @@ export class PendingChangesService {
     chrome.storage.sync.get(["pendingChanges"]).then(result => {
       if (result["pendingChanges"]) {
         this.stage.next(result["pendingChanges"].stage || stages.NoChanges);
-        this.validationDate.next(new Date(result["pendingChanges"].validationDate) || null);
+        const validationDate = result["pendingChanges"].validationDate
+          ? new Date(result["pendingChanges"].validationDate)
+          : null;
+        if (!validationDate) return;
+
+        this.validationDate.next(validationDate);
         this.websitesToDelete = new Set(result["pendingChanges"].websitesToDelete);
         this.websitesToEdit = new Set(result["pendingChanges"].websitesToEdit);
 
@@ -78,45 +83,24 @@ export class PendingChangesService {
       return;
     }
 
-    let userWebsites: WatchedWebsite[] = [];
-    await chrome.storage.sync
-      .get(["userWebsites"])
-      .catch(error => {
-        this.soundsEngine.error();
-        console.error("Cannot get user websites: ", error);
-        return;
-      })
-      .then(result => {
-        if (!result!["userWebsites"]) {
-          this.soundsEngine.error();
-          isDevMode() ? console.warn("No user websites found") : null;
-          return;
-        }
-        userWebsites = result!["userWebsites"];
-      });
-
+    const restrictedWebsites = await getRestrictedWebsites();
     this.websitesToDelete.forEach(host => {
-      userWebsites = userWebsites.filter(website => website.host !== host);
+      restrictedWebsites.delete(host);
     });
 
     this.websitesToEdit.forEach(website => {
-      userWebsites.forEach(userWebsite => {
-        if (userWebsite.host === website.oldHost) {
-          userWebsite.host = website.newHost;
-        }
-      });
+      const restrictedWebsite = restrictedWebsites.get(website.oldHost);
+      restrictedWebsites.delete(website.oldHost);
+
+      if (restrictedWebsite) {
+        restrictedWebsite.host = website.newHost;
+        restrictedWebsites.set(website.newHost, restrictedWebsite);
+      }
     });
 
-    chrome.storage.sync
-      .set({ userWebsites: userWebsites })
-      .then(() => {
-        this.soundsEngine.success();
-        this.discardPendingChanges();
-      })
-      .catch(error => {
-        this.soundsEngine.error();
-        console.error("Error while saving websites: ", error);
-      });
+    await setRestrictedWebsites(restrictedWebsites);
+    this.soundsEngine.success();
+    this.discardPendingChanges();
   }
 
   private checkChangesValidity() {

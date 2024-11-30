@@ -22,43 +22,53 @@
       />
     </svg>
     <div class="mt-[0.10rem] flex items-baseline gap-2">
-      <label class="text-base font-medium">DevMode is ON</label>
+      <p class="text-base font-medium">DevMode is ON</p>
     </div>
   </div>
 }
 
 <div
-  [ngClass]="isCommandPaletteShown ? 'fixed bottom-0 left-0 right-0 top-0 overflow-hidden' : 'overflow-scroll'"
+  [ngClass]="
+    isCommandPaletteShown
+      ? 'fixed bottom-0 left-0 right-0 top-0 overflow-hidden'
+      : 'overflow-scroll'
+  "
   class="bg-white flex h-fit min-h-[100vh] w-full !transform flex-col gap-3 px-52 py-20 !transition-all !duration-300 !ease-in-out max-xl:px-44 max-lg:px-32 max-md:px-16 max-sm:px-8"
 >
-  <div class="flex animate-fade-up items-center gap-5 animate-duration-500">
+  <div class="fade-up flex items-center gap-5">
     <div class="group">
-      <img src="/assets/logo-512.png" alt="" class="size-12 group-hover:animate-spin" />
+      <img src="/assets/logo-256.png" alt="" class="size-12 group-hover:animate-spin" />
     </div>
 
-    <h1 class="green-gradient -mt-1 h-fit w-fit bg-clip-text py-2 text-4xl font-bold text-transparent">Options</h1>
+    <h1
+      class="green-gradient -mt-1 h-fit w-fit bg-clip-text py-2 text-4xl font-bold text-transparent"
+    >
+      Options
+    </h1>
   </div>
 
   <!-- Complete Setup -->
-  <complete-setup class="animate-fade-up animate-delay-100 animate-duration-500"></complete-setup>
+  <app-complete-setup class="fade-up fade-up-delay-100"></app-complete-setup>
 
   <!-- Pending Changes -->
-  <app-pending-changes class="animate-fade-up animate-delay-100 animate-duration-500"></app-pending-changes>
+  <app-pending-changes class="fade-up fade-up-delay-100"></app-pending-changes>
 
   <!-- Tabs -->
-  <div class="block w-full animate-fade-up overflow-x-scroll animate-delay-200 animate-duration-500">
+  <div class="fade-up fade-up-delay-100 block w-full overflow-x-scroll">
     <div class="border-gray-200 border-b">
       <nav class="flex" aria-label="Tabs">
         <!-- Highlighted Sites Tab -->
         <div class="flex w-full items-center justify-start gap-5">
           <div
             (click)="setCurrentTab('websites-list')"
+            (keypress)="setCurrentTab('websites-list')"
+            tabindex="0"
             [ngClass]="
-              currentTab == 'websites-list' || currentTab == 'default-tab'
+              currentTab === 'websites-list' || currentTab === 'default-tab'
                 ? 'text-green-500 !border-green-500'
-                : 'text-gray-500 hover:border-green-500'
+                : 'text-gray-500 !cursor-pointer hover:border-green-500/50'
             "
-            class="group text-gray-500 flex w-fit cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
+            class="group text-gray-500 flex w-fit items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium transition-all"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -81,10 +91,14 @@
           <!-- Awareness Page Tab -->
           <div
             (click)="setCurrentTab('awareness-page')"
+            (keypress)="setCurrentTab('awareness-page')"
+            tabindex="1"
             [ngClass]="
-              currentTab == 'awareness-page' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'
+              currentTab === 'awareness-page'
+                ? 'text-green-500 !border-green-500'
+                : 'text-gray-500 !cursor-pointer hover:border-green-500/50'
             "
-            class="group text-gray-500 flex w-fit cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
+            class="group text-gray-500 flex w-fit items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium transition-all"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -107,8 +121,14 @@
           <!-- Disconnect Tab -->
           <div
             (click)="setCurrentTab('disconnect')"
-            [ngClass]="currentTab == 'disconnect' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500'"
-            class="group text-gray-500 flex w-fit cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium"
+            (keypress)="setCurrentTab('disconnect')"
+            tabindex="2"
+            [ngClass]="
+              currentTab === 'disconnect'
+                ? 'text-green-500 !border-green-500'
+                : 'text-gray-500 !cursor-pointer hover:border-green-500/50'
+            "
+            class="group text-gray-500 flex w-fit items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium transition-all"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -128,7 +148,12 @@
           </div>
         </div>
 
-        <div class="group" (click)="setCurrentTab('about')">
+        <div
+          class="group"
+          (click)="setCurrentTab('about')"
+          (keypress)="setCurrentTab('about')"
+          tabindex="3"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -136,7 +161,11 @@
             stroke-width="1.75"
             aria-hidden="true"
             class="mt-2 size-6"
-            [ngClass]="currentTab == 'about' ? 'stroke-green-500' : 'stroke-gray-500 group-hover:animate-bounce'"
+            [ngClass]="
+              currentTab === 'about'
+                ? 'stroke-green-500'
+                : '!cursor-pointer stroke-gray-500 group-hover:animate-bounce'
+            "
           >
             <path
               stroke-linecap="round"
@@ -150,14 +179,14 @@
   </div>
 
   <!-- Options Content -->
-  <div class="animate-fade-up animate-delay-300 animate-duration-500">
-    @if (currentTab == "websites-list" || currentTab == "default-tab") {
+  <div class="fade-up fade-up-delay-300">
+    @if (currentTab === "websites-list" || currentTab === "default-tab") {
       <app-websites-list></app-websites-list>
-    } @else if (currentTab == "awareness-page") {
+    } @else if (currentTab === "awareness-page") {
       <app-awareness-page></app-awareness-page>
-    } @else if (currentTab == "disconnect") {
+    } @else if (currentTab === "disconnect") {
       <app-disconnect></app-disconnect>
-    } @else if (currentTab == "about") {
+    } @else if (currentTab === "about") {
       <app-about></app-about>
     }
   </div>

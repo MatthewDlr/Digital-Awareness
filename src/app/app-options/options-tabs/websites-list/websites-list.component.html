@@ -1,9 +1,9 @@
-<div class="mt-2 min-w-full animate-fade-up animate-duration-500">
-  <h1 class="text-gray-900 animate-fade-up text-lg font-semibold leading-6 animate-duration-500">Websites</h1>
+<div class="mt-2 min-w-full">
+  <h1 class="text-gray-900 text-lg font-semibold leading-6">Websites</h1>
   <div class="sm:flex sm:items-center">
-    <div class="w-full animate-fade-up animate-duration-500 sm:flex-auto">
+    <div class="w-full sm:flex-auto">
       <p class="text-gray-700 mt-2 w-full text-pretty text-sm">
-        For your wellbeing, some websites we identified as the most time-consuming cannot be removed from the list.
+        You can add, edit, or delete websites from this list.
       </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -22,23 +22,33 @@
             aria-hidden="true"
             class="size-6"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
           </svg>
 
           Add new website
         </button>
-        <div class="absolute bottom-full mb-2 hidden justify-center !transition-all group-hover:block">
-          <div class="text-black bg-gray-200 rounded-full px-4 py-2 text-sm">{{ OS === "MacOS" ? "⌘" : "Ctrl" }} + K</div>
+        <div
+          class="absolute bottom-full mb-2 hidden justify-center !transition-all group-hover:block"
+        >
+          <div class="text-black bg-gray-200 rounded-full px-4 py-2 text-sm">
+            {{ OS === "MacOS" ? "⌘" : "Ctrl" }} + K
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Websites Table -->
-  <div class="mt-5 flow-root animate-fade-up animate-delay-200 animate-duration-500">
+  <div class="fade-up fade-up-delay-100 mt-5 flow-root">
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-        <div class="max-h-[30rem] overflow-scroll shadow ring-1 ring-gray-300 ring-opacity-5 dark:ring-gray-700 sm:rounded-lg">
+        <div
+          class="max-h-[30rem] overflow-scroll shadow ring-1 ring-gray-300 ring-opacity-5 dark:ring-gray-700 sm:rounded-lg"
+        >
           <table class="min-w-full divide-y-0 divide-gray-300 dark:divide-gray-700">
             <thead class="bg-green-500 sticky top-0 z-10">
               <tr class="cursor-default *:text-white *:text-left *:text-sm *:font-semibold">
@@ -50,27 +60,23 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-300 overflow-scroll dark:divide-gray-700">
               <!-- User Websites -->
-              @for (website of userWebsites; track $index) {
+              @for (website of restrictedWebsites; track $index) {
                 <tr
                   websites-list-row
-                  [website]="website"
-                  [isEnforced]="false"
-                  [isPending]="websitesPendingEdit.has(website.host) || pendingChangesService.websitesToDelete.has(website.host)"
-                  class="animate-fade-up animate-delay-[400ms] animate-duration-500"
+                  [website]="website[1]"
+                  [isPending]="
+                    websitesPendingEdit.has(website[1].host) ||
+                    pendingChangesService.websitesToDelete.has(website[1].host)
+                  "
+                  class="fade-up fade-up-delay-300"
                   [ngClass]="[
-                    pendingChangesService.websitesToDelete.has(website.host) ? 'bg-red-50 saturate-[0.8] dark:bg-opacity-50' : '',
-                    websitesPendingEdit.has(website.host) ? 'bg-purple-50 saturate-[0.8] dark:bg-opacity-50' : ''
+                    pendingChangesService.websitesToDelete.has(website[1].host)
+                      ? 'bg-red-50 saturate-[0.8] dark:bg-opacity-50'
+                      : '',
+                    websitesPendingEdit.has(website[1].host)
+                      ? 'bg-purple-50 saturate-[0.8] dark:bg-opacity-50'
+                      : ''
                   ]"
-                ></tr>
-              }
-
-              <!-- Enforced Websites -->
-              @for (website of enforcedWebsites; track $index) {
-                <tr
-                  websites-list-row
-                  [website]="website"
-                  [isEnforced]="true"
-                  class="bg-gray-50 animate-fade-up animate-delay-[400ms] animate-duration-500"
                 ></tr>
               }
             </tbody>

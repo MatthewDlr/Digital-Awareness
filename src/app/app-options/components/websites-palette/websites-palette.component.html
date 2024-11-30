@@ -1,12 +1,19 @@
-<section class="bg-white absolute left-0 top-0 z-20 h-full w-full bg-opacity-50 object-center" (click)="blockSelectedWebsites()">
+<section
+  class="bg-white absolute left-0 top-0 z-20 h-full w-full bg-opacity-50 object-center"
+  (click)="blockSelectedWebsites()"
+  (keypress)="blockSelectedWebsites()"
+  tabindex="0"
+>
   <div class="animate-jump-custom mt-20 items-center justify-center">
     <div
-      class="max-h-xl bg-gray-50 mx-auto max-w-xl transform rounded-2xl bg-opacity-10 p-3 shadow-2xl ring-1 ring-gray-200 backdrop-blur-3xl backdrop-filter !transition-all dark:bg-gray-100 dark:bg-opacity-25 dark:ring-gray-800"
+      class="max-h-2xl bg-white mx-auto max-w-xl transform rounded-2xl bg-opacity-25 p-3 shadow-2xl ring-1 ring-gray-200 backdrop-blur-3xl backdrop-filter !transition-all dark:bg-gray-100 dark:ring-gray-800"
       (click)="$event.stopPropagation()"
+      (keypress)="$event.stopPropagation()"
+      tabindex="1"
     >
       <!--Search Bar-->
       <div
-        class="bg-gray-100 relative flex items-center gap-2 rounded-lg bg-opacity-75 pl-3 !transition-all hover:scale-[1.01] hover:bg-opacity-60"
+        class="bg-white relative flex items-center gap-2 rounded-lg bg-opacity-75 pl-3 !transition-all hover:scale-[1.01]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +21,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="size-6 stroke-black dark:stroke-white"
+          class="size-6 stroke-gray-950 dark:stroke-gray-50"
         >
           <path
             stroke-linecap="round"
@@ -34,14 +41,16 @@
           aria-controls="options"
           #search
         />
-        @if (searchQuery.trim() != "") {
+
+        <!-- Clear Search -->
+        @if (searchQuery.trim() !== "") {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             aria-hidden="true"
-            class="mr-3 size-6 cursor-pointer stroke-black dark:stroke-white"
+            class="mr-3 size-6 cursor-pointer stroke-gray-950 dark:stroke-gray-50"
             (click)="onClear()"
           >
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -49,44 +58,13 @@
         }
       </div>
 
-      <!-- Save Error -->
-      @if (saveError) {
-        <div
-          class="bg-orange-50 mt-3 rounded-lg p-4 animate-duration-[250ms] animate-twice animate-ease-linear dark:saturate-[0.75]"
-          #saveError
-        >
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-7 w-7 fill-orange-700" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path
-                  fill-rule="evenodd"
-                  d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </div>
-            <div class="ml-3">
-              <h3 class="text-orange-700 text-base font-medium">Unable to save data</h3>
-              <div class="text-orange-700 mt-1 text-sm">
-                <p>
-                  Due to Chrome's storage limitations, the number of website you can add is limited. Please review and adjust your
-                  selections, then try again. <br />
-                  Press <strong>escape</strong> to close without saving.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      }
-
       <!--Search Results-->
-      <div class="mt-3 h-full max-h-96 overflow-y-scroll rounded-md">
+      <div class="mt-3 h-full max-h-[28rem] overflow-y-scroll rounded-md">
         <!-- No Results -->
         @if (
-          searchService.suggestions.Results.length == 0 &&
-          searchService.suggestions.Selected.length == 0 &&
-          searchService.suggestions.Suggestions.length == 0 &&
-          saveError == false
+          searchService.suggestions.Results.length === 0 &&
+          searchService.suggestions.Selected.length === 0 &&
+          searchService.suggestions.Suggestions.length === 0
         ) {
           <app-search-animation></app-search-animation>
         }
@@ -94,7 +72,7 @@
         @for (category of searchService.suggestions | keyvalue: sortCategories; track $index) {
           <!-- Category Name -->
           @if (category.value.length > 0) {
-            <h2 class="text-gray-900 mt-3 animate-fade-up text-sm font-semibold !transition-all animate-duration-300">
+            <h2 class="fade-up text-gray-900 mt-3 text-sm font-semibold !transition-all">
               {{ category.key }}
             </h2>
           }
@@ -103,14 +81,18 @@
           @for (website of category.value; track $index) {
             <ul class="mt-2">
               <li
-                class="group text-gray-500 flex animate-fade-up cursor-default select-none items-center rounded-lg px-3 py-2 !transition-all animate-duration-300"
+                class="fade-up fade-up-delay-200 group flex cursor-default select-none items-center rounded-lg px-3 py-2 !transition-all"
                 (click)="toggleWebsiteSelection(website)"
+                (keypress)="toggleWebsiteSelection(website)"
+                tabindex="3"
                 [ngClass]="[
-                  website.isSelected ? 'text-green-500 bg-green-100 bg-opacity-75' : 'hover:bg-gray-200 hover:bg-opacity-50',
+                  website.isSelected
+                    ? 'text-green-800 bg-green-100/50'
+                    : 'text-gray-700 hover:cursor-pointer hover:bg-gray-200/50',
                   website.isBlocked ? 'cursor-not-allowed' : ''
                 ]"
               >
-                <div class="text-gray-600 flex w-4/5 items-baseline justify-start gap-3">
+                <div class="flex w-4/5 items-baseline justify-start gap-3">
                   <span class="text-base font-normal">
                     {{ website.host }}
                   </span>
@@ -131,7 +113,7 @@
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
-                      class="size-6 stroke-green-500"
+                      class="size-6 stroke-green-800"
                     >
                       <path
                         stroke-linecap="round"

@@ -11,9 +11,9 @@ import { SoundsEngineService } from "app/services/soundsEngine/sounds-engine.ser
   styleUrls: ["./pending-changes.component.css"],
 })
 export class PendingChangesComponent {
-  validationDate: string = "";
-  expirationDate: string = "";
-  stage: string = "NoChanges";
+  validationDate = "";
+  expirationDate = "";
+  stage = "NoChanges";
 
   timeToAdd = isDevMode() ? 1000 * 15 : 1000 * 60 * 60; // Time required to wait in order to validate the changes
 
@@ -23,9 +23,13 @@ export class PendingChangesComponent {
   ) {
     this.pendingChangesService.validationDate.subscribe({
       next: date => {
-        this.validationDate = String(date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0"));
+        this.validationDate = String(
+          date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0"),
+        );
         const expirationDate = new Date(date.getTime() + this.timeToAdd);
-        this.expirationDate = String(expirationDate.getHours() + ":" + String(expirationDate.getMinutes()).padStart(2, "0"));
+        this.expirationDate = String(
+          expirationDate.getHours() + ":" + String(expirationDate.getMinutes()).padStart(2, "0"),
+        );
       },
     });
     this.pendingChangesService.stage.subscribe({
@@ -43,10 +47,8 @@ export class PendingChangesComponent {
   }
 
   confirmChanges() {
-    if (this.stage != "ChangesCanBeValidated") {
-      this.soundsEngine.notAllowed();
-      return;
-    }
+    if (this.stage != "ChangesCanBeValidated") return;
+
     this.pendingChangesService.confirmPendingChanges();
   }
 }
