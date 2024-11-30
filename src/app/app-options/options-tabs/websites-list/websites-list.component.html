@@ -2,8 +2,9 @@
   <h1 class="text-gray-900 text-lg font-semibold leading-6">Websites</h1>
   <div class="sm:flex sm:items-center">
     <div class="w-full sm:flex-auto">
-      <p class="text-gray-700 mt-2 w-full text-pretty text-sm">
-        You can add, edit, or delete websites from this list.
+      <p class="text-gray-700 text-sm font-normal">
+        Websites visited for the first time, as well as those not accessed in the past four days,
+        will not be restricted by the timer.
       </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -58,7 +59,7 @@
                 <th scope="col" class="w-1/6 py-3.5">Actions</th>
               </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-300 overflow-scroll dark:divide-gray-700">
+            <tbody class="bg-white divide-y divide-gray-300 overflow-y-scroll dark:divide-gray-700">
               <!-- User Websites -->
               @for (website of restrictedWebsites; track $index) {
                 <tr
@@ -81,6 +82,29 @@
               }
             </tbody>
           </table>
+          @if (restrictedWebsites.size === 0) {
+            <div class="flex h-fit w-full flex-col items-center justify-center gap-3 p-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-circle-plus size-8 stroke-gray-900 dark:stroke-gray-100"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8 12h8" />
+                <path d="M12 8v8" />
+              </svg>
+              <p class="text-gray-900 text-balance text-base font-medium">
+                Start by adding a website to this list.
+              </p>
+            </div>
+          }
         </div>
       </div>
     </div>

@@ -52,10 +52,6 @@ export class SoundsEngineService {
     this.playAudio("alert");
   }
 
-  appear() {
-    this.playAudio("appear");
-  }
-
   select() {
     this.playAudio("select");
   }
