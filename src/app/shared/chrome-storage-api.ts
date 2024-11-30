@@ -5,7 +5,7 @@ import { UserConfig } from "app/types/userConfig.type";
 
 export async function setConfig(config: UserConfig) {
   try {
-    await chrome.storage.sync.set(config);
+    await chrome.storage.local.set(config);
     console.info("Default configuration successfully written !");
   } catch (error) {
     throw new Error("Failed to set config: " + error);
@@ -13,7 +13,7 @@ export async function setConfig(config: UserConfig) {
 }
 
 export async function getExtensionVersion(): Promise<string | undefined> {
-  const result = await chrome.storage.sync.get("extensionVersion");
+  const result = await chrome.storage.local.get("extensionVersion");
   const extensionVersion = result["extensionVersion"] || undefined;
   isDevMode() && console.log("Extension version:", extensionVersion);
   return extensionVersion;
@@ -21,7 +21,7 @@ export async function getExtensionVersion(): Promise<string | undefined> {
 
 export async function setExtensionVersion(extensionVersion: string) {
   try {
-    await chrome.storage.sync.set({ extensionVersion });
+    await chrome.storage.local.set({ extensionVersion });
   } catch (error) {
     throw new Error("Failed to set extension version: " + error);
   }
@@ -43,7 +43,7 @@ export async function setFinishSetupState(isSetupDismissed: boolean) {
 }
 
 export async function getAwarenessPageWidget(): Promise<string> {
-  const result = await chrome.storage.sync.get("awarenessPageWidget");
+  const result = await chrome.storage.local.get("awarenessPageWidget");
   const widget: string = result["awarenessPageWidget"] || "Quotes";
   isDevMode() && console.log("Page widget:", widget);
 
@@ -58,14 +58,14 @@ export async function getAwarenessPageWidget(): Promise<string> {
 
 export async function setAwarenessPageWidget(awarenessPageWidget: string) {
   try {
-    await chrome.storage.sync.set({ awarenessPageWidget });
+    await chrome.storage.local.set({ awarenessPageWidget });
   } catch (error) {
     throw new Error("Failed to set awareness page widget: " + error);
   }
 }
 
 export async function getAwarenessPageTasks(): Promise<string[]> {
-  const result = await chrome.storage.sync.get("awarenessPageTasks");
+  const result = await chrome.storage.local.get("awarenessPageTasks");
   const tasks: string[] = result["awarenessPageTasks"] || ["", "", ""];
   const nonEmptyTasks = tasks.filter(task => task.length > 0);
   if (nonEmptyTasks.length === 0) {
@@ -77,28 +77,28 @@ export async function getAwarenessPageTasks(): Promise<string[]> {
 
 export async function setAwarenessPageTasks(awarenessPageTasks: string[]) {
   try {
-    await chrome.storage.sync.set({ awarenessPageTasks });
+    await chrome.storage.local.set({ awarenessPageTasks });
   } catch (error) {
     throw new Error("Failed to set awareness page tasks: " + error);
   }
 }
 
 export async function getRestrictedWebsites(): Promise<Map<string, RestrictedWebsite>> {
-  const result = await chrome.storage.sync.get("restrictedWebsites");
+  const result = await chrome.storage.local.get("restrictedWebsites");
   return new Map<string, RestrictedWebsite>(Object.entries(result["restrictedWebsites"] || []));
 }
 
 export async function setRestrictedWebsites(restrictedWebsitesMap: Map<string, RestrictedWebsite>) {
   try {
     const restrictedWebsites = Object.fromEntries(restrictedWebsitesMap);
-    await chrome.storage.sync.set({ restrictedWebsites });
+    await chrome.storage.local.set({ restrictedWebsites });
   } catch (error) {
     throw new Error("Failed to set restricted websites: " + error);
   }
 }
 
 export async function getDoomScrollingState(): Promise<boolean> {
-  const result = await chrome.storage.sync.get("doomScrollingToggle");
+  const result = await chrome.storage.local.get("doomScrollingToggle");
   const isDoomScrollingEnabled = result["doomScrollingToggle"] || false;
   isDevMode() && console.log("Doom scrolling toggle:", isDoomScrollingEnabled);
   return isDoomScrollingEnabled;
@@ -106,14 +106,14 @@ export async function getDoomScrollingState(): Promise<boolean> {
 
 export async function setDoomScrollingState(doomScrollingToggle: boolean) {
   try {
-    await chrome.storage.sync.set({ doomScrollingToggle });
+    await chrome.storage.local.set({ doomScrollingToggle });
   } catch (error) {
     throw new Error("Failed to set doom scrolling toggle: " + error);
   }
 }
 
 export async function getBedtimeMode(): Promise<BedtimeMode | undefined> {
-  const result = await chrome.storage.sync.get("bedtimeMode");
+  const result = await chrome.storage.local.get("bedtimeMode");
   const bedtimeMode: BedtimeMode | undefined = result["bedtimeMode"] || undefined;
   isDevMode() && console.log("Bedtime mode:", bedtimeMode);
   return bedtimeMode;
@@ -121,7 +121,7 @@ export async function getBedtimeMode(): Promise<BedtimeMode | undefined> {
 
 export async function setBedtimeMode(bedtimeMode: BedtimeMode) {
   try {
-    await chrome.storage.sync.set({ bedtimeMode });
+    await chrome.storage.local.set({ bedtimeMode });
   } catch (error) {
     throw new Error("Failed to set bedtime mode: " + error);
   }
