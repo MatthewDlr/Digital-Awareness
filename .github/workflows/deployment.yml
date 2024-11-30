@@ -75,7 +75,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4.1.1
-      - name: Create Release 
+      - name: Create Release
         uses: ncipollo/release-action@v1.14.0
         with:
           artifacts: "./digital-awareness.zip"
@@ -83,10 +83,3 @@ jobs:
           makeLatest: true
           tag: v${{ env.VERSION }}
           allowUpdates: true
-
-          
-
-
-            
-      
-            

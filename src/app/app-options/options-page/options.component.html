@@ -28,15 +28,23 @@
 }
 
 <div
-  [ngClass]="isCommandPaletteShown ? 'fixed bottom-0 left-0 right-0 top-0 overflow-hidden' : 'overflow-scroll'"
+  [ngClass]="
+    isCommandPaletteShown
+      ? 'fixed bottom-0 left-0 right-0 top-0 overflow-hidden'
+      : 'overflow-scroll'
+  "
   class="bg-white flex h-fit min-h-[100vh] w-full !transform flex-col gap-3 px-52 py-20 !transition-all !duration-300 !ease-in-out max-xl:px-44 max-lg:px-32 max-md:px-16 max-sm:px-8"
 >
-  <div class="flex fade-up items-center gap-5">
+  <div class="fade-up flex items-center gap-5">
     <div class="group">
       <img src="/assets/logo-256.png" alt="" class="size-12 group-hover:animate-spin" />
     </div>
 
-    <h1 class="green-gradient -mt-1 h-fit w-fit bg-clip-text py-2 text-4xl font-bold text-transparent">Options</h1>
+    <h1
+      class="green-gradient -mt-1 h-fit w-fit bg-clip-text py-2 text-4xl font-bold text-transparent"
+    >
+      Options
+    </h1>
   </div>
 
   <!-- Complete Setup -->
@@ -46,7 +54,7 @@
   <app-pending-changes class="fade-up fade-up-delay-100"></app-pending-changes>
 
   <!-- Tabs -->
-  <div class="block w-full overflow-x-scroll fade-up fade-up-delay-100">
+  <div class="fade-up fade-up-delay-100 block w-full overflow-x-scroll">
     <div class="border-gray-200 border-b">
       <nav class="flex" aria-label="Tabs">
         <!-- Highlighted Sites Tab -->
@@ -58,7 +66,7 @@
             [ngClass]="
               currentTab === 'websites-list' || currentTab === 'default-tab'
                 ? 'text-green-500 !border-green-500'
-                : 'text-gray-500 hover:border-green-500/50 !cursor-pointer'
+                : 'text-gray-500 !cursor-pointer hover:border-green-500/50'
             "
             class="group text-gray-500 flex w-fit items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium transition-all"
           >
@@ -86,7 +94,9 @@
             (keypress)="setCurrentTab('awareness-page')"
             tabindex="1"
             [ngClass]="
-              currentTab === 'awareness-page' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500/50 !cursor-pointer'
+              currentTab === 'awareness-page'
+                ? 'text-green-500 !border-green-500'
+                : 'text-gray-500 !cursor-pointer hover:border-green-500/50'
             "
             class="group text-gray-500 flex w-fit items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium transition-all"
           >
@@ -113,7 +123,11 @@
             (click)="setCurrentTab('disconnect')"
             (keypress)="setCurrentTab('disconnect')"
             tabindex="2"
-            [ngClass]="currentTab === 'disconnect' ? 'text-green-500 !border-green-500' : 'text-gray-500 hover:border-green-500/50 !cursor-pointer'"
+            [ngClass]="
+              currentTab === 'disconnect'
+                ? 'text-green-500 !border-green-500'
+                : 'text-gray-500 !cursor-pointer hover:border-green-500/50'
+            "
             class="group text-gray-500 flex w-fit items-center gap-2 border-b-2 border-transparent px-1 py-2 text-base font-medium transition-all"
           >
             <svg
@@ -134,7 +148,12 @@
           </div>
         </div>
 
-        <div class="group" (click)="setCurrentTab('about')" (keypress)="setCurrentTab('about')" tabindex="3">
+        <div
+          class="group"
+          (click)="setCurrentTab('about')"
+          (keypress)="setCurrentTab('about')"
+          tabindex="3"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -142,7 +161,11 @@
             stroke-width="1.75"
             aria-hidden="true"
             class="mt-2 size-6"
-            [ngClass]="currentTab === 'about' ? 'stroke-green-500' : 'stroke-gray-500 group-hover:animate-bounce !cursor-pointer'"
+            [ngClass]="
+              currentTab === 'about'
+                ? 'stroke-green-500'
+                : '!cursor-pointer stroke-gray-500 group-hover:animate-bounce'
+            "
           >
             <path
               stroke-linecap="round"

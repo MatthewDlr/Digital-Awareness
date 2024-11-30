@@ -67,7 +67,10 @@ export class WebsitesPaletteComponent implements AfterViewInit {
     }
 
     for (const selectedWebsite of selectedWebsites) {
-      restrictedWebsites.set(selectedWebsite.host, this.constructRestrictedWebsite(selectedWebsite));
+      restrictedWebsites.set(
+        selectedWebsite.host,
+        this.constructRestrictedWebsite(selectedWebsite),
+      );
     }
 
     try {

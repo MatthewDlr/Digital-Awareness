@@ -4,7 +4,11 @@ import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../../tailwind.config.js";
 const fullConfig = resolveConfig(tailwindConfig);
 import dayjs, { Dayjs } from "dayjs";
-import { getRestrictedWebsites, getExtensionVersion, setRestrictedWebsites } from "app/shared/chrome-storage-api";
+import {
+  getRestrictedWebsites,
+  getExtensionVersion,
+  setRestrictedWebsites,
+} from "app/shared/chrome-storage-api";
 
 chrome.webNavigation.onCommitted.addListener(async function (details) {
   // Avoid showing block page if the request is made in background or isn't http/https

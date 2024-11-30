@@ -72,9 +72,7 @@
         @for (category of searchService.suggestions | keyvalue: sortCategories; track $index) {
           <!-- Category Name -->
           @if (category.value.length > 0) {
-            <h2
-              class="text-gray-900 mt-3 fade-up text-sm font-semibold !transition-all"
-            >
+            <h2 class="fade-up text-gray-900 mt-3 text-sm font-semibold !transition-all">
               {{ category.key }}
             </h2>
           }
@@ -83,14 +81,14 @@
           @for (website of category.value; track $index) {
             <ul class="mt-2">
               <li
-                class="group flex fade-up fade-up-delay-200 cursor-default select-none items-center rounded-lg px-3 py-2 !transition-all"
+                class="fade-up fade-up-delay-200 group flex cursor-default select-none items-center rounded-lg px-3 py-2 !transition-all"
                 (click)="toggleWebsiteSelection(website)"
                 (keypress)="toggleWebsiteSelection(website)"
                 tabindex="3"
                 [ngClass]="[
                   website.isSelected
                     ? 'text-green-800 bg-green-100/50'
-                    : 'text-gray-700 hover:bg-gray-200/50 hover:cursor-pointer',
+                    : 'text-gray-700 hover:cursor-pointer hover:bg-gray-200/50',
                   website.isBlocked ? 'cursor-not-allowed' : ''
                 ]"
               >

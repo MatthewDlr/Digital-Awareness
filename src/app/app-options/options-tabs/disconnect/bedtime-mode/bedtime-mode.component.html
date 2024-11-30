@@ -1,15 +1,22 @@
 <!-- Bedtime Mode -->
 <li
   class="flex w-full flex-col rounded-xl border px-6 py-4"
-  [ngClass]="bedtimeMode.isEnabled ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'"
-  [@HeightChange]="{ value: bedtimeMode.isEnabled, params: { startHeight: container.clientHeight } }"
+  [ngClass]="
+    bedtimeMode.isEnabled ? 'shadow-inner-md border-green-500 shadow-green-500' : 'border-gray-200'
+  "
+  [@HeightChange]="{
+    value: bedtimeMode.isEnabled,
+    params: { startHeight: container.clientHeight }
+  }"
   #container
 >
   <!-- Title & Switch -->
   <div class="flex w-full items-center justify-between">
     <span class="flex flex-grow flex-col gap-1">
       <div class="flex gap-2">
-        <span class="text-gray-900 text-base font-medium leading-6" id="availability-label">Bedtime Mode</span>
+        <span class="text-gray-900 text-base font-medium leading-6" id="availability-label"
+          >Bedtime Mode</span
+        >
       </div>
       <span class="text-gray-500 text-sm" id="availability-description">
         Smoothly change screen colors to black & white during the selected hours.
@@ -36,10 +43,12 @@
 
   <!-- Hours Selection-->
   @if (bedtimeMode.isEnabled) {
-    <div class="flex w-full fade-up fade-up-delay-200 gap-5 pt-5">
+    <div class="fade-up fade-up-delay-200 flex w-full gap-5 pt-5">
       <!-- Start Time -->
       <div class="w-32">
-        <label for="start-time" class="text-gray-900 mb-1 block text-sm font-medium">Start at:</label>
+        <label for="start-time" class="text-gray-900 mb-1 block text-sm font-medium"
+          >Start at:</label
+        >
         <div class="relative mb-1">
           <div class="pointer-events-none absolute inset-y-0 end-0 top-0 flex items-center pe-3.5">
             <svg
@@ -49,7 +58,11 @@
               stroke-width="1.25"
               class="size-6 stroke-black dark:stroke-white"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
             </svg>
           </div>
           <input
@@ -69,7 +82,7 @@
           />
         </div>
         <p
-          class="text-red-500 flex items-end font-medium "
+          class="text-red-500 flex items-end font-medium"
           [ngClass]="isBedtimeStartCorrect ? 'hidden' : 'block'"
         >
           Don't be ridiculous
@@ -110,7 +123,11 @@
               stroke-width="1.25"
               class="size-6 stroke-black dark:stroke-white"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
             </svg>
           </div>
           <input
@@ -130,7 +147,7 @@
           />
         </div>
         <p
-          class="text-red-500 mt-1 flex animate-fade items-end font-medium animate-duration-150"
+          class="animate-fade animate-duration-150 text-red-500 mt-1 flex items-end font-medium"
           [ngClass]="isBedtimeEndCorrect ? 'hidden' : 'block'"
         >
           Don't be ridiculous
