@@ -7,11 +7,11 @@
 
   <!-- Random -->
   <p
-    class="fade-up bg-white relative mt-5 flex cursor-pointer rounded-lg border px-4 py-2 shadow-sm !transition-all duration-300 ease-in-out focus:outline-none"
+    class="fade-up fade-up-delay-100 bg-white relative mt-5 flex cursor-pointer rounded-lg border px-4 py-2 shadow-sm transition-all duration-300 ease-in-out focus:outline-none"
     [ngClass]="
       selectedWidget === 'Random'
-        ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
-        : 'border-gray-300 hover:border-green-500 hover:scale-[1.02]'
+        ? 'border-green-500 bg-green-50/75 dark:bg-green-900/50'
+        : 'border-gray-300 hover:border-green-500 hover:bg-green-50/50 dark:hover:bg-green-900/50'
     "
     (click)="updateSelectedWidget('Random')"
     (keypress)="updateSelectedWidget('Random')"
@@ -47,11 +47,11 @@
   <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
     <!-- Quotes -->
     <p
-      class="fade-up fade-up-delay-200 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm !transition-all !duration-300 !ease-in-out focus:outline-none"
+      class="fade-up fade-up-delay-200 bg-white relative flex cursor-pointer rounded-lg border px-4 py-3 shadow-sm transition-all duration-300 ease-in-out focus:outline-none"
       [ngClass]="
         selectedWidget === 'Quotes'
-          ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
-          : 'border-gray-300 hover:border-green-500 hover:scale-[1.02]'
+          ? 'border-green-500 bg-green-50/75 dark:bg-green-900/50'
+          : 'border-gray-300 hover:border-green-500 hover:bg-green-50/50 dark:hover:bg-green-900/50'
       "
       (click)="updateSelectedWidget('Quotes')"
       (keypress)="updateSelectedWidget('Quotes')"
@@ -92,8 +92,8 @@
       tabindex="2"
       [ngClass]="
         selectedWidget === 'Breathing'
-          ? '!bg-green-50 border-green-500 !bg-opacity-75 dark:!bg-opacity-50'
-          : 'border-gray-300 hover:border-green-500 hover:scale-[1.02]'
+          ? 'border-green-500 bg-green-50/75 dark:bg-green-900/50'
+          : 'border-gray-300 hover:border-green-500 hover:bg-green-50/50 dark:hover:bg-green-900/50'
       "
     >
       <span class="flex flex-1">
@@ -131,8 +131,8 @@
       tabindex="3"
       [ngClass]="
         selectedWidget === 'Tasks'
-          ? '!bg-green-50 !bg-opacity-75 dark:!bg-opacity-50'
-          : 'border-gray-300 hover:border-green-500 hover:scale-[1.02]'
+          ? 'border-green-500 bg-green-50/75 dark:bg-green-900/50'
+          : 'border-gray-300 hover:border-green-500 hover:bg-green-50/50 dark:hover:bg-green-900/50'
       "
     >
       <span class="flex flex-1">
@@ -174,7 +174,7 @@
 
 <!-- Tasks Details -->
 @if (selectedWidget === "Tasks" || selectedWidget === "Random") {
-  <div class="mt-4 flex fade-up flex-col gap-2 ">
+  <div class="fade-up mt-4 flex flex-col gap-2">
     <legend class="text-gray-900 text-sm font-medium">
       Specify your tasks and the goals you want to achieve
     </legend>

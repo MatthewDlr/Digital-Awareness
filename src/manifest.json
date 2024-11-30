@@ -4,9 +4,7 @@
   "version": "1.5.0",
   "description": "Unlearn bad browsing habits and become more aware of your digital life.",
   "icons": {
-    "128": "./assets/logo-128.png",
-    "256": "./assets/logo-256.png",
-    "512": "./assets/logo-512.png"
+    "256": "./assets/logo-256.png"
   },
   "action": {
     "default_popup": ""

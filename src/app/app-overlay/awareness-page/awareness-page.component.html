@@ -2,7 +2,9 @@
   class="flex h-[100vh] w-full flex-col items-center justify-center gap-16 bg-gradient-to-br from-green-100 from-10% via-green-200 via-70% to-green-300 !transition-all dark:from-green-800 dark:via-green-900 dark:to-green-950"
 >
   <!-- Timer -->
-  <div class="fade-up bg-opacity- flex size-24 items-center justify-center rounded-lg bg-white/50">
+  <div
+    class="fade-up bg-opacity- flex size-24 items-center justify-center rounded-lg bg-white/50 dark:bg-gray-950/50"
+  >
     @defer (when originalTimerValue) {
       <p class="text-gray-900 text-4xl" [ngClass]="{ 'animate-bounce': timerValue() < 6 }">
         {{ timerValue() }}
@@ -61,7 +63,7 @@
       class="flex flex-col items-center gap-2"
     >
       <div
-        class="fade-up text-gray-500 text-sm opacity-50"
+        class="fade-up text-sm text-gray-950/60 dark:text-gray-50/60"
         [ngClass]="{ 'fade-up': timerValue() === 0 }"
       >
         Continue to
@@ -70,7 +72,7 @@
         </button>
       </div>
       <p
-        class="text-gray-500 text-sm opacity-50"
+        class="text-sm text-gray-950/60 dark:text-gray-50/60"
         [ngClass]="{ 'fade-up fade-up-delay-200': timerValue() === 0 }"
       >
         Otherwise, tab will close on its own
